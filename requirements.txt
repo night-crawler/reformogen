@@ -1,0 +1,5 @@
+Django
+djangorestframework
+django-model-utils>=2.6
+easy-thumbnails==2.4.1
+-e git+https://github.com/night-crawler/drf-metadata.git@#egg=drf-metadata
