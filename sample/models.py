@@ -58,7 +58,6 @@ class Author(TimeStampedModel, abstract.StateBundleMixin):
         return self.name
 
 
-
 class AuthorPhoto(TimeStampedModel):
     author = models.ForeignKey('Author', verbose_name=_('author'))
     photo = ThumbnailerImageField(_('photo'), blank=True, null=True,

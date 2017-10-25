@@ -1,13 +1,11 @@
 import typing as t
-from pprint import pprint
-import pandas as pd
-from django.utils.translation import ugettext_lazy as _
+
+from django.db import models
 from rest_framework.decorators import list_route, detail_route
 from rest_framework.request import Request
 from rest_framework.response import Response
-
-from django.db import models
 from rest_framework import viewsets
+
 from sample.api import metadata
 from sample.api import serializers as s_serializers
 from sample import models as s_models

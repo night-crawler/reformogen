@@ -1,10 +1,12 @@
-# Byte-compiled / optimized / DLL files
-__pycache__/
-*.py[cod]
-*$py.class
+# See https://help.github.com/ignore-files/ for more about ignoring files.
+__py
+# dependencies
+.idea/
+__pycache__
+/node_modules
 
-# C extensions
-*.so
+# testing
+/coverage
 
 # Distribution / packaging
 .Python
