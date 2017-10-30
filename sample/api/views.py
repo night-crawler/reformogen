@@ -1,3 +1,4 @@
+import time
 import typing as t
 
 from django.db import models
@@ -31,6 +32,10 @@ class DescribeMixin:
 
 class AuthorViewSet(viewsets.ModelViewSet, DescribeMixin):
     serializer_class = s_serializers.AuthorSerializer
+
+    def dispatch(self, request, *args, **kwargs):
+        # time.sleep(2)
+        return super().dispatch(request, *args, **kwargs)
 
     def get_queryset(self) -> models.QuerySet:
         return s_models.Author.objects.all()

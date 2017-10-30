@@ -1,41 +1,38 @@
 import React, { Component } from 'react';
 
-
-import logo from './logo.svg';
-import './App.css';
-
-import static_metadata from './form.json';
-
 import Formogen from './formogen';
 
+import './App.css';
+import logo from './logo.svg';
+import preparedMetaData from './form.json';
 
-const URL = 'http://localhost:8000/api/v1/sample/authors/describe/';
+const metaDataUrl = 'http://localhost:8000/api/v1/sample/authors/describe/';
+
 
 class App extends Component {
     handleSubmit(data) {
-        console.log(this);
-        console.log(data);
+        console.log(`<App/>, handleSubmit() - ${ data }`);
     }
 
     render() {
-        return (
-            <div className="App">
+        return <div className="App">
 
-                <div className="App-header">
-                    <img src={ logo } className="App-logo" alt="logo" />
-                    <h2>Welcome to React</h2>
-                </div>
+            <div className="App-header">
+                <h1>React Formogen JS</h1>
+                <img src={ logo } className="App-logo" alt="logo" />
+            </div>
 
-                <div className="App-intro">
+            <div className="App-content">
+                <div className="formogen">
                     <Formogen
-                        metaData={ static_metadata }
-                        metaDataUrl={ URL }
-                        onSubmit={ (validatedData) => this.handleSubmit(validatedData) }
+                        metaData={ preparedMetaData }
+                        metaDataUrl={ metaDataUrl }
+                        onSubmit={ data => this.handleSubmit(data) }
                     />
                 </div>
-
             </div>
-        );
+
+        </div>;
     }
 }
 

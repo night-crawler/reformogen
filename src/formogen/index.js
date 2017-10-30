@@ -1,4 +1,4 @@
-import Formogen from './Formogen'
+import Formogen from './FormogenComponent'
 
 /*
 
@@ -19,6 +19,11 @@ import Formogen from './Formogen'
 15. state save between requests
 16. modal forms support
 17. dropzone
+
+
+- modal mode
+- action URL (old formogen: objUrl, objCreateUrl)
+- cache metadata
 
  */
 
