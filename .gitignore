@@ -65,7 +65,6 @@ target/
 /*.ipynb
 
 # Misc
-.idea
 .ipynb_checkpoints
 /static/
 /frontend/static/frontend/node_components/node_modules/
@@ -75,3 +74,4 @@ target/
 gen_admin.py
 celerybeat-schedule*
 db.sqlite3
+package-lock.json

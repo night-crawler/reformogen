@@ -1,11 +1,13 @@
 import React from 'react';
-
+import PropTypes from 'prop-types';
 import _ from 'lodash';
 
 import 'semantic-ui-css/semantic.css';  // TODO: сoncretize it
 
-import { ChoiceFieldComponent, CharFieldComponent,
-         TextFieldComponent, PositiveSmallIntegerFieldComponent } from './FieldComponents';
+import {
+    ChoiceFieldComponent, CharFieldComponent,
+    TextFieldComponent, PositiveSmallIntegerFieldComponent
+} from './FieldComponents';
 
 
 export default class FormFieldsComponent extends React.Component {
@@ -45,6 +47,12 @@ export default class FormFieldsComponent extends React.Component {
         return <div>{ formFields }</div>;
     }
 }
+
+
+FormFieldsComponent.propTypes = {
+    fields: PropTypes.array.isRequired,
+};
+
 
 FormFieldsComponent.defaultProps = {
     fields: [],

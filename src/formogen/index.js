@@ -1,4 +1,4 @@
-import Formogen from './FormogenComponent'
+import Formogen from './FormogenComponent';
 
 /*
 

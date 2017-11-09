@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Form } from 'semantic-ui-react'
+import { Form } from 'semantic-ui-react';
 import 'semantic-ui-css/semantic.css';  // TODO: сoncretize it
 
 
@@ -111,5 +111,5 @@ export const MultipleChoiceFieldComponent = (opts) => {
         "data": []
     */
     opts.default_choice_render_name = 'id';
-    return <Form.Input/>;
+    return <Form.Input />;
 };

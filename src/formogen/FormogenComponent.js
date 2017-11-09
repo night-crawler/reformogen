@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
-
+import PropTypes from 'prop-types';
 import fetch from 'isomorphic-fetch';
 
 import _ from 'lodash';
 
-import { Button, Form, Header, Segment } from 'semantic-ui-react'
+import { Button, Form, Header, Segment } from 'semantic-ui-react';
 import 'semantic-ui-css/semantic.css';  // TODO: сoncretize it
 
 import FormogenFormFieldsComponent from './FormFieldComponent';
-import { LoaderComponent } from './MiscComponents'
+import { LoaderComponent } from './MiscComponents';
 
 
 export default class FormogenComponent extends Component {
@@ -66,16 +66,16 @@ export default class FormogenComponent extends Component {
 
     // --------------- standard handlers ---------------
     handleSubmit() {
-        console.log('<FormogenComponent/>, handleSubmit()');
+        console.log('<FormogenComponent />, handleSubmit()');
         this.handleOnSubmit({test: 1});
     }
     handleSuccess() {
-        console.log('<FormogenComponent/>, handleSuccess()');
+        console.log('<FormogenComponent />, handleSuccess()');
         this.handleOnSuccess();
     }
     handleFail() {
         // if http status is 400 (Bad Request) it should show form errors
-        console.log('<FormogenComponent/>, handleFail()');
+        console.log('<FormogenComponent />, handleFail()');
         this.handleOnSubmit();
     }
 
@@ -129,27 +129,39 @@ export default class FormogenComponent extends Component {
     // --------------- React.js render ---------------
     render() {
         const { metaDataReady } = this.state;
-        if (!metaDataReady) return <LoaderComponent/>;
+        if (!metaDataReady) return <LoaderComponent />;
 
-        return <Segment>
-            <Header as='h2'>{ this.getTitle() }</Header>
-            <Form>
-                <FormogenFormFieldsComponent
-                    fields={ this.getFields() }
-                    onSubmit={ (validatedData) => this.handleSubmit(validatedData) }
-                />
-                <Button
-                    content={ 'Submit' }
-                    onClick={ () => this.handleSubmit() }
-                    onKeyPress={ () => this.handleSubmit() }
+        return (
+            <Segment>
+                <Header as='h2'>{ this.getTitle() }</Header>
+                <Form>
+                    <FormogenFormFieldsComponent
+                        fields={ this.getFields() }
+                        onSubmit={ (validatedData) => this.handleSubmit(validatedData) }
+                    />
+                    <Button
+                        content={ 'Submit' }
+                        onClick={ () => this.handleSubmit() }
+                        onKeyPress={ () => this.handleSubmit() }
 
-                    fluid
-                    type="submit"
-                />
-            </Form>
-        </Segment>;
+                        fluid
+                        type="submit"
+                    />
+                </Form>
+            </Segment>
+        );
     }
 }
+
+FormogenComponent.propTypes = {
+    metaData: PropTypes.object,
+    title: PropTypes.string,
+    metaDataUrl: PropTypes.string,
+    onSubmit: PropTypes.func,
+    onSuccess: PropTypes.func,
+    onFail: PropTypes.func
+};
+
 
 FormogenComponent.defaultProps = {
     // data
@@ -159,7 +171,7 @@ FormogenComponent.defaultProps = {
     metaDataUrl: null,
 
     // callbacks
-    onSubmit: data => console.log(`<FormogenComponent/>, onSubmit() - ${ data }`),
-    onSuccess: data => console.log(`<FormogenComponent/>, onSuccess() - ${ data }`),
-    onFail: data => console.log(`<FormogenComponent/>, onFail() - ${ data }`),
+    onSubmit: data => console.log(`<FormogenComponent />, onSubmit() - ${ data }`),
+    onSuccess: data => console.log(`<FormogenComponent />, onSuccess() - ${ data }`),
+    onFail: data => console.log(`<FormogenComponent />, onFail() - ${ data }`),
 };

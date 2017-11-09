@@ -9,6 +9,6 @@ export const LoaderComponent = () => (
             <Loader>Loading...</Loader>
         </Dimmer>
 
-        <Image src='/assets/images/wireframe/short-paragraph.png'/>
+        <Image src='/assets/images/wireframe/short-paragraph.png' />
     </Segment>
 );
