@@ -1,7 +1,13 @@
 import React from 'react';
 
 import { Form } from 'semantic-ui-react';
-import 'semantic-ui-css/semantic.css';  // TODO: сoncretize it
+import { Dropdown } from 'semantic-ui-react';
+import DatePicker from 'react-datepicker';
+import PropTypes from 'prop-types';
+import _ from 'lodash';
+
+import './custom.css';
+import 'react-datepicker/dist/react-datepicker.css';
 
 
 const makeOptions = (choices) => {
@@ -20,7 +26,37 @@ const makeOptions = (choices) => {
     });
 };
 
-export const ChoiceFieldComponent = (opts) => {
+
+const defaultFieldComponentPropTypes = {
+    upperFirstLabel: PropTypes.bool,
+    name: PropTypes.string.isRequired,
+    value: PropTypes.any,
+    verbose_name: PropTypes.string.isRequired,
+    help_text: PropTypes.string.isRequired,
+    blank: PropTypes.bool,
+    null: PropTypes.bool,
+    editable: PropTypes.bool,
+    type: PropTypes.string.isRequired,
+    required: PropTypes.bool,
+    default: PropTypes.any,
+    choices: PropTypes.arrayOf(PropTypes.array),
+    placeholder: PropTypes.string,
+    max_length: PropTypes.number,
+
+    onChange: PropTypes.func,
+};
+
+const getLabel = (props) => {
+    const labelText = props.upperFirstLabel ? _.upperFirst(props.verbose_name) : props.verbose_name;
+    // if (props.help_text){
+    //
+    // }
+    return <label>{ labelText }</label>;
+};
+getLabel.propTypes = defaultFieldComponentPropTypes;
+
+
+export const ChoiceFieldComponent = (props) => {
     /*
         "name": "state",
         "verbose_name": "state",
@@ -37,13 +73,57 @@ export const ChoiceFieldComponent = (opts) => {
             [30, "dried"]
         ]
      */
-    return <Form.Select
-        label={ opts.verbose_name }
-        options={ makeOptions(opts.choices) }
-    />;
-};
 
-export const CharFieldComponent = (opts) => {
+    return (
+        <Form.Field required={ props.required } disabled={ !props.editable }>
+            { getLabel(props) }
+            <Form.Select
+                options={ makeOptions(props.choices) }
+                name={ props.name }
+                onChange={ props.onChange }
+            />
+        </Form.Field>
+    );
+};
+ChoiceFieldComponent.propTypes = defaultFieldComponentPropTypes;
+
+
+export const AutocompleteChoiceFieldComponent = (props) => {
+    /*
+        "name": "state",
+        "verbose_name": "state",
+        "help_text": "",
+        "blank": false,
+        "null": false,
+        "editable": true,
+        "type": "PositiveSmallIntegerField",
+        "required": true,
+        "default": 255,
+        "choices": [
+            [0, "dead"],
+            [255, "alive"],
+            [30, "dried"]
+        ]
+     */
+
+    // https://react.semantic-ui.com/collections/form#form-example-field-control
+    return (
+        <Form.Field required={ props.required } disabled={ !props.editable }>
+            { getLabel(props) }
+            <Dropdown
+                name={ props.name }
+                options={ makeOptions(props.choices) }
+                onChange={ props.onChange }
+                placeholder={ props.placeholder }
+                search={ true }
+                selection={ true } />
+        </Form.Field>
+    );
+};
+AutocompleteChoiceFieldComponent.propTypes = defaultFieldComponentPropTypes;
+
+
+export const CharFieldComponent = (props) => {
     /*
         "name": "first_name",
         "verbose_name": "имя",
@@ -55,15 +135,23 @@ export const CharFieldComponent = (opts) => {
         "type": "CharField",
         "required": false
     */
-    return <Form.Field
-        label={ opts.verbose_name }
-        type='text'
-        control='input'
-        maxLength={ opts.max_length }
-    />;
-};
 
-export const TextFieldComponent = (opts) => {
+    return (
+        <Form.Field required={ props.required } disabled={ !props.editable }>
+            { getLabel(props) }
+            <Form.Input
+                name={ props.name }
+                value={ props.value }
+                onChange={ props.onChange }
+                type='text'
+                maxLength={ props.max_length } />
+        </Form.Field>
+    );
+};
+CharFieldComponent.propTypes = defaultFieldComponentPropTypes;
+
+
+export const TextFieldComponent = (props) => {
     /*
         "name": "biography",
         "verbose_name": "biography",
@@ -74,18 +162,38 @@ export const TextFieldComponent = (opts) => {
         "type": "TextField",
         "required": false
      */
-    return <Form.TextArea
-        label={ opts.verbose_name }
-    />;
-};
 
-export const PositiveSmallIntegerFieldComponent = (opts) => {
-    return <Form.Input
-        label={ opts.verbose_name }
-    />;
+    return (
+        <Form.Field required={ props.required } disabled={ !props.editable }>
+            { getLabel(props) }
+            <Form.TextArea
+                name={ props.name }
+                value={ props.value }
+                onChange={ props.onChange }
+            />
+        </Form.Field>
+    );
 };
+TextFieldComponent.propTypes = defaultFieldComponentPropTypes;
 
-export const DateTimeFieldComponent = (opts) => {
+
+export const PositiveSmallIntegerFieldComponent = (props) => {
+    return (
+        <Form.Field required={ props.required } disabled={ !props.editable }>
+            { getLabel(props) }
+            <Form.Input
+                name={ props.name }
+                value={ props.value }
+                onChange={ props.onChange }
+                type='number'
+            />
+        </Form.Field>
+    );
+};
+PositiveSmallIntegerFieldComponent.propTypes = defaultFieldComponentPropTypes;
+
+
+export const DateTimeFieldComponent = (props) => {
     /*
         "name": "dt_death",
         "verbose_name": "death date time",
@@ -96,9 +204,37 @@ export const DateTimeFieldComponent = (opts) => {
         "type": "DateTimeField",
         "required": false
      */
-};
 
-export const MultipleChoiceFieldComponent = (opts) => {
+    const handleChange = (momentTimeObject, e) => {
+        // proxy event with SUI-React compliant style
+        props.onChange(e, {name: props.name, value: momentTimeObject});
+    };
+
+    return (
+        <Form.Field required={ props.required } disabled={ !props.editable }>
+            { getLabel(props) }
+            <DatePicker
+                name={ props.name }
+                value={ props.value }
+                onChange={ handleChange }
+                showTimeSelect={ true }
+                timeFormat="HH:mm"
+                timeIntervals={ 60 }
+                locale="ru"
+                placeholderText={ props.placeholder || props.help_text }
+                todayButton={ 'Now' }
+                dateFormat="LLL"
+                showYearDropdown={ true }
+                // showMonthDropdown={ true }
+                dropdownMode="select"
+            />
+        </Form.Field>
+    );
+};
+DateTimeFieldComponent.propTypes = defaultFieldComponentPropTypes;
+
+
+export const MultipleChoiceFieldComponent = (props) => {
     /*
         "name": "inspire_source",
         "verbose_name": "inspire source",
@@ -110,6 +246,6 @@ export const MultipleChoiceFieldComponent = (opts) => {
         "required": false,
         "data": []
     */
-    opts.default_choice_render_name = 'id';
+    props.default_choice_render_name = 'id';
     return <Form.Input />;
 };

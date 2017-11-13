@@ -8,6 +8,12 @@ from sample import models as wf_models
 class AuthorMetadata(MetaData):
     model = wf_models.Author
 
+    update_fields = {
+        # 'state': {'autocomplete': True, 'editable': False,},
+        'dt_death': {'editable': False, },
+        # 'name': {'editable': False},
+    }
+
     def get_title(self, request, view, obj: wf_models.Author):
         if obj:
             return _('Edit Author "{0}"').format(obj.printable_name)

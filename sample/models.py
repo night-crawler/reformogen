@@ -39,7 +39,7 @@ class TimeStampedModel(models.Model):
 class Author(TimeStampedModel, abstract.StateBundleMixin):
     STATE = states.AUTHOR_CHOICES
     name = models.CharField(_('name'), max_length=255)
-    dt_birth = models.DateTimeField(_('birth date time'))
+    dt_birth = models.DateTimeField(_('birth date time'), help_text=_('Select the day of birth'))
     dt_death = models.DateTimeField(_('death date time'), blank=True, null=True)
 
     biography = models.TextField(_('biography'), blank=True)

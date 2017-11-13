@@ -5,7 +5,7 @@ import { Dimmer, Image, Loader, Segment } from 'semantic-ui-react';
 
 export const LoaderComponent = () => (
     <Segment>
-        <Dimmer active>
+        <Dimmer active={ true }>
             <Loader>Loading...</Loader>
         </Dimmer>
 

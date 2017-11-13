@@ -5,22 +5,38 @@ import fetch from 'isomorphic-fetch';
 import _ from 'lodash';
 
 import { Button, Form, Header, Segment } from 'semantic-ui-react';
-import 'semantic-ui-css/semantic.css';  // TODO: сoncretize it
 
-import FormogenFormFieldsComponent from './FormFieldComponent';
-import { LoaderComponent } from './MiscComponents';
+import FormogenFormFieldsComponent from './FormFieldsComponent';
+// import { LoaderComponent } from './MiscComponents';
 
 
 export default class FormogenComponent extends Component {
+    static propTypes = {
+        metaData: PropTypes.object,
+        title: PropTypes.string,
+        metaDataUrl: PropTypes.string,
+        onSubmit: PropTypes.func,
+        onSuccess: PropTypes.func,
+        onFail: PropTypes.func,
+        upperFirstLabels: PropTypes.bool,
+    };
+    static defaultProps = {
+        // data
+        title: 'formogen form',
+        upperFirstLabels: false,
+
+        // urls
+        metaDataUrl: null,
+
+        // callbacks
+        onSubmit: data => console.log(`<FormogenComponent />, onSubmit() - ${ data }`),
+        onSuccess: data => console.log(`<FormogenComponent />, onSuccess() - ${ data }`),
+        onFail: data => console.log(`<FormogenComponent />, onFail() - ${ data }`),
+    };
+
+
     constructor(props) {
         super(props);
-
-        let state = Object.assign({}, props);
-
-        state.metaData = null;  // accumulates all metaData
-        state.assignedMetaData = props.metaData;
-        state.receivedMetaData = null;
-
         this.state = {
             title: props.title,
 
@@ -97,10 +113,10 @@ export default class FormogenComponent extends Component {
         const { title, assignedMetaData, receivedMetaData } = this.state;
 
         if (assignedMetaData) {
-            return assignedMetaData.title.substr();
+            return _.upperFirst(assignedMetaData.title.substr());
         }
         if (receivedMetaData) {
-            return receivedMetaData.title.substr();
+            return _.upperFirst(receivedMetaData.title.substr());
         }
         return title.substr();
     }
@@ -122,29 +138,28 @@ export default class FormogenComponent extends Component {
             ...assignedMetaData ? assignedMetaData.fields.slice() : [],
             ...receivedMetaData ? receivedMetaData.fields.slice() : [],
         ];
-
         return _.differenceBy(fields, 'name');
     }
 
     // --------------- React.js render ---------------
     render() {
-        const { metaDataReady } = this.state;
-        if (!metaDataReady) return <LoaderComponent />;
 
         return (
             <Segment>
-                <Header as='h2'>{ this.getTitle() }</Header>
-                <Form>
+                <Form loading={ !this.state.metaDataReady }>
+                    <Header as='h2' dividing={ true }>{ this.getTitle() }</Header>
                     <FormogenFormFieldsComponent
+                        key={ this.getFields() }
                         fields={ this.getFields() }
                         onSubmit={ (validatedData) => this.handleSubmit(validatedData) }
+                        upperFirstLabels={ this.props.upperFirstLabels }
                     />
                     <Button
                         content={ 'Submit' }
                         onClick={ () => this.handleSubmit() }
                         onKeyPress={ () => this.handleSubmit() }
 
-                        fluid
+                        fluid={ true }
                         type="submit"
                     />
                 </Form>
@@ -153,25 +168,3 @@ export default class FormogenComponent extends Component {
     }
 }
 
-FormogenComponent.propTypes = {
-    metaData: PropTypes.object,
-    title: PropTypes.string,
-    metaDataUrl: PropTypes.string,
-    onSubmit: PropTypes.func,
-    onSuccess: PropTypes.func,
-    onFail: PropTypes.func
-};
-
-
-FormogenComponent.defaultProps = {
-    // data
-    title: 'formogen form',
-
-    // urls
-    metaDataUrl: null,
-
-    // callbacks
-    onSubmit: data => console.log(`<FormogenComponent />, onSubmit() - ${ data }`),
-    onSuccess: data => console.log(`<FormogenComponent />, onSuccess() - ${ data }`),
-    onFail: data => console.log(`<FormogenComponent />, onFail() - ${ data }`),
-};

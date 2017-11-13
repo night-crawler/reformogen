@@ -14,6 +14,7 @@ module.exports = {
         'plugin:react/recommended',
         // 'plugin:react-native/all'
     ],
+    "parser": "babel-eslint",
     'parserOptions': {
         'ecmaFeatures': {
             'experimentalObjectRestSpread': true,
@@ -28,7 +29,7 @@ module.exports = {
     'rules': {
         'react/jsx-pascal-case': [2, {'allowAllCaps': true, 'ignore': [] }],
         'react/jsx-curly-spacing': [2, {'when': 'always', 'allowMultiline': true}],
-        'react/jsx-boolean-value': 1,
+        'react/jsx-boolean-value': [2, 'always'],
         'react/jsx-indent-props': [1],
         'react/jsx-indent': [1],
         'react/jsx-handler-names': [1, {

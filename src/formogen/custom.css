@@ -1,0 +1,13 @@
+/*fix the extra big padding issue with semantic ui */
+.react-datepicker ul {
+    padding: 0;
+}
+
+.react-datepicker-wrapper input {
+    width: 100% !important;
+}
+
+
+.react-datepicker-wrapper {
+    width: 100% !important;
+}

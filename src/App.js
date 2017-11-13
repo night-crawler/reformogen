@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 
 import Formogen from './formogen';
 
-import './App.css';
-import logo from './logo.svg';
+import { Grid } from 'semantic-ui-react'
+import 'semantic-ui-css/semantic.css';
 import preparedMetaData from './form.json';
 
 const metaDataUrl = 'http://localhost:8000/api/v1/sample/authors/describe/';
@@ -15,24 +15,43 @@ class App extends Component {
     }
 
     render() {
-        return <div className="App">
+        return (
+            <div className="App">
 
-            <div className="App-header">
-                <h1>React Formogen JS</h1>
-                <img src={ logo } className="App-logo" alt="logo" />
+
+                {/*<div className="App-header">*/}
+                {/*<h1>React Formogen JS</h1>*/}
+                {/*<img src={ logo } className="App-logo" alt="logo" />*/}
+                {/*</div>*/}
+
+                <Grid columns={ 2 } stackable={ true }>
+                    <Grid.Row>
+                        <Grid.Column>
+                            <div className="formogen">
+                                <Formogen
+                                    metaData={ preparedMetaData }
+                                    metaDataUrl={ metaDataUrl }
+                                    onSubmit={ data => this.handleSubmit(data) }
+                                    upperFirstLabels={ true }
+                                />
+                            </div>
+                        </Grid.Column>
+
+                        <Grid.Column>
+                            <div className="formogen">
+                                <Formogen
+                                    metaDataUrl={ metaDataUrl }
+                                    onSubmit={ data => this.handleSubmit(data) }
+                                    upperFirstLabels={ true }
+                                />
+                            </div>
+                        </Grid.Column>
+                    </Grid.Row>
+                </Grid>
+
+
             </div>
-
-            <div className="App-content">
-                <div className="formogen">
-                    <Formogen
-                        metaData={ preparedMetaData }
-                        metaDataUrl={ metaDataUrl }
-                        onSubmit={ data => this.handleSubmit(data) }
-                    />
-                </div>
-            </div>
-
-        </div>;
+        );
     }
 }
 
