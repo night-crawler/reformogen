@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import fetch from 'isomorphic-fetch';
-
+import 'moment/locale/ru';
+import loglevel from 'loglevel';
 import _ from 'lodash';
 
 import { Button, Form, Header, Segment } from 'semantic-ui-react';
@@ -19,24 +20,32 @@ export default class FormogenComponent extends Component {
         onSuccess: PropTypes.func,
         onFail: PropTypes.func,
         upperFirstLabels: PropTypes.bool,
+        locale: PropTypes.string,
+        helpTextOnHover: PropTypes.bool,
+        showHeader: PropTypes.bool,
     };
     static defaultProps = {
         // data
         title: 'formogen form',
         upperFirstLabels: false,
+        helpTextOnHover: false,
+        showHeader: false,
 
         // urls
         metaDataUrl: null,
+        locale: 'en',
 
         // callbacks
-        onSubmit: data => console.log(`<FormogenComponent />, onSubmit() - ${ data }`),
-        onSuccess: data => console.log(`<FormogenComponent />, onSuccess() - ${ data }`),
-        onFail: data => console.log(`<FormogenComponent />, onFail() - ${ data }`),
+        onSubmit: data => this.log.debug(`onSubmit() - ${ data }`),
+        onSuccess: data => this.log.debug(`onSuccess() - ${ data }`),
+        onFail: data => this.log.debug(`onFail() - ${ data }`),
     };
 
 
     constructor(props) {
         super(props);
+        this.log = loglevel.getLogger('FormogenComponent.js');
+        this.log.debug('Initialized');
         this.state = {
             title: props.title,
 
@@ -82,16 +91,16 @@ export default class FormogenComponent extends Component {
 
     // --------------- standard handlers ---------------
     handleSubmit() {
-        console.log('<FormogenComponent />, handleSubmit()');
+        this.log.debug('handleSubmit()');
         this.handleOnSubmit({test: 1});
     }
     handleSuccess() {
-        console.log('<FormogenComponent />, handleSuccess()');
+        this.log.debug('handleSuccess()');
         this.handleOnSuccess();
     }
     handleFail() {
         // if http status is 400 (Bad Request) it should show form errors
-        console.log('<FormogenComponent />, handleFail()');
+        this.log.debug('handleFail()');
         this.handleOnSubmit();
     }
 
@@ -145,25 +154,27 @@ export default class FormogenComponent extends Component {
     render() {
 
         return (
-            <Segment>
-                <Form loading={ !this.state.metaDataReady }>
-                    <Header as='h2' dividing={ true }>{ this.getTitle() }</Header>
-                    <FormogenFormFieldsComponent
-                        key={ this.getFields() }
-                        fields={ this.getFields() }
-                        onSubmit={ (validatedData) => this.handleSubmit(validatedData) }
-                        upperFirstLabels={ this.props.upperFirstLabels }
-                    />
-                    <Button
-                        content={ 'Submit' }
-                        onClick={ () => this.handleSubmit() }
-                        onKeyPress={ () => this.handleSubmit() }
+            <Form loading={ !this.state.metaDataReady }>
+                { this.props.showHeader ? <Header as='h2' dividing={ true }>{ this.getTitle() }</Header> : '' }
 
-                        fluid={ true }
-                        type="submit"
-                    />
-                </Form>
-            </Segment>
+                <FormogenFormFieldsComponent
+                    key={ this.getFields() }
+                    fields={ this.getFields() }
+                    locale={ this.props.locale }
+                    formData={ {name: 'lol'} }
+                    onSubmit={ (validatedData) => this.handleSubmit(validatedData) }
+                    upperFirstLabels={ this.props.upperFirstLabels }
+                    helpTextOnHover={ this.props.helpTextOnHover }
+                />
+                <Button
+                    content={ 'Submit' }
+                    onClick={ () => this.handleSubmit() }
+                    onKeyPress={ () => this.handleSubmit() }
+
+                    fluid={ true }
+                    type="submit"
+                />
+            </Form>
         );
     }
 }

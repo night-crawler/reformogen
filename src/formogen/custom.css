@@ -1,6 +1,10 @@
 /*fix the extra big padding issue with semantic ui */
 .react-datepicker ul {
-    padding: 0;
+    padding: 0 !important;
+}
+
+.react-datepicker__input-container {
+    width: 100%;
 }
 
 .react-datepicker-wrapper input {
@@ -10,4 +14,10 @@
 
 .react-datepicker-wrapper {
     width: 100% !important;
+}
+
+.field .help-text {
+    float: right;
+    padding-right: 10px;
+    color: gray;
 }
