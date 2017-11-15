@@ -5,9 +5,9 @@ import 'moment/locale/ru';
 import loglevel from 'loglevel';
 import _ from 'lodash';
 
-import { Button, Form, Header, Segment } from 'semantic-ui-react';
+import { Button, Form, Header } from 'semantic-ui-react';
 
-import FormogenFormFieldsComponent from './FormFieldsComponent';
+import FormogenFormFieldsComponent from './components/semantic-ui';
 // import { LoaderComponent } from './MiscComponents';
 
 

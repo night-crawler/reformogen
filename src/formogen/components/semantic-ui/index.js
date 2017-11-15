@@ -3,16 +3,27 @@ import PropTypes from 'prop-types';
 import _ from 'lodash';
 import loglevel from 'loglevel';
 
-import {
-    GenericFieldComponent,
-    ChoiceFieldComponent,
-    CharFieldComponent,
-    TextFieldComponent,
-    PositiveSmallIntegerFieldComponent,
-    AutocompleteChoiceFieldComponent,
-    DateTimeFieldComponent
-} from './FieldComponents';
+import CharField from './CharField';
+import AutocompleteChoiceField from './AutocompleteChoiceField';
+import TextField from './TextField';
+import GenericField from './GenericField';
+import PositiveSmallIntegerField from './PositiveSmallIntegerField';
+import DateTimeField from './DateTimeField';
+import ManyToManyField from './ManyToManyField';
 
+import 'react-select/dist/react-select.css';
+import './custom.css';
+import 'react-datepicker/dist/react-datepicker.css';
+
+export {
+    CharField,
+    AutocompleteChoiceField,
+    TextField,
+    GenericField,
+    PositiveSmallIntegerField,
+    DateTimeField,
+    ManyToManyField,
+};
 
 export default class FormFieldsComponent extends React.Component {
     static defaultProps = {
@@ -32,10 +43,10 @@ export default class FormFieldsComponent extends React.Component {
     };
 
     static djangoFieldMap = {
-        CharField: CharFieldComponent,
-        TextField: TextFieldComponent,
-        DateTimeField: DateTimeFieldComponent,
-        PositiveSmallIntegerField: PositiveSmallIntegerFieldComponent
+        CharField: CharField,
+        TextField: TextField,
+        DateTimeField: DateTimeField,
+        PositiveSmallIntegerField: PositiveSmallIntegerField,
     };
 
     constructor(props) {
@@ -78,18 +89,23 @@ export default class FormFieldsComponent extends React.Component {
     static pickFieldComponent(opts) {
         if (_.has(opts, 'choices')) {
             if (_.get(opts, 'autocomplete', false)) {
-                return AutocompleteChoiceFieldComponent;
+                return AutocompleteChoiceField;
             } else {
-                return ChoiceFieldComponent;
+                return AutocompleteChoiceField;
             }
         }
-        return FormFieldsComponent.djangoFieldMap[opts.type] || GenericFieldComponent;
+
+        if (opts.type === 'ManyToManyField') {
+            return typeof opts.data === 'string' ? GenericField : ManyToManyField;
+        }
+
+        return FormFieldsComponent.djangoFieldMap[opts.type] || GenericField;
     }
 
     renderField(i, opts) {
-        const FieldComponent = FormFieldsComponent.pickFieldComponent(opts);
+        const Field = FormFieldsComponent.pickFieldComponent(opts);
         return (
-            <FieldComponent
+            <Field
                 key={ i }
                 value={ this.state.formData[opts.name] }
                 onChange={ this.handleFieldChange }

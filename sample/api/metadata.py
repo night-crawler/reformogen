@@ -9,7 +9,7 @@ class AuthorMetadata(MetaData):
     model = wf_models.Author
 
     update_fields = {
-        # 'state': {'autocomplete': True, 'editable': False,},
+        'state': {'autocomplete': True},
         'dt_death': {'editable': False, },
         # 'name': {'editable': False},
     }
