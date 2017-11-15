@@ -1,6 +1,6 @@
 import React from 'react';
 import { Form } from 'semantic-ui-react';
-
+import _ from 'lodash';
 import Label from './Label';
 
 import propTypes from '../fieldPropTypes';
@@ -19,14 +19,20 @@ export default function TextField(props) {
         "required": false
      */
 
+    let _props = {
+        name: props.name,
+        value: props.value,
+        onChange: props.onChange,
+    };
+
+    if (_.isFunction(props.updateProps)) {
+        _props = props.updateProps(_props, props);
+    }
+
     return (
         <Form.Field required={ props.required } disabled={ !props.editable }>
             <Label { ...props } />
-            <Form.TextArea
-                name={ props.name }
-                value={ props.value }
-                onChange={ props.onChange }
-            />
+            <Form.TextArea { ..._props } />
             { !props.helpTextOnHover ? <span className="help-text">{ props.help_text }</span> : ''}
         </Form.Field>
     );

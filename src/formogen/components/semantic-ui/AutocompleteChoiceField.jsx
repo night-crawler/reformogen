@@ -1,7 +1,7 @@
 import React from 'react';
 import { Form } from 'semantic-ui-react';
 import Select from 'react-select';
-
+import _ from 'lodash';
 import Label from './Label';
 
 import propTypes from '../fieldPropTypes';
@@ -44,17 +44,22 @@ export default function AutocompleteChoiceField(props) {
         );
     };
 
+    let _props = {
+        name: props.name,
+        value: props.value,
+        options: makeReactSelectOptions(props.choices),
+        onChange: handleChange,
+        inputProps: {type: 'react-type'},  // fixing breaking semantic markup
+    };
+
+    if (_.isFunction(props.updateProps)) {
+        _props = props.updateProps(_props, props);
+    }
+
     return (
         <Form.Field required={ props.required } disabled={ !props.editable }>
             <Label { ...props } />
-
-            <Select
-                name={ props.name }
-                value={ props.value }
-                options={ makeReactSelectOptions(props.choices) }
-                onChange={ handleChange }
-                inputProps={ { type: 'react-type' } }  // fixing breaking semantic markup
-            />
+            <Select { ..._props } />
 
             { !props.helpTextOnHover ? <span className="help-text">{ props.help_text }</span> : ''}
         </Form.Field>
