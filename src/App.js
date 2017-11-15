@@ -59,6 +59,9 @@ class App extends Component {
                                     metaDataUrl={ metaDataUrl }
                                     onSubmit={ data => this.handleSubmit(data) }
                                     upperFirstLabels={ true }
+                                    fieldUpdatePropsMap={ {
+                                        dt_birth: (_props, props) => Object.assign({}, _props, {timeIntervals: 5})
+                                    } }
                                 />
                             </Segment>
                         </Grid.Column>

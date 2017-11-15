@@ -32,6 +32,7 @@ export default class FormFieldsComponent extends React.Component {
         formData: {},
         locale: 'en',
         helpTextOnHover: false,
+        fieldUpdatePropsMap: {},
     };
 
     static propTypes = {
@@ -40,6 +41,7 @@ export default class FormFieldsComponent extends React.Component {
         helpTextOnHover: PropTypes.bool,
         formData: PropTypes.object,
         locale: PropTypes.string,
+        fieldUpdatePropsMap: PropTypes.object,
     };
 
     static djangoFieldMap = {
@@ -109,6 +111,7 @@ export default class FormFieldsComponent extends React.Component {
                 key={ i }
                 value={ this.state.formData[opts.name] }
                 onChange={ this.handleFieldChange }
+                updateProps={ this.props.fieldUpdatePropsMap[opts.name] }
                 upperFirstLabel={ this.props.upperFirstLabels }
                 helpTextOnHover={ this.props.helpTextOnHover }
                 locale={ this.props.locale }

@@ -23,6 +23,8 @@ export default class FormogenComponent extends Component {
         locale: PropTypes.string,
         helpTextOnHover: PropTypes.bool,
         showHeader: PropTypes.bool,
+
+        fieldUpdatePropsMap: PropTypes.object,
     };
     static defaultProps = {
         // data
@@ -39,6 +41,8 @@ export default class FormogenComponent extends Component {
         onSubmit: data => this.log.debug(`onSubmit() - ${ data }`),
         onSuccess: data => this.log.debug(`onSuccess() - ${ data }`),
         onFail: data => this.log.debug(`onFail() - ${ data }`),
+
+        fieldUpdatePropsMap: {},
     };
 
 
@@ -165,6 +169,7 @@ export default class FormogenComponent extends Component {
                     onSubmit={ (validatedData) => this.handleSubmit(validatedData) }
                     upperFirstLabels={ this.props.upperFirstLabels }
                     helpTextOnHover={ this.props.helpTextOnHover }
+                    fieldUpdatePropsMap={ this.props.fieldUpdatePropsMap }
                 />
                 <Button
                     content={ 'Submit' }
