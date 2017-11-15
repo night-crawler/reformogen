@@ -2,12 +2,26 @@ import React from 'react';
 import { Form } from 'semantic-ui-react';
 import Select from 'react-select';
 import _ from 'lodash';
-
+import PropTypes from 'prop-types';
 import 'react-select/dist/react-select.css';
 
 import Label from './Label';
 
 import propTypes from '../fieldPropTypes';
+
+
+makeOptions.propTypes = PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.number,
+    name: PropTypes.string,
+}));
+
+/**
+ *
+ * @param fieldData
+ */
+function makeOptions(fieldData) {
+    return fieldData.map( ({ id, name }) => ({label: name, value: id}) );
+}
 
 
 ManyToManyField.propTypes = propTypes;
@@ -24,7 +38,8 @@ export default function ManyToManyField(props) {
         "data": []
     */
     const handleChange = (val) => {
-        console.log(val);
+        let plainIds = val.map( ({ value }) => (value*1) );
+        props.onChange(null, {name: props.name, value: plainIds});
     };
 
     let _props = {
@@ -32,12 +47,12 @@ export default function ManyToManyField(props) {
         disabled: !props.editable,
         multi: true,
         onChange: handleChange,
-        options: [],
+        options: makeOptions(props.data),
         placeholder: props.placeholder,
-        simpleValue: true,
+        // simpleValue: true,
         value: props.value,
-        inputProps: {type: 'react-type'},  // fixing breaking semantic markup
-        // removeSelected: this.state.removeSelected,
+        inputProps: {type: 'react-type'},  // fixes broken semantic markup
+        removeSelected: true,
         // rtl: this.state.rtl,
     };
 

@@ -12,6 +12,8 @@ export default function PositiveSmallIntegerField(props) {
         value: props.value,
         onChange: props.onChange,
         type:  'number',
+        min: props.min_value || 0,
+        max: props.max_value || undefined,
     };
 
     if (_.isFunction(props.updateProps)) {

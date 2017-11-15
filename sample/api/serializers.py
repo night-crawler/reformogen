@@ -16,3 +16,16 @@ class AuthorSerializer(serializers.ModelSerializer):
     class Meta:
         model = s_models.Author
         fields = '__all__'
+
+
+class BookSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = s_models.Book
+        fields = '__all__'
+
+
+class AllModelFieldsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = s_models.AllModelFields
+        fields = '__all__'
+

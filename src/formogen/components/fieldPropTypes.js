@@ -16,6 +16,8 @@ const defaultFieldPropTypes = {
     choices: PropTypes.arrayOf(PropTypes.array),
     placeholder: PropTypes.string,
     max_length: PropTypes.number,
+    min_value: PropTypes.number,
+    max_value: PropTypes.number,
     helpTextOnHover: PropTypes.bool,
 
     locale: PropTypes.string,

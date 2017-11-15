@@ -1,5 +1,6 @@
 from django.contrib.postgres.fields import ArrayField
 from django.db import models
+from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 from easy_thumbnails.fields import ThumbnailerImageField
 from model_utils.fields import AutoCreatedField, AutoLastModifiedField
@@ -89,4 +90,55 @@ class Book(TimeStampedModel):
         verbose_name = _('book')
         verbose_name_plural = _('books')
 
+    def printable_name(self):
+        return self.title
 
+
+def default_date():
+    return now().date()
+
+
+def default_time():
+    return now().time()
+
+
+class AllModelFields(models.Model):
+    STATE = states.AUTHOR_CHOICES
+
+    f_date = models.DateField(_('date'), default=default_date)
+    f_time = models.TimeField(_('time'), default=default_time)
+    f_dt = models.DateTimeField(_('date and time'), default=now)
+
+    f_integer = models.IntegerField(_('integer'), default=-22)
+    f_positive_integer = models.PositiveIntegerField(_('positive integer'), default=0)
+    f_small_integer = models.SmallIntegerField(_('small integer'), default=13)
+    f_positive_small_integer = models.PositiveSmallIntegerField(_('positive small integer'), default=222)
+
+    f_decimal = models.DecimalField(_('decimal'), max_digits=10, decimal_places=4, default=3.1415)
+    f_float = models.FloatField(_('float'), default=3.14)
+
+    f_fk_embed = models.ForeignKey(Author,
+                                   verbose_name=_('embedded foreign key'), blank=True, null=True, related_name='+')
+    f_fk_rel = models.ForeignKey(Book,
+                                 verbose_name=_('foreign key with relation'), blank=True, null=True, related_name='+')
+
+    f_m2m_embed = models.ManyToManyField(Author, verbose_name=_('embedded M2M'), blank=True, related_name='+')
+    f_m2m_rel = models.ManyToManyField(Author, verbose_name=_('related M2M'), blank=True, related_name='+')
+
+    f_choice = models.PositiveSmallIntegerField(_('choice'), choices=STATE, default=STATE.alive)
+
+    f_file = models.FileField(_('short preview sample'), blank=True)
+    f_photo = ThumbnailerImageField(_('photo'), blank=True, null=True, help_text=_('logo image'))
+
+    f_char_field = models.CharField(_('char field'), max_length=255, help_text=_('charfield'))
+    f_text_field = models.TextField(_('text field'), blank=True)
+
+    class Meta:
+        verbose_name = _('all model fields')
+        verbose_name_plural = _('list of all model fields instances')
+
+    def __str__(self):
+        return self.printable_name()
+
+    def printable_name(self):
+        return '{0.id}: {0.f_char_field}'.format(self)

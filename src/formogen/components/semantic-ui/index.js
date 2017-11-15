@@ -8,8 +8,11 @@ import AutocompleteChoiceField from './AutocompleteChoiceField';
 import TextField from './TextField';
 import GenericField from './GenericField';
 import PositiveSmallIntegerField from './PositiveSmallIntegerField';
-import DateTimeField from './DateTimeField';
 import ManyToManyField from './ManyToManyField';
+
+import DateTimeField from './DateTimeField';
+import DateField from './DateField';
+import TimeField from './TimeField';
 
 import 'react-select/dist/react-select.css';
 import './custom.css';
@@ -23,6 +26,7 @@ export {
     PositiveSmallIntegerField,
     DateTimeField,
     ManyToManyField,
+
 };
 
 export default class FormFieldsComponent extends React.Component {
@@ -47,8 +51,12 @@ export default class FormFieldsComponent extends React.Component {
     static djangoFieldMap = {
         CharField: CharField,
         TextField: TextField,
-        DateTimeField: DateTimeField,
+
         PositiveSmallIntegerField: PositiveSmallIntegerField,
+
+        DateField: DateField,
+        DateTimeField: DateTimeField,
+        TimeField: TimeField,
     };
 
     constructor(props) {
@@ -82,7 +90,7 @@ export default class FormFieldsComponent extends React.Component {
     }
 
     handleFieldChange = (e, { name, value }) => {
-        this.log.debug(`Setting formData field "${name}" to "${value}"`);
+        this.log.debug(`Setting formData field "${name}" to ${typeof value} ${JSON.stringify(value)}`);
         this.setState({
             formData: Object.assign({}, this.state.formData, {[name]: value})
         });

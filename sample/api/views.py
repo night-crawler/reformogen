@@ -39,3 +39,25 @@ class AuthorViewSet(viewsets.ModelViewSet, DescribeMixin):
 
     def get_queryset(self) -> models.QuerySet:
         return s_models.Author.objects.all()
+
+
+class BookViewSet(viewsets.ModelViewSet, DescribeMixin):
+    serializer_class = s_serializers.BookSerializer
+
+    def dispatch(self, request, *args, **kwargs):
+        # time.sleep(2)
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_queryset(self) -> models.QuerySet:
+        return s_models.Book.objects.all()
+
+
+class AllModelFieldsViewSet(viewsets.ModelViewSet, DescribeMixin):
+    serializer_class = s_serializers.AllModelFieldsSerializer
+
+    def dispatch(self, request, *args, **kwargs):
+        # time.sleep(2)
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_queryset(self) -> models.QuerySet:
+        return s_models.AllModelFields.objects.all()

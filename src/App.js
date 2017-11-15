@@ -37,7 +37,7 @@ class App extends Component {
                 {/*<img src={ logo } className="App-logo" alt="logo" />*/}
                 {/*</div>*/}
 
-                <Grid columns={ 2 } stackable={ true }>
+                <Grid columns={ 3 } stackable={ true }>
                     <Grid.Row>
                         <Grid.Column>
                             <Segment className="formogen">
@@ -57,6 +57,22 @@ class App extends Component {
                                     showHeader={ true }
                                     helpTextOnHover={ true }
                                     metaDataUrl={ metaDataUrl }
+                                    onSubmit={ data => this.handleSubmit(data) }
+                                    upperFirstLabels={ true }
+                                    fieldUpdatePropsMap={ {
+                                        dt_birth: (_props, props) => Object.assign({}, _props, {timeIntervals: 5})
+                                    } }
+                                />
+                            </Segment>
+                        </Grid.Column>
+
+                        <Grid.Column>
+                            <Segment className="formogen">
+                                <Formogen
+                                    locale='ru'
+                                    showHeader={ true }
+                                    helpTextOnHover={ true }
+                                    metaDataUrl={ 'http://localhost:8000/api/v1/sample/all/describe/' }
                                     onSubmit={ data => this.handleSubmit(data) }
                                     upperFirstLabels={ true }
                                     fieldUpdatePropsMap={ {
