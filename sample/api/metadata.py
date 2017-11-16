@@ -36,9 +36,13 @@ class AllModelFieldsMetadata(MetaData):
     update_fields = {
         # 'state': {'autocomplete': True},
         # 'dt_death': {'editable': False, },
-        'f_m2m_rel': {'data': reverse_lazy('authors-list')},
-        'f_fk_rel': {'data': reverse_lazy('books-list')},
     }
+
+    def get_f_fk_rel_dataset_url(self, field, obj):
+        return 'http://localhost:8000%s' % reverse_lazy('books-list')
+
+    def get_f_m2m_rel_dataset_url(self, field, obj):
+        return 'http://localhost:8000%s' % reverse_lazy('authors-list')
 
     def get_title(self, request, view, obj: wf_models.AllModelFields):
         if obj:

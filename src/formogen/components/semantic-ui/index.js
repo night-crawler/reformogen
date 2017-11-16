@@ -7,8 +7,12 @@ import CharField from './CharField';
 import AutocompleteChoiceField from './AutocompleteChoiceField';
 import TextField from './TextField';
 import GenericField from './GenericField';
-import PositiveSmallIntegerField from './PositiveSmallIntegerField';
-import ManyToManyField from './ManyToManyField';
+
+import EmbeddedManyToManyField from './InlineManyToManyField';
+import EmbeddedForeignKeyField from './InlineForeignKeyField';
+import AsyncForeignKeyField from './AsyncForeignKeyField';
+
+import IntegerField from './IntegerField';
 
 import DateTimeField from './DateTimeField';
 import DateField from './DateField';
@@ -18,15 +22,19 @@ import 'react-select/dist/react-select.css';
 import './custom.css';
 import 'react-datepicker/dist/react-datepicker.css';
 
+
 export {
     CharField,
     AutocompleteChoiceField,
     TextField,
     GenericField,
-    PositiveSmallIntegerField,
     DateTimeField,
-    ManyToManyField,
 
+    EmbeddedForeignKeyField,
+    EmbeddedManyToManyField,
+    AsyncForeignKeyField,
+
+    IntegerField,
 };
 
 export default class FormFieldsComponent extends React.Component {
@@ -49,14 +57,19 @@ export default class FormFieldsComponent extends React.Component {
     };
 
     static djangoFieldMap = {
-        CharField: CharField,
-        TextField: TextField,
+        CharField,
+        TextField,
 
-        PositiveSmallIntegerField: PositiveSmallIntegerField,
+        DateField,
+        DateTimeField,
+        TimeField,
 
-        DateField: DateField,
-        DateTimeField: DateTimeField,
-        TimeField: TimeField,
+        PositiveSmallIntegerField: IntegerField,
+        SmallIntegerField: IntegerField,
+        IntegerField: IntegerField,
+        PositiveIntegerField: IntegerField,
+        DecimalField: IntegerField,
+        FloatField: IntegerField,
     };
 
     constructor(props) {
@@ -80,12 +93,9 @@ export default class FormFieldsComponent extends React.Component {
             if (field.name in data) {
                 continue;
             }
-            // should undefined for uncontrolled components, not null
+            // should be undefined for uncontrolled components, not null
             data[field.name] = field.default || '';
         }
-        // console.log(data);
-        // log.setLevel(log.levels.DEBUG);
-        // console.log(log.getLevel());
         return data;
     }
 
@@ -97,16 +107,19 @@ export default class FormFieldsComponent extends React.Component {
     };
 
     static pickFieldComponent(opts) {
+        // opts.autocomplete points to autocomplete request but we don't care
         if (_.has(opts, 'choices')) {
-            if (_.get(opts, 'autocomplete', false)) {
-                return AutocompleteChoiceField;
-            } else {
-                return AutocompleteChoiceField;
-            }
+            return AutocompleteChoiceField;
         }
 
         if (opts.type === 'ManyToManyField') {
-            return typeof opts.data === 'string' ? GenericField : ManyToManyField;
+            // opts.data can be a string or a list; string treats as a url to DataSet
+            return typeof opts.data === 'string' ? GenericField : EmbeddedManyToManyField;
+        }
+
+        if (opts.type === 'ForeignKey') {
+            // opts.data can be a string or a list; string treats as a url to DataSet
+            return typeof opts.data === 'string' ? AsyncForeignKeyField : EmbeddedForeignKeyField;
         }
 
         return FormFieldsComponent.djangoFieldMap[opts.type] || GenericField;
@@ -123,6 +136,7 @@ export default class FormFieldsComponent extends React.Component {
                 upperFirstLabel={ this.props.upperFirstLabels }
                 helpTextOnHover={ this.props.helpTextOnHover }
                 locale={ this.props.locale }
+
                 { ...opts }
             />
         );

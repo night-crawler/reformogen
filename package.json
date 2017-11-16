@@ -8,12 +8,12 @@
     "loglevel": "^1.6.0",
     "loglevel-plugin-prefix": "^0.5.3",
     "moment": "^2.19.2",
-    "rc-time-picker": "^3.2.0",
     "react": "^15.6.1",
     "react-datepicker": "^0.60.2",
     "react-dom": "^15.6.1",
     "react-scripts": "1.0.11",
     "react-select": "^1.0.0-rc.10",
+    "react-times": "^2.2.8",
     "semantic-ui-css": "^2.2.12",
     "semantic-ui-react": "^0.72.0"
   },

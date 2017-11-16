@@ -2,27 +2,47 @@ import PropTypes from 'prop-types';
 
 
 const defaultFieldPropTypes = {
-    upperFirstLabel: PropTypes.bool,
+    /* common */
+    type: PropTypes.string.isRequired,
+
     name: PropTypes.string.isRequired,
-    value: PropTypes.any,
     verbose_name: PropTypes.string.isRequired,
     help_text: PropTypes.string.isRequired,
+    max_length: PropTypes.number,  /* for CharField && TextField */
+
     blank: PropTypes.bool,
     null: PropTypes.bool,
     editable: PropTypes.bool,
-    type: PropTypes.string.isRequired,
     required: PropTypes.bool,
+
     default: PropTypes.any,
-    choices: PropTypes.arrayOf(PropTypes.array),
-    placeholder: PropTypes.string,
-    max_length: PropTypes.number,
+    value: PropTypes.any,
+
+    /* integers */
     min_value: PropTypes.number,
     max_value: PropTypes.number,
+    decimal_places: PropTypes.number,
+    max_digits: PropTypes.number,
+
+    /* Django choices */
+    choices: PropTypes.arrayOf(PropTypes.array),
+
+    /* optional placeholder support (not bundled in default field data in drf-metadata) */
+    placeholder: PropTypes.string,
+
+    /* lowercase labels to Uppercase */
+    upperFirstLabel: PropTypes.bool,
+
+    /* show help text on hover label (?) sign, or put in the bottom */
     helpTextOnHover: PropTypes.bool,
 
+    /* pass optional locale to child, it can be useful in some cases */
     locale: PropTypes.string,
-    onChange: PropTypes.func,
+
+    /* method to provide additional/redefine some opts in child component */
     updateProps: PropTypes.func,
+
+    onChange: PropTypes.func,
 };
 
 export default defaultFieldPropTypes;

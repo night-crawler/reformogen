@@ -37,7 +37,6 @@ export default function AutocompleteChoiceField(props) {
      */
 
     const handleChange = (newVal) => {
-        console.log(newVal);
         props.onChange(
             null,
             {name: props.name, value: newVal ? newVal.value : null }
@@ -45,6 +44,7 @@ export default function AutocompleteChoiceField(props) {
     };
 
     let _props = {
+        clearable: !props.required,
         name: props.name,
         value: props.value,
         options: makeReactSelectOptions(props.choices),

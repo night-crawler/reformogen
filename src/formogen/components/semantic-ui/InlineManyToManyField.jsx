@@ -24,8 +24,8 @@ function makeOptions(fieldData) {
 }
 
 
-ManyToManyField.propTypes = propTypes;
-export default function ManyToManyField(props) {
+InlineManyToManyField.propTypes = propTypes;
+export default function InlineManyToManyField(props) {
     /*
         "name": "inspire_source",
         "verbose_name": "inspire source",

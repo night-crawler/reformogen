@@ -1,39 +1,48 @@
 import React from 'react';
 import { Form } from 'semantic-ui-react';
-import TimePicker from 'rc-time-picker';
 import moment from 'moment';
 import _ from 'lodash';
-
-import 'rc-time-picker/assets/index.css';
-
+import TimePicker from 'react-times';
 import Label from './Label';
 
 import propTypes from '../fieldPropTypes';
 
 
+import 'react-times/css/material/default.css';
+
+
 DateField.propTypes = propTypes;
 export default function DateField(props) {
-    const handleChange = (momentTimeObject) => {
-        // proxy event with SUI-React compliant style
-        props.onChange(null, {
+    let hour=null, minutes=null;
+
+    const handleChange = (timeString) => {
+        // trigger global onChange in case user've changed both minutes and hours
+        // (calling onChange on every change causes redraw && closing TimePicker)
+        hour && minutes && props.onChange(null, {
             name: props.name,
-            value: momentTimeObject ? momentTimeObject.format('HH:mm:ss') : null
+            // append seconds to time
+            value: timeString ? moment(timeString, 'HH:mm').format('HH:mm:ss') : null
         });
     };
 
-    // proxyConsole.js:56 Warning: Failed form propType: You provided a `value` prop to a form field without an `onChange` handler
     let _props = {
+        autoMode: true,
         name: props.name,
-        // locale: props.locale,
-        value: props.value ? moment(props.value, 'HH:mm:ss') : null,
-        onChange: handleChange,
-        // showSecond: false,
+        time: props.value ? moment(props.value, 'HH:mm:ss').format('HH:mm') : null,
+        timeMode: '24',
+        focused: false,
+        withoutIcon: false,
+        showTimezone: true,
+        onMinuteChange: (_minutes) => (minutes = _minutes),
+        onHourChange: (_hour) => (hour = _hour),
+        onTimeChange: handleChange,
+        // timezone: 'America/New_York',
+        theme: 'material',
     };
 
     if (_.isFunction(props.updateProps)) {
         _props = props.updateProps(_props, props);
     }
-    console.log(_props);
 
     return (
         <Form.Field required={ props.required } disabled={ !props.editable }>

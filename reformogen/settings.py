@@ -137,3 +137,17 @@ STATIC_URL = '/static/'
 
 # --------------- 666 ---------------
 CORS_ORIGIN_ALLOW_ALL = True
+
+
+# DJANGO REST FRAMEWORK
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [],  # авторизация проверяется через LoginRequiredMiddleware
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'DEFAULT_RENDERER_CLASSES': ('rest_framework.renderers.JSONRenderer',),
+    'URL_FORMAT_OVERRIDE': None,  # не использовать 'format' как особый url аргумент
+    'PAGE_SIZE': 10,
+}
+
+if DEBUG:
+    del REST_FRAMEWORK['DEFAULT_RENDERER_CLASSES']
+
