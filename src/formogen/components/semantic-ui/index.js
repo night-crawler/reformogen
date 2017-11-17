@@ -3,10 +3,12 @@ import PropTypes from 'prop-types';
 import _ from 'lodash';
 import loglevel from 'loglevel';
 
-import CharField from './CharField';
-import AutocompleteChoiceField from './AutocompleteChoiceField';
-import TextField from './TextField';
 import GenericField from './GenericField';
+
+import CharField from './CharField';
+import TextField from './TextField';
+
+import AutocompleteChoiceField from './AutocompleteChoiceField';
 
 import EmbeddedManyToManyField from './InlineManyToManyField';
 import EmbeddedForeignKeyField from './InlineForeignKeyField';
@@ -18,6 +20,8 @@ import IntegerField from './IntegerField';
 import DateTimeField from './DateTimeField';
 import DateField from './DateField';
 import TimeField from './TimeField';
+
+import DropzoneField from './DropzoneField';
 
 import 'react-select/dist/react-select.css';
 import './custom.css';
@@ -71,6 +75,8 @@ export default class FormFieldsComponent extends React.Component {
         PositiveIntegerField: IntegerField,
         DecimalField: IntegerField,
         FloatField: IntegerField,
+
+        FileField: DropzoneField,
     };
 
     constructor(props) {

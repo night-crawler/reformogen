@@ -1,23 +1,40 @@
 /*fix the extra big padding issue with semantic ui */
-.react-datepicker ul {
+.formogen .react-datepicker ul {
     padding: 0 !important;
 }
 
-.react-datepicker__input-container {
+.formogen .react-datepicker__input-container {
     width: 100%;
 }
 
-.react-datepicker-wrapper input {
+.formogen .react-datepicker-wrapper input {
     width: 100% !important;
 }
 
 
-.react-datepicker-wrapper {
+.formogen .react-datepicker-wrapper {
     width: 100% !important;
 }
 
-.field .help-text {
+.formogen .field .help-text {
     float: right;
     padding-right: 10px;
     color: gray;
+}
+
+.formogen .ui.red {
+    color: red;
+}
+
+.formogen .ui.segment.dropzone {
+    border: 1px dashed lightgray;
+}
+
+.formogen .ui.segment.dropzone .help-text {
+    float: none;
+    display: block !important;
+}
+
+.formogen .ui.segment.dropzone .clear {
+    clear: both;
 }

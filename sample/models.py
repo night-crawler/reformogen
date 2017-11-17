@@ -128,7 +128,7 @@ class AllModelFields(models.Model):
 
     f_choice = models.PositiveSmallIntegerField(_('choice'), choices=STATE, default=STATE.alive)
 
-    f_file = models.FileField(_('short preview sample'), blank=True)
+    f_file = models.FileField(_('short preview sample'), blank=False)
     f_photo = ThumbnailerImageField(_('photo'), blank=True, null=True, help_text=_('logo image'))
 
     f_char_field = models.CharField(_('char field'), max_length=255, help_text=_('charfield'))
