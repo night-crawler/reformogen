@@ -10,6 +10,7 @@ import GenericField from './GenericField';
 
 import EmbeddedManyToManyField from './InlineManyToManyField';
 import EmbeddedForeignKeyField from './InlineForeignKeyField';
+import AsyncManyToManyField from './AsyncManyToManyField';
 import AsyncForeignKeyField from './AsyncForeignKeyField';
 
 import IntegerField from './IntegerField';
@@ -114,7 +115,7 @@ export default class FormFieldsComponent extends React.Component {
 
         if (opts.type === 'ManyToManyField') {
             // opts.data can be a string or a list; string treats as a url to DataSet
-            return typeof opts.data === 'string' ? GenericField : EmbeddedManyToManyField;
+            return typeof opts.data === 'string' ? AsyncManyToManyField : EmbeddedManyToManyField;
         }
 
         if (opts.type === 'ForeignKey') {

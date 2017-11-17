@@ -89,6 +89,7 @@ class Book(TimeStampedModel):
     class Meta:
         verbose_name = _('book')
         verbose_name_plural = _('books')
+        ordering = ('author', 'title')
 
     def printable_name(self):
         return self.title

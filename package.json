@@ -15,7 +15,8 @@
     "react-select": "^1.0.0-rc.10",
     "react-times": "^2.2.8",
     "semantic-ui-css": "^2.2.12",
-    "semantic-ui-react": "^0.72.0"
+    "semantic-ui-react": "^0.72.0",
+    "urijs": "^1.19.0"
   },
   "scripts": {
     "start": "react-scripts start",

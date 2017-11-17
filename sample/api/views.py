@@ -40,6 +40,13 @@ class AuthorViewSet(viewsets.ModelViewSet, DescribeMixin):
     def get_queryset(self) -> models.QuerySet:
         return s_models.Author.objects.all()
 
+    def filter_queryset(self, queryset: models.QuerySet):
+        qp = self.request.query_params
+        search = qp.get('q') or qp.get('search') or qp.get('query')
+        if search:
+            return queryset.filter(name__icontains=search)
+        return queryset
+
 
 class BookViewSet(viewsets.ModelViewSet, DescribeMixin):
     serializer_class = s_serializers.BookSerializer
@@ -50,6 +57,13 @@ class BookViewSet(viewsets.ModelViewSet, DescribeMixin):
 
     def get_queryset(self) -> models.QuerySet:
         return s_models.Book.objects.all()
+
+    def filter_queryset(self, queryset: models.QuerySet):
+        qp = self.request.query_params
+        search = qp.get('q') or qp.get('search') or qp.get('query')
+        if search:
+            return queryset.filter(title__icontains=search)
+        return queryset
 
 
 class AllModelFieldsViewSet(viewsets.ModelViewSet, DescribeMixin):

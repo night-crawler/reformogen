@@ -12,8 +12,8 @@ import ModelInstanceOption from './ReactSelectOptionComponent';
 import ModelInstanceValue from './ReactSelectValueComponent';
 
 
-AsyncForeignKeyField.propTypes = propTypes;
-export default function AsyncForeignKeyField(props) {
+AsyncManyToManyField.propTypes = propTypes;
+export default function AsyncManyToManyField(props) {
     /*
         "name": "inspire_source",
         "verbose_name": "inspire source",
@@ -26,7 +26,8 @@ export default function AsyncForeignKeyField(props) {
         "data": []
     */
     const handleChange = (val) => {
-        props.onChange(null, {name: props.name, value: val ? val*1 : null});
+        let plainIds = val.map( ({ id }) => (id*1) );
+        props.onChange(null, {name: props.name, value: plainIds});
     };
 
     const loadOptions = (input, callback) => {
@@ -47,7 +48,7 @@ export default function AsyncForeignKeyField(props) {
         clearable: !props.required,
         closeOnSelect: true,
         disabled: !props.editable,
-        multi: false,
+        multi: true,
         onChange: handleChange,
         placeholder: props.placeholder,
 
@@ -56,7 +57,7 @@ export default function AsyncForeignKeyField(props) {
         removeSelected: true,
 
         valueKey: 'id',  /* server-side model should provide `id` for object */
-        simpleValue: true,  /* we have no need to store whole objects in parent's state */
+        // simpleValue: true,  /* we have no need to store whole objects in parent's state */
 
         optionComponent: ModelInstanceOption,
         valueComponent: ModelInstanceValue,
