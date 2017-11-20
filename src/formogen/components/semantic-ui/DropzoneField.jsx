@@ -54,7 +54,7 @@ function bytesToSize(bytes) {
         sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'],
         i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)), 10);
 
-    if (i === 0) {return `${bytes} ${sizes[i]})`;}
+    if (i === 0) {return `${bytes} ${sizes[i]}`;}
     return `${(bytes / (1024 ** i)).toFixed(1)} ${sizes[i]}`;
 }
 
@@ -99,7 +99,6 @@ FileItem.propTypes = {
     onRemove: PropTypes.func.isRequired,
 };
 function FileItem({ file, getFileIcon, onRemove }) {
-    console.log(file);
     return (
         <List.Item>
             <List.Content floated='right' className='left aligned'>
@@ -128,14 +127,18 @@ export default class DropzoneField extends React.Component {
         updateProps: PropTypes.func,
         widget: PropTypes.string,
 
+        onChange: PropTypes.func.isRequired,
         getFileIcon: PropTypes.func,
+        multiple: PropTypes.bool,
+        accept: PropTypes.string,
     };
 
     static defaultProps = {
         getFileIcon: (fileObject) => {
             let ext = fileObject.name.split('.').pop().toLowerCase();
             return fileTypeImageMapping[ext] || UNKNOWN_FILE_TYPE;
-        }
+        },
+        multiple: false,
     };
 
     constructor(props) {
@@ -144,27 +147,41 @@ export default class DropzoneField extends React.Component {
     }
 
     handleDrop = (files) => {
-        this.setState({
-            files //: files.map((file, i) => Object.assign(file, {id: i}))
-        });
+        if (!this.state.multiple) {
+            this.setState({files});
+            this.props.onChange(null, { name: this.props.name, value: files });
+            return;
+        }
+
+        // build key by this triple to ensure we're adding different files
+        const keyBuilder = (item) => (`${item.lastModified}:${item.size}:${item.name}`);
+        const mergedFiles = _(this.state.files)
+            .keyBy(keyBuilder)
+            .merge(_.keyBy(files, keyBuilder))
+            .values()
+            .value();
+        this.setState({ files: mergedFiles });
+        this.props.onChange(null, { name: this.props.name, value: mergedFiles });
     };
 
     handleClearFiles = () => {
         this.setState({files: []});
+        this.props.onChange(null, {name: this.props.name, value: []});
     };
 
     handleRemoveFile = (fileObject) => {
-        this.setState({
-            files: _.without(this.state.files, fileObject)
-        });
+        const files = _.without(this.state.files, fileObject);
+        this.setState({files});
+        this.props.onChange(null, {name: this.props.name, value: files });
     };
 
     render() {
         const labelText = this.props.upperFirstLabel ? _.upperFirst(this.props.verbose_name) : this.props.verbose_name;
 
         let _props = {
-            multiple: true,
+            multiple: this.props.multiple,
             onDrop: this.handleDrop,
+            accept: this.props.accept,
         };
 
         if (_.isFunction(this.props.updateProps)) {

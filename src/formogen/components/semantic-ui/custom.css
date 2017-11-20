@@ -38,3 +38,7 @@
 .formogen .ui.segment.dropzone .clear {
     clear: both;
 }
+
+.formogen .ui.segment.dropzone {
+    cursor: pointer;
+}

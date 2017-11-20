@@ -1,3 +1,4 @@
+from django.utils.text import format_lazy
 from django.utils.translation import ugettext_lazy as _
 
 from drf_metadata.meta import MetaData
@@ -34,8 +35,14 @@ class AllModelFieldsMetadata(MetaData):
     model = wf_models.AllModelFields
 
     update_fields = {
-        # 'state': {'autocomplete': True},
-        # 'dt_death': {'editable': False, },
+        'f_file': {
+            # ensure upload_url is lazy (premature import case)
+            'upload_url': format_lazy('{}{}', 'http://localhost:8000', reverse_lazy('all-accept-file'))
+        },
+        'f_photo': {
+            # ensure upload_url is lazy (premature import case)
+            'upload_url': format_lazy('{}{}', 'http://localhost:8000', reverse_lazy('all-accept-file'))
+        }
     }
 
     def get_f_fk_rel_dataset_url(self, field, obj):

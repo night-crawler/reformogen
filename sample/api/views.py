@@ -75,3 +75,8 @@ class AllModelFieldsViewSet(viewsets.ModelViewSet, DescribeMixin):
 
     def get_queryset(self) -> models.QuerySet:
         return s_models.AllModelFields.objects.all()
+
+    @list_route(['POST'])
+    def accept_file(self, request: Request):
+        print(request.FILES)
+        return Response({'lol': 1})
