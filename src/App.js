@@ -78,6 +78,20 @@ class App extends Component {
                                     fieldUpdatePropsMap={ {
                                         dt_birth: (_props, props) => Object.assign({}, _props, {timeIntervals: 5})
                                     } }
+                                    layout={ [
+                                        {
+                                            header: 'Integer Group',
+                                            fields: [
+                                                ['f_integer', 2], 'f_positive_integer', 'f_small_integer',
+                                                'f_positive_small_integer'
+                                            ],
+                                            width: 8,
+                                        },
+                                        {
+                                            header: 'Other',
+                                            fields: '*',
+                                        }
+                                    ] }
                                 />
                             </Segment>
                         </Grid.Column>

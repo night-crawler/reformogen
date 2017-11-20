@@ -170,6 +170,7 @@ export default class FormogenComponent extends Component {
                     upperFirstLabels={ this.props.upperFirstLabels }
                     helpTextOnHover={ this.props.helpTextOnHover }
                     fieldUpdatePropsMap={ this.props.fieldUpdatePropsMap }
+                    layout={ this.props.layout }
                 />
                 <Button
                     content={ 'Submit' }

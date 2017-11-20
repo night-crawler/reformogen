@@ -32,7 +32,7 @@ export default function CharField (props) {
     }
 
     return (
-        <Form.Field required={ props.required } disabled={ !props.editable }>
+        <Form.Field required={ props.required } disabled={ !props.editable } width={ props.width }>
             <Label { ...props } />
             <Form.Input { ..._props } />
             { !props.helpTextOnHover ? <span className="help-text">{ props.help_text }</span> : ''}

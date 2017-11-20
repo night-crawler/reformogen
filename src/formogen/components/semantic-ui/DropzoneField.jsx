@@ -189,7 +189,7 @@ export default class DropzoneField extends React.Component {
         }
 
         return (
-            <Form.Field required={ this.props.required } disabled={ !this.props.editable }>
+            <Form.Field required={ this.props.required } disabled={ !this.props.editable } width={ this.props.width }>
 
                 <Dropzone className="ui center aligned dropzone segment attached top"  { ..._props }>
                     <strong>{ labelText } { this.props.required && <span className='ui red'>*</span> }</strong>

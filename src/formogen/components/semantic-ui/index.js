@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import _ from 'lodash';
 import loglevel from 'loglevel';
 
+import { Header, Grid } from 'semantic-ui-react';
+
 import GenericField from './GenericField';
 
 import CharField from './CharField';
@@ -50,6 +52,10 @@ export default class FormFieldsComponent extends React.Component {
         locale: 'en',
         helpTextOnHover: false,
         fieldUpdatePropsMap: {},
+        layout: [{
+            header: '',
+            fields: '*',
+        }],
     };
 
     static propTypes = {
@@ -59,6 +65,7 @@ export default class FormFieldsComponent extends React.Component {
         formData: PropTypes.object,
         locale: PropTypes.string,
         fieldUpdatePropsMap: PropTypes.object,
+        layout: PropTypes.array,
     };
 
     static djangoFieldMap = {
@@ -88,10 +95,50 @@ export default class FormFieldsComponent extends React.Component {
 
         this.state = {
             fields: props.fields,
+            layout: this.unfoldWildcardFields(),
             formData: FormFieldsComponent.updateFormDataWithDefaults(props.fields, formData),
             origFormData: Object.assign({}, props.formData),
         };
+    }
 
+    getFieldPropsByName(name) {
+        return _(this.state.fields).find({name});
+    }
+
+    renderLayout() {
+        return this.state.layout.map(({ header, fields, width }, i) => {
+
+            // render all fields in layout section
+            let renderedFields = fields.map((fieldName, j) => {
+                let opts = this.getFieldPropsByName(fieldName);
+                if (!opts){
+                    return null;
+                }
+                opts.width = width || 16;
+                console.log(opts);
+                return this.renderField(j, opts);
+            });
+
+            return (
+                <Grid columns={ 16 } key={ i }>
+                    { header && <div className="sixteen wide column"><Header>{ header }</Header></div> }
+                    { renderedFields }
+                </Grid>
+            );
+
+        }) || null;
+    }
+
+    unfoldWildcardFields() {
+        let layout = _(this.props.layout).cloneDeep(),
+            ldLayout = _(layout),
+            usedFields = ldLayout.map('fields').flatten().without('*'),
+            allFields = _(this.props.fields).map('name');
+
+        console.log(usedFields.value());
+
+        ldLayout.find({'fields': '*'})['fields'] = allFields.difference(usedFields.value()).value();
+        return layout;
     }
 
     static updateFormDataWithDefaults(fields, formData) {
@@ -149,11 +196,20 @@ export default class FormFieldsComponent extends React.Component {
         );
     }
 
+
+
     render() {
-        const { fields } = this.state;
+        this.unfoldWildcardFields();
 
-        const formFields = fields.map( (field, i) => this.renderField(i, field) );
+        return null;
 
-        return <div>{ formFields }</div>;
+        return <div>{this.renderLayout()}</div>;
+        // this.renderLayout();
+        //
+        // const { fields } = this.state;
+        //
+        // const formFields = fields.map( (field, i) => this.renderField(i, field) );
+        //
+        // return <div>{ formFields }</div>;
     }
 }
