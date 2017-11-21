@@ -30,7 +30,7 @@ export default function TextField(props) {
     }
 
     return (
-        <Form.Field required={ props.required } disabled={ !props.editable } width={ props.width }>
+        <Form.Field required={ props.required } disabled={ !props.editable } width={ props.layoutOpts.width }>
             <Label { ...props } />
             <Form.TextArea { ..._props } />
             { !props.helpTextOnHover ? <span className="help-text">{ props.help_text }</span> : ''}

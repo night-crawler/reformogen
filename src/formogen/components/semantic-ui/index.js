@@ -52,9 +52,12 @@ export default class FormFieldsComponent extends React.Component {
         locale: 'en',
         helpTextOnHover: false,
         fieldUpdatePropsMap: {},
+
+        /* declare a default layout */
         layout: [{
             header: '',
             fields: '*',
+            width: 16,
         }],
     };
 
@@ -102,25 +105,35 @@ export default class FormFieldsComponent extends React.Component {
     }
 
     getFieldPropsByName(name) {
-        return _(this.state.fields).find({name});
+        return _.find(this.state.fields, {name});
     }
 
     renderLayout() {
         return this.state.layout.map(({ header, fields, width }, i) => {
+            /* fields: ['field1', 'field2'] || [{field1: {...opts}}, 'field42'] */
 
             // render all fields in layout section
-            let renderedFields = fields.map((fieldName, j) => {
-                let opts = this.getFieldPropsByName(fieldName);
-                if (!opts){
+            let renderedFields = fields.map((fieldObj, j) => {
+                /* fieldObj may be a string representing field name or object with first key as a field name,
+                 * if we need to provide more options */
+                /* layoutFieldOpts take a default width from layout section */
+                let fieldName, layoutFieldOpts = { width };
+                if (_.isString(fieldObj)) {
+                    fieldName = fieldObj;
+                } else {
+                    fieldName = _.keys(fieldObj).pop();
+                    layoutFieldOpts = Object.assign(layoutFieldOpts, fieldObj[fieldName]);
+                }
+
+                let fieldProps = this.getFieldPropsByName(fieldName);
+                if (!fieldProps){
                     return null;
                 }
-                opts.width = width || 16;
-                console.log(opts);
-                return this.renderField(j, opts);
+                return this.renderField(j, fieldProps, layoutFieldOpts);
             });
 
             return (
-                <Grid columns={ 16 } key={ i }>
+                <Grid columns={ 16 } key={ i } className='layout'>
                     { header && <div className="sixteen wide column"><Header>{ header }</Header></div> }
                     { renderedFields }
                 </Grid>
@@ -131,12 +144,16 @@ export default class FormFieldsComponent extends React.Component {
 
     unfoldWildcardFields() {
         let layout = _(this.props.layout).cloneDeep(),
-            ldLayout = _(layout),
-            usedFields = ldLayout.map('fields').flatten().without('*'),
-            allFields = _(this.props.fields).map('name');
+            ldLayout = _(layout);
 
-        console.log(usedFields.value());
+        let usedFields = ldLayout.map('fields')
+            .flatten()
+            .map((fieldObj) => {  /* object first key is field name or object itself */
+                return _.isString(fieldObj) ? fieldObj : _.keys(fieldObj)[0];
+            })
+            .without('*');  /* we don't take wildcard as a field */
 
+        let allFields = _(this.props.fields).map('name');
         ldLayout.find({'fields': '*'})['fields'] = allFields.difference(usedFields.value()).value();
         return layout;
     }
@@ -179,7 +196,7 @@ export default class FormFieldsComponent extends React.Component {
         return FormFieldsComponent.djangoFieldMap[opts.type] || GenericField;
     }
 
-    renderField(i, opts) {
+    renderField(i, opts, layoutOpts) {
         const Field = FormFieldsComponent.pickFieldComponent(opts);
         return (
             <Field
@@ -191,6 +208,8 @@ export default class FormFieldsComponent extends React.Component {
                 helpTextOnHover={ this.props.helpTextOnHover }
                 locale={ this.props.locale }
 
+                layoutOpts={ layoutOpts }
+
                 { ...opts }
             />
         );
@@ -199,11 +218,7 @@ export default class FormFieldsComponent extends React.Component {
 
 
     render() {
-        this.unfoldWildcardFields();
-
-        return null;
-
-        return <div>{this.renderLayout()}</div>;
+        return <div className='layouts'>{this.renderLayout()}</div>;
         // this.renderLayout();
         //
         // const { fields } = this.state;

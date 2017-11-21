@@ -45,7 +45,7 @@ export default function DateField(props) {
     }
 
     return (
-        <Form.Field required={ props.required } disabled={ !props.editable } width={ props.width }>
+        <Form.Field required={ props.required } disabled={ !props.editable } width={ props.layoutOpts.width }>
             <Label { ...props } />
             <TimePicker { ..._props } />
             { !props.helpTextOnHover ? <span className="help-text">{ props.help_text }</span> : ''}

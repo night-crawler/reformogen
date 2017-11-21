@@ -131,6 +131,8 @@ export default class DropzoneField extends React.Component {
         getFileIcon: PropTypes.func,
         multiple: PropTypes.bool,
         accept: PropTypes.string,
+
+        layoutOpts: PropTypes.object,
     };
 
     static defaultProps = {
@@ -189,7 +191,7 @@ export default class DropzoneField extends React.Component {
         }
 
         return (
-            <Form.Field required={ this.props.required } disabled={ !this.props.editable } width={ this.props.width }>
+            <Form.Field required={ this.props.required } disabled={ !this.props.editable } width={ this.props.layoutOpts.width }>
 
                 <Dropzone className="ui center aligned dropzone segment attached top"  { ..._props }>
                     <strong>{ labelText } { this.props.required && <span className='ui red'>*</span> }</strong>

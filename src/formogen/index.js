@@ -3,13 +3,13 @@ import Formogen from './FormogenComponent';
 /*
 
 0. edit && save support
-1. render json metadata
+1. + render json metadata
 2. validate (simple) user input (js-side validators)
 3. + dynamic data loading (data="/url/")
 4. custom (3) renderers
 6. + populate with default values
 7. populate from (*) custom user data values
-8. layouts
+8. + layouts
 9. + dynamic metadata (without serverside endpoints)
 10. additional fields
 11. request interceptions (pipeline)

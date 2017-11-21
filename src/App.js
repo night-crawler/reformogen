@@ -82,14 +82,49 @@ class App extends Component {
                                         {
                                             header: 'Integer Group',
                                             fields: [
-                                                ['f_integer', 2], 'f_positive_integer', 'f_small_integer',
+                                                {f_integer: {width: 8}},
+                                                {f_positive_integer: {width: 8}},
+                                                'f_small_integer',
                                                 'f_positive_small_integer'
                                             ],
                                             width: 8,
                                         },
                                         {
+                                            header: 'Float group',
+                                            fields: [
+                                                {f_decimal: {width: 4}},
+                                                {f_float: {width: 12}},
+                                            ]
+                                        },
+                                        {
+                                            header: 'Dates',
+                                            fields: [
+                                                {f_date: {width: 8}},
+                                                {f_time: {width: 8}},
+                                                {f_dt: {width: 16}},
+                                            ]
+                                        },
+                                        {
+                                            header: 'Relations',
+                                            fields: [
+                                                {f_fk_embed: {width: 8}},
+                                                {f_fk_rel: {width: 8}},
+                                                {f_m2m_embed: {width: 8}},
+                                                {f_m2m_rel: {width: 8}},
+                                                {f_choice: {width: 16}},
+                                            ]
+                                        },
+                                        {
+                                            header: 'Files',
+                                            fields: [
+                                                {f_file: {width: 8}},
+                                                {f_photo: {width: 8}}
+                                            ]
+                                        },
+                                        {
                                             header: 'Other',
                                             fields: '*',
+                                            width: 16,
                                         }
                                     ] }
                                 />

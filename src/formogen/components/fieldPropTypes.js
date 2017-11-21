@@ -43,6 +43,8 @@ const defaultFieldPropTypes = {
     updateProps: PropTypes.func,
 
     onChange: PropTypes.func,
+
+    layoutOpts: PropTypes.object,
 };
 
 export default defaultFieldPropTypes;

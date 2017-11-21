@@ -42,3 +42,8 @@
 .formogen .ui.segment.dropzone {
     cursor: pointer;
 }
+
+.formogen .layouts {
+    padding-top: 10px;
+    padding-bottom: 25px;
+}

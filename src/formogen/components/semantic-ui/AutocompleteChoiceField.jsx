@@ -57,7 +57,7 @@ export default function AutocompleteChoiceField(props) {
     }
 
     return (
-        <Form.Field required={ props.required } disabled={ !props.editable } width={ props.width }>
+        <Form.Field required={ props.required } disabled={ !props.editable } width={ props.layoutOpts.width }>
             <Label { ...props } />
             <Select { ..._props } />
 
