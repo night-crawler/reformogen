@@ -22,13 +22,28 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
     "eject": "react-scripts eject"
   },
+  "jest": {
+    "setupFiles": [
+      "./src/formogen/tests/jestsetup.js"
+    ],
+    "snapshotSerializers": [
+      "<rootDir>/node_modules/enzyme-to-json/serializer"
+    ]
+  },
   "devDependencies": {
+    "babel-jest": "^21.2.0",
+    "babel-preset-env": "^1.6.1",
+    "enzyme": "^3.2.0",
+    "enzyme-to-json": "^3.2.2",
     "eslint": "^4.10.0",
     "eslint-plugin-react": "^7.4.0",
     "eslint-plugin-react-native": "^3.1.0",
-    "mocha": "^4.0.1"
+    "jest": "^21.2.1",
+    "react-addons-test-utils": "^15.6.2"
   }
 }

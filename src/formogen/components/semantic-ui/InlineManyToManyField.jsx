@@ -38,7 +38,7 @@ export default function InlineManyToManyField(props) {
         "data": []
     */
     const handleChange = (val) => {
-        let plainIds = val.map( ({ value }) => (value*1) );
+        const plainIds = val.map( ({ value }) => (value*1) );
         props.onChange(null, {name: props.name, value: plainIds});
     };
 
@@ -65,7 +65,7 @@ export default function InlineManyToManyField(props) {
             <Label { ...props } />
             <Select { ..._props } />
 
-            { !props.helpTextOnHover ? <span className="help-text">{ props.help_text }</span> : ''}
+            { !props.helpTextOnHover ? <span className='help-text'>{ props.help_text }</span> : ''}
         </Form.Field>
     );
 }

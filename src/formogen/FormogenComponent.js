@@ -178,7 +178,7 @@ export default class FormogenComponent extends Component {
                     onKeyPress={ () => this.handleSubmit() }
 
                     fluid={ true }
-                    type="submit"
+                    type='submit'
                 />
             </Form>
         );

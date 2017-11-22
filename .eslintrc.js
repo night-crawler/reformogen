@@ -4,7 +4,7 @@ module.exports = {
         // 'node': true,
         // https://github.com/standard/standard/issues/371
         // https://github.com/standard/standard/issues/122
-        'mocha': true,  // otherwise it can't see `it`
+        // 'mocha': true,  // otherwise it can't see `it`
         'jest': true,
         'commonjs': true,
         'es6': true

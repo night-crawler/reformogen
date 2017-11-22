@@ -6,7 +6,7 @@ import React, { Component } from 'react';
 
 import Formogen from './formogen';
 
-import { Grid } from 'semantic-ui-react'
+import { Grid } from 'semantic-ui-react';
 import 'semantic-ui-css/semantic.css';
 import preparedMetaData from './form.json';
 
@@ -30,17 +30,17 @@ class App extends Component {
 
     render() {
         return (
-            <div className="App">
+            <div className='App'>
 
-                {/*<div className="App-header">*/}
+                {/*<div className='App-header'>*/}
                 {/*<h1>React Formogen JS</h1>*/}
-                {/*<img src={ logo } className="App-logo" alt="logo" />*/}
+                {/*<img src={ logo } className='App-logo' alt='logo' />*/}
                 {/*</div>*/}
 
                 <Grid columns={ 3 } stackable={ true }>
                     <Grid.Row>
                         <Grid.Column>
-                            <Segment className="formogen">
+                            <Segment className='formogen'>
                                 <Formogen
                                     metaData={ preparedMetaData }
                                     metaDataUrl={ metaDataUrl }
@@ -51,7 +51,7 @@ class App extends Component {
                         </Grid.Column>
 
                         <Grid.Column>
-                            <Segment className="formogen">
+                            <Segment className='formogen'>
                                 <Formogen
                                     locale='ru'
                                     showHeader={ true }
@@ -67,7 +67,7 @@ class App extends Component {
                         </Grid.Column>
 
                         <Grid.Column>
-                            <Segment className="formogen">
+                            <Segment className='formogen'>
                                 <Formogen
                                     locale='ru'
                                     showHeader={ true }

@@ -134,7 +134,7 @@ export default class FormFieldsComponent extends React.Component {
 
             return (
                 <Grid columns={ 16 } key={ i } className='layout'>
-                    { header && <div className="sixteen wide column"><Header>{ header }</Header></div> }
+                    { header && <div className='sixteen wide column'><Header>{ header }</Header></div> }
                     { renderedFields }
                 </Grid>
             );
@@ -185,12 +185,12 @@ export default class FormFieldsComponent extends React.Component {
 
         if (opts.type === 'ManyToManyField') {
             // opts.data can be a string or a list; string treats as a url to DataSet
-            return typeof opts.data === 'string' ? AsyncManyToManyField : EmbeddedManyToManyField;
+            return _.isString(opts.data) ? AsyncManyToManyField : EmbeddedManyToManyField;
         }
 
         if (opts.type === 'ForeignKey') {
             // opts.data can be a string or a list; string treats as a url to DataSet
-            return typeof opts.data === 'string' ? AsyncForeignKeyField : EmbeddedForeignKeyField;
+            return _.isString(opts.data) ? AsyncForeignKeyField : EmbeddedForeignKeyField;
         }
 
         return FormFieldsComponent.djangoFieldMap[opts.type] || GenericField;
