@@ -3,7 +3,7 @@ django-cors-headers==2.1.0
 django-extensions==1.9.6
 django-model-utils==3.0.0
 djangorestframework==3.7.1
--e git+https://github.com/night-crawler/drf-metadata.git@1b1a78725169466baa70085ae19414ea1873bcaf#egg=drf_metadata
+-e git+https://github.com/night-crawler/drf-metadata.git@0.1.11#egg=drf_metadata
 easy-thumbnails==2.4.1
 olefile==0.44
 Pillow==4.3.0
