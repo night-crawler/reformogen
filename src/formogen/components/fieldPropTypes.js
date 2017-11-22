@@ -5,6 +5,10 @@ const defaultFieldPropTypes = {
     /* common */
     type: PropTypes.string.isRequired,
 
+    layoutOpts: PropTypes.shape({
+        width: PropTypes.number.isRequired,
+    }).isRequired,
+
     name: PropTypes.string.isRequired,
     verbose_name: PropTypes.string.isRequired,
     help_text: PropTypes.string.isRequired,
@@ -42,9 +46,7 @@ const defaultFieldPropTypes = {
     /* method to provide additional/redefine some opts in child component */
     updateProps: PropTypes.func,
 
-    onChange: PropTypes.func,
-
-    layoutOpts: PropTypes.object,
+    onChange: PropTypes.func
 };
 
 export default defaultFieldPropTypes;

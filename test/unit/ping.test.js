@@ -1,6 +1,8 @@
-test('should render a label', () => {
+
+
+it('should render ping-pong', () => {
     const wrapper = shallow(
-        <Label>Hello Jest!</Label>
+        <label>Ping? Pong!</label>
     );
     expect(wrapper).toMatchSnapshot();
 });

@@ -1,0 +1,36 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should render GenericField 1`] = `
+<FormField
+  disabled={true}
+  width={1}
+>
+  <SUILabel
+    help_text="Don't utter a single word"
+    layoutOpts={
+      Object {
+        "width": 1,
+      }
+    }
+    name="something_cute"
+    type="LOLField"
+    verbose_name="Die die die my darling"
+  />
+  <pre>
+    {
+    "type": "LOLField",
+    "name": "something_cute",
+    "verbose_name": "Die die die my darling",
+    "help_text": "Don't utter a single word",
+    "layoutOpts": {
+        "width": 1
+    }
+}
+  </pre>
+  <span
+    className="help-text"
+  >
+    Don't utter a single word
+  </span>
+</FormField>
+`;
