@@ -20,7 +20,7 @@ GenericField.propTypes = propTypes;
 export default function GenericField(props) {
     loglevel
         .getLogger('Formogen/components/semantic-ui/GenericField.jsx')
-        .warn(`Using a placeholder GenericFieldComponent to render field "${props.name}" of type "${props.type}"`);
+        .warn(`Using a placeholder GenericFieldComponent to render field "${ props.name }" of type "${ props.type }"`);
 
     let _props = Object.assign({}, props);
     if (_.isFunction(props.updateProps)) {

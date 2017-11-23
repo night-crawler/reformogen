@@ -30,7 +30,6 @@ import 'react-select/dist/react-select.css';
 import './custom.css';
 import 'react-datepicker/dist/react-datepicker.css';
 import 'react-times/css/material/default.css';
-// import FormogenComponent from "../../FormogenComponent";
 
 
 export {
@@ -95,6 +94,7 @@ export default class FormFieldsComponent extends React.Component {
 
     constructor(props) {
         super(props);
+
         this.log = loglevel.getLogger('FormFieldsComponent.jsx');
         this.log.debug('Initialized');
 
@@ -131,8 +131,8 @@ export default class FormFieldsComponent extends React.Component {
             let fieldProps = this.fieldPropsByNameMap[fieldName];
             if (!fieldProps) {
                 const warnPresentKeys = JSON.stringify(_.keys(this.fieldPropsByNameMap), null, 4);
-                this.log.warn(`Field "${fieldName}": "${fieldValue}" is present in formData,` +
-                                   `but is not present in metaData fields: ${warnPresentKeys}`);
+                this.log.warn(`Field "${ fieldName }": "${ fieldValue }" is present in formData,` +
+                                   `but is not present in metaData fields: ${ warnPresentKeys }`);
                 dataFields[fieldName] = fieldValue;
                 continue;
             }
@@ -146,40 +146,6 @@ export default class FormFieldsComponent extends React.Component {
             data: dataFields,
             files: fileFields
         };
-    }
-
-    renderLayouts() {
-        return this.state.layout.map(({ header, fields, width }, i) => {
-            /* fields: ['field1', 'field2'] || [{field1: {...opts}}, 'field42'] */
-
-            // render all fields in layout section
-            let renderedFields = fields.map((fieldObj, j) => {
-                /* fieldObj may be a string representing field name or object with first key as a field name,
-                 * if we need to provide more options */
-                /* layoutFieldOpts take a default width from layout section */
-                let fieldName, layoutFieldOpts = { width };
-                if (_.isString(fieldObj)) {
-                    fieldName = fieldObj;
-                } else {
-                    fieldName = _.keys(fieldObj).pop();
-                    layoutFieldOpts = Object.assign(layoutFieldOpts, fieldObj[fieldName]);
-                }
-
-                let fieldProps = this.fieldPropsByNameMap[fieldName];
-                if (!fieldProps){
-                    return null;
-                }
-                return this.renderField(j, fieldProps, layoutFieldOpts);
-            });
-
-            return (
-                <Grid columns={ 16 } key={ i } className='layout'>
-                    { header && <div className='sixteen wide column'><Header>{ header }</Header></div> }
-                    { renderedFields }
-                </Grid>
-            );
-
-        }) || null;
     }
 
     unfoldWildcardFields() {
@@ -213,7 +179,8 @@ export default class FormFieldsComponent extends React.Component {
     }
 
     handleFieldChange = (e, { name, value }) => {
-        this.log.debug(`Setting formData field "${name}" to ${typeof value} ${JSON.stringify(value)}`);
+        this.log.debug(`Setting formData field "${ name }" to ${ typeof value } ${ JSON.stringify(value) }`);
+
         this.setState({
             formData: Object.assign({}, this.state.formData, {[name]: value})
         });
@@ -238,6 +205,42 @@ export default class FormFieldsComponent extends React.Component {
         return this.state.djangoFieldsMap[opts.type] || GenericField;
     }
 
+    // --------------- render methods ---------------
+    renderLayouts() {
+        const { layout } = this.state;
+
+        return layout.map(({ header, fields, width }, i) => {
+            /* fields: ['field1', 'field2'] || [{field1: {...opts}}, 'field42'] */
+
+            // render all fields in layout section
+            const renderedFields = fields.map((fieldObj, j) => {
+                /* fieldObj may be a string representing field name or object with first key as a field name,
+                 * if we need to provide more options */
+                /* layoutFieldOpts take a default width from layout section */
+                let fieldName, layoutFieldOpts = { width };
+                if (_.isString(fieldObj)) {
+                    fieldName = fieldObj;
+                } else {
+                    fieldName = _.keys(fieldObj).pop();
+                    layoutFieldOpts = Object.assign(layoutFieldOpts, fieldObj[fieldName]);
+                }
+
+                let fieldProps = this.fieldPropsByNameMap[fieldName];
+                if (!fieldProps){
+                    return null;
+                }
+                return this.renderField(j, fieldProps, layoutFieldOpts);
+            });
+
+            return (
+                <Grid columns={ 16 } key={ i } className='layout'>
+                    { header && <div className='sixteen wide column'><Header>{ header }</Header></div> }
+                    { renderedFields }
+                </Grid>
+            );
+
+        }) || null;
+    }
     renderField(i, opts, layoutOpts) {
         const Field = this.pickFieldComponent(opts);
         return (
@@ -258,6 +261,7 @@ export default class FormFieldsComponent extends React.Component {
         );
     }
 
+    // --------------- React.js render ---------------
     render() {
         return <div className='layouts'>{ this.renderLayouts() }</div>;
     }

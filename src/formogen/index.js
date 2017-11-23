@@ -1,30 +1,33 @@
-import Formogen from './FormogenComponent';
-
 /*
+    ========================= TODOLIST =========================
 
-0. edit && save support
-1. + render json metadata
-2. validate (simple) user input (js-side validators)
-3. + dynamic data loading (data='/url/')
-4. custom (3) renderers
-6. + populate with default values
-7. populate from (*) custom user data values
-8. + layouts
-9. + dynamic metadata (without serverside endpoints)
-10. additional fields
-11. request interceptions (pipeline)
-12. i18n
-13. + error display
-14. non-field errors
-15. state save between requests
-16. modal forms support
-17. +- dropzone
+    [ ] edit && save support
+    [+] render json metadata
+    [ ] validate (simple) user input (js-side validators)
+    [+] dynamic data loading (data='/url/')
+    [ ] custom (3) renderers
+    [+] populate with default values
+    [ ] populate from (*) custom user data values
+    [+] layouts
+    [+] dynamic metadata (without serverside endpoints)
+    [ ] additional fields
+    [ ] request interceptions (pipeline)
+    [ ] i18n
+    [+] error display
+    [ ] non-field errors
+    [ ] state save between requests
+    [ ] modal forms support
+    [?] dropzone
 
+    [ ] modal mode
+    [ ] action URL (old formogen: objUrl, objCreateUrl)
+    [ ] cache metadata
 
-- modal mode
-- action URL (old formogen: objUrl, objCreateUrl)
-- cache metadata
+    ============================================================
+*/
 
- */
+/* All used locales (from moment.js, excepting the 'en' locale) MUST be imported explicitly HERE! */
+import 'moment/locale/ru';
 
+import Formogen from './FormogenComponent';
 export default Formogen;

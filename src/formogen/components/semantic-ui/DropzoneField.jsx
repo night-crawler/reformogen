@@ -56,8 +56,8 @@ function bytesToSize(bytes) {
         sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'],
         i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)), 10);
 
-    if (i === 0) {return `${bytes} ${sizes[i]}`;}
-    return `${(bytes / (1024 ** i)).toFixed(1)} ${sizes[i]}`;
+    if (i === 0) {return `${ bytes } ${ sizes[i] }`;}
+    return `${ (bytes / (1024 ** i)).toFixed(1) } ${ sizes[i] }`;
 }
 
 
@@ -158,7 +158,7 @@ export default class DropzoneField extends React.Component {
         }
 
         // build key by this triple to ensure we're adding different files
-        const keyBuilder = (item) => (`${item.lastModified}:${item.size}:${item.name}`);
+        const keyBuilder = (item) => (`${ item.lastModified }:${ item.size }:${ item.name }`);
         const mergedFiles = _(this.state.files)
             .keyBy(keyBuilder)
             .merge(_.keyBy(files, keyBuilder))

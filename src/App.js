@@ -10,18 +10,16 @@ import { Grid } from 'semantic-ui-react';
 import 'semantic-ui-css/semantic.css';
 import preparedMetaData from './form.json';
 
-
+// TODO: it should be in formogen module
 prefix.apply(loglevel, {template: '[%t] %l (%n)'});
-
-const metaDataUrl = 'http://localhost:8000/api/v1/sample/authors/describe/';
-
 
 
 class App extends Component {
     constructor(props) {
         super(props);
+
         this.log = loglevel.getLogger('App.js');
-        this.log.debug('Initialized');
+        this.log.debug('initialized');
     }
 
     handleSubmit(data) {
@@ -32,19 +30,18 @@ class App extends Component {
         return (
             <div className='App'>
 
-                {/*<div className='App-header'>*/}
-                {/*<h1>React Formogen JS</h1>*/}
-                {/*<img src={ logo } className='App-logo' alt='logo' />*/}
-                {/*</div>*/}
-
                 <Grid columns={ 3 } stackable={ true }>
                     <Grid.Row>
                         <Grid.Column>
                             <Segment className='formogen'>
                                 <Formogen
                                     metaData={ preparedMetaData }
-                                    metaDataUrl={ metaDataUrl }
+
+                                    metaDataUrl={ 'http://localhost:8000/api/v1/sample/authors/describe/' }
+                                    submitUrl={ 'http://localhost:8000/api/v1/sample/authors/' }
+
                                     onSubmit={ data => this.handleSubmit(data) }
+
                                     upperFirstLabels={ true }
                                 />
                             </Segment>
@@ -54,10 +51,15 @@ class App extends Component {
                             <Segment className='formogen'>
                                 <Formogen
                                     locale='ru'
+
                                     showHeader={ true }
                                     helpTextOnHover={ true }
-                                    metaDataUrl={ metaDataUrl }
+
+                                    metaDataUrl={ 'http://localhost:8000/api/v1/sample/authors/describe/' }
+                                    submitUrl={ 'http://localhost:8000/api/v1/sample/authors/' }
+
                                     onSubmit={ data => this.handleSubmit(data) }
+
                                     upperFirstLabels={ true }
                                     fieldUpdatePropsMap={ {
                                         dt_birth: (_props, props) => Object.assign({}, _props, {timeIntervals: 5})
@@ -70,10 +72,15 @@ class App extends Component {
                             <Segment className='formogen'>
                                 <Formogen
                                     locale='ru'
+
                                     showHeader={ true }
                                     helpTextOnHover={ true }
+
                                     metaDataUrl={ 'http://localhost:8000/api/v1/sample/all/describe/' }
+                                    submitUrl={ 'http://localhost:8000/api/v1/sample/all/' }
+
                                     onSubmit={ data => this.handleSubmit(data) }
+
                                     upperFirstLabels={ true }
                                     fieldUpdatePropsMap={ {
                                         dt_birth: (_props, props) => Object.assign({}, _props, {timeIntervals: 5})
@@ -132,7 +139,6 @@ class App extends Component {
                         </Grid.Column>
                     </Grid.Row>
                 </Grid>
-
 
             </div>
         );
