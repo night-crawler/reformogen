@@ -3,8 +3,8 @@ import { Form } from 'semantic-ui-react';
 import Select from 'react-select';
 import _ from 'lodash';
 import PropTypes from 'prop-types';
-import 'react-select/dist/react-select.css';
 
+import { MessageList } from './MiscComponents';
 import Label from './Label';
 
 import propTypes from '../fieldPropTypes';
@@ -61,10 +61,16 @@ export default function InlineForeignKeyField(props) {
     }
 
     return (
-        <Form.Field required={ props.required } disabled={ !props.editable } width={ props.layoutOpts.width }>
+        <Form.Field
+            required={ props.required }
+            disabled={ !props.editable }
+            width={ props.layoutOpts.width }
+            error={ !_.isEmpty(props.errors) }
+        >
             <Label { ...props } />
             <Select { ..._props } />
             { !props.helpTextOnHover ? <span className="help-text">{ props.help_text }</span> : ''}
+            <MessageList messages={ props.errors } />
         </Form.Field>
     );
 }

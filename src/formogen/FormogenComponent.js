@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+
 import PropTypes from 'prop-types';
 import fetch from 'isomorphic-fetch';
 import 'moment/locale/ru';
@@ -11,21 +12,22 @@ import FormogenFormFieldsComponent from './components/semantic-ui';
 // import { LoaderComponent } from './MiscComponents';
 
 
-export default class FormogenComponent extends Component {
-    static propTypes = {
-        metaData: PropTypes.object,
-        title: PropTypes.string,
-        metaDataUrl: PropTypes.string,
-        onSubmit: PropTypes.func,
-        onSuccess: PropTypes.func,
-        onFail: PropTypes.func,
-        upperFirstLabels: PropTypes.bool,
-        locale: PropTypes.string,
-        helpTextOnHover: PropTypes.bool,
-        showHeader: PropTypes.bool,
 
-        fieldUpdatePropsMap: PropTypes.object,
-    };
+function resolveResponse(response) {
+    if (response.ok) {
+        return response.json();
+    }
+
+    return response.json().then(err => {
+        const error = new Error();
+        error.data = err;
+
+        throw error;
+    });
+}
+
+
+export default class FormogenComponent extends Component {
     static defaultProps = {
         // data
         title: 'formogen form',
@@ -44,12 +46,27 @@ export default class FormogenComponent extends Component {
 
         fieldUpdatePropsMap: {},
     };
+    static propTypes = {
+        metaData: PropTypes.object,
+        title: PropTypes.string,
+        metaDataUrl: PropTypes.string,
+        onSubmit: PropTypes.func,
+        onSuccess: PropTypes.func,
+        onFail: PropTypes.func,
+        upperFirstLabels: PropTypes.bool,
+        locale: PropTypes.string,
+        helpTextOnHover: PropTypes.bool,
+        showHeader: PropTypes.bool,
 
+        fieldUpdatePropsMap: PropTypes.object,
+    };
 
     constructor(props) {
         super(props);
+
         this.log = loglevel.getLogger('FormogenComponent.js');
         this.log.debug('Initialized');
+
         this.state = {
             title: props.title,
 
@@ -65,6 +82,8 @@ export default class FormogenComponent extends Component {
             onSubmit: props.onSubmit,
             onSuccess: props.onSuccess,
             onFail: props.onFail,
+
+            errorsFieldMap: {},
         };
 
         /* ref */
@@ -73,6 +92,8 @@ export default class FormogenComponent extends Component {
 
     // --------------- React.js standard ---------------
     componentWillMount() {
+        this.log.debug('componentWillMount()');
+
         const { metaDataUrl } = this.state;
 
         if (_.isNull(metaDataUrl)) {
@@ -98,10 +119,23 @@ export default class FormogenComponent extends Component {
 
     // --------------- standard handlers ---------------
     handleSubmit() {
-        const fd = this.fieldsComponent.getFormData();
+        const {data, files} = this.fieldsComponent.getFormData();
 
+        const headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+        };
+        const options = {
+            method: 'POST',
+            headers: headers,
+            body: JSON.stringify(data)
+        };
+        console.log(options);
 
-        console.log(fd);
+        fetch('http://localhost:8000/api/v1/sample/authors/', options)
+            .then(resolveResponse)
+            .then(data => this.receiveResult(data))
+            .catch(error => this.handleFail(error));
 
         this.log.debug('handleSubmit()');
         this.handleOnSubmit({test: 1});
@@ -110,26 +144,48 @@ export default class FormogenComponent extends Component {
         this.log.debug('handleSuccess()');
         this.handleOnSuccess();
     }
-    handleFail() {
-        // if http status is 400 (Bad Request) it should show form errors
-        this.log.debug('handleFail()');
-        this.handleOnSubmit();
+
+
+    handleFormErrors(errors) {
+        this.log.debug('handleFormErrors()');
+        this.log.warn(`Processing form errors: ${ JSON.stringify(Object.assign({}, errors), null, 4) }`);
+
+        this.setState(Object.assign({}, this.state, {errorsFieldMap: errors}))
     }
 
-    // --------------- fetch-receive MetaData (use redux) ---------------
+    handleFail(error) {
+        // if http status is 400 (Bad Request) it should show form errors
+        // this.log.debug(`handleFail(): ${ JSON.stringify(error, null, 4) }`);
+
+
+        this.handleFormErrors(error.data);
+    }
+
+    // --------------- fetch-receive MetaData ---------------
     fetchMetaData(url) {
         fetch(url)
-            .then(response => response.json())
-            .then(json => this.receiveMetaData(json));
+            .then(resolveResponse)
+            .then(data => this.receiveMetaData(data));
     }
     receiveMetaData(data) {
+        this.log.debug('receiveMetaData()');
+
         this.setState({
             metaDataReady: true,
             receivedMetaData: Object.assign({}, data),
         });
     }
 
+
+    receiveResult(data) {
+        console.log(data);
+    }
+
     // --------------- get methods ---------------
+    /**
+     * Returns the title of the Formogen Component.
+     * @returns {string} e.g 'The Main Form'
+     */
     getTitle() {
         const { title, assignedMetaData, receivedMetaData } = this.state;
 
@@ -139,8 +195,12 @@ export default class FormogenComponent extends Component {
         if (receivedMetaData) {
             return _.upperFirst(receivedMetaData.title.substr());
         }
-        return title.substr();
+        return title.substr(0);
     }
+    /**
+     * Returns an array of all (assigned and received) metadata fields.
+     * @returns {Array} The array of Objects (e.g [{name: '...', ...}, ...])
+     */
     getFields() {
         const { assignedMetaData, receivedMetaData } = this.state;
 
@@ -153,7 +213,10 @@ export default class FormogenComponent extends Component {
 
     // --------------- React.js render ---------------
     render() {
-
+        /* TODO: https://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript
+            OR
+            key={ new Date().getTime() }
+         */
         return (
             <Form loading={ !this.state.metaDataReady }>
                 { this.props.showHeader ? <Header as='h2' dividing={ true }>{ this.getTitle() }</Header> : '' }
@@ -162,7 +225,7 @@ export default class FormogenComponent extends Component {
                     key={ this.getFields() }
                     fields={ this.getFields() }
                     locale={ this.props.locale }
-                    formData={ {name: 'lol'} }
+                    // formData={ {name: 'lol'} }
                     onSubmit={ (validatedData) => this.handleSubmit(validatedData) }
                     upperFirstLabels={ this.props.upperFirstLabels }
                     helpTextOnHover={ this.props.helpTextOnHover }
@@ -170,6 +233,7 @@ export default class FormogenComponent extends Component {
                     layout={ this.props.layout }
 
                     ref={ (comp) => { this.fieldsComponent = comp; } }
+                    errorsFieldMap={ this.state.errorsFieldMap }
                 />
                 <Button
                     content={ 'Submit' }

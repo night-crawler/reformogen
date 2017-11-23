@@ -2,6 +2,8 @@ import React from 'react';
 import { Form } from 'semantic-ui-react';
 import Label from './Label';
 import _ from 'lodash';
+import { MessageList } from './MiscComponents';
+
 import propTypes from '../fieldPropTypes';
 
 
@@ -63,10 +65,16 @@ export default function IntegerField(props) {
     }
 
     return (
-        <Form.Field required={ props.required } disabled={ !props.editable } width={ props.layoutOpts.width }>
+        <Form.Field
+            required={ props.required }
+            disabled={ !props.editable }
+            width={ props.layoutOpts.width }
+            error={ !_.isEmpty(props.errors) }
+        >
             <Label { ...props } />
             <Form.Input { ..._props } { ...input_options } />
             { !props.helpTextOnHover ? <span className="help-text">{ props.help_text }</span> : ''}
+            <MessageList messages={ props.errors } />
         </Form.Field>
     );
 }

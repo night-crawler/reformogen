@@ -1,4 +1,5 @@
 import React from 'react';
+
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 import loglevel from 'loglevel';
@@ -28,7 +29,8 @@ import DropzoneField from './DropzoneField';
 import 'react-select/dist/react-select.css';
 import './custom.css';
 import 'react-datepicker/dist/react-datepicker.css';
-import FormogenComponent from "../../FormogenComponent";
+import 'react-times/css/material/default.css';
+// import FormogenComponent from "../../FormogenComponent";
 
 
 export {
@@ -79,7 +81,6 @@ export default class FormFieldsComponent extends React.Component {
             FileField: DropzoneField,
         },
     };
-
     static propTypes = {
         fields: PropTypes.arrayOf(PropTypes.object).isRequired,
         upperFirstLabels: PropTypes.bool,
@@ -89,6 +90,7 @@ export default class FormFieldsComponent extends React.Component {
         fieldUpdatePropsMap: PropTypes.object,
         layout: PropTypes.array,
         djangoFieldsMap: PropTypes.object,
+        errorsFieldMap: PropTypes.object,
     };
 
     constructor(props) {
@@ -243,6 +245,7 @@ export default class FormFieldsComponent extends React.Component {
                 key={ i }
                 value={ this.state.formData[opts.name] }
                 onChange={ this.handleFieldChange }
+                errors={ this.props.errorsFieldMap[opts.name] }
                 updateProps={ this.props.fieldUpdatePropsMap[opts.name] }
                 upperFirstLabel={ this.props.upperFirstLabels }
                 helpTextOnHover={ this.props.helpTextOnHover }
@@ -256,6 +259,6 @@ export default class FormFieldsComponent extends React.Component {
     }
 
     render() {
-        return <div className='layouts'>{this.renderLayouts()}</div>;
+        return <div className='layouts'>{ this.renderLayouts() }</div>;
     }
 }

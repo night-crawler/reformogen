@@ -2,7 +2,7 @@ import React from 'react';
 import { Form } from 'semantic-ui-react';
 import _ from 'lodash';
 import Label from './Label';
-
+import { MessageList } from './MiscComponents';
 import propTypes from '../fieldPropTypes';
 
 
@@ -30,10 +30,16 @@ export default function TextField(props) {
     }
 
     return (
-        <Form.Field required={ props.required } disabled={ !props.editable } width={ props.layoutOpts.width }>
+        <Form.Field
+            required={ props.required }
+            disabled={ !props.editable }
+            width={ props.layoutOpts.width }
+            error={ !_.isEmpty(props.errors) }
+        >
             <Label { ...props } />
             <Form.TextArea { ..._props } />
             { !props.helpTextOnHover ? <span className="help-text">{ props.help_text }</span> : ''}
+            <MessageList messages={ props.errors } />
         </Form.Field>
     );
 }

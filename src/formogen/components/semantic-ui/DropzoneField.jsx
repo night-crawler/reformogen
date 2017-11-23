@@ -2,6 +2,8 @@ import React from 'react';
 import { Form, Image, Button, Icon, List } from 'semantic-ui-react';
 import _ from 'lodash';
 import Dropzone from 'react-dropzone';
+
+import { MessageList } from './MiscComponents';
 import PropTypes from 'prop-types';
 
 import mt_msword from '../../images/mimetypes/application-msword.png';
@@ -191,7 +193,12 @@ export default class DropzoneField extends React.Component {
         }
 
         return (
-            <Form.Field required={ this.props.required } disabled={ !this.props.editable } width={ this.props.layoutOpts.width }>
+            <Form.Field
+                required={ this.props.required }
+                disabled={ !this.props.editable }
+                width={ this.props.layoutOpts.width }
+                error={ !_.isEmpty(this.props.errors) }
+            >
 
                 <Dropzone className="ui center aligned dropzone segment attached top"  { ..._props }>
                     <strong>{ labelText } { this.props.required && <span className='ui red'>*</span> }</strong>
@@ -207,6 +214,7 @@ export default class DropzoneField extends React.Component {
                     getFileIcon={ this.props.getFileIcon }
                     onRemoveFile={ this.handleRemoveFile }
                 />
+                <MessageList messages={ this.props.errors } />
             </Form.Field>
         );
     }

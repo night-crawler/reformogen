@@ -8,8 +8,11 @@ import Label from './Label';
 import propTypes from '../fieldPropTypes';
 import * as URI from 'urijs';
 
+import { MessageList } from './MiscComponents';
+
 import ModelInstanceOption from './ReactSelectOptionComponent';
 import ModelInstanceValue from './ReactSelectValueComponent';
+
 
 
 AsyncManyToManyField.propTypes = propTypes;
@@ -75,10 +78,16 @@ export default function AsyncManyToManyField(props) {
     }
 
     return (
-        <Form.Field required={ props.required } disabled={ !props.editable } width={ props.layoutOpts.width }>
+        <Form.Field
+            required={ props.required }
+            disabled={ !props.editable }
+            width={ props.layoutOpts.width }
+            error={ !_.isEmpty(props.errors) }
+        >
             <Label { ...props } />
             <Select.Async { ..._props } />
             { !props.helpTextOnHover ? <span className="help-text">{ props.help_text }</span> : ''}
+            <MessageList messages={ props.errors } />
         </Form.Field>
     );
 }

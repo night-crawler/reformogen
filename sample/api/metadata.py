@@ -12,7 +12,7 @@ class AuthorMetadata(MetaData):
 
     update_fields = {
         'state': {'autocomplete': True},
-        'dt_death': {'editable': False, },
+        # 'dt_death': {'editable': False, },
         # 'name': {'editable': False},
     }
 

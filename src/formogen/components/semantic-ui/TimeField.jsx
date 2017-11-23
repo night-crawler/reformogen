@@ -4,11 +4,9 @@ import moment from 'moment';
 import _ from 'lodash';
 import TimePicker from 'react-times';
 import Label from './Label';
-
+import { MessageList } from './MiscComponents';
 import propTypes from '../fieldPropTypes';
 
-
-import 'react-times/css/material/default.css';
 
 
 DateField.propTypes = propTypes;
@@ -45,10 +43,16 @@ export default function DateField(props) {
     }
 
     return (
-        <Form.Field required={ props.required } disabled={ !props.editable } width={ props.layoutOpts.width }>
+        <Form.Field
+            required={ props.required }
+            disabled={ !props.editable }
+            width={ props.layoutOpts.width }
+            error={ !_.isEmpty(props.errors) }
+        >
             <Label { ...props } />
             <TimePicker { ..._props } />
             { !props.helpTextOnHover ? <span className="help-text">{ props.help_text }</span> : ''}
+            <MessageList messages={ props.errors } />
         </Form.Field>
     );
 }

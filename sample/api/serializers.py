@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from rest_framework.exceptions import ValidationError
 
 from sample import models as s_models
 from sample import abstract
@@ -16,6 +17,11 @@ class AuthorSerializer(serializers.ModelSerializer):
     class Meta:
         model = s_models.Author
         fields = '__all__'
+
+    # TODO:
+    # def validate(self, attrs):
+    #     raise ValidationError({'lol': ['This is sad']})
+    #     return attrs
 
 
 class BookSerializer(serializers.ModelSerializer):

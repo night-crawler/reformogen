@@ -3,7 +3,7 @@ import { Form } from 'semantic-ui-react';
 import DatePicker from 'react-datepicker';
 import moment from 'moment';
 import _ from 'lodash';
-import 'react-datepicker/dist/react-datepicker.css';
+import { MessageList } from './MiscComponents';
 
 import Label from './Label';
 
@@ -57,10 +57,16 @@ export default function DateTimeField(props) {
     }
 
     return (
-        <Form.Field required={ props.required } disabled={ !props.editable } width={ props.layoutOpts.width }>
+        <Form.Field
+            required={ props.required }
+            disabled={ !props.editable }
+            width={ props.layoutOpts.width }
+            error={ !_.isEmpty(props.errors) }
+        >
             <Label { ...props } />
             <DatePicker { ..._props } />
             { !props.helpTextOnHover ? <span className="help-text">{ props.help_text }</span> : ''}
+            <MessageList messages={ props.errors } />
         </Form.Field>
     );
 }
