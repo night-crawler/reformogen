@@ -121,6 +121,9 @@ export default class FormogenComponent extends Component {
     handleSubmit() {
         const {data, files} = this.fieldsComponent.getFormData();
 
+        /* clear field errors before submit */
+        this.setState({errorsFieldMap: {}});
+
         const headers = {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
