@@ -66,6 +66,9 @@ export default class FormogenComponent extends Component {
             onSuccess: props.onSuccess,
             onFail: props.onFail,
         };
+
+        /* ref */
+        this.fieldsComponent = null;
     }
 
     // --------------- React.js standard ---------------
@@ -95,6 +98,11 @@ export default class FormogenComponent extends Component {
 
     // --------------- standard handlers ---------------
     handleSubmit() {
+        const fd = this.fieldsComponent.getFormData();
+
+
+        console.log(fd);
+
         this.log.debug('handleSubmit()');
         this.handleOnSubmit({test: 1});
     }
@@ -133,17 +141,6 @@ export default class FormogenComponent extends Component {
         }
         return title.substr();
     }
-    getLayout() {
-        const { assignedMetaData, receivedMetaData } = this.state;
-
-        if (assignedMetaData) {
-            return Object.assign({}, assignedMetaData.layout);
-        }
-        if (receivedMetaData) {
-            return Object.assign({}, receivedMetaData.layout);
-        }
-        return {};
-    }
     getFields() {
         const { assignedMetaData, receivedMetaData } = this.state;
 
@@ -171,6 +168,8 @@ export default class FormogenComponent extends Component {
                     helpTextOnHover={ this.props.helpTextOnHover }
                     fieldUpdatePropsMap={ this.props.fieldUpdatePropsMap }
                     layout={ this.props.layout }
+
+                    ref={ (comp) => { this.fieldsComponent = comp; } }
                 />
                 <Button
                     content={ 'Submit' }

@@ -28,6 +28,7 @@ import DropzoneField from './DropzoneField';
 import 'react-select/dist/react-select.css';
 import './custom.css';
 import 'react-datepicker/dist/react-datepicker.css';
+import FormogenComponent from "../../FormogenComponent";
 
 
 export {
@@ -59,6 +60,24 @@ export default class FormFieldsComponent extends React.Component {
             fields: '*',
             width: 16,
         }],
+
+        djangoFieldsMap: {
+            CharField,
+            TextField,
+
+            DateField,
+            DateTimeField,
+            TimeField,
+
+            PositiveSmallIntegerField: IntegerField,
+            SmallIntegerField: IntegerField,
+            IntegerField: IntegerField,
+            PositiveIntegerField: IntegerField,
+            DecimalField: IntegerField,
+            FloatField: IntegerField,
+
+            FileField: DropzoneField,
+        },
     };
 
     static propTypes = {
@@ -69,24 +88,7 @@ export default class FormFieldsComponent extends React.Component {
         locale: PropTypes.string,
         fieldUpdatePropsMap: PropTypes.object,
         layout: PropTypes.array,
-    };
-
-    static djangoFieldMap = {
-        CharField,
-        TextField,
-
-        DateField,
-        DateTimeField,
-        TimeField,
-
-        PositiveSmallIntegerField: IntegerField,
-        SmallIntegerField: IntegerField,
-        IntegerField: IntegerField,
-        PositiveIntegerField: IntegerField,
-        DecimalField: IntegerField,
-        FloatField: IntegerField,
-
-        FileField: DropzoneField,
+        djangoFieldsMap: PropTypes.object,
     };
 
     constructor(props) {
@@ -97,18 +99,54 @@ export default class FormFieldsComponent extends React.Component {
         const formData = Object.assign({}, props.formData);
 
         this.state = {
-            fields: props.fields,
+            fieldPropsByNameMap: _(props.fields).map((fieldData) => {
+                return [fieldData.name, fieldData];
+            }).fromPairs().value(),
+
             layout: this.unfoldWildcardFields(),
             formData: FormFieldsComponent.updateFormDataWithDefaults(props.fields, formData),
             origFormData: Object.assign({}, props.formData),
+            djangoFieldsMap: props.djangoFieldsMap,
         };
     }
 
-    getFieldPropsByName(name) {
-        return _.find(this.state.fields, {name});
+    get fieldPropsByNameMap() {
+        Object.defineProperty(this, 'fieldPropsByNameMap', {
+            value: _(this.props.fields).map((fieldData) => {
+                return [fieldData.name, fieldData];
+            }).fromPairs().value(),
+            writable: false,
+            configurable: true
+        });
+        return this.fieldPropsByNameMap;
     }
 
-    renderLayout() {
+    getFormData() {
+        // split data and file fields
+        let dataFields = {}, fileFields = {};
+        for (let [fieldName, fieldValue] of Object.entries(this.state.formData)) {
+            // user can pass into formData a key (fieldName) that is not present in metaData (props.fields)
+            let fieldProps = this.fieldPropsByNameMap[fieldName];
+            if (!fieldProps) {
+                const warnPresentKeys = JSON.stringify(_.keys(this.fieldPropsByNameMap), null, 4);
+                this.log.warn(`Field "${fieldName}": "${fieldValue}" is present in formData,` +
+                                   `but is not present in metaData fields: ${warnPresentKeys}`);
+                dataFields[fieldName] = fieldValue;
+                continue;
+            }
+            if (fieldProps.type === 'FileField') {
+                fileFields[fieldName] = fieldValue;
+            } else {
+                dataFields[fieldName] = fieldValue;
+            }
+        }
+        return {
+            data: dataFields,
+            files: fileFields
+        };
+    }
+
+    renderLayouts() {
         return this.state.layout.map(({ header, fields, width }, i) => {
             /* fields: ['field1', 'field2'] || [{field1: {...opts}}, 'field42'] */
 
@@ -125,7 +163,7 @@ export default class FormFieldsComponent extends React.Component {
                     layoutFieldOpts = Object.assign(layoutFieldOpts, fieldObj[fieldName]);
                 }
 
-                let fieldProps = this.getFieldPropsByName(fieldName);
+                let fieldProps = this.fieldPropsByNameMap[fieldName];
                 if (!fieldProps){
                     return null;
                 }
@@ -153,7 +191,9 @@ export default class FormFieldsComponent extends React.Component {
             })
             .without('*');  /* we don't take wildcard as a field */
 
-        let allFields = _(this.props.fields).map('name');
+        // let allFields = _(this.props.fields).map('name');
+        let allFields = _(this.fieldPropsByNameMap).keys();
+
         ldLayout.find({'fields': '*'})['fields'] = allFields.difference(usedFields.value()).value();
         return layout;
     }
@@ -177,7 +217,7 @@ export default class FormFieldsComponent extends React.Component {
         });
     };
 
-    static pickFieldComponent(opts) {
+    pickFieldComponent(opts) {
         // opts.autocomplete points to autocomplete request but we don't care
         if (_.has(opts, 'choices')) {
             return AutocompleteChoiceField;
@@ -193,11 +233,11 @@ export default class FormFieldsComponent extends React.Component {
             return _.isString(opts.data) ? AsyncForeignKeyField : EmbeddedForeignKeyField;
         }
 
-        return FormFieldsComponent.djangoFieldMap[opts.type] || GenericField;
+        return this.state.djangoFieldsMap[opts.type] || GenericField;
     }
 
     renderField(i, opts, layoutOpts) {
-        const Field = FormFieldsComponent.pickFieldComponent(opts);
+        const Field = this.pickFieldComponent(opts);
         return (
             <Field
                 key={ i }
@@ -215,16 +255,7 @@ export default class FormFieldsComponent extends React.Component {
         );
     }
 
-
-
     render() {
-        return <div className='layouts'>{this.renderLayout()}</div>;
-        // this.renderLayout();
-        //
-        // const { fields } = this.state;
-        //
-        // const formFields = fields.map( (field, i) => this.renderField(i, field) );
-        //
-        // return <div>{ formFields }</div>;
+        return <div className='layouts'>{this.renderLayouts()}</div>;
     }
 }

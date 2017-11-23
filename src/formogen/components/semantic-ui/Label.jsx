@@ -1,5 +1,5 @@
 import React from 'react';
-import { Popup, Icon } from 'semantic-ui-react';
+import { Popup } from 'semantic-ui-react';
 import _ from 'lodash';
 import propTypes from '../fieldPropTypes';
 
@@ -10,10 +10,14 @@ export default function SUILabel(props) {
     if (!props.help_text || !props.helpTextOnHover) {
         return <label>{ labelText }</label>;
     }
+    /* replaced trigger's <Icon name="help" /> with <i> to prevent react warning:
+     * Warning: Stateless function components cannot be given refs. Attempts to access this ref will fail.
+     */
     return (
         <label>
             <Popup
-                trigger={ <Icon name="help" /> }
+                trigger={ <i className="icon help" /> }
+
                 content={ props.help_text }
                 wide={ true }
                 position='bottom left'
