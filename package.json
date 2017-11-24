@@ -35,7 +35,10 @@
     "snapshotSerializers": [
       "<rootDir>/node_modules/enzyme-to-json/serializer"
     ],
-    "moduleDirectories": ["node_modules", "<rootDir>/src"]
+    "moduleDirectories": [
+      "node_modules",
+      "<rootDir>/src"
+    ]
   },
   "devDependencies": {
     "babel-jest": "^21.2.0",
