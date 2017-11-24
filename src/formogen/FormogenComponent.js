@@ -10,7 +10,6 @@ import _ from 'lodash';
 import { Button, Form, Header } from 'semantic-ui-react';
 
 import FormogenFormFieldsComponent from './components/semantic-ui';
-import { LoaderComponent } from './components/semantic-ui/MiscComponents';
 
 
 // TODO: take it away from here
@@ -118,7 +117,11 @@ export default class FormogenComponent extends Component {
                 totalFields
             });
         } else {
+            const totalFields = assignedMetaData ? FormogenComponent.concatFields(assignedMetaData.fields) : [];
             this.fetchMetaData(metaDataUrl);
+            this.setState({
+                totalFields
+            });
         }
     }
 
@@ -258,25 +261,6 @@ export default class FormogenComponent extends Component {
         this.log.debug('render()');
 
         const { metaDataReady, totalFields, errorsFieldMap } = this.state;
-
-        /*
-        Пока это здесь.
-
-        Задумка с <Form loading={ !metaDataReady }> понятна (согласен и поддерживаю),
-        ты хотел чтобы форма с назначенной метадатой (assignedMetaData) сразу же рендерилась,
-        а полученная метадата (receivedMetaData) конкатенировалась с назначенной и рендерилась позже...
-
-        Но внутри <FormogenFormFieldsComponent> ты чего-то наворотил, особенно в методе unfoldWildcardFields,
-        если честно, я вообще не понял для чего оно (да, да, как переводится имя метода я знаю),
-        выглядит как преждевременная оптимизация, и в итоге, рендер происходит один раз, и больше ни разу.
-        (Кстати, состояние при этом содержит все необходимые филды).
-
-        Конечно, можно оставить старое решение key={ this.getFields() }, но оно по природе не верно etc.
-        Мы уже сошлись на мнении, что key здесь не нужен.
-
-        p.s вечерело, если что не бомби =)
-         */
-        if (!metaDataReady) return <LoaderComponent />;
 
         return (
             <Form loading={ !metaDataReady }>

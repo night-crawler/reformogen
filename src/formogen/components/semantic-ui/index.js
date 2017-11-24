@@ -98,39 +98,92 @@ export default class FormFieldsComponent extends React.Component {
         this.log = loglevel.getLogger('FormFieldsComponent.jsx');
         this.log.debug('Initialized');
 
-        const formData = Object.assign({}, props.formData);
-
         this.state = {
-            fieldPropsByNameMap: _(props.fields).map((fieldData) => {
-                return [fieldData.name, fieldData];
-            }).fromPairs().value(),
+            fieldPropsByNameMap: {},
 
-            layout: this.unfoldWildcardFields(),
-            formData: FormFieldsComponent.updateFormDataWithDefaults(props.fields, formData),
-            origFormData: Object.assign({}, props.formData),
+            formData: props.formData,
             djangoFieldsMap: props.djangoFieldsMap,
+
+            fields: props.fields,
+            layoutTemplate: props.layout,
+            layout: [],
         };
     }
 
-    get fieldPropsByNameMap() {
-        Object.defineProperty(this, 'fieldPropsByNameMap', {
-            value: _(this.props.fields).map((fieldData) => {
-                return [fieldData.name, fieldData];
-            }).fromPairs().value(),
-            writable: false,
-            configurable: true
-        });
-        return this.fieldPropsByNameMap;
+    // --------------- React.js standard ---------------
+    componentWillMount() {
+        this.setState(FormFieldsComponent.computeRuntimeState(this.state));
+    }
+    componentWillReceiveProps({ fields }) {
+        const { layoutTemplate, formData } = this.state;
+        this.setState(FormFieldsComponent.computeRuntimeState({ layoutTemplate, formData, fields }));
     }
 
+    static updateFormDataWithDefaults(fields, formData) {
+        let data = Object.assign({}, formData);
+        for (let field of fields) {
+            if (field.name in data) {
+                continue;
+            }
+            // should be undefined for uncontrolled components, not null
+            data[field.name] = field.default || '';
+        }
+        return data;
+    }
+    /**
+     * Pure static method to compute a new layout
+     * @param {Array} layoutTemplate - raw layout with wildcard catch-all pattern
+     * @param fieldPropsByNameMap - {field: field properties} mapping
+     * @returns {object} new layout
+     */
+    static unfoldWildcardFields(layoutTemplate, fieldPropsByNameMap) {
+        let _ldLayout = _(_(layoutTemplate).cloneDeep());
+
+        let usedFields = _ldLayout.map('fields')
+            .flatten()
+            .map((fieldObj) => {  /* object first key is field name or object itself */
+                return _.isString(fieldObj) ? fieldObj : _.keys(fieldObj)[0];
+            })
+            .without('*');  /* we don't take wildcard as a field */
+
+        let allFieldNames = _(fieldPropsByNameMap).keys();
+
+        _ldLayout.find({'fields': '*'})['fields'] = allFieldNames.difference(usedFields.value()).value();
+        return _ldLayout.value();
+    }
+    /**
+     * @param {Object[]} initialState
+     * @param {Array} initialState.layoutTemplate -
+     * @param {Array} initialState.fields -
+     * @param {Object} initialState.formData -
+     * @returns {{fieldPropsByNameMap: Object, formData: Object, layout: Object}}
+     */
+    static computeRuntimeState(initialState) {
+        const { fields, formData, layoutTemplate } = initialState;
+
+        const fieldPropsByNameMap = _(fields).map((fieldData) => {
+            return [fieldData.name, fieldData];
+        }).fromPairs().value();
+
+        return {
+            fieldPropsByNameMap,
+            formData: FormFieldsComponent.updateFormDataWithDefaults(fields, formData),
+            layout: FormFieldsComponent.unfoldWildcardFields(layoutTemplate, fieldPropsByNameMap),
+            fields,
+        };
+    }
+
+    // --------------- miscellaneous methods ---------------
     getFormData() {
+        const { fieldPropsByNameMap } = this.state;
+
         // split data and file fields
         let dataFields = {}, fileFields = {};
         for (let [fieldName, fieldValue] of Object.entries(this.state.formData)) {
             // user can pass into formData a key (fieldName) that is not present in metaData (props.fields)
-            let fieldProps = this.fieldPropsByNameMap[fieldName];
+            let fieldProps = fieldPropsByNameMap[fieldName];
             if (!fieldProps) {
-                const warnPresentKeys = JSON.stringify(_.keys(this.fieldPropsByNameMap), null, 4);
+                const warnPresentKeys = JSON.stringify(_.keys(fieldPropsByNameMap), null, 4);
                 this.log.warn(`Field "${ fieldName }": "${ fieldValue }" is present in formData,` +
                                    `but is not present in metaData fields: ${ warnPresentKeys }`);
                 dataFields[fieldName] = fieldValue;
@@ -147,37 +200,6 @@ export default class FormFieldsComponent extends React.Component {
             files: fileFields
         };
     }
-
-    unfoldWildcardFields() {
-        let layout = _(this.props.layout).cloneDeep(),
-            ldLayout = _(layout);
-
-        let usedFields = ldLayout.map('fields')
-            .flatten()
-            .map((fieldObj) => {  /* object first key is field name or object itself */
-                return _.isString(fieldObj) ? fieldObj : _.keys(fieldObj)[0];
-            })
-            .without('*');  /* we don't take wildcard as a field */
-
-        // let allFields = _(this.props.fields).map('name');
-        let allFields = _(this.fieldPropsByNameMap).keys();
-
-        ldLayout.find({'fields': '*'})['fields'] = allFields.difference(usedFields.value()).value();
-        return layout;
-    }
-
-    static updateFormDataWithDefaults(fields, formData) {
-        let data = Object.assign({}, formData);
-        for (let field of fields) {
-            if (field.name in data) {
-                continue;
-            }
-            // should be undefined for uncontrolled components, not null
-            data[field.name] = field.default || '';
-        }
-        return data;
-    }
-
     handleFieldChange = (e, { name, value }) => {
         this.log.debug(`Setting formData field "${ name }" to ${ typeof value } ${ JSON.stringify(value) }`);
 
@@ -185,7 +207,6 @@ export default class FormFieldsComponent extends React.Component {
             formData: Object.assign({}, this.state.formData, {[name]: value})
         });
     };
-
     pickFieldComponent(opts) {
         // opts.autocomplete points to autocomplete request but we don't care
         if (_.has(opts, 'choices')) {
@@ -207,7 +228,7 @@ export default class FormFieldsComponent extends React.Component {
 
     // --------------- render methods ---------------
     renderLayouts() {
-        const { layout } = this.state;
+        const { layout, fieldPropsByNameMap } = this.state;
 
         return layout.map(({ header, fields, width }, i) => {
             /* fields: ['field1', 'field2'] || [{field1: {...opts}}, 'field42'] */
@@ -225,7 +246,7 @@ export default class FormFieldsComponent extends React.Component {
                     layoutFieldOpts = Object.assign(layoutFieldOpts, fieldObj[fieldName]);
                 }
 
-                let fieldProps = this.fieldPropsByNameMap[fieldName];
+                let fieldProps = fieldPropsByNameMap[fieldName];
                 if (!fieldProps){
                     return null;
                 }
@@ -243,6 +264,7 @@ export default class FormFieldsComponent extends React.Component {
     }
     renderField(i, opts, layoutOpts) {
         const Field = this.pickFieldComponent(opts);
+
         return (
             <Field
                 key={ i }
