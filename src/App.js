@@ -11,6 +11,7 @@ import 'semantic-ui-css/semantic.css';
 import preparedMetaData from './form.json';
 
 // TODO: it should be in formogen module
+window.loglevel = loglevel;
 prefix.apply(loglevel, {template: '[%t] %l (%n)'});
 
 
@@ -20,10 +21,6 @@ class App extends Component {
 
         this.log = loglevel.getLogger('App.js');
         this.log.debug('initialized');
-    }
-
-    handleSubmit(data) {
-        this.log.debug(`handleSubmit() - ${ data }`);
     }
 
     render() {
@@ -38,6 +35,7 @@ class App extends Component {
                                     upperFirstLabels={ true }
 
                                     metaData={ preparedMetaData }
+
                                     metaDataUrl={ 'http://localhost:8000/api/v1/sample/authors/describe/' }
                                     objectCreateUrl={ 'http://localhost:8000/api/v1/sample/authors/' }
                                 />
@@ -51,6 +49,8 @@ class App extends Component {
                                     showHeader={ true }
                                     helpTextOnHover={ true }
                                     upperFirstLabels={ true }
+
+                                    formData={ {name: 'That is prepopulated field!'} }
 
                                     metaDataUrl={ 'http://localhost:8000/api/v1/sample/authors/describe/' }
                                     objectCreateUrl={ 'http://localhost:8000/api/v1/sample/authors/' }
@@ -76,7 +76,7 @@ class App extends Component {
                                     fieldUpdatePropsMap={ {
                                         dt_birth: (_props, props) => Object.assign({}, _props, {timeIntervals: 5})
                                     } }
-                                    layout={ [
+                                    layoutTemplate={ [
                                         {
                                             header: 'Integer Group',
                                             fields: [

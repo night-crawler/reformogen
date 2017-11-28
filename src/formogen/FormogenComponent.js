@@ -7,73 +7,51 @@ import loglevel from 'loglevel';
 
 import _ from 'lodash';
 
-import { Button, Form, Header } from 'semantic-ui-react';
-
-import FormogenFormFieldsComponent from './components/semantic-ui';
-
-
-// TODO: take it away from here
-const headers = {
-    'Accept': 'application/json',
-    'Content-Type': 'application/json',
-};
-function resolveResponse(response) {
-    if (response.ok) {
-        return response.json();
-    }
-
-    return response.json().then(data => {
-        const error = new Error();
-        error.statusCode = response.status;
-        error.data = data;
-
-        throw error;
-    });
-}
+import { headers, resolveResponse } from './utils';
+import FormogenFormComponent from './components/semantic-ui';
 
 
 export default class FormogenComponent extends Component {
     static defaultProps = {
         locale: 'en',
-
-        // misc properties
+        showHeader: false,
         title: 'formogen form',
         upperFirstLabels: false,
         helpTextOnHover: false,
-        showHeader: false,
 
-        // urls
-        metaDataUrl: null,
-        objectCreateUrl: null,
-        objectUpdateUrl: null,
+        formData: {},
 
         fieldUpdatePropsMap: {},
     };
     static propTypes = {
-        metaData: PropTypes.object,
-
         locale: PropTypes.string,
-
+        showHeader: PropTypes.bool,
         title: PropTypes.string,
         upperFirstLabels: PropTypes.bool,
         helpTextOnHover: PropTypes.bool,
-        showHeader: PropTypes.bool,
 
+        layoutTemplate: PropTypes.array,
+
+        metaData: PropTypes.object,
+        formData: PropTypes.object,
+
+        /* urls */
         metaDataUrl: PropTypes.string,
         objectCreateUrl: PropTypes.string,
         objectUpdateUrl: PropTypes.string,
 
         fieldUpdatePropsMap: PropTypes.object,
 
-        // [pre] => send => [pre] receive [post]
-        /* patch data before send */
+        /*
+            callbacks that's called before *[submit, error, success]
+            they can patch data (must return modified data)
+        */
         pipePreSubmit: PropTypes.func,
         pipePreError: PropTypes.func,
         pipePreSuccess: PropTypes.func,
-
-        layout: PropTypes.array
     };
 
+    // --------------- constructor ---------------
     constructor(props) {
         super(props);
 
@@ -82,7 +60,8 @@ export default class FormogenComponent extends Component {
         this.log = loglevel.getLogger(`FormogenComponent id=${ id }`);
         this.log.debug('Initialized');
 
-        // all pipe* callbacks are stored in props
+        // all initial states are stored in props (coz they're immutable)
+        // all pipe* callbacks are stored in props (coz they're immutable)
         this.state = {
             id,
 
@@ -90,8 +69,6 @@ export default class FormogenComponent extends Component {
 
             // metaData
             metaDataReady: false,
-
-            assignedMetaData: props.metaData,
             receivedMetaData: null,
 
             errorsFieldMap: {},
@@ -101,6 +78,10 @@ export default class FormogenComponent extends Component {
             metaDataUrl: props.metaDataUrl,
             objectCreateUrl: props.objectCreateUrl,
             objectUpdateUrl: props.objectUpdateUrl,
+
+            // formData
+            formData: props.formData,
+            defaultFormData: null,  // ?
         };
 
         /* ref */
@@ -111,30 +92,31 @@ export default class FormogenComponent extends Component {
     componentWillMount() {
         this.log.debug('componentWillMount()');
 
-        const { metaDataUrl, assignedMetaData } = this.state;
+        const { metaDataUrl } = this.state;
+        const initialFields = this.props.metaData ? this.props.metaData.fields.slice() : [];
+        let metaDataReady,
+            fields,
+            fieldNames;
 
         if (_.isNull(metaDataUrl)) {
-            // TODO: DRY
-            const totalFields = assignedMetaData ? FormogenComponent.concatFields(assignedMetaData.fields) : [];
-            const totalFieldNames =  _(totalFields).map('name').flatten().value();
-
-            this.setState({
-                metaDataReady: true,
-                totalFields,
-                totalFieldNames
-            });
+            metaDataReady = true;
+            fields = FormogenComponent.concatFields(initialFields);
+            fieldNames =  _(fields).map('name').flatten().value();
         } else {
-            const totalFields = assignedMetaData ? FormogenComponent.concatFields(assignedMetaData.fields) : [];
             this.fetchMetaData(metaDataUrl);
-            this.setState({
-                totalFields
-            });
+
+            metaDataReady = false;
+            fields = FormogenComponent.concatFields(initialFields);
+            fieldNames =  _(fields).map('name').flatten().value();
         }
+
+        this.setState({ metaDataReady, fields, fieldNames });
     }
 
-    // --------------- pipeline callbacks ---------------
+    // --------------- pipeline data callbacks ---------------
     pipePreSubmit(data) {
         const { pipePreSubmit } = this.props;
+
         if (_.isFunction(pipePreSubmit)) {
             this.log.warn('Using custom pipeline processing for pipePreSubmit()');
             return pipePreSubmit(data, this);
@@ -142,45 +124,43 @@ export default class FormogenComponent extends Component {
         return data;
     }
     pipePreError(data) {
-        const { pipePostError } = this.props;
-        if (_.isFunction(pipePostError)) {
+        const { pipePreError } = this.props;
+
+        if (_.isFunction(pipePreError)) {
             this.log.warn('Using custom pipeline processing for pipePreError()');
-            return pipePostError(data, this);
+            return pipePreError(data, this);
         }
         return data;
     }
     pipePreSuccess(data) {
-        const { pipePostSuccess } = this.props;
-        if (_.isFunction(pipePostSuccess)) {
+        const { pipePreSuccess } = this.props;
+
+        if (_.isFunction(pipePreSuccess)) {
             this.log.warn('Using custom pipeline processing for pipePreSuccess()');
-            return pipePostSuccess(data, this);
+            return pipePreSuccess(data, this);
         }
         return data;
     }
 
     // --------------- miscellaneous handlers ---------------
-    handleSubmit() {
+    handleSubmit = () => {
         this.log.debug('handleSubmit()');
 
-        // const { submitUrl } = this.state;
         const { data } = this.fieldsComponent.getFormData();
 
         /* clear field errors before submit */
-        this.setState({
-            errorsFieldMap: {},
-            nonFieldErrorsMap: {}
-        });
+        this.setState({ errorsFieldMap: {}, nonFieldErrorsMap: {} });
+
         this.submitForm(this.pipePreSubmit(data));
-    }
+    };
     handleSuccess(data) {
-        this.log.debug('handleSuccess()');
-        this.log.warn('Processing submitted form\'s successful result', data);
+        this.log.debug('handleSuccess()', data);
 
         // update formData with received data
         this.setState({ formData: this.pipePreSuccess(data) });
     }
     handleFail(error) {
-        this.log.debug(`handleFail(): ${ error.statusCode }`);
+        this.log.debug(`handleFail(), with the status of response = ${ error.statusCode }`);
 
         // if http status is 400 (Bad Request) it should show form errors
         const data = this.pipePreError(error.data);
@@ -190,15 +170,13 @@ export default class FormogenComponent extends Component {
             this.handelOtherErrors(data);
     }
     handelOtherErrors(errors) {
-        this.log.debug('handelOtherErrors()');
-        this.log.warn('Processing errors', errors);
+        this.log.debug('handelOtherErrors()', errors);
     }
     handleValidationErrors(errors) {
-        this.log.debug('handleValidationErrors()');
-        this.log.warn('Processing form\'s validation errors', errors);
+        this.log.debug('handleValidationErrors()', errors);
 
         const receivedFieldNames = _.keys(errors);
-        const nonFieldErrorKeys = _(receivedFieldNames).difference(this.state.totalFieldNames).value();
+        const nonFieldErrorKeys = _(receivedFieldNames).difference(this.state.fieldNames).value();
         const nonFieldErrorsMap = _(errors).pick(nonFieldErrorKeys).value();
 
         this.setState({
@@ -206,6 +184,12 @@ export default class FormogenComponent extends Component {
             nonFieldErrorsMap
         });
     }
+
+    handleFieldChange = (event, { name, value }) => {
+        this.log.debug(`handleFieldChange(): setting formData field "${ name }" to ${ typeof value }`, value);
+
+        this.setState({ formData: Object.assign({}, this.state.formData, {[name]: value}) });
+    };
 
     // --------------- fetch-receive submit-receive methods ---------------
     fetchMetaData(url) {
@@ -220,23 +204,24 @@ export default class FormogenComponent extends Component {
             .then(data => this.receiveMetaData(data));
     }
     receiveMetaData(data) {
-        this.log.debug('receiveMetaData()');
-        this.log.warn('Received data', data);
+        this.log.debug('receiveMetaData()', data);
 
-        const { assignedMetaData } = this.state;
+        const { formData } = this.state;
 
-        const assignedFields = assignedMetaData ? assignedMetaData.fields : [];
-        const { fields } = data;
+        const initialFields = this.props.metaData ? this.props.metaData.fields.slice() : [];
+        const receivedFields = data.fields.slice();
 
         // TODO: DRY
-        const totalFields = FormogenComponent.concatFields(assignedFields, fields);
-        const totalFieldNames =  _(totalFields).map('name').flatten().value();
+        const fields = FormogenComponent.concatFields(initialFields, receivedFields);
+        const fieldNames =  _(fields).map('name').flatten().value();
 
         this.setState({
             metaDataReady: true,
             receivedMetaData: data,
-            totalFields,
-            totalFieldNames
+            fields,
+            fieldNames,
+
+            formData: FormogenComponent.updateFormDataWithDefaults(fields, formData)
         });
     }
     submitForm(data) {
@@ -266,66 +251,69 @@ export default class FormogenComponent extends Component {
      * @returns {string} e.g 'The Main Form'
      */
     getTitle() {
-        const { title, assignedMetaData, receivedMetaData } = this.state;
+        const { title, receivedMetaData } = this.state;
 
-        if (assignedMetaData) {
-            return _.upperFirst(assignedMetaData.title.substr(0));
+        if (this.props.metaData) {
+            return _.upperFirst(this.props.metaData.title.substr(0));
         }
         if (receivedMetaData) {
             return _.upperFirst(receivedMetaData.title.substr(0));
         }
         return title.substr(0);
     }
-    /**
-     * Returns an array of all (assigned and received) metadata fields.
-     * @returns {Array} The array of Objects (e.g [{name: '...', ...}, ...])
-     */
-    static concatFields(fieldSet, anotherFieldSet) {
+    static concatFields(fieldSet, anotherFieldSet = []) {
         const fields = [
             ...fieldSet ? fieldSet.slice() : [],
             ...anotherFieldSet ? anotherFieldSet.slice() : [],
         ];
         return _.differenceBy(fields, 'name');
     }
+    static updateFormDataWithDefaults(fields, formData) {
+        let data = Object.assign({}, formData);
+        for (let field of fields) {
+            if (field.name in data) {
+                continue;
+            }
+            // should be undefined for uncontrolled components, not null
+            data[field.name] = field.default || '';
+
+            // DRF expects M2M values as an list (empty or not), so empty string is not acceptable here
+            if (!data[field.name] && field.type === 'ManyToManyField')
+                data[field.name] = [];
+        }
+        return data;
+    }
 
     // --------------- React.js render ---------------
     render() {
         this.log.debug('render()');
 
-        const { metaDataReady, formData, totalFields, errorsFieldMap, nonFieldErrorsMap } = this.state;
+        const { metaDataReady, formData, fields, errorsFieldMap, nonFieldErrorsMap } = this.state;
 
         return (
-            <Form loading={ !metaDataReady }>
-                { this.props.showHeader ? <Header as='h2' dividing={ true }>{ this.getTitle() }</Header> : '' }
+            <FormogenFormComponent
+                ref={ comp => { this.fieldsComponent = comp; } }
 
-                <FormogenFormFieldsComponent
-                    ref={ comp => { this.fieldsComponent = comp; } }
+                locale={ this.props.locale }
+                loading={ !metaDataReady }
+                showHeader={ this.props.showHeader }
+                title={ this.getTitle() }
+                upperFirstLabels={ this.props.upperFirstLabels }
+                helpTextOnHover={ this.props.helpTextOnHover }
 
-                    fields={ totalFields }
+                fields={ fields }
+                formData={ formData }
+                layoutTemplate={ this.props.layoutTemplate }
 
-                    locale={ this.props.locale }
-                    onSubmit={ validatedData => this.handleSubmit(validatedData) }
+                errorsFieldMap={ errorsFieldMap }
+                nonFieldErrorsMap={ nonFieldErrorsMap }
 
-                    upperFirstLabels={ this.props.upperFirstLabels }
-                    helpTextOnHover={ this.props.helpTextOnHover }
-                    layout={ this.props.layout }
+                fieldUpdatePropsMap={ this.props.fieldUpdatePropsMap }
 
-                    fieldUpdatePropsMap={ this.props.fieldUpdatePropsMap }
-                    formData={ formData }
-
-                    errorsFieldMap={ errorsFieldMap }
-                    nonFieldErrorsMap={ nonFieldErrorsMap }
-                />
-                <Button
-                    content={ 'Submit' }
-                    onClick={ () => this.handleSubmit() }
-                    onKeyPress={ () => this.handleSubmit() }
-
-                    fluid={ true }
-                    type='submit'
-                />
-            </Form>
+                // callbacks
+                onFieldChange={ this.handleFieldChange }
+                onSubmit={ this.handleSubmit }
+            />
         );
     }
 }
-

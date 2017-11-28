@@ -1,9 +1,9 @@
 // import FormFieldsComponent from 'formogen/components/semantic-ui/FormFieldsComponent';
 
 
-it('should render FormFieldsComponent', () => {
+it('should render FormogenFormComponent', () => {
     // const wrapper = shallow(
-    //     <FormFieldsComponent/>
+    //     <FormogenFormComponent/>
     // );
     // expect(wrapper).toMatchSnapshot();
     expect(true).toBeTruthy();
