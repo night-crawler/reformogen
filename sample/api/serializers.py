@@ -19,9 +19,12 @@ class AuthorSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     # TODO:
-    # def validate(self, attrs):
-    #     raise ValidationError({'lol': ['This is sad']})
-    #     return attrs
+    def validate(self, attrs):
+        raise ValidationError({
+            'lol': ['This is sad'],
+            'lol2': ['This is sad fuck you'],
+        })
+        return attrs
 
 
 class BookSerializer(serializers.ModelSerializer):

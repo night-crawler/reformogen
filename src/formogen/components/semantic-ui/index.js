@@ -30,6 +30,7 @@ import 'react-select/dist/react-select.css';
 import './custom.css';
 import 'react-datepicker/dist/react-datepicker.css';
 import 'react-times/css/material/default.css';
+import { MessageList } from './MiscComponents';
 
 
 export {
@@ -79,6 +80,7 @@ export default class FormFieldsComponent extends React.Component {
 
             FileField: DropzoneField,
         },
+        nonFieldErrorsMap: {},
     };
     static propTypes = {
         fields: PropTypes.arrayOf(PropTypes.object).isRequired,
@@ -90,6 +92,7 @@ export default class FormFieldsComponent extends React.Component {
         layout: PropTypes.array,
         djangoFieldsMap: PropTypes.object,
         errorsFieldMap: PropTypes.object,
+        nonFieldErrorsMap: PropTypes.object,  /* {title: [errors]} */
     };
 
     constructor(props) {
@@ -107,6 +110,8 @@ export default class FormFieldsComponent extends React.Component {
             fields: props.fields,
             layoutTemplate: props.layout,
             layout: [],
+
+            nonFieldErrorsMap: props.nonFieldErrorsMap,
         };
     }
 
@@ -114,9 +119,14 @@ export default class FormFieldsComponent extends React.Component {
     componentWillMount() {
         this.setState(FormFieldsComponent.computeRuntimeState(this.state));
     }
-    componentWillReceiveProps({ fields }) {
+    componentWillReceiveProps({ fields, nonFieldErrorsMap }) {
         const { layoutTemplate, formData } = this.state;
-        this.setState(FormFieldsComponent.computeRuntimeState({ layoutTemplate, formData, fields }));
+        const state = Object.assign(
+            {},
+            FormFieldsComponent.computeRuntimeState({ layoutTemplate, formData, fields }),
+            { nonFieldErrorsMap }
+        );
+        this.setState(state);
     }
 
     static updateFormDataWithDefaults(fields, formData) {
@@ -282,9 +292,26 @@ export default class FormFieldsComponent extends React.Component {
             />
         );
     }
+    renderNonFieldErrors() {
+        if (_.isEmpty(this.state.nonFieldErrorsMap)) return null;
+
+        const renderedMsgs = _(this.state.nonFieldErrorsMap).toPairs().value().map(([title, errors], i) =>
+            <Grid.Row  key={ i }>
+                <div className='sixteen wide column'>
+                    <MessageList header={ title } messages={ errors } />
+                </div>
+            </Grid.Row>
+        );
+        return <Grid className='non-field-errors layout' columns={ 16 }>{ renderedMsgs }</Grid>;
+    }
 
     // --------------- React.js render ---------------
     render() {
-        return <div className='layouts'>{ this.renderLayouts() }</div>;
+        return (
+            <div className='layouts'>
+                { this.renderNonFieldErrors() }
+                { this.renderLayouts() }
+            </div>
+        );
     }
 }

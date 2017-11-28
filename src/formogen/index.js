@@ -14,7 +14,7 @@
     [ ] request interceptions (pipeline)
     [ ] i18n
     [+] error display
-    [ ] non-field errors
+    [+] non-field errors
     [ ] state save between requests
     [ ] modal forms support
     [?] dropzone

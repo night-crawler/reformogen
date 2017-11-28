@@ -51,6 +51,9 @@ export default class FormogenComponent extends Component {
         onFail: data => data,
 
         fieldUpdatePropsMap: {},
+
+        mainFormComponent: Form,
+        buttonSubmitComponent: Button,
     };
     static propTypes = {
         metaData: PropTypes.object,
@@ -88,6 +91,7 @@ export default class FormogenComponent extends Component {
             receivedMetaData: null,
 
             errorsFieldMap: {},
+            nonFieldErrorsMap: {},
 
             // urls
             metaDataUrl: props.metaDataUrl,
@@ -110,11 +114,14 @@ export default class FormogenComponent extends Component {
         const { metaDataUrl, assignedMetaData } = this.state;
 
         if (_.isNull(metaDataUrl)) {
+            // TODO: DRY
             const totalFields = assignedMetaData ? FormogenComponent.concatFields(assignedMetaData.fields) : [];
+            const totalFieldNames =  _(totalFields).map('name').flatten().value();
 
             this.setState({
                 metaDataReady: true,
-                totalFields
+                totalFields,
+                totalFieldNames
             });
         } else {
             const totalFields = assignedMetaData ? FormogenComponent.concatFields(assignedMetaData.fields) : [];
@@ -175,7 +182,14 @@ export default class FormogenComponent extends Component {
         this.log.debug('handleValidationErrors()');
         this.log.warn('Processing form\'s validation errors', errors);
 
-        this.setState({ errorsFieldMap: errors });
+        const receivedFieldNames = _.keys(errors);
+        const nonFieldErrorKeys = _(receivedFieldNames).difference(this.state.totalFieldNames).value();
+        const nonFieldErrorsMap = _(errors).pick(nonFieldErrorKeys).value();
+
+        this.setState({
+            errorsFieldMap: errors,
+            nonFieldErrorsMap
+        });
     }
 
     // --------------- fetch-receive submit-receive methods ---------------
@@ -198,12 +212,16 @@ export default class FormogenComponent extends Component {
 
         const assignedFields = assignedMetaData ? assignedMetaData.fields : [];
         const { fields } = data;
+
+        // TODO: DRY
         const totalFields = FormogenComponent.concatFields(assignedFields, fields);
+        const totalFieldNames =  _(totalFields).map('name').flatten().value();
 
         this.setState({
             metaDataReady: true,
             receivedMetaData: data,
-            totalFields
+            totalFields,
+            totalFieldNames
         });
     }
     submitForm(url, data) {
@@ -260,7 +278,7 @@ export default class FormogenComponent extends Component {
     render() {
         this.log.debug('render()');
 
-        const { metaDataReady, totalFields, errorsFieldMap } = this.state;
+        const { metaDataReady, totalFields, errorsFieldMap, nonFieldErrorsMap } = this.state;
 
         return (
             <Form loading={ !metaDataReady }>
@@ -281,6 +299,7 @@ export default class FormogenComponent extends Component {
                     fieldUpdatePropsMap={ this.props.fieldUpdatePropsMap }
 
                     errorsFieldMap={ errorsFieldMap }
+                    nonFieldErrorsMap={ nonFieldErrorsMap }
                 />
                 <Button
                     content={ 'Submit' }
