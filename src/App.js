@@ -35,14 +35,11 @@ class App extends Component {
                         <Grid.Column>
                             <Segment className='formogen'>
                                 <Formogen
-                                    metaData={ preparedMetaData }
-
-                                    metaDataUrl={ 'http://localhost:8000/api/v1/sample/authors/describe/' }
-                                    submitUrl={ 'http://localhost:8000/api/v1/sample/authors/' }
-
-                                    onSubmit={ data => this.handleSubmit(data) }
-
                                     upperFirstLabels={ true }
+
+                                    metaData={ preparedMetaData }
+                                    metaDataUrl={ 'http://localhost:8000/api/v1/sample/authors/describe/' }
+                                    objectCreateUrl={ 'http://localhost:8000/api/v1/sample/authors/' }
                                 />
                             </Segment>
                         </Grid.Column>
@@ -50,17 +47,14 @@ class App extends Component {
                         <Grid.Column>
                             <Segment className='formogen'>
                                 <Formogen
-                                    locale='ru'
-
+                                    locale={ 'ru' }
                                     showHeader={ true }
                                     helpTextOnHover={ true }
+                                    upperFirstLabels={ true }
 
                                     metaDataUrl={ 'http://localhost:8000/api/v1/sample/authors/describe/' }
-                                    submitUrl={ 'http://localhost:8000/api/v1/sample/authors/' }
+                                    objectCreateUrl={ 'http://localhost:8000/api/v1/sample/authors/' }
 
-                                    onSubmit={ data => this.handleSubmit(data) }
-
-                                    upperFirstLabels={ true }
                                     fieldUpdatePropsMap={ {
                                         dt_birth: (_props, props) => Object.assign({}, _props, {timeIntervals: 5})
                                     } }
@@ -71,17 +65,14 @@ class App extends Component {
                         <Grid.Column>
                             <Segment className='formogen'>
                                 <Formogen
-                                    locale='ru'
-
+                                    locale={ 'ru' }
                                     showHeader={ true }
                                     helpTextOnHover={ true }
+                                    upperFirstLabels={ true }
 
                                     metaDataUrl={ 'http://localhost:8000/api/v1/sample/all/describe/' }
-                                    submitUrl={ 'http://localhost:8000/api/v1/sample/all/' }
+                                    objectCreateUrl={ 'http://localhost:8000/api/v1/sample/all/' }
 
-                                    onSubmit={ data => this.handleSubmit(data) }
-
-                                    upperFirstLabels={ true }
                                     fieldUpdatePropsMap={ {
                                         dt_birth: (_props, props) => Object.assign({}, _props, {timeIntervals: 5})
                                     } }

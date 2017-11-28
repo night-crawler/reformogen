@@ -5,6 +5,8 @@ from django.utils.translation import ugettext_lazy as _
 from easy_thumbnails.fields import ThumbnailerImageField
 from model_utils.fields import AutoCreatedField, AutoLastModifiedField
 from django.core.exceptions import ValidationError
+from rest_framework.reverse import reverse
+
 from sample import states
 from sample import abstract
 
@@ -37,11 +39,42 @@ class TimeStampedModel(models.Model):
         abstract = True
 
 
-class Author(TimeStampedModel, abstract.StateBundleMixin):
+class CRUDUrlsMixin:
+    @property
+    def urls(self):
+        url_scheme_name = '{0}s'.format(self.__class__.__name__.lower())
+        describe_url = 'http://localhost:8000%s' % reverse('%s-describe' % url_scheme_name)
+        list_url = 'http://localhost:8000%s' % reverse('%s-list' % url_scheme_name)
+
+        urls = {
+            'create': list_url,
+            'read': None,
+            'update': None,
+            'delete': None,
+
+            'describe': describe_url,
+            'describe_object': None,
+        }
+
+        if self.id:
+            detail_url = 'http://localhost:8000%s' % reverse('%s-detail' % url_scheme_name, [self.id])
+            describe_object_url = 'http://localhost:8000%s' % reverse('%s-describe-object' % url_scheme_name, [self.id])
+            urls.update({
+                'read': detail_url,
+                'update': detail_url,
+                'delete': detail_url,
+
+                'describe_object': describe_object_url,
+            })
+
+        return urls
+
+
+class Author(CRUDUrlsMixin, TimeStampedModel, abstract.StateBundleMixin):
     STATE = states.AUTHOR_CHOICES
     name = models.CharField(_('name'), max_length=255, help_text=_('Author real name'))
-    dt_birth = models.DateTimeField(_('birth date time'), help_text=_('Select the day of birth'))
-    dt_death = models.DateTimeField(_('death date time'), blank=True, null=True)
+    dt_birth = models.DateTimeField(_('birth date time'), help_text=_('Select the day of birth'), default=now)
+    dt_death = models.DateTimeField(_('death date time'), blank=True, null=True, default=now)
 
     biography = models.TextField(_('biography'), blank=True)
     state = models.PositiveSmallIntegerField(_('state'), choices=STATE, default=STATE.alive)
@@ -55,11 +88,16 @@ class Author(TimeStampedModel, abstract.StateBundleMixin):
     def __str__(self):
         return _('Author {0}').format(self.name)
 
+    def save(self, *args, **kwargs):
+        if not self.biography:
+            self.biography = 'It was filled on the server side as a test value!'
+        super().save(*args, **kwargs)
+
     def printable_name(self):
         return self.name
 
 
-class AuthorPhoto(TimeStampedModel):
+class AuthorPhoto(CRUDUrlsMixin, TimeStampedModel):
     author = models.ForeignKey('Author', verbose_name=_('author'))
     photo = ThumbnailerImageField(_('photo'), blank=True, null=True,
                                   help_text=_('logo image'))
@@ -69,7 +107,7 @@ class AuthorPhoto(TimeStampedModel):
         verbose_name_plural = _('author photos')
 
 
-class Book(TimeStampedModel):
+class Book(CRUDUrlsMixin, TimeStampedModel):
     author = models.ForeignKey('Author', verbose_name=_('author'))
     title = models.CharField(_('title'), max_length=255)
     score = models.DecimalField(_('score'), max_digits=10, decimal_places=4)
@@ -103,7 +141,7 @@ def default_time():
     return now().time()
 
 
-class AllModelFields(models.Model):
+class AllModelFields(CRUDUrlsMixin, models.Model):
     STATE = states.AUTHOR_CHOICES
 
     f_date = models.DateField(_('date'), default=default_date)

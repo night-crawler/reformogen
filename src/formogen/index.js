@@ -15,6 +15,7 @@
     [ ] i18n
     [+] error display
     [+] non-field errors
+    [ ] initial form field state
     [ ] state save between requests
     [ ] modal forms support
     [?] dropzone

@@ -117,10 +117,14 @@ export default class FormFieldsComponent extends React.Component {
 
     // --------------- React.js standard ---------------
     componentWillMount() {
+        this.log.warn('componentWillMount()');
+
         this.setState(FormFieldsComponent.computeRuntimeState(this.state));
     }
-    componentWillReceiveProps({ fields, nonFieldErrorsMap }) {
-        const { layoutTemplate, formData } = this.state;
+    componentWillReceiveProps({ fields, formData, nonFieldErrorsMap }) {
+        this.log.warn('componentWillReceiveProps()');
+
+        const { layoutTemplate } = this.state;
         const state = Object.assign(
             {},
             FormFieldsComponent.computeRuntimeState({ layoutTemplate, formData, fields }),
@@ -137,6 +141,10 @@ export default class FormFieldsComponent extends React.Component {
             }
             // should be undefined for uncontrolled components, not null
             data[field.name] = field.default || '';
+
+            // DRF expects M2M values as an list (empty or not), so empty string is not acceptable here
+            if (!data[field.name] && field.type === 'ManyToManyField')
+                data[field.name] = [];
         }
         return data;
     }

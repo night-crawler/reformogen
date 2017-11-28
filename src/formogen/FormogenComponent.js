@@ -34,7 +34,9 @@ function resolveResponse(response) {
 
 export default class FormogenComponent extends Component {
     static defaultProps = {
-        // data
+        locale: 'en',
+
+        // misc properties
         title: 'formogen form',
         upperFirstLabels: false,
         helpTextOnHover: false,
@@ -42,33 +44,34 @@ export default class FormogenComponent extends Component {
 
         // urls
         metaDataUrl: null,
-        submitUrl: null,
-        locale: 'en',
-
-        // callbacks
-        onSubmit: data => data,
-        onSuccess: data => data,
-        onFail: data => data,
+        objectCreateUrl: null,
+        objectUpdateUrl: null,
 
         fieldUpdatePropsMap: {},
-
-        mainFormComponent: Form,
-        buttonSubmitComponent: Button,
     };
     static propTypes = {
         metaData: PropTypes.object,
-        title: PropTypes.string,
-        metaDataUrl: PropTypes.string,
-        submitUrl: PropTypes.string,
-        onSubmit: PropTypes.func,
-        onSuccess: PropTypes.func,
-        onFail: PropTypes.func,
-        upperFirstLabels: PropTypes.bool,
+
         locale: PropTypes.string,
+
+        title: PropTypes.string,
+        upperFirstLabels: PropTypes.bool,
         helpTextOnHover: PropTypes.bool,
         showHeader: PropTypes.bool,
 
+        metaDataUrl: PropTypes.string,
+        objectCreateUrl: PropTypes.string,
+        objectUpdateUrl: PropTypes.string,
+
         fieldUpdatePropsMap: PropTypes.object,
+
+        // [pre] => send => [pre] receive [post]
+        /* patch data before send */
+        pipePreSubmit: PropTypes.func,
+        pipePreError: PropTypes.func,
+        pipePreSuccess: PropTypes.func,
+
+        layout: PropTypes.array
     };
 
     constructor(props) {
@@ -79,6 +82,7 @@ export default class FormogenComponent extends Component {
         this.log = loglevel.getLogger(`FormogenComponent id=${ id }`);
         this.log.debug('Initialized');
 
+        // all pipe* callbacks are stored in props
         this.state = {
             id,
 
@@ -95,12 +99,8 @@ export default class FormogenComponent extends Component {
 
             // urls
             metaDataUrl: props.metaDataUrl,
-            submitUrl: props.submitUrl,
-
-            // callbacks
-            onSubmit: props.onSubmit,
-            onSuccess: props.onSuccess,
-            onFail: props.onFail,
+            objectCreateUrl: props.objectCreateUrl,
+            objectUpdateUrl: props.objectUpdateUrl,
         };
 
         /* ref */
@@ -132,47 +132,62 @@ export default class FormogenComponent extends Component {
         }
     }
 
-    // --------------- handle callbacks ---------------
-    handleOnSubmit(data) {
-        const { onSubmit } = this.state;
-        if (_.isFunction(onSubmit)) onSubmit(data);
+    // --------------- pipeline callbacks ---------------
+    pipePreSubmit(data) {
+        const { pipePreSubmit } = this.props;
+        if (_.isFunction(pipePreSubmit)) {
+            this.log.warn('Using custom pipeline processing for pipePreSubmit()');
+            return pipePreSubmit(data, this);
+        }
+        return data;
     }
-    handleOnSuccess(data) {
-        const { onSuccess } = this.state;
-        if (_.isFunction(onSuccess)) onSuccess(data);
+    pipePreError(data) {
+        const { pipePostError } = this.props;
+        if (_.isFunction(pipePostError)) {
+            this.log.warn('Using custom pipeline processing for pipePreError()');
+            return pipePostError(data, this);
+        }
+        return data;
     }
-    handleOnFail(data) {
-        const { onFail } = this.state;
-        if (_.isFunction(onFail)) onFail(data);
+    pipePreSuccess(data) {
+        const { pipePostSuccess } = this.props;
+        if (_.isFunction(pipePostSuccess)) {
+            this.log.warn('Using custom pipeline processing for pipePreSuccess()');
+            return pipePostSuccess(data, this);
+        }
+        return data;
     }
 
     // --------------- miscellaneous handlers ---------------
     handleSubmit() {
         this.log.debug('handleSubmit()');
 
-        const { submitUrl } = this.state;
+        // const { submitUrl } = this.state;
         const { data } = this.fieldsComponent.getFormData();
 
         /* clear field errors before submit */
-        this.setState({ errorsFieldMap: {} });
-
-        this.submitForm(submitUrl, data);
-        this.handleOnSubmit(data);
+        this.setState({
+            errorsFieldMap: {},
+            nonFieldErrorsMap: {}
+        });
+        this.submitForm(this.pipePreSubmit(data));
     }
     handleSuccess(data) {
         this.log.debug('handleSuccess()');
-        this.log.warn(`Processing submitted form's successful result: ${ JSON.stringify(data, null, 4) }`);
+        this.log.warn('Processing submitted form\'s successful result', data);
 
-        this.handleOnSuccess(data);
+        // update formData with received data
+        this.setState({ formData: this.pipePreSuccess(data) });
     }
     handleFail(error) {
         this.log.debug(`handleFail(): ${ error.statusCode }`);
 
         // if http status is 400 (Bad Request) it should show form errors
-        if (+error.statusCode === 400) this.handleValidationErrors(error.data);
-        else this.handelOtherErrors(error.data);
-
-        this.handleOnFail(error.data);
+        const data = this.pipePreError(error.data);
+        if (+error.statusCode === 400)
+            this.handleValidationErrors(data);
+        else
+            this.handelOtherErrors(data);
     }
     handelOtherErrors(errors) {
         this.log.debug('handelOtherErrors()');
@@ -224,12 +239,20 @@ export default class FormogenComponent extends Component {
             totalFieldNames
         });
     }
-    submitForm(url, data) {
-        const options = {
+    submitForm(data) {
+        this.log.debug('submitForm()', data);
+
+        let options = {
             method: 'POST',
             headers: headers,
             body: JSON.stringify(data)
         };
+        let url = this.props.objectCreateUrl;
+
+        if (+(_.get(data, 'id', 0) || 0)) {
+            url = this.props.objectUpdateUrl || data.urls.update;
+            options.method = 'PATCH';
+        }
 
         fetch(url, options)
             .then(resolveResponse)
@@ -257,15 +280,6 @@ export default class FormogenComponent extends Component {
      * Returns an array of all (assigned and received) metadata fields.
      * @returns {Array} The array of Objects (e.g [{name: '...', ...}, ...])
      */
-    getFields() {  // TODO: feel free to delete this
-        const { assignedMetaData, receivedMetaData } = this.state;
-
-        const fields = [
-            ...assignedMetaData ? assignedMetaData.fields.slice() : [],
-            ...receivedMetaData ? receivedMetaData.fields.slice() : [],
-        ];
-        return _.differenceBy(fields, 'name');
-    }
     static concatFields(fieldSet, anotherFieldSet) {
         const fields = [
             ...fieldSet ? fieldSet.slice() : [],
@@ -278,7 +292,7 @@ export default class FormogenComponent extends Component {
     render() {
         this.log.debug('render()');
 
-        const { metaDataReady, totalFields, errorsFieldMap, nonFieldErrorsMap } = this.state;
+        const { metaDataReady, formData, totalFields, errorsFieldMap, nonFieldErrorsMap } = this.state;
 
         return (
             <Form loading={ !metaDataReady }>
@@ -297,6 +311,7 @@ export default class FormogenComponent extends Component {
                     layout={ this.props.layout }
 
                     fieldUpdatePropsMap={ this.props.fieldUpdatePropsMap }
+                    formData={ formData }
 
                     errorsFieldMap={ errorsFieldMap }
                     nonFieldErrorsMap={ nonFieldErrorsMap }

@@ -38,9 +38,6 @@ export default function InlineManyToManyField(props) {
         "data": []
     */
 
-    /* change empty value type to empty array on startup, unless we have correct values */
-    !props.value && props.onChange(null, {name: props.name, value: []});
-
     const handleChange = (val) => {
         const plainIds = val.map( ({ value }) => (value*1) );
         props.onChange(null, {name: props.name, value: plainIds});
