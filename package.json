@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "babel-polyfill": "^6.26.0",
     "eslint-plugin-jest": "^21.3.2",
     "isomorphic-fetch": "^2.2.1",
     "lodash": "^4.17.4",

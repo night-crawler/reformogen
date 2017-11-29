@@ -1,29 +1,32 @@
 /*
     ========================= TODOLIST =========================
 
-    [ ] edit && save support
-    [+] render json metadata
-    [ ] validate (simple) user input (js-side validators)
-    [+] dynamic data loading (data='/url/')
-    [ ] custom (3) renderers
-    [+] populate with default values
-    [ ] populate from (*) custom user data values
-    [+] layouts
-    [+] dynamic metadata (without serverside endpoints)
-    [ ] additional fields
-    [ ] request interceptions (pipeline)
-    [ ] i18n
-    [+] error display
-    [+] non-field errors
-    [ ] initial form field state
-    [ ] state save between requests
+    [ ] do some tests, we need a bit more tests
+
+    [+] edit && save support (implemented POST, PATCH logic)
+    [+] action URL (old formogen: objUrl, objCreateUrl)
+    [ ] modal mode
     [ ] modal forms support
     [?] dropzone
-
-    [ ] modal mode
-    [ ] action URL (old formogen: objUrl, objCreateUrl)
     [ ] cache metadata
+    [?] state save between requests
+    [ ] m2m async
 
+    [+] render json metadata (got from sever-side)
+    [+] dynamic metadata (without serverside endpoints)
+    [+] dynamic data loading (data='/url/')
+    [+] additional fields (via <Formogen metaData={ ... }/>
+    [+] populate with default values
+    [+] layouts
+    [+] request interceptions (pipeline)
+    [.] error display
+    [+] non-field errors
+    [+] initial form field state (via props formData)
+    [+] custom react-select option && value renderers
+    [ ] misc error display (500, 300 etc)
+    [ ] validate (simple) user input (js-side validators)
+    [ ] populate from (*) custom user data values
+    [ ] i18n
     [ ] fix re-render issue (see logs)
 
     ============================================================
@@ -48,6 +51,8 @@
             - worse performance
             - don't access this to from child components, pass it down with props instead
  */
+
+// https://github.com/sunnylqm/react-native-storage
 
 /* All used locales (from moment.js, excepting the 'en' locale) MUST be imported explicitly HERE! */
 import 'moment/locale/ru';

@@ -1,18 +1,15 @@
 import React from 'react';
+import _ from 'lodash';
+import * as URI from 'urijs';
 import { Form } from 'semantic-ui-react';
 import Select from 'react-select';
-import _ from 'lodash';
-import 'react-select/dist/react-select.css';
-import fetch from 'isomorphic-fetch';
-import Label from './Label';
 import propTypes from '../fieldPropTypes';
-import * as URI from 'urijs';
-
+import Label from './Label';
 import { MessageList } from './MiscComponents';
-
 import ModelInstanceOption from './ReactSelectOptionComponent';
 import ModelInstanceValue from './ReactSelectValueComponent';
 
+import { resolveResponse } from '../../utils';
 
 
 AsyncManyToManyField.propTypes = propTypes;
@@ -37,7 +34,7 @@ export default function AsyncManyToManyField(props) {
         let uri = URI(props.data).addSearch({q: input});
 
         fetch(uri)
-            .then(response => response.json())
+            .then(resolveResponse)
             .then(json => {
                 if (_.isArray(json)) {  /* without pagination */
                     callback(null, { complete: false, options: json, });

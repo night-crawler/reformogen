@@ -35,6 +35,7 @@ class AuthorViewSet(viewsets.ModelViewSet, DescribeMixin):
 
     def dispatch(self, request, *args, **kwargs):
         # time.sleep(2)
+        # return Response(data={'get out': True}, status=502)
         return super().dispatch(request, *args, **kwargs)
 
     def get_queryset(self) -> models.QuerySet:

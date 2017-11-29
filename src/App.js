@@ -134,6 +134,46 @@ class App extends Component {
             </div>
         );
     }
+    _render() {
+        const metaDataUrl = 'http://localhost:8000/api/v1/sample/authors/describe/';
+        const objectUrl = 'http://localhost:8000/api/v1/sample/authors/23/';
+        const objectCreateUrl = 'http://localhost:8000/api/v1/sample/authors/';
+
+        const prepopulatedFormData = {
+            name: 'Mr. Inconspicuous',
+            dt_birth: new Date(),
+            dt_death: new Date(),
+            state: 30,
+        };
+
+        return (
+            <div className='App'>
+
+                <Grid columns={ 3 } stackable={ true }>
+                    <Grid.Row>
+                        <Grid.Column>
+                            <Segment className='formogen'>
+                                <Formogen
+                                    locale={ 'ru' }
+                                    showHeader={ true }
+                                    helpTextOnHover={ true }
+                                    upperFirstLabels={ true }
+
+                                    formData={ prepopulatedFormData }
+
+                                    metaDataUrl={ metaDataUrl }
+                                    objectUrl={ objectUrl }
+
+                                    componentToRenderError={ Component }
+                                />
+                            </Segment>
+                        </Grid.Column>
+                    </Grid.Row>
+                </Grid>
+
+            </div>
+        );
+    }
 }
 
 export default App;

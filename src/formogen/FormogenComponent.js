@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import fetch from 'isomorphic-fetch';
-
 import loglevel from 'loglevel';
 
 import _ from 'lodash';
@@ -37,6 +35,7 @@ export default class FormogenComponent extends Component {
 
         /* urls */
         metaDataUrl: PropTypes.string,
+        objectUrl: PropTypes.string,
         objectCreateUrl: PropTypes.string,
         objectUpdateUrl: PropTypes.string,
 
@@ -49,6 +48,8 @@ export default class FormogenComponent extends Component {
         pipePreSubmit: PropTypes.func,
         pipePreError: PropTypes.func,
         pipePreSuccess: PropTypes.func,
+
+        onNetworkError: PropTypes.func,
     };
 
     // --------------- constructor ---------------
@@ -76,6 +77,7 @@ export default class FormogenComponent extends Component {
 
             // urls
             metaDataUrl: props.metaDataUrl,
+            objectUrl: props.objectUrl,
             objectCreateUrl: props.objectCreateUrl,
             objectUpdateUrl: props.objectUpdateUrl,
 
@@ -83,34 +85,24 @@ export default class FormogenComponent extends Component {
             formData: props.formData,
             defaultFormData: null,  // ?
         };
-
-        /* ref */
-        this.fieldsComponent = null;
     }
 
     // --------------- React.js standard ---------------
     componentWillMount() {
         this.log.debug('componentWillMount()');
+        Promise
+            .all([this.getMetaData(), this.getFormData()])
+            .then(([newMetaData, newFormData]) => {
+                this.setState({
+                    metaDataReady: true,
+                    fields: newMetaData.fields,
+                    fieldNames: _(newMetaData.fields).map('name').flatten().value(),
 
-        const { metaDataUrl } = this.state;
-        const initialFields = this.props.metaData ? this.props.metaData.fields.slice() : [];
-        let metaDataReady,
-            fields,
-            fieldNames;
-
-        if (_.isNull(metaDataUrl)) {
-            metaDataReady = true;
-            fields = FormogenComponent.concatFields(initialFields);
-            fieldNames =  _(fields).map('name').flatten().value();
-        } else {
-            this.fetchMetaData(metaDataUrl);
-
-            metaDataReady = false;
-            fields = FormogenComponent.concatFields(initialFields);
-            fieldNames =  _(fields).map('name').flatten().value();
-        }
-
-        this.setState({ metaDataReady, fields, fieldNames });
+                    title: this.props.title || newMetaData.title,
+                    formData: FormogenComponent.updateFormDataWithDefaults(newMetaData.fields, newFormData)
+                });
+            })
+            .catch(this.onNetworkError);
     }
 
     // --------------- pipeline data callbacks ---------------
@@ -143,34 +135,51 @@ export default class FormogenComponent extends Component {
     }
 
     // --------------- miscellaneous handlers ---------------
+    onNetworkError = (error) => {
+        /* fetch can produce exceptions on OPTIONS preflight requests we can't catch, so isHandled shows
+        * enduser we could not handle it proper way and could not put additional information into exception bundle
+        * since it's not present in original Fetch exception */
+
+        const isHandled = error.name === 'FormogenError';
+        if (_.isFunction(this.props.onNetworkError)) {
+            return this.props.onNetworkError(error, isHandled);
+        }
+
+        this.log.error(
+            `[${ isHandled ? 'HANDLED' : 'UNHANDLED' }]: Cannot fetch ${ error.url }, details`,
+            JSON.stringify(error, null, 4)
+        );
+    };
+
     handleSubmit = () => {
         this.log.debug('handleSubmit()');
 
-        const { data } = this.fieldsComponent.getFormData();
+        const { formData } = this.state;
 
         /* clear field errors before submit */
         this.setState({ errorsFieldMap: {}, nonFieldErrorsMap: {} });
 
-        this.submitForm(this.pipePreSubmit(data));
+        this.submitForm(this.pipePreSubmit(formData));
     };
-    handleSuccess(data) {
-        this.log.debug('handleSuccess()', data);
+    handleSubmitSuccess(data) {
+        this.log.debug('handleSubmitSuccess()', data);
 
         // update formData with received data
         this.setState({ formData: this.pipePreSuccess(data) });
     }
-    handleFail(error) {
+    handleSubmitFail(error) {
         this.log.debug(`handleFail(), with the status of response = ${ error.statusCode }`);
 
         // if http status is 400 (Bad Request) it should show form errors
         const data = this.pipePreError(error.data);
-        if (+error.statusCode === 400)
+        console.log('????', data, error.status, error);
+        if (+error.status === 400)
             this.handleValidationErrors(data);
         else
-            this.handelOtherErrors(data);
+            this.handleClientErrors(data);
     }
-    handelOtherErrors(errors) {
-        this.log.debug('handelOtherErrors()', errors);
+    handleClientErrors(errors) {
+        this.log.debug('handleClientErrors()', errors);
     }
     handleValidationErrors(errors) {
         this.log.debug('handleValidationErrors()', errors);
@@ -191,37 +200,52 @@ export default class FormogenComponent extends Component {
         this.setState({ formData: Object.assign({}, this.state.formData, {[name]: value}) });
     };
 
-    // --------------- fetch-receive submit-receive methods ---------------
-    fetchMetaData(url) {
-        const options = {
-            method: 'GET',
-            headers: headers,
-        };
-
-        // TODO: process fail
-        fetch(url, options)
-            .then(resolveResponse)
-            .then(data => this.receiveMetaData(data));
-    }
-    receiveMetaData(data) {
-        this.log.debug('receiveMetaData()', data);
-
+    // --------------- fetch-receive submit-receive methods (return promises) ---------------
+    getFormData() {
         const { formData } = this.state;
+        const { objectUrl } = this.props;
 
-        const initialFields = this.props.metaData ? this.props.metaData.fields.slice() : [];
-        const receivedFields = data.fields.slice();
+        return new Promise((resolve, reject) => {
+            if (!objectUrl)
+                return resolve(formData);
 
-        // TODO: DRY
-        const fields = FormogenComponent.concatFields(initialFields, receivedFields);
-        const fieldNames =  _(fields).map('name').flatten().value();
+            fetch(objectUrl, { method: 'GET', headers: headers })
+                .then(resolveResponse)
+                .then(data => {
+                    resolve(Object.assign({}, formData, data));
+                })
+                .catch(error => reject(error));
+        });
+    }
+    getMetaData() {
+        /*
+        1. form metadata key in cache: return resolved promise
+        2. metadata is only in metadataUrl: return Promise
+        3. metadataUrl + metaData = return Promise
+         */
+        const { metaData: initialMetaData, metaDataUrl } = this.props;
 
-        this.setState({
-            metaDataReady: true,
-            receivedMetaData: data,
-            fields,
-            fieldNames,
+        return new Promise((resolve, reject) => {
+            if (_.isEmpty(initialMetaData) && !metaDataUrl)
+                return reject(new Error('Formogen must be initialized either metaData or metaDataUrl!'));
 
-            formData: FormogenComponent.updateFormDataWithDefaults(fields, formData)
+            if (!metaDataUrl)
+                return resolve(initialMetaData);
+
+            fetch(metaDataUrl, { method: 'GET', headers: headers })
+                .then(resolveResponse)
+                .then(data => {
+                    const initialFields = this.props.metaData ? this.props.metaData.fields : [];
+                    const receivedFields = data.fields.slice();
+                    // TODO: cache initialFields before resolve!
+                    const fields = FormogenComponent.concatFields(initialFields, receivedFields);
+                    resolve({
+                        title: _.get(initialMetaData, 'title', null) || data.title,
+                        description: _.get(initialMetaData, 'description', null) || data.description,
+                        fields
+                    });
+                })
+                .catch(error => reject(error));
         });
     }
     submitForm(data) {
@@ -239,28 +263,13 @@ export default class FormogenComponent extends Component {
             options.method = 'PATCH';
         }
 
-        fetch(url, options)
+        return fetch(url, options)
             .then(resolveResponse)
-            .then(data => this.handleSuccess(data))
-            .catch(error => this.handleFail(error));
+            .then(data => this.handleSubmitSuccess(data))
+            .catch(error => this.handleSubmitFail(error));
     }
 
     // --------------- get methods ---------------
-    /**
-     * Returns the title of the Formogen Component.
-     * @returns {string} e.g 'The Main Form'
-     */
-    getTitle() {
-        const { title, receivedMetaData } = this.state;
-
-        if (this.props.metaData) {
-            return _.upperFirst(this.props.metaData.title.substr(0));
-        }
-        if (receivedMetaData) {
-            return _.upperFirst(receivedMetaData.title.substr(0));
-        }
-        return title.substr(0);
-    }
     static concatFields(fieldSet, anotherFieldSet = []) {
         const fields = [
             ...fieldSet ? fieldSet.slice() : [],
@@ -288,16 +297,14 @@ export default class FormogenComponent extends Component {
     render() {
         this.log.debug('render()');
 
-        const { metaDataReady, formData, fields, errorsFieldMap, nonFieldErrorsMap } = this.state;
+        const { metaDataReady, title, formData, fields, errorsFieldMap, nonFieldErrorsMap } = this.state;
 
         return (
             <FormogenFormComponent
-                ref={ comp => { this.fieldsComponent = comp; } }
-
                 locale={ this.props.locale }
                 loading={ !metaDataReady }
                 showHeader={ this.props.showHeader }
-                title={ this.getTitle() }
+                title={ title }
                 upperFirstLabels={ this.props.upperFirstLabels }
                 helpTextOnHover={ this.props.helpTextOnHover }
 

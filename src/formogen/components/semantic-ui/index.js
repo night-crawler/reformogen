@@ -133,9 +133,10 @@ export default class FormogenFormComponent extends React.Component {
         const { fields, formData } = this.state;
         this.computeNewState(fields, formData, this.props.layoutTemplate);
     }
-    componentWillReceiveProps({ fields, formData }) {
+    componentWillReceiveProps({ fields, formData, nonFieldErrorsMap }) {
         this.log.debug('componentWillReceiveProps()');
 
+        this.setState({ nonFieldErrorsMap });
         this.computeNewState(fields, formData, this.props.layoutTemplate);
     }
 
@@ -148,7 +149,7 @@ export default class FormogenFormComponent extends React.Component {
 
         this.setState({ formData, fields, fieldPropsByNameMap, layout });
     }
-    getFormData() {  // TODO: FEEL FREE TO DELETE IT
+    getFormData() {  // TODO: delete it after a while
         this.log.warn('method getFormData() is deprecated!');
 
         const { fieldPropsByNameMap } = this.state;
@@ -196,7 +197,8 @@ export default class FormogenFormComponent extends React.Component {
 
         const field = this.state.djangoFieldsMap[opts.type] || GenericField;
 
-        this.log.debug(`pickFieldComponent(), for Django field type="${ opts.type }", picked - `, field);
+        // this.log.debug(`pickFieldComponent(), for Django field type="${ opts.type }", picked - `, field);
+        this.log.debug(`pickFieldComponent(), for Django field type="${ opts.type }"`);
         return field;
     }
 
@@ -250,11 +252,11 @@ export default class FormogenFormComponent extends React.Component {
                 if (!fieldProps){
                     return null;
                 }
-                return this.renderField(j, fieldProps, layoutFieldOpts);
+                return this.renderField('field:' + j, fieldProps, layoutFieldOpts);
             });
 
             return (
-                <Grid columns={ 16 } key={ i } className='layout'>
+                <Grid columns={ 16 } key={ 'grid:' + i } className='layout'>
                     { header && <div className='sixteen wide column'><Header>{ header }</Header></div> }
                     { renderedFields }
                 </Grid>
