@@ -75,4 +75,3 @@ gen_admin.py
 celerybeat-schedule*
 db.sqlite3
 package-lock.json
-__snapshots__

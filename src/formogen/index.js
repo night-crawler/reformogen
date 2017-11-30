@@ -5,12 +5,11 @@
 
     [+] edit && save support (implemented POST, PATCH logic)
     [+] action URL (old formogen: objUrl, objCreateUrl)
-    [ ] modal mode
-    [ ] modal forms support
+    [ ] modal forms support (modal-mode)
     [?] dropzone
-    [ ] cache metadata
     [?] state save between requests
     [ ] m2m async
+    [ ] cache metadata
 
     [+] render json metadata (got from sever-side)
     [+] dynamic metadata (without serverside endpoints)
@@ -19,11 +18,12 @@
     [+] populate with default values
     [+] layouts
     [+] request interceptions (pipeline)
-    [.] error display
+    [+] error display
     [+] non-field errors
     [+] initial form field state (via props formData)
     [+] custom react-select option && value renderers
-    [ ] misc error display (500, 300 etc)
+    [ ] reload form
+    [+] misc error display (500, 300 etc) (it's not project's responsibility)
     [ ] validate (simple) user input (js-side validators)
     [ ] populate from (*) custom user data values
     [ ] i18n

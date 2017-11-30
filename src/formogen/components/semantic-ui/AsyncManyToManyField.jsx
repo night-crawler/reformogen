@@ -41,7 +41,8 @@ export default function AsyncManyToManyField(props) {
                 } else {  /* with pagination */
                     callback(null, { complete: false, options: json.results, });
                 }
-            });
+            })
+            .catch((error) => this.props.onNetworkError({ type: 'load', error }));
     };
 
     let _props = {

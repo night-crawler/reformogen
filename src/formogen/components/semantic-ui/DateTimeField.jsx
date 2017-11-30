@@ -15,17 +15,16 @@ import propTypes from '../fieldPropTypes';
 
 /**
  * Component should receive a value in ISO format
- * @param {Object[]} props {
- *      "name": "dt_death",
-        "verbose_name": "death date time",
-        "help_text": "",
-        "blank": true,
-        "null": true,
-        "editable": true,
-        "type": "DateTimeField",
-        "required": false
- * }
- * @param {string} props[].value - well ISO-formatted value to pass moment()
+ * @param {object} props
+ * @param {string} props.name - internal field name
+ * @param {string} props.verbose_name
+ * @param {string} props.help_text -
+ * @param {bool} props.blank - determines if we can leave field unfilled
+ * @param {bool} props.null - determines if we can store NULL values
+ * @param {bool} props.editable - can we edit the field value?
+ * @param {string} props.type - Django ORM field type
+ * @param {bool} props.required
+ * @param {string} props.value - well ISO-formatted value to pass moment()
  * @returns {XML}
  * @constructor
  */

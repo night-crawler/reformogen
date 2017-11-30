@@ -105,6 +105,7 @@ export default class FormogenFormComponent extends React.Component {
 
         onFieldChange: PropTypes.func,
         onSubmit: PropTypes.func,
+        onNetworkError: PropTypes.func,
 
         djangoFieldsMap: PropTypes.object,
     };
@@ -274,6 +275,7 @@ export default class FormogenFormComponent extends React.Component {
                 key={ i }
                 value={ this.state.formData[opts.name] }
                 onChange={ this.props.onFieldChange }
+                onNetworkError={ this.props.onNetworkError }
                 errors={ this.props.errorsFieldMap[opts.name] }
                 updateProps={ this.props.fieldUpdatePropsMap[opts.name] }
                 upperFirstLabel={ this.props.upperFirstLabels }

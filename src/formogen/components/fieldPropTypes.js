@@ -48,7 +48,8 @@ const defaultFieldPropTypes = {
     /* method to provide additional/redefine some opts in child component */
     updateProps: PropTypes.func,
 
-    onChange: PropTypes.func
+    onChange: PropTypes.func,
+    onNetworkError: PropTypes.func
 };
 
 export default defaultFieldPropTypes;

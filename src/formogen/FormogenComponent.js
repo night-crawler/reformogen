@@ -46,10 +46,12 @@ export default class FormogenComponent extends Component {
             they can patch data (must return modified data)
         */
         pipePreSubmit: PropTypes.func,
-        pipePreError: PropTypes.func,
+        pipePreValidationError: PropTypes.func,  // validation
         pipePreSuccess: PropTypes.func,
 
-        onNetworkError: PropTypes.func,
+        onSubmitNetworkError: PropTypes.func,
+        onFileUploadError: PropTypes.func,
+        onLoadNetworkError: PropTypes.func,
     };
 
     // --------------- constructor ---------------
@@ -102,8 +104,51 @@ export default class FormogenComponent extends Component {
                     formData: FormogenComponent.updateFormDataWithDefaults(newMetaData.fields, newFormData)
                 });
             })
-            .catch(this.onNetworkError);
+            .catch((error) => this.dispatchNetworkError({type: 'load', error}));
     }
+
+    /**
+     * Handles network errors ONLY.
+     *
+     * We have no ability to handle internal Fetch preflight (OPTIONS) request errors. The name of such errors
+     * is TypeError. Internally handled errors have name `FormogenError` and populated bundle of additional args.
+     * @param {string} type - load|submit|file
+     * @param {object} error
+     * @param {string} error.name
+     * @param {object} error.data
+     * @param {number} error.status
+     * @param {string} error.statusText
+     * @param {*} error.origResponse
+     * @param {bool} error.isJson
+     * @param {string} error.url
+     */
+    dispatchNetworkError = ({ type, error }) => {
+        const isHandled = error.name === 'FormogenError';
+        this.log.error(`[${type}:${error.name}]: Cannot fetch url "${ error.url }", details:`, error);
+
+        switch (type) {
+            case 'load':
+                if (_.isFunction(this.props.onLoadNetworkError))
+                    return this.props.onLoadNetworkError(error, isHandled);
+                this.log.warn(`No custom handler for type error ${type}. Pass callback to prop "onLoadNetworkError"`);
+                break;
+            case 'submit':
+                if (+error.status === 400)
+                    return this.handleValidationErrors(this.pipePreValidationError(error.data));
+                if (_.isFunction(this.props.onSubmitNetworkError))
+                    return this.props.onSubmitNetworkError(error, isHandled);
+                this.log.warn(`No custom handler for type error ${type}. Pass callback to prop "onSubmitNetworkError"`);
+                break;
+            case 'file':
+                if (_.isFunction(this.props.onFileUploadError))
+                    return this.props.onFileUploadError(error, isHandled);
+                this.log.warn(`No custom handler for type error ${type}. Pass callback to prop "onFileUploadError"`);
+                break;
+            default:
+                this.log.warn(`Unknown error type: ${type}`);
+
+        }
+    };
 
     // --------------- pipeline data callbacks ---------------
     pipePreSubmit(data) {
@@ -115,12 +160,12 @@ export default class FormogenComponent extends Component {
         }
         return data;
     }
-    pipePreError(data) {
-        const { pipePreError } = this.props;
+    pipePreValidationError(data) {
+        const { pipePreValidationError } = this.props;
 
-        if (_.isFunction(pipePreError)) {
-            this.log.warn('Using custom pipeline processing for pipePreError()');
-            return pipePreError(data, this);
+        if (_.isFunction(pipePreValidationError)) {
+            this.log.warn('Using custom pipeline processing for pipePreValidationError()');
+            return pipePreValidationError(data, this);
         }
         return data;
     }
@@ -135,22 +180,6 @@ export default class FormogenComponent extends Component {
     }
 
     // --------------- miscellaneous handlers ---------------
-    onNetworkError = (error) => {
-        /* fetch can produce exceptions on OPTIONS preflight requests we can't catch, so isHandled shows
-        * enduser we could not handle it proper way and could not put additional information into exception bundle
-        * since it's not present in original Fetch exception */
-
-        const isHandled = error.name === 'FormogenError';
-        if (_.isFunction(this.props.onNetworkError)) {
-            return this.props.onNetworkError(error, isHandled);
-        }
-
-        this.log.error(
-            `[${ isHandled ? 'HANDLED' : 'UNHANDLED' }]: Cannot fetch ${ error.url }, details`,
-            JSON.stringify(error, null, 4)
-        );
-    };
-
     handleSubmit = () => {
         this.log.debug('handleSubmit()');
 
@@ -166,20 +195,6 @@ export default class FormogenComponent extends Component {
 
         // update formData with received data
         this.setState({ formData: this.pipePreSuccess(data) });
-    }
-    handleSubmitFail(error) {
-        this.log.debug(`handleFail(), with the status of response = ${ error.statusCode }`);
-
-        // if http status is 400 (Bad Request) it should show form errors
-        const data = this.pipePreError(error.data);
-        console.log('????', data, error.status, error);
-        if (+error.status === 400)
-            this.handleValidationErrors(data);
-        else
-            this.handleClientErrors(data);
-    }
-    handleClientErrors(errors) {
-        this.log.debug('handleClientErrors()', errors);
     }
     handleValidationErrors(errors) {
         this.log.debug('handleValidationErrors()', errors);
@@ -266,7 +281,7 @@ export default class FormogenComponent extends Component {
         return fetch(url, options)
             .then(resolveResponse)
             .then(data => this.handleSubmitSuccess(data))
-            .catch(error => this.handleSubmitFail(error));
+            .catch(error => this.dispatchNetworkError({ type: 'submit', error }));
     }
 
     // --------------- get methods ---------------
@@ -320,6 +335,7 @@ export default class FormogenComponent extends Component {
                 // callbacks
                 onFieldChange={ this.handleFieldChange }
                 onSubmit={ this.handleSubmit }
+                onNetworkError={ this.dispatchNetworkError }
             />
         );
     }
