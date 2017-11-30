@@ -8,7 +8,7 @@
     [ ] modal forms support (modal-mode)
     [?] dropzone
     [?] state save between requests
-    [ ] m2m async
+    [ ] m2m async (pagination etc)
     [ ] cache metadata
 
     [+] render json metadata (got from sever-side)
@@ -22,12 +22,14 @@
     [+] non-field errors
     [+] initial form field state (via props formData)
     [+] custom react-select option && value renderers
+    [ ] custom react-select option && value renderers deal with initial values before component's data loaded
     [ ] reload form
     [+] misc error display (500, 300 etc) (it's not project's responsibility)
     [ ] validate (simple) user input (js-side validators)
     [ ] populate from (*) custom user data values
-    [ ] i18n
+    [?] i18n (it's not project's responsibility)
     [ ] fix re-render issue (see logs)
+    [ ] proper tab index for fields
 
     ============================================================
 */

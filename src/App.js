@@ -23,7 +23,7 @@ class App extends Component {
         this.log.debug('initialized');
     }
 
-    render() {
+    _render() {
         return (
             <div className='App'>
 
@@ -134,7 +134,7 @@ class App extends Component {
             </div>
         );
     }
-    _render() {
+    render() {
         const metaDataUrl = 'http://localhost:8000/api/v1/sample/authors/describe/';
         const objectUrl = 'http://localhost:8000/api/v1/sample/authors/23/';
         const objectCreateUrl = 'http://localhost:8000/api/v1/sample/authors/';

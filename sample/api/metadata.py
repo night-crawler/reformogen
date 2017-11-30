@@ -16,6 +16,9 @@ class AuthorMetadata(MetaData):
         # 'name': {'editable': False},
     }
 
+    def get_inspire_source_dataset_url(self, field, obj):
+        return 'http://localhost:8000%s' % reverse_lazy('authors-list')
+
     def get_title(self, request, view, obj: wf_models.Author):
         if obj:
             return _('Edit Author "{0}"').format(obj.printable_name)
