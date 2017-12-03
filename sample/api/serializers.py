@@ -23,7 +23,15 @@ class StateBundleMixin(serializers.ModelSerializer):
         return obj.state_bundle
 
 
+class AuthorPlainSerializer(CRUDUrlsSerializerMixin, serializers.ModelSerializer):
+    class Meta:
+        model = s_models.Author
+        fields = '__all__'
+
+
 class AuthorSerializer(CRUDUrlsSerializerMixin, serializers.ModelSerializer):
+    inspire_source = AuthorPlainSerializer(many=True)
+
     class Meta:
         model = s_models.Author
         fields = '__all__'

@@ -84,6 +84,7 @@ class Author(CRUDUrlsMixin, TimeStampedModel, abstract.StateBundleMixin):
     class Meta:
         verbose_name = _('author')
         verbose_name_plural = _('authors')
+        ordering = ('id',)
 
     def __str__(self):
         return _('Author {0}').format(self.name)
@@ -105,6 +106,7 @@ class AuthorPhoto(CRUDUrlsMixin, TimeStampedModel):
     class Meta:
         verbose_name = _('author photo')
         verbose_name_plural = _('author photos')
+        ordering = ('id',)
 
 
 class Book(CRUDUrlsMixin, TimeStampedModel):
@@ -127,7 +129,7 @@ class Book(CRUDUrlsMixin, TimeStampedModel):
     class Meta:
         verbose_name = _('book')
         verbose_name_plural = _('books')
-        ordering = ('author', 'title')
+        ordering = ('id',)
 
     def printable_name(self):
         return self.title
@@ -175,6 +177,7 @@ class AllModelFields(CRUDUrlsMixin, models.Model):
     class Meta:
         verbose_name = _('all model fields')
         verbose_name_plural = _('list of all model fields instances')
+        ordering = ('id',)
 
     def __str__(self):
         return self.printable_name()

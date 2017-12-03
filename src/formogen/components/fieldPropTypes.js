@@ -30,6 +30,9 @@ const defaultFieldPropTypes = {
     decimal_places: PropTypes.number,
     max_digits: PropTypes.number,
 
+    /* multiple select M2M or FK */
+    multi: PropTypes.bool,
+
     /* Django choices */
     choices: PropTypes.arrayOf(PropTypes.array),
 
