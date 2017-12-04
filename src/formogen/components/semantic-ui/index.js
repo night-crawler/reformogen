@@ -19,8 +19,8 @@ import AutocompleteChoiceField from './AutocompleteChoiceField';
 import EmbeddedManyToManyField from './InlineManyToManyField';
 import EmbeddedForeignKeyField from './InlineForeignKeyField';
 
-import AsyncManyToManyField from './AsyncManyToManyField';
 import AsyncForeignKeyField from './AsyncForeignKeyField';
+import AsyncManyToManyField from './AsyncManyToManyField';
 
 import IntegerField from './IntegerField';
 
