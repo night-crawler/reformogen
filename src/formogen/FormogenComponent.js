@@ -212,7 +212,11 @@ export default class FormogenComponent extends Component {
     handleFieldChange = (event, { name, value }) => {
         this.log.debug(`handleFieldChange(): setting formData field "${ name }" to ${ typeof value }`, value);
 
-        this.setState({ formData: Object.assign({}, this.state.formData, {[name]: value}) });
+        const { formData } = this.state;
+        formData[name] = value;
+
+        this.setState({ formData });
+        // this.setState({ formData: Object.assign({}, this.state.formData, {[name]: value}) });
     };
 
     // --------------- fetch-receive submit-receive methods (return promises) ---------------

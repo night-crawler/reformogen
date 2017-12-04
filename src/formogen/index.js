@@ -10,6 +10,7 @@
     [?] state save between requests
     [ ] m2m async (pagination etc)
     [ ] cache metadata
+    [ ] fk & m2m - check loading options without paginator (server-side)
 
     [+] render json metadata (got from sever-side)
     [+] dynamic metadata (without serverside endpoints)

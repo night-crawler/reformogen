@@ -202,6 +202,8 @@ const SelectStateEvaluator = WrappedComponent => class extends Component {
 
             isLoading: this.state.isLoading,
 
+            filterOption: () => true,
+
             // rtl: this.state.rtl,
 
             options: this.state.options,
