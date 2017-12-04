@@ -1,6 +1,3 @@
-import time
-import typing as t
-
 from django.db import models
 from rest_framework.decorators import list_route, detail_route
 from rest_framework.request import Request
@@ -68,11 +65,6 @@ class AuthorViewSet(MultiSerializerViewSetMixin, DescribeMixin, viewsets.ModelVi
         'partial_update': s_serializers.AuthorPlainSerializer,
     }
 
-    def dispatch(self, request, *args, **kwargs):
-        # time.sleep(2)
-        # return Response(data={'get out': True}, status=502)
-        return super().dispatch(request, *args, **kwargs)
-
     def get_queryset(self) -> models.QuerySet:
         return s_models.Author.objects.all()
 
@@ -83,19 +75,11 @@ class AuthorViewSet(MultiSerializerViewSetMixin, DescribeMixin, viewsets.ModelVi
         if search:
             return queryset.filter(name__icontains=search)
 
-        ids = qp.getlist('id__in')
-        if ids:
-            return queryset.filter(id__in=ids)
-
         return queryset
 
 
 class BookViewSet(viewsets.ModelViewSet, DescribeMixin):
     serializer_class = s_serializers.BookSerializer
-
-    def dispatch(self, request, *args, **kwargs):
-        # time.sleep(2)
-        return super().dispatch(request, *args, **kwargs)
 
     def get_queryset(self) -> models.QuerySet:
         return s_models.Book.objects.all()
@@ -110,10 +94,6 @@ class BookViewSet(viewsets.ModelViewSet, DescribeMixin):
 
 class AllModelFieldsViewSet(viewsets.ModelViewSet, DescribeMixin):
     serializer_class = s_serializers.AllModelFieldsSerializer
-
-    def dispatch(self, request, *args, **kwargs):
-        # time.sleep(2)
-        return super().dispatch(request, *args, **kwargs)
 
     def get_queryset(self) -> models.QuerySet:
         return s_models.AllModelFields.objects.all()

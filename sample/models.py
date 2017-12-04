@@ -79,6 +79,7 @@ class Author(CRUDUrlsMixin, TimeStampedModel, abstract.StateBundleMixin):
     biography = models.TextField(_('biography'), blank=True)
     state = models.PositiveSmallIntegerField(_('state'), choices=STATE, default=STATE.alive)
 
+    favorite_book = models.ForeignKey('Book', blank=True, null=True, related_name='+')
     inspire_source = models.ManyToManyField('self', symmetrical=False, blank=True)
 
     class Meta:
@@ -130,6 +131,9 @@ class Book(CRUDUrlsMixin, TimeStampedModel):
         verbose_name = _('book')
         verbose_name_plural = _('books')
         ordering = ('id',)
+
+    def __str__(self):
+        return self.printable_name()
 
     def printable_name(self):
         return self.title

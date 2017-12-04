@@ -16,6 +16,10 @@ class AuthorMetadata(MetaData):
         # 'name': {'editable': False},
     }
 
+    dataset_urls = {
+        'favorite_book': format_lazy('{}{}', 'http://localhost:8000', reverse_lazy('books-list'))
+    }
+
     def get_inspire_source_dataset_url(self, field, obj):
         return 'http://localhost:8000%s' % reverse_lazy('authors-list')
 

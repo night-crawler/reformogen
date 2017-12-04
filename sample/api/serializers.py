@@ -1,5 +1,3 @@
-import random
-
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
@@ -23,6 +21,12 @@ class StateBundleMixin(serializers.ModelSerializer):
         return obj.state_bundle
 
 
+class BookSerializer(CRUDUrlsSerializerMixin, serializers.ModelSerializer):
+    class Meta:
+        model = s_models.Book
+        fields = '__all__'
+
+
 class AuthorPlainSerializer(CRUDUrlsSerializerMixin, serializers.ModelSerializer):
     class Meta:
         model = s_models.Author
@@ -31,6 +35,7 @@ class AuthorPlainSerializer(CRUDUrlsSerializerMixin, serializers.ModelSerializer
 
 class AuthorSerializer(CRUDUrlsSerializerMixin, serializers.ModelSerializer):
     inspire_source = AuthorPlainSerializer(many=True)
+    favorite_book = BookSerializer()
 
     class Meta:
         model = s_models.Author
@@ -46,12 +51,6 @@ class AuthorSerializer(CRUDUrlsSerializerMixin, serializers.ModelSerializer):
                 ],
             })
         return attrs
-
-
-class BookSerializer(CRUDUrlsSerializerMixin, serializers.ModelSerializer):
-    class Meta:
-        model = s_models.Book
-        fields = '__all__'
 
 
 class AllModelFieldsSerializer(CRUDUrlsSerializerMixin, serializers.ModelSerializer):
