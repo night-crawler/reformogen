@@ -78,6 +78,25 @@ class AuthorViewSet(MultiSerializerViewSetMixin, DescribeMixin, viewsets.ModelVi
         return queryset
 
 
+class AuthorPhotoViewSet(viewsets.ModelViewSet, DescribeMixin):
+    serializer_class = s_serializers.AuthorPhotoSerializer
+
+    def get_queryset(self) -> models.QuerySet:
+        return s_models.AuthorPhoto.objects.all()
+
+    def filter_queryset(self, queryset: models.QuerySet):
+        qp = self.request.query_params
+        search = qp.get('q') or qp.get('search') or qp.get('query')
+        if search:
+            return queryset.filter(photo__icontains=search)
+        return queryset
+
+    @list_route()
+    def describe_without_author(self, request: Request) -> Response:
+        md = metadata.AuthorPhotoWithoutAuthorMetadata().determine_metadata(request, self)
+        return Response(md)
+
+
 class BookViewSet(viewsets.ModelViewSet, DescribeMixin):
     serializer_class = s_serializers.BookSerializer
 

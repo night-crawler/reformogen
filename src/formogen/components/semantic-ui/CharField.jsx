@@ -18,6 +18,9 @@ CharField.propTypes = {
     placeholder: PropTypes.string,
     errors: errorsType,
 
+    widget: PropTypes.string,
+    password: PropTypes.bool,
+
     required: PropTypes.bool,
     editable: PropTypes.bool,
 
@@ -28,12 +31,14 @@ CharField.propTypes = {
     onChange: PropTypes.func,
 };
 export default function CharField(props) {
+    const isPassword = props.password || props.widget === 'HiddenInput';
+
     let _props = {
         name: props.name,
         value: props.value,
         placeholder: props.placeholder,
         onChange: props.onChange,
-        type: 'text',
+        type: isPassword ? 'password' : 'text',
         maxLength: props.max_length,
     };
 
@@ -49,7 +54,7 @@ export default function CharField(props) {
             error={ !_.isEmpty(props.errors) }
         >
             <Label { ...props } />
-            <Form.Input { ..._props } />
+            <Form.Input { ..._props } hidden={true}/>
             { !props.helpTextOnHover ? <span className='help-text'>{ props.help_text }</span> : '' }
             <MessageList messages={ props.errors } />
         </Form.Field>

@@ -11,6 +11,8 @@ import { Button, Form, Grid, Header } from 'semantic-ui-react';
 // Field imports
 import GenericField from './GenericField';
 
+import BooleanField from './BooleanField';
+
 import CharField from './CharField';
 import TextField from './TextField';
 
@@ -51,6 +53,7 @@ export {
     AsyncForeignKeyField,
 
     IntegerField,
+    BooleanField,
 };
 
 export default class FormogenFormComponent extends React.Component {
@@ -85,6 +88,7 @@ export default class FormogenFormComponent extends React.Component {
             FloatField: IntegerField,
 
             FileField: DropzoneField,
+            BooleanField,
         },
     };
     static propTypes = {
@@ -146,42 +150,13 @@ export default class FormogenFormComponent extends React.Component {
     computeNewState(fields, formData, layoutTemplate) {
         this.log.debug('computeNewState()');
 
-        const fieldPropsByNameMap = _(fields).map((fieldData) => [fieldData.name, fieldData]).fromPairs().value();
+        const fieldPropsByNameMap = _(fields).map((fieldOpts) => [fieldOpts.name, fieldOpts]).fromPairs().value();
         const layout = FormogenFormComponent.unfoldWildcardFields(layoutTemplate, fieldPropsByNameMap);
 
         this.setState({ formData, fields, fieldPropsByNameMap, layout });
     }
-    getFormData() {  // TODO: delete it after a while
-        this.log.warn('method getFormData() is deprecated!');
 
-        const { fieldPropsByNameMap } = this.state;
-
-        // split data and file fields
-        let dataFields = {}, fileFields = {};
-        for (let [fieldName, fieldValue] of Object.entries(this.state.formData)) {
-            // user can pass into formData a key (fieldName) that is not present in metaData (props.fields)
-            let fieldProps = fieldPropsByNameMap[fieldName];
-            if (!fieldProps) {
-                const warnPresentKeys = JSON.stringify(_.keys(fieldPropsByNameMap), null, 4);
-                this.log.debug(`Field "${ fieldName }": "${ fieldValue }" is present in formData,` +
-                                   `but is not present in metaData fields: ${ warnPresentKeys }`);
-                dataFields[fieldName] = fieldValue;
-                continue;
-            }
-            if (fieldProps.type === 'FileField') {
-                fileFields[fieldName] = fieldValue;
-            } else {
-                dataFields[fieldName] = fieldValue;
-            }
-        }
-        return {
-            data: dataFields,
-            files: fileFields
-        };
-    }
     pickFieldComponent(opts) {
-        /* this.log.debug(...) is below, see code */
-
         // opts.autocomplete points to autocomplete request but we don't care
         if (_.has(opts, 'choices')) {
             return AutocompleteChoiceField;
@@ -198,9 +173,6 @@ export default class FormogenFormComponent extends React.Component {
         }
 
         const field = this.state.djangoFieldsMap[opts.type] || GenericField;
-
-        // this.log.debug(`pickFieldComponent(), for Django field type="${ opts.type }", picked - `, field);
-        this.log.debug(`pickFieldComponent(), for Django field type="${ opts.type }"`);
         return field;
     }
 
@@ -211,8 +183,6 @@ export default class FormogenFormComponent extends React.Component {
      * @returns {object} new layout
      */
     static unfoldWildcardFields(layoutTemplate, fieldPropsByNameMap) {
-        console.log('unfoldWildcardFields()');
-
         let _ldLayout = _(_(layoutTemplate).cloneDeep());
 
         let usedFields = _ldLayout.map('fields')
@@ -267,9 +237,9 @@ export default class FormogenFormComponent extends React.Component {
         }) || null;
     }
     renderField(i, opts, layoutOpts) {
-        this.log.debug('renderField()');
-
         const Field = this.pickFieldComponent(opts);
+
+        this.log.debug(`renderField(${i}, ${opts.name}, ${opts.type} as ${Field.name})`);
 
         return (
             <Field

@@ -27,6 +27,12 @@ class BookSerializer(CRUDUrlsSerializerMixin, serializers.ModelSerializer):
         fields = '__all__'
 
 
+class AuthorPhotoSerializer(CRUDUrlsSerializerMixin, serializers.ModelSerializer):
+    class Meta:
+        model = s_models.AuthorPhoto
+        fields = '__all__'
+
+
 class AuthorPlainSerializer(CRUDUrlsSerializerMixin, serializers.ModelSerializer):
     class Meta:
         model = s_models.Author

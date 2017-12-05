@@ -1,3 +1,5 @@
+import re
+
 from django.contrib.postgres.fields import ArrayField
 from django.db import models
 from django.utils.timezone import now
@@ -40,9 +42,14 @@ class TimeStampedModel(models.Model):
 
 
 class CRUDUrlsMixin:
+    @staticmethod
+    def __camelcase_to_dashed(raw_str: str):
+        s1 = re.sub('(.)([A-Z][a-z]+)', r'\1-\2', raw_str)
+        return re.sub('([a-z0-9])([A-Z])', r'\1-\2', s1).lower()
+
     @property
     def urls(self):
-        url_scheme_name = '{0}s'.format(self.__class__.__name__.lower())
+        url_scheme_name = '{0}s'.format(self.__camelcase_to_dashed(self.__class__.__name__))
         describe_url = 'http://localhost:8000%s' % reverse('%s-describe' % url_scheme_name)
         list_url = 'http://localhost:8000%s' % reverse('%s-list' % url_scheme_name)
 
@@ -81,6 +88,9 @@ class Author(CRUDUrlsMixin, TimeStampedModel, abstract.StateBundleMixin):
 
     favorite_book = models.ForeignKey('Book', blank=True, null=True, related_name='+')
     inspire_source = models.ManyToManyField('self', symmetrical=False, blank=True)
+
+    is_ghostwriter = models.BooleanField(_('Ghostwriter'))
+    nickname = models.CharField(_('hidden nickname'), max_length=255, blank=True)
 
     class Meta:
         verbose_name = _('author')

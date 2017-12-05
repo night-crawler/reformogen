@@ -21,6 +21,11 @@ class App extends Component {
 
         this.log = loglevel.getLogger('App.js');
         this.log.debug('initialized');
+
+        this.state = {
+            canRenderAuthorPhotosForms: false,
+            authorPhotosMetaDataUrl: null,
+        };
     }
 
     _render() {
@@ -134,6 +139,21 @@ class App extends Component {
             </div>
         );
     }
+
+    handleAuthorEditFormLoaded = (metaData, formData) => {
+        if (!formData.id)
+            return;
+
+        this.setState({
+            authorPhotosMetaDataUrl: 'http://localhost:8000/api/v1/sample/author-photos/describe/',
+            authorPhotosWithoutAuthorMetaDataUrl: 'http://localhost:8000/api/v1/sample/author-photos/describe_without_author/',
+            authorPhotosCreateUrl: 'http://localhost:8000/api/v1/sample/author-photos/',
+            canRenderAuthorPhotosForms: true,
+            authorId: formData.id,
+
+        });
+    };
+
     render() {
         const metaDataUrl = 'http://localhost:8000/api/v1/sample/authors/describe/';
         const objectUrl = 'http://localhost:8000/api/v1/sample/authors/23/';
@@ -145,6 +165,8 @@ class App extends Component {
             dt_death: new Date(),
             state: 30,
         };
+
+        let trash = null;
 
         return (
             <div className='App'>
@@ -164,10 +186,42 @@ class App extends Component {
                                     metaDataUrl={ metaDataUrl }
                                     objectUrl={ objectUrl }
 
-                                    componentToRenderError={ Component }
+                                    onFetchComplete={ this.handleAuthorEditFormLoaded }
                                 />
                             </Segment>
                         </Grid.Column>
+
+                        { this.state.canRenderAuthorPhotosForms && (
+                            <Grid.Column>
+                                <Segment className='formogen'>
+                                    <Formogen
+                                        locale={ 'ru' }
+                                        showHeader={ true }
+                                        metaDataUrl={ this.state.authorPhotosMetaDataUrl }
+                                        formData={ {
+                                            author: this.state.authorId,
+                                        } }
+                                    />
+                                </Segment>
+                            </Grid.Column>
+                        ) }
+
+                        { this.state.canRenderAuthorPhotosForms && (
+                            <Grid.Column>
+                                <Segment className='formogen'>
+                                    <Formogen
+                                        locale={ 'ru' }
+                                        showHeader={ true }
+                                        metaDataUrl={ this.state.authorPhotosWithoutAuthorMetaDataUrl }
+                                        objectCreateUrl={ this.state.authorPhotosCreateUrl }
+
+                                        pipePreSubmit={ (data) => Object.assign(data, {author: this.state.authorId}) }
+                                    />
+                                </Segment>
+                            </Grid.Column>
+                        ) }
+
+
                     </Grid.Row>
                 </Grid>
 

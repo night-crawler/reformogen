@@ -1,12 +1,11 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-
-import loglevel from 'loglevel';
-
 import _ from 'lodash';
 
-import { headers, resolveResponse } from './utils';
+import loglevel from 'loglevel';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import FormogenFormComponent from './components/semantic-ui';
+
+import { headers, extractIdentity, resolveResponse } from './utils';
 
 
 export default class FormogenComponent extends Component {
@@ -20,6 +19,8 @@ export default class FormogenComponent extends Component {
         formData: {},
 
         fieldUpdatePropsMap: {},
+        // eslint-disable-next-line
+        onFetchComplete: (metaData, formData) => null,
     };
     static propTypes = {
         locale: PropTypes.string,
@@ -48,6 +49,8 @@ export default class FormogenComponent extends Component {
         pipePreSubmit: PropTypes.func,
         pipePreValidationError: PropTypes.func,  // validation
         pipePreSuccess: PropTypes.func,
+
+        onFetchComplete: PropTypes.func,
 
         onSubmitNetworkError: PropTypes.func,
         onFileUploadError: PropTypes.func,
@@ -85,6 +88,7 @@ export default class FormogenComponent extends Component {
 
             // formData
             formData: props.formData,
+            initialFormData: {},
             defaultFormData: null,  // ?
         };
     }
@@ -93,7 +97,11 @@ export default class FormogenComponent extends Component {
     componentWillMount() {
         this.log.debug('componentWillMount()');
         Promise
-            .all([this.getMetaData(), this.getFormData()])
+            .all([this.fetchMetaData(), this.fetchFormData()])
+            .then(([newMetaData, newFormData]) => {
+                this.props.onFetchComplete(newMetaData, newFormData);
+                return [newMetaData, newFormData];
+            })
             .then(([newMetaData, newFormData]) => {
                 this.setState({
                     metaDataReady: true,
@@ -101,10 +109,11 @@ export default class FormogenComponent extends Component {
                     fieldNames: _(newMetaData.fields).map('name').flatten().value(),
 
                     title: this.props.title || newMetaData.title,
-                    formData: FormogenComponent.updateFormDataWithDefaults(newMetaData.fields, newFormData)
+                    formData: FormogenComponent.updateFormDataWithDefaults(newMetaData.fields, newFormData),
+                    initialFormData: _.cloneDeep(newFormData),
                 });
             })
-            .catch((error) => this.dispatchNetworkError({type: 'load', error}));
+            .catch((error) => this.dispatchNetworkError({ type: 'load', error }));
     }
 
     /**
@@ -123,31 +132,34 @@ export default class FormogenComponent extends Component {
      * @param {string} error.url
      */
     dispatchNetworkError = ({ type, error }) => {
+        const { onLoadNetworkError, onSubmitNetworkError, onFileUploadError } = this.props;
+
         const isHandled = error.name === 'FormogenError';
         this.log.error(`[${type}:${error.name}]: Cannot fetch url "${ error.url }", details:`, error);
 
         switch (type) {
             case 'load':
-                if (_.isFunction(this.props.onLoadNetworkError))
-                    return this.props.onLoadNetworkError(error, isHandled);
+                if (_.isFunction(onLoadNetworkError))
+                    return onLoadNetworkError(error, isHandled);
                 this.log.warn(`No custom handler for type error ${type}. Pass callback to prop "onLoadNetworkError"`);
                 break;
             case 'submit':
                 if (+error.status === 400)
                     return this.handleValidationErrors(this.pipePreValidationError(error.data));
-                if (_.isFunction(this.props.onSubmitNetworkError))
-                    return this.props.onSubmitNetworkError(error, isHandled);
+                if (_.isFunction(onSubmitNetworkError))
+                    return onSubmitNetworkError(error, isHandled);
                 this.log.warn(`No custom handler for type error ${type}. Pass callback to prop "onSubmitNetworkError"`);
                 break;
             case 'file':
-                if (_.isFunction(this.props.onFileUploadError))
-                    return this.props.onFileUploadError(error, isHandled);
+                if (_.isFunction(onFileUploadError))
+                    return onFileUploadError(error, isHandled);
                 this.log.warn(`No custom handler for type error ${type}. Pass callback to prop "onFileUploadError"`);
                 break;
             default:
                 this.log.warn(`Unknown error type: ${type}`);
 
         }
+        return error;
     };
 
     // --------------- pipeline data callbacks ---------------
@@ -160,6 +172,7 @@ export default class FormogenComponent extends Component {
         }
         return data;
     }
+
     pipePreValidationError(data) {
         const { pipePreValidationError } = this.props;
 
@@ -169,6 +182,7 @@ export default class FormogenComponent extends Component {
         }
         return data;
     }
+
     pipePreSuccess(data) {
         const { pipePreSuccess } = this.props;
 
@@ -179,28 +193,94 @@ export default class FormogenComponent extends Component {
         return data;
     }
 
-    // --------------- miscellaneous handlers ---------------
+    getFieldData() {
+        const { fields, formData, initialFormData } = this.state;
+
+        let files = {}, data = {}, changedFields = [];
+        fields.map(({ type, name, upload_url = null }) => {
+            const
+                value = formData[name],
+                ptr = (upload_url || type in ['FileField', 'ImageField']) ? files : data,
+                initialValue = initialFormData[name];
+            let isChanged = value !== initialValue;
+
+            // go deeper with checks only when the basic comparision returned true
+            // this check applies on arrays or object
+            if (isChanged && _.isObject(initialValue)) {
+                const _initialValueIdentity = extractIdentity(initialValue);
+                const _valueIdentity = extractIdentity(value);
+
+                if (_.isArray(_initialValueIdentity)) {
+                    isChanged = !_(_initialValueIdentity).difference(_valueIdentity).isEmpty();
+                } else {
+                    isChanged = _initialValueIdentity !== _valueIdentity;
+                }
+            }
+
+            isChanged && changedFields.push(name);
+            ptr[name] = value;
+
+            return null;  // shut warning
+        });
+
+        return {data, files, changedFields};
+    }
+
+    // --------------- handle submit  ---------------
+    submitForm(data) {
+        this.log.debug('submitForm()', data);
+        const { objectCreateUrl, objectUpdateUrl } = this.props;
+        const { initialFormData } = this.state;
+
+        let options = {
+            method: 'POST',
+            headers: headers,
+            body: JSON.stringify(data)
+        };
+        let url = objectCreateUrl;
+
+        if (+( _.get(initialFormData, 'id', 0) || 0 )) {
+            url = objectUpdateUrl || _.get(initialFormData, 'urls.update') || _.get(initialFormData, 'urls.edit');
+            options.method = 'PATCH';
+        }
+
+        if (!url)
+            throw new Error('URL is empty!');
+
+        return fetch(url, options)
+            .then(resolveResponse)
+            .then(data => this.handleSubmitSuccess(data))
+            .catch(error => this.dispatchNetworkError({ type: 'submit', error }));
+    }
+
     handleSubmit = () => {
         this.log.debug('handleSubmit()');
+        const { data, files, changedFields } = this.getFieldData();
 
-        const { formData } = this.state;
-
-        /* clear field errors before submit */
+        // clear field errors before submit
         this.setState({ errorsFieldMap: {}, nonFieldErrorsMap: {} });
 
-        this.submitForm(this.pipePreSubmit(formData));
+        let promise = this.submitForm(this.pipePreSubmit(data));
+        promise.then((data) => {
+            console.log('azaza?', data);
+        });
     };
+
     handleSubmitSuccess(data) {
         this.log.debug('handleSubmitSuccess()', data);
 
         // update formData with received data
+        // TODO: update initialFormData ?
         this.setState({ formData: this.pipePreSuccess(data) });
+        return data;
     }
+
     handleValidationErrors(errors) {
         this.log.debug('handleValidationErrors()', errors);
+        const { fieldNames } = this.state;
 
         const receivedFieldNames = _.keys(errors);
-        const nonFieldErrorKeys = _(receivedFieldNames).difference(this.state.fieldNames).value();
+        const nonFieldErrorKeys = _(receivedFieldNames).difference(fieldNames).value();
         const nonFieldErrorsMap = _(errors).pick(nonFieldErrorKeys).value();
 
         this.setState({
@@ -211,16 +291,13 @@ export default class FormogenComponent extends Component {
 
     handleFieldChange = (event, { name, value }) => {
         this.log.debug(`handleFieldChange(): setting formData field "${ name }" to ${ typeof value }`, value);
-
-        const { formData } = this.state;
-        formData[name] = value;
-
-        this.setState({ formData });
-        // this.setState({ formData: Object.assign({}, this.state.formData, {[name]: value}) });
+        this.setState(currentState => {
+            return { formData: Object.assign({}, currentState.formData, {[name]: value}) };
+        });
     };
 
     // --------------- fetch-receive submit-receive methods (return promises) ---------------
-    getFormData() {
+    fetchFormData() {
         const { formData } = this.state;
         const { objectUrl } = this.props;
 
@@ -236,7 +313,8 @@ export default class FormogenComponent extends Component {
                 .catch(error => reject(error));
         });
     }
-    getMetaData() {
+
+    fetchMetaData() {
         /*
         1. form metadata key in cache: return resolved promise
         2. metadata is only in metadataUrl: return Promise
@@ -246,7 +324,7 @@ export default class FormogenComponent extends Component {
 
         return new Promise((resolve, reject) => {
             if (_.isEmpty(initialMetaData) && !metaDataUrl)
-                return reject(new Error('Formogen must be initialized either metaData or metaDataUrl!'));
+                return reject(new Error('Formogen must be initialized with either metaData or metaDataUrl!'));
 
             if (!metaDataUrl)
                 return resolve(initialMetaData);
@@ -254,6 +332,10 @@ export default class FormogenComponent extends Component {
             fetch(metaDataUrl, { method: 'GET', headers: headers })
                 .then(resolveResponse)
                 .then(data => {
+                    if (!data.fields) {
+                        return reject(new Error(`Not found "fields" key in dataset from "${metaDataUrl}"`));
+                    }
+
                     const initialFields = this.props.metaData ? this.props.metaData.fields : [];
                     const receivedFields = data.fields.slice();
                     // TODO: cache initialFields before resolve!
@@ -267,26 +349,6 @@ export default class FormogenComponent extends Component {
                 .catch(error => reject(error));
         });
     }
-    submitForm(data) {
-        this.log.debug('submitForm()', data);
-
-        let options = {
-            method: 'POST',
-            headers: headers,
-            body: JSON.stringify(data)
-        };
-        let url = this.props.objectCreateUrl;
-
-        if (+(_.get(data, 'id', 0) || 0)) {
-            url = this.props.objectUpdateUrl || data.urls.update;
-            options.method = 'PATCH';
-        }
-
-        return fetch(url, options)
-            .then(resolveResponse)
-            .then(data => this.handleSubmitSuccess(data))
-            .catch(error => this.dispatchNetworkError({ type: 'submit', error }));
-    }
 
     // --------------- get methods ---------------
     static concatFields(fieldSet, anotherFieldSet = []) {
@@ -296,8 +358,9 @@ export default class FormogenComponent extends Component {
         ];
         return _.differenceBy(fields, 'name');
     }
+
     static updateFormDataWithDefaults(fields, formData) {
-        let data = Object.assign({}, formData);
+        let data = {...formData};
         for (let field of fields) {
             if (field.name in data) {
                 continue;
@@ -305,7 +368,7 @@ export default class FormogenComponent extends Component {
             // should be undefined for uncontrolled components, not null
             data[field.name] = field.default || '';
 
-            // DRF expects M2M values as an list (empty or not), so empty string is not acceptable here
+            // DRF expects M2M values as a list (empty or not), so empty string is not acceptable here
             if (!data[field.name] && field.type === 'ManyToManyField')
                 data[field.name] = [];
         }

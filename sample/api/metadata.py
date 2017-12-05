@@ -7,6 +7,15 @@ from rest_framework.reverse import reverse_lazy
 from sample import models as wf_models
 
 
+class BookMetadata(MetaData):
+    model = wf_models.Book
+
+    def get_title(self, request, view, obj: wf_models.Book):
+        if obj:
+            return _('Edit Book "{0}"').format(obj.printable_name)
+        return _('Create Book')
+
+
 class AuthorMetadata(MetaData):
     model = wf_models.Author
 
@@ -14,6 +23,9 @@ class AuthorMetadata(MetaData):
         'state': {'autocomplete': True},
         # 'dt_death': {'editable': False, },
         # 'name': {'editable': False},
+        'nickname': {
+            'password': True,
+        }
     }
 
     dataset_urls = {
@@ -29,13 +41,27 @@ class AuthorMetadata(MetaData):
         return _('Create Author')
 
 
-class BookMetadata(MetaData):
-    model = wf_models.Book
+class AuthorPhotoMetadata(MetaData):
+    model = wf_models.AuthorPhoto
 
-    def get_title(self, request, view, obj: wf_models.Book):
-        if obj:
-            return _('Edit Book "{0}"').format(obj.printable_name)
-        return _('Create Book')
+    update_fields = {
+        'photo': {
+            # ensure upload_url is lazy (premature import case)
+            'upload_url': format_lazy('{}{}', 'http://localhost:8000', reverse_lazy('all-accept-file'))
+        }
+    }
+
+
+class AuthorPhotoWithoutAuthorMetadata(MetaData):
+    model = wf_models.AuthorPhoto
+    exclude = 'author'
+
+    update_fields = {
+        'photo': {
+            # ensure upload_url is lazy (premature import case)
+            'upload_url': format_lazy('{}{}', 'http://localhost:8000', reverse_lazy('all-accept-file'))
+        }
+    }
 
 
 class AllModelFieldsMetadata(MetaData):

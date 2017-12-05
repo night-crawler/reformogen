@@ -49,21 +49,30 @@ export function extractPageNumber(uri) {
  * @returns {Array.<Number>|Array}
  */
 export function idsList(value) {
-    if (!value)
-        return [];
+    if (_.isArray(value))
+        return extractIdentity(value);
+    return [extractIdentity(value)];
+}
 
-    // coz _.isEmpty(20) === true
-    // if (_.isEmpty(value))
-    //     return [];
+export function extractIdentity(value) {
+    if (!value)
+        return null;
 
     if (_.isPlainObject(value))
-        return [+value.id];
+        return +value.id;
 
-    if (_.isPlainObject(value[0]))
-        return _(value).map('id').map((v) => +v).value();
+    if (_.isArray(value)) {
+        if (_.isEmpty(value))
+            return [];
 
-    if (_.isArray(value))
-        return _.map(value, (v) => +v);
+        if (_.isPlainObject(value[0]))
+            return _(value).map('id').map((v) => +v).value();
+        else
+            return _.map(value, (v) => +v);
+    }
 
-    return [+value];
+    if (_.isString(value) || _.isNumber(value))
+        return +value;
+
+    throw new Error(`Cannot extract identity from ${value}`);
 }
