@@ -54,7 +54,7 @@ export default function CharField(props) {
             error={ !_.isEmpty(props.errors) }
         >
             <Label { ...props } />
-            <Form.Input { ..._props } hidden={true}/>
+            <Form.Input { ..._props } />
             { !props.helpTextOnHover ? <span className='help-text'>{ props.help_text }</span> : '' }
             <MessageList messages={ props.errors } />
         </Form.Field>
