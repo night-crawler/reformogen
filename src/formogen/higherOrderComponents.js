@@ -12,7 +12,7 @@ import ModelInstanceOption from './components/ReactSelectOptionComponent';
 import ModelInstanceValue from './components/ReactSelectValueComponent';
 
 
-export default function({ WrappedComponent, multi=true }) {
+export default function ({ WrappedComponent, multi = true }) {
     class WithSelectState extends React.Component {
         static propTypes = propTypes;
         static id = new Date().getTime();
@@ -119,7 +119,7 @@ export default function({ WrappedComponent, multi=true }) {
             return valueKeyList;
         }
 
-        loadOptions = (query='', page=1, selectedValues=[]) => {
+        loadOptions = (query = '', page = 1, selectedValues = []) => {
             this.log.debug(`loadOptions(), with query="${query}" page=${page} currentValues=${selectedValues}`);
 
             let uri = URI(this.props.data).addSearch({ q: query, page: page });
@@ -214,7 +214,7 @@ export default function({ WrappedComponent, multi=true }) {
                 onMenuScrollToBottom: () => {
                     const nextPageNumber = _.get(this.state.queryMap, `${this.state.query}.nextPageNumber`);
                     this.log.debug(`onMenuScrollToBottom(), for query="${this.state.query}" ` +
-                                   `and nextPageNumber=${nextPageNumber}`);
+                        `and nextPageNumber=${nextPageNumber}`);
 
                     if (!nextPageNumber) return;
                     this.loadOptions(this.state.query, nextPageNumber, this.getValueKeyList());
