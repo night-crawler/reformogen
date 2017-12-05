@@ -1,13 +1,13 @@
-import React from 'react';
-import loglevel from 'loglevel';
-import { Form } from 'semantic-ui-react';
 import _ from 'lodash';
+import loglevel from 'loglevel';
+import React from 'react';
+import { Form } from 'semantic-ui-react';
 
-import { MessageList } from './MiscComponents';
+import propTypes from '../fieldPropTypes';
 
 import Label from './Label';
 
-import propTypes from '../fieldPropTypes';
+import { MessageList } from './MiscComponents';
 
 
 /**
@@ -38,8 +38,8 @@ export default function GenericField(props) {
             <pre>
                 { JSON.stringify(_props, null, 4) }
             </pre>
-            { !props.helpTextOnHover ? <span className="help-text">{ props.help_text }</span> : ''}
-            <MessageList messages={ props.errors }/>
+            { !props.helpTextOnHover ? <span className='help-text'>{ props.help_text }</span> : '' }
+            <MessageList messages={ props.errors } />
         </Form.Field>
     );
 }
