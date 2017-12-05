@@ -1,16 +1,16 @@
-import React from 'react';
-
-import moment from 'moment';
-
 import _ from 'lodash';
 
-import { Form } from 'semantic-ui-react';
+import moment from 'moment';
+import PropTypes from 'prop-types';
+import React from 'react';
 
 import DatePicker from 'react-datepicker';
 
-import { MessageList } from './MiscComponents';
+import { Form } from 'semantic-ui-react';
+import { errorsType, layoutOptsType } from '../fieldPropTypes';
 import Label from './Label';
-import propTypes from '../fieldPropTypes';
+
+import { MessageList } from './MiscComponents';
 
 
 /**
@@ -18,6 +18,7 @@ import propTypes from '../fieldPropTypes';
  * @param {object} props
  * @param {string} props.name - internal field name
  * @param {string} props.verbose_name
+ * @param {string} props.placeholder
  * @param {string} props.help_text -
  * @param {bool} props.blank - determines if we can leave field unfilled
  * @param {bool} props.null - determines if we can store NULL values
@@ -28,7 +29,25 @@ import propTypes from '../fieldPropTypes';
  * @returns {XML}
  * @constructor
  */
-DateTimeField.propTypes = propTypes;
+DateTimeField.propTypes = {
+    type: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    value: PropTypes.string,
+    max_length: PropTypes.number,
+    help_text: PropTypes.string.isRequired,
+    placeholder: PropTypes.string,
+    errors: errorsType,
+
+    required: PropTypes.bool,
+    editable: PropTypes.bool,
+
+    helpTextOnHover: PropTypes.bool,
+    layoutOpts: layoutOptsType,
+    locale: PropTypes.string,
+
+    updateProps: PropTypes.func,
+    onChange: PropTypes.func,
+};
 export default function DateTimeField(props) {
     const handleChange = (momentTimeObject, e) => {
         // proxy event with SUI-React compliant style
@@ -67,7 +86,7 @@ export default function DateTimeField(props) {
         >
             <Label { ...props } />
             <DatePicker { ..._props } />
-            { !props.helpTextOnHover ? <span className="help-text">{ props.help_text }</span> : ''}
+            { !props.helpTextOnHover ? <span className='help-text'>{ props.help_text }</span> : '' }
             <MessageList messages={ props.errors } />
         </Form.Field>
     );

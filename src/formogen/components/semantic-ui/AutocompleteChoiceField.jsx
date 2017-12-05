@@ -1,16 +1,16 @@
-import React from 'react';
-import { Form } from 'semantic-ui-react';
-import Select from 'react-select';
 import _ from 'lodash';
+import PropTypes from 'prop-types';
+import React from 'react';
+import Select from 'react-select';
+import { Form } from 'semantic-ui-react';
+
+import { errorsType, layoutOptsType } from '../fieldPropTypes';
 import Label from './Label';
-
 import { MessageList } from './MiscComponents';
-
-import propTypes from '../fieldPropTypes';
 
 
 const makeReactSelectOptions = (choices) => {
-    return choices.map( ([ key, val ]) => {
+    return choices.map(([key, val]) => {
         return {
             value: key,
             label: val,
@@ -19,29 +19,30 @@ const makeReactSelectOptions = (choices) => {
 };
 
 
-AutocompleteChoiceField.propTypes = propTypes;
-export default function AutocompleteChoiceField(props) {
-    /*
-        "name": "state",
-        "verbose_name": "state",
-        "help_text": "",
-        "blank": false,
-        "null": false,
-        "editable": true,
-        "type": "PositiveSmallIntegerField",
-        "required": true,
-        "default": 255,
-        "choices": [
-            [0, "dead"],
-            [255, "alive"],
-            [30, "dried"]
-        ]
-     */
+AutocompleteChoiceField.propTypes = {
+    type: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    value: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    choices: PropTypes.arrayOf(PropTypes.array),
+    max_length: PropTypes.number,
+    help_text: PropTypes.string.isRequired,
+    placeholder: PropTypes.string,
+    errors: errorsType,
 
+    required: PropTypes.bool,
+    editable: PropTypes.bool,
+
+    helpTextOnHover: PropTypes.bool,
+    layoutOpts: layoutOptsType,
+
+    updateProps: PropTypes.func,
+    onChange: PropTypes.func,
+};
+export default function AutocompleteChoiceField(props) {
     const handleChange = (newVal) => {
         props.onChange(
             null,
-            {name: props.name, value: newVal ? newVal.value : null }
+            { name: props.name, value: newVal ? newVal.value : null }
         );
     };
 
@@ -49,9 +50,10 @@ export default function AutocompleteChoiceField(props) {
         clearable: !props.required,
         name: props.name,
         value: props.value,
+        placeholder: props.placeholder,
         options: makeReactSelectOptions(props.choices),
         onChange: handleChange,
-        inputProps: {type: 'react-type'},  // fixing breaking semantic markup
+        inputProps: { type: 'react-type' },  // fixing breaking semantic markup
     };
 
     if (_.isFunction(props.updateProps)) {
@@ -67,7 +69,7 @@ export default function AutocompleteChoiceField(props) {
         >
             <Label { ...props } />
             <Select { ..._props } />
-            { !props.helpTextOnHover ? <span className="help-text">{ props.help_text }</span> : ''}
+            { !props.helpTextOnHover ? <span className='help-text'>{ props.help_text }</span> : '' }
             <MessageList messages={ props.errors } />
         </Form.Field>
     );

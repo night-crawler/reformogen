@@ -1,13 +1,13 @@
-import React from 'react';
-import { Form } from 'semantic-ui-react';
-import Select from 'react-select';
 import _ from 'lodash';
 import PropTypes from 'prop-types';
-import { MessageList } from './MiscComponents';
+import React from 'react';
+import Select from 'react-select';
+import { Form } from 'semantic-ui-react';
+
+import { errorsType, layoutOptsType } from '../fieldPropTypes';
 
 import Label from './Label';
-
-import propTypes from '../fieldPropTypes';
+import { MessageList } from './MiscComponents';
 
 
 makeOptions.propTypes = PropTypes.arrayOf(PropTypes.shape({
@@ -15,32 +15,40 @@ makeOptions.propTypes = PropTypes.arrayOf(PropTypes.shape({
     name: PropTypes.string,
 }));
 
-/**
- *
- * @param fieldData
- */
 function makeOptions(fieldData) {
-    return fieldData.map( ({ id, name }) => ({label: name, value: id}) );
+    return fieldData.map(({ id, name }) => ( { label: name, value: id } ));
 }
 
 
-InlineManyToManyField.propTypes = propTypes;
-export default function InlineManyToManyField(props) {
-    /*
-        "name": "inspire_source",
-        "verbose_name": "inspire source",
-        "help_text": "",
-        "blank": true,
-        "null": false,
-        "editable": true,
-        "type": "ManyToManyField",
-        "required": false,
-        "data": []
-    */
+InlineManyToManyField.propTypes = {
+    type: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    value: PropTypes.arrayOf(PropTypes.shape({
+        id: PropTypes.number,
+        name: PropTypes.string,
+    })),
+    data: PropTypes.arrayOf(PropTypes.shape({
+        id: PropTypes.number.isRequired,
+        name: PropTypes.string.isRequired,
+    })),
+    max_length: PropTypes.number,
+    help_text: PropTypes.string.isRequired,
+    placeholder: PropTypes.string,
+    errors: errorsType,
 
+    required: PropTypes.bool,
+    editable: PropTypes.bool,
+
+    helpTextOnHover: PropTypes.bool,
+    layoutOpts: layoutOptsType,
+
+    updateProps: PropTypes.func,
+    onChange: PropTypes.func,
+};
+export default function InlineManyToManyField(props) {
     const handleChange = (val) => {
-        const plainIds = val.map( ({ value }) => (value*1) );
-        props.onChange(null, {name: props.name, value: plainIds});
+        const plainIds = val.map(({ value }) => ( value * 1 ));
+        props.onChange(null, { name: props.name, value: plainIds });
     };
 
     let _props = {
@@ -52,7 +60,7 @@ export default function InlineManyToManyField(props) {
         placeholder: props.placeholder,
         // simpleValue: true,
         value: props.value,
-        inputProps: {type: 'react-type'},  // fixes broken semantic markup
+        inputProps: { type: 'react-type' },  // fixes broken semantic markup
         removeSelected: true,
         // rtl: this.state.rtl,
     };
@@ -71,7 +79,7 @@ export default function InlineManyToManyField(props) {
             <Label { ...props } />
             <Select { ..._props } />
 
-            { !props.helpTextOnHover ? <span className='help-text'>{ props.help_text }</span> : ''}
+            { !props.helpTextOnHover ? <span className='help-text'>{ props.help_text }</span> : '' }
             <MessageList messages={ props.errors } />
         </Form.Field>
     );

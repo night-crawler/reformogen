@@ -1,15 +1,13 @@
-import React from 'react';
-import { Form, Image, Button, Icon, List } from 'semantic-ui-react';
 import _ from 'lodash';
-import Dropzone from 'react-dropzone';
-
-import { MessageList } from './MiscComponents';
 import PropTypes from 'prop-types';
+import React from 'react';
+import Dropzone from 'react-dropzone';
+import { Button, Form, Icon, Image, List } from 'semantic-ui-react';
 
 import mt_msword from '../../images/mimetypes/application-msword.png';
+import mt_pdf from '../../images/mimetypes/application-pdf.png';
 import mt_excel from '../../images/mimetypes/application-vnd.ms-excel.png';
 import mt_powerpoint from '../../images/mimetypes/application-vnd.ms-powerpoint.png';
-import mt_pdf from '../../images/mimetypes/application-pdf.png';
 import mt_7zip from '../../images/mimetypes/application-x-7zip.png';
 import mt_rar from '../../images/mimetypes/application-x-rar.png';
 import mt_tar from '../../images/mimetypes/application-x-tar.png';
@@ -23,6 +21,9 @@ import mt_tiff from '../../images/mimetypes/image-tiff.png';
 import mt_ico from '../../images/mimetypes/image-x-ico.png';
 import mt_text_plain from '../../images/mimetypes/text-plain.png';
 import mt_unknown from '../../images/mimetypes/unknown.png';
+import { errorsType } from '../fieldPropTypes';
+
+import { MessageList } from './MiscComponents';
 
 
 const fileTypeImageMapping = {
@@ -56,8 +57,10 @@ function bytesToSize(bytes) {
         sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'],
         i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)), 10);
 
-    if (i === 0) {return `${ bytes } ${ sizes[i] }`;}
-    return `${ (bytes / (1024 ** i)).toFixed(1) } ${ sizes[i] }`;
+    if (i === 0) {
+        return `${ bytes } ${ sizes[i] }`;
+    }
+    return `${ ( bytes / ( 1024 ** i ) ).toFixed(1) } ${ sizes[i] }`;
 }
 
 
@@ -76,6 +79,7 @@ FilesPreviews.propTypes = {
     onRemoveFile: PropTypes.func.isRequired,
     getFileIcon: PropTypes.func.isRequired,
 };
+
 function FilesPreviews({ files, onClear, getFileIcon, onRemoveFile }) {
     if (_.isEmpty(files)) {
         return null;
@@ -86,7 +90,7 @@ function FilesPreviews({ files, onClear, getFileIcon, onRemoveFile }) {
             <List divided={ true } relaxed={ true }>
                 { files.map((file, i) => (
                     <FileItem file={ file } key={ i } getFileIcon={ getFileIcon } onRemove={ onRemoveFile } />
-                ))}
+                )) }
             </List>
             <Button size='mini' fluid={ true } icon={ true } onClick={ onClear }>
                 <Icon name='remove' />
@@ -100,6 +104,7 @@ FileItem.propTypes = {
     getFileIcon: PropTypes.func.isRequired,
     onRemove: PropTypes.func.isRequired,
 };
+
 function FileItem({ file, getFileIcon, onRemove }) {
     return (
         <List.Item>
@@ -128,6 +133,7 @@ export default class DropzoneField extends React.Component {
         editable: PropTypes.bool,
         updateProps: PropTypes.func,
         widget: PropTypes.string,
+        errors: errorsType,
 
         onChange: PropTypes.func.isRequired,
         getFileIcon: PropTypes.func,
@@ -147,18 +153,18 @@ export default class DropzoneField extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {files: []};
+        this.state = { files: [] };
     }
 
     handleDrop = (files) => {
         if (!this.state.multiple) {
-            this.setState({files});
+            this.setState({ files });
             this.props.onChange(null, { name: this.props.name, value: files });
             return;
         }
 
         // build key by this triple to ensure we're adding different files
-        const keyBuilder = (item) => (`${ item.lastModified }:${ item.size }:${ item.name }`);
+        const keyBuilder = (item) => ( `${ item.lastModified }:${ item.size }:${ item.name }` );
         const mergedFiles = _(this.state.files)
             .keyBy(keyBuilder)
             .merge(_.keyBy(files, keyBuilder))
@@ -169,14 +175,14 @@ export default class DropzoneField extends React.Component {
     };
 
     handleClearFiles = () => {
-        this.setState({files: []});
-        this.props.onChange(null, {name: this.props.name, value: []});
+        this.setState({ files: [] });
+        this.props.onChange(null, { name: this.props.name, value: [] });
     };
 
     handleRemoveFile = (fileObject) => {
         const files = _.without(this.state.files, fileObject);
-        this.setState({files});
-        this.props.onChange(null, {name: this.props.name, value: files });
+        this.setState({ files });
+        this.props.onChange(null, { name: this.props.name, value: files });
     };
 
     render() {
@@ -200,11 +206,11 @@ export default class DropzoneField extends React.Component {
                 error={ !_.isEmpty(this.props.errors) }
             >
 
-                <Dropzone className="ui center aligned dropzone segment attached top"  { ..._props }>
+                <Dropzone className='ui center aligned dropzone segment attached top'  { ..._props }>
                     <strong>{ labelText } { this.props.required && <span className='ui red'>*</span> }</strong>
-                    { this.props.help_text && <div className="help-text">{ this.props.help_text }</div> }
+                    { this.props.help_text && <div className='help-text'>{ this.props.help_text }</div> }
                     <div>
-                        { !_.isEmpty(this.state.files) || 'Drop files here'}
+                        { !_.isEmpty(this.state.files) || 'Drop files here' }
                     </div>
                 </Dropzone>
 

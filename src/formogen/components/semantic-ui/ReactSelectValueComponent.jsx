@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 
 
 export default class ReactSelectValueComponent extends Component {
@@ -9,11 +9,11 @@ export default class ReactSelectValueComponent extends Component {
         value: PropTypes.object
     };
 
-    render () {
+    render() {
         let value = this.props.value, title = value.printable_name || value.name || value.title;
         return (
-            <div className="Select-value" title={ this.props.value.title }>
-                <span className="Select-value-label">
+            <div className='Select-value' title={ this.props.value.title }>
+                <span className='Select-value-label'>
                     { title }
                     { this.props.children }
                 </span>

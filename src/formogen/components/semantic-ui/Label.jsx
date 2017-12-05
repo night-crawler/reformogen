@@ -1,10 +1,17 @@
+import _ from 'lodash';
+
+import PropTypes from 'prop-types';
 import React from 'react';
 import { Popup } from 'semantic-ui-react';
-import _ from 'lodash';
-import propTypes from '../fieldPropTypes';
 
 
-SUILabel.propTypes = propTypes;
+SUILabel.propTypes = {
+    upperFirstLabel: PropTypes.bool,
+    verbose_name: PropTypes.string.isRequired,
+    help_text: PropTypes.string.isRequired,
+    // show help text on hover label (?) sign, or put in the bottom
+    helpTextOnHover: PropTypes.bool,
+};
 export default function SUILabel(props) {
     const labelText = props.upperFirstLabel ? _.upperFirst(props.verbose_name) : props.verbose_name;
     if (!props.help_text || !props.helpTextOnHover) {
@@ -16,7 +23,7 @@ export default function SUILabel(props) {
     return (
         <label>
             <Popup
-                trigger={ <i className="icon help" /> }
+                trigger={ <i className='icon help' /> }
 
                 content={ props.help_text }
                 wide={ true }

@@ -1,17 +1,35 @@
-import React from 'react';
-import { Form } from 'semantic-ui-react';
-import DatePicker from 'react-datepicker';
-import moment from 'moment';
-
-import { MessageList } from './MiscComponents';
 import _ from 'lodash';
+import moment from 'moment';
+import PropTypes from 'prop-types';
+import React from 'react';
+import DatePicker from 'react-datepicker';
+import { Form } from 'semantic-ui-react';
+
+import { errorsType, layoutOptsType } from '../fieldPropTypes';
 
 import Label from './Label';
+import { MessageList } from './MiscComponents';
 
-import propTypes from '../fieldPropTypes';
 
+DateField.propTypes = {
+    type: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    value: PropTypes.string,
+    max_length: PropTypes.number,
+    help_text: PropTypes.string.isRequired,
+    placeholder: PropTypes.string,
+    errors: errorsType,
 
-DateField.propTypes = propTypes;
+    required: PropTypes.bool,
+    editable: PropTypes.bool,
+
+    helpTextOnHover: PropTypes.bool,
+    layoutOpts: layoutOptsType,
+    locale: PropTypes.string,
+
+    updateProps: PropTypes.func,
+    onChange: PropTypes.func,
+};
 export default function DateField(props) {
     const handleChange = (momentTimeObject, e) => {
         // proxy event with SUI-React compliant style
@@ -48,7 +66,7 @@ export default function DateField(props) {
         >
             <Label { ...props } />
             <DatePicker { ..._props } />
-            { !props.helpTextOnHover ? <span className="help-text">{ props.help_text }</span> : ''}
+            { !props.helpTextOnHover ? <span className='help-text'>{ props.help_text }</span> : '' }
             <MessageList messages={ props.errors } />
         </Form.Field>
     );

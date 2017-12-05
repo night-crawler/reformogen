@@ -1,22 +1,21 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-
-import loglevel from 'loglevel';
-
 import _ from 'lodash';
 
-import * as URI from 'urijs';
-
-import { Form } from 'semantic-ui-react';
+import loglevel from 'loglevel';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 
 import Select from 'react-select';
 
-import propTypes from '../fieldPropTypes';
+import { Form } from 'semantic-ui-react';
+
+import * as URI from 'urijs';
+import { resolveResponse } from '../../utils';
+
+import { errorsType, layoutOptsType } from '../fieldPropTypes';
 import Label from './Label';
 import { MessageList } from './MiscComponents';
 import ModelInstanceOption from './ReactSelectOptionComponent';
 import ModelInstanceValue from './ReactSelectValueComponent';
-import { resolveResponse } from '../../utils';
 
 
 function extractPageNumber(uri) {
@@ -32,16 +31,15 @@ function extractPageNumber(uri) {
 function idsList(value) {
     if (!value)
         return [];
+
     if (_.isEmpty(value))
         return [];
 
     if (_.isPlainObject(value))
         return [+value.id];
 
-
-    if (_.isPlainObject(value[0])) {
+    if (_.isPlainObject(value[0]))
         return _(value).map('id').map((v) => +v).value();
-    }
 
     if (_.isArray(value))
         return _.map(value, (v) => +v);
@@ -50,8 +48,37 @@ function idsList(value) {
 }
 
 
+const __propTypes = {
+    type: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    value: PropTypes.oneOfType([
+        PropTypes.string,  // string is an initial empty value
+        PropTypes.objectOf(PropTypes.shape({
+            id: PropTypes.number,
+        }))
+    ]),
+    data: PropTypes.string.isRequired,
+    help_text: PropTypes.string.isRequired,
+    placeholder: PropTypes.string,
+    errors: errorsType,
+
+    required: PropTypes.bool,
+    editable: PropTypes.bool,
+
+    helpTextOnHover: PropTypes.bool,
+    layoutOpts: layoutOptsType,
+
+    updateProps: PropTypes.func,
+    onChange: PropTypes.func,
+    onNetworkError: PropTypes.func,
+
+    // _props inside the component
+    selectProps: PropTypes.object,
+};
+
+
 const SelectStateEvaluator = WrappedComponent => class extends Component {
-    static propTypes = propTypes;
+    static propTypes = __propTypes;
 
     // --------------- constructor ---------------
     constructor(props) {
@@ -81,7 +108,7 @@ const SelectStateEvaluator = WrappedComponent => class extends Component {
                     completed: false,
                 }
             },
-            optionsByIdMap: _optionsByIdMap,  /* {id: {id: 12, name: 123}} */
+            optionsByIdMap: _optionsByIdMap, /* {id: {id: 12, name: 123}} */
             options: _(_optionsByIdMap).values().value(),
             isLoading: false,
         };
@@ -99,7 +126,8 @@ const SelectStateEvaluator = WrappedComponent => class extends Component {
 
     // --------------- Misc ---------------
     handleOptionsLoaded(query, page, dataBundle) {
-        let data = dataBundle, nextPageNumber = 1;  /* without pagination */
+        let data = dataBundle, nextPageNumber = 1;
+        /* without pagination */
 
         if (_.isPlainObject(dataBundle)) {  /* with pagination */
             data = dataBundle.results;
@@ -137,7 +165,7 @@ const SelectStateEvaluator = WrappedComponent => class extends Component {
         return [value];
     }
 
-    loadOptions = (query='', page=1, selectedValues=[]) => {
+    loadOptions = (query = '', page = 1, selectedValues = []) => {
         this.log.debug(`loadOptions(), with query=${query} page=${page} currentValues=${selectedValues}`);
 
         let uri = URI(this.props.data).addSearch({ q: query, page: page });
@@ -162,7 +190,7 @@ const SelectStateEvaluator = WrappedComponent => class extends Component {
     };
 
     handleChange = (val) => {
-        this.props.onChange(null, {name: this.props.name, value: _.get(val, 'id', null)});
+        this.props.onChange(null, { name: this.props.name, value: _.get(val, 'id', null) });
     };
 
     // --------------- React.js render ---------------
@@ -175,7 +203,7 @@ const SelectStateEvaluator = WrappedComponent => class extends Component {
             placeholder: this.props.placeholder,
 
             value: this.props.value,
-            inputProps: {type: 'react-type'},  // fixes broken semantic markup
+            inputProps: { type: 'react-type' },  // fixes broken semantic markup
             removeSelected: true,
 
             valueKey: 'id', /* server-side model should provide `id` for object */
@@ -211,7 +239,7 @@ const SelectStateEvaluator = WrappedComponent => class extends Component {
             onMenuScrollToBottom: () => {
                 const nextPageNumber = _.get(this.state.queryMap, `${this.state.query}.nextPageNumber`);
                 this.log.debug(`onMenuScrollToBottom(), for query="${this.state.query}" ` +
-                               `and nextPageNumber=${nextPageNumber}`);
+                    `and nextPageNumber=${nextPageNumber}`);
 
                 if (!nextPageNumber) return;
                 this.loadOptions(this.state.query, nextPageNumber, this.getValuesList());
@@ -227,7 +255,8 @@ const SelectStateEvaluator = WrappedComponent => class extends Component {
 };
 
 
-AsyncForeignKeyField.propTypes = propTypes;
+AsyncForeignKeyField.propTypes = __propTypes;
+
 function AsyncForeignKeyField(props) {
     const fieldProps = _.pickBy(props, (value, key) => key !== 'selectProps');
 
@@ -242,7 +271,7 @@ function AsyncForeignKeyField(props) {
         >
             <Label { ...fieldProps } />
             <Select { ...props.selectProps } />
-            { !props.helpTextOnHover ? <span className="help-text">{ props.help_text }</span> : '' }
+            { !props.helpTextOnHover ? <span className='help-text'>{ props.help_text }</span> : '' }
             <MessageList messages={ props.errors } />
         </Form.Field>
     );

@@ -1,17 +1,37 @@
+import _ from 'lodash';
+import PropTypes from 'prop-types';
 import React from 'react';
 import { Form } from 'semantic-ui-react';
+import { errorsType, layoutOptsType } from '../fieldPropTypes';
 import Label from './Label';
-import _ from 'lodash';
 import { MessageList } from './MiscComponents';
 
-import propTypes from '../fieldPropTypes';
 
+IntegerField.propTypes = {
+    type: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    value: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    min_value: PropTypes.number,
+    max_value: PropTypes.number,
+    decimal_places: PropTypes.number,
+    help_text: PropTypes.string.isRequired,
+    placeholder: PropTypes.string,
+    errors: errorsType,
 
-IntegerField.propTypes = propTypes;
+    required: PropTypes.bool,
+    editable: PropTypes.bool,
+
+    helpTextOnHover: PropTypes.bool,
+    layoutOpts: layoutOptsType,
+
+    updateProps: PropTypes.func,
+    onChange: PropTypes.func,
+};
 export default function IntegerField(props) {
     let _props = {
         name: props.name,
         value: props.value,
+        placeholder: props.placeholder,
         onChange: props.onChange,
     };
 
@@ -50,8 +70,8 @@ export default function IntegerField(props) {
         case 'DecimalField':
             input_options.step = 0.1;
             if (props.decimal_places) {
-                if (props.decimal_places * 1 >= 2) {
-                    input_options.step = 1 / Math.pow(10, (props.decimal_places * 1 / 2));
+                if (props.decimal_places >= 2) {
+                    input_options.step = 1 / Math.pow(10, (props.decimal_places / 2));
                 }
             }
             break;

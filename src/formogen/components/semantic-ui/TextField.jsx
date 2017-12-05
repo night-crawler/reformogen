@@ -1,28 +1,36 @@
+import _ from 'lodash';
+
+import PropTypes from 'prop-types';
 import React from 'react';
 import { Form } from 'semantic-ui-react';
-import _ from 'lodash';
+import { errorsType, layoutOptsType } from '../fieldPropTypes';
 import Label from './Label';
 import { MessageList } from './MiscComponents';
-import propTypes from '../fieldPropTypes';
 
+TextField.propTypes = {
+    type: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    value: PropTypes.string,
+    max_length: PropTypes.number,
+    help_text: PropTypes.string.isRequired,
+    placeholder: PropTypes.string,
+    errors: errorsType,
 
-TextField.propTypes = propTypes;
+    required: PropTypes.bool,
+    editable: PropTypes.bool,
+
+    helpTextOnHover: PropTypes.bool,
+    layoutOpts: layoutOptsType,
+
+    updateProps: PropTypes.func,
+    onChange: PropTypes.func,
+};
 export default function TextField(props) {
-    /*
-        "name": "biography",
-        "verbose_name": "biography",
-        "help_text": "",
-        "blank": true,
-        "null": false,
-        "editable": true,
-        "type": "TextField",
-        "required": false
-     */
-
     let _props = {
         name: props.name,
         value: props.value,
         onChange: props.onChange,
+        placeholder: props.placeholder,
     };
 
     if (_.isFunction(props.updateProps)) {
@@ -38,7 +46,7 @@ export default function TextField(props) {
         >
             <Label { ...props } />
             <Form.TextArea { ..._props } />
-            { !props.helpTextOnHover ? <span className="help-text">{ props.help_text }</span> : ''}
+            { !props.helpTextOnHover ? <span className='help-text'>{ props.help_text }</span> : '' }
             <MessageList messages={ props.errors } />
         </Form.Field>
     );

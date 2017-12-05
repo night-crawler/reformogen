@@ -1,17 +1,33 @@
-import React from 'react';
-import { Form } from 'semantic-ui-react';
-import moment from 'moment';
 import _ from 'lodash';
+import moment from 'moment';
+import PropTypes from 'prop-types';
+import React from 'react';
 import TimePicker from 'react-times';
+import { Form } from 'semantic-ui-react';
+import { errorsType, layoutOptsType } from '../fieldPropTypes';
 import Label from './Label';
 import { MessageList } from './MiscComponents';
-import propTypes from '../fieldPropTypes';
 
 
+DateField.propTypes = {
+    type: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    value: PropTypes.string,
+    max_length: PropTypes.number,
+    help_text: PropTypes.string.isRequired,
+    errors: errorsType,
 
-DateField.propTypes = propTypes;
+    required: PropTypes.bool,
+    editable: PropTypes.bool,
+
+    helpTextOnHover: PropTypes.bool,
+    layoutOpts: layoutOptsType,
+
+    updateProps: PropTypes.func,
+    onChange: PropTypes.func,
+};
 export default function DateField(props) {
-    let hour=null, minutes=null;
+    let hour = null, minutes = null;
 
     const handleChange = (timeString) => {
         // trigger global onChange in case user've changed both minutes and hours
@@ -31,8 +47,8 @@ export default function DateField(props) {
         focused: false,
         withoutIcon: false,
         showTimezone: true,
-        onMinuteChange: (_minutes) => (minutes = _minutes),
-        onHourChange: (_hour) => (hour = _hour),
+        onMinuteChange: (_minutes) => ( minutes = _minutes ),
+        onHourChange: (_hour) => ( hour = _hour ),
         onTimeChange: handleChange,
         // timezone: 'America/New_York',
         theme: 'material',
@@ -51,7 +67,7 @@ export default function DateField(props) {
         >
             <Label { ...props } />
             <TimePicker { ..._props } />
-            { !props.helpTextOnHover ? <span className="help-text">{ props.help_text }</span> : ''}
+            { !props.helpTextOnHover ? <span className='help-text'>{ props.help_text }</span> : '' }
             <MessageList messages={ props.errors } />
         </Form.Field>
     );

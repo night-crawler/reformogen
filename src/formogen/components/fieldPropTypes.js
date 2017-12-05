@@ -1,20 +1,25 @@
 import PropTypes from 'prop-types';
 
 
+export const layoutOptsType = PropTypes.shape({
+    width: PropTypes.number.isRequired,
+}).isRequired;
+
+export const errorsType = PropTypes.arrayOf(PropTypes.string.isRequired);
+
+
 const defaultFieldPropTypes = {
     /* common */
     type: PropTypes.string.isRequired,
 
-    layoutOpts: PropTypes.shape({
-        width: PropTypes.number.isRequired,
-    }).isRequired,
+    layoutOpts: layoutOptsType,
 
     name: PropTypes.string.isRequired,
     verbose_name: PropTypes.string.isRequired,
     help_text: PropTypes.string.isRequired,
     errors: PropTypes.array,
 
-    max_length: PropTypes.number,  /* for CharField && TextField */
+    max_length: PropTypes.number, /* for CharField && TextField */
 
     blank: PropTypes.bool,
     null: PropTypes.bool,

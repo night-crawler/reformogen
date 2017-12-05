@@ -1,23 +1,21 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-
-import loglevel from 'loglevel';
-
 import _ from 'lodash';
 
-import * as URI from 'urijs';
-
-import { Form } from 'semantic-ui-react';
+import loglevel from 'loglevel';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 
 import Select from 'react-select';
 
-import propTypes from '../fieldPropTypes';
+import { Form } from 'semantic-ui-react';
+
+import * as URI from 'urijs';
+import { resolveResponse } from '../../utils';
+
+import { errorsType, layoutOptsType } from '../fieldPropTypes';
 import Label from './Label';
 import { MessageList } from './MiscComponents';
 import ModelInstanceOption from './ReactSelectOptionComponent';
 import ModelInstanceValue from './ReactSelectValueComponent';
-import { resolveResponse } from '../../utils';
-
 
 
 function extractPageNumber(uri) {
@@ -27,7 +25,7 @@ function extractPageNumber(uri) {
 
 /**
  * If value contains a list of objects like {id: 1, ...} it returns a list of ids. Any id coerces to int.
- * @param {Number|String|Array.<Number>|Array.<String>|Array.<Object>} value
+ * @param {Number|String|Object|Array.<Number>|Array.<String>|Array.<Object>} value
  * @returns {Array.<Number>|Array}
  */
 function idsList(value) {
@@ -51,8 +49,39 @@ function idsList(value) {
 }
 
 
+const __propTypes = {
+    type: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    value: PropTypes.oneOfType([
+        PropTypes.string,  // string is an initial empty value
+        PropTypes.arrayOf(
+            PropTypes.objectOf(PropTypes.shape({
+                id: PropTypes.number,
+            }))
+        )
+    ]),
+    data: PropTypes.string.isRequired,
+    help_text: PropTypes.string.isRequired,
+    placeholder: PropTypes.string,
+    errors: errorsType,
+
+    required: PropTypes.bool,
+    editable: PropTypes.bool,
+
+    helpTextOnHover: PropTypes.bool,
+    layoutOpts: layoutOptsType,
+
+    updateProps: PropTypes.func,
+    onChange: PropTypes.func,
+    onNetworkError: PropTypes.func,
+
+    // _props inside the component
+    selectOpts: PropTypes.object,
+};
+
+
 const SelectStateEvaluator = WrappedComponent => class extends Component {
-    static propTypes = propTypes;
+    static propTypes = __propTypes;
 
     // --------------- constructor ---------------
     constructor(props) {
@@ -64,7 +93,7 @@ const SelectStateEvaluator = WrappedComponent => class extends Component {
         this.log.debug('Initialized');
 
         // pre-populate options from object if it's present in props
-        let _value = idsList(props.value), _optionsByIdMap={};
+        let _value = idsList(props.value), _optionsByIdMap = {};
         if (!_.isEmpty(_value) && _.isPlainObject(props.value[0])) {
             _optionsByIdMap = _.keyBy(props.value, 'id');
         }
@@ -80,7 +109,7 @@ const SelectStateEvaluator = WrappedComponent => class extends Component {
                     completed: false,
                 }
             },
-            optionsByIdMap: _optionsByIdMap,  /* {id: {id: 12, name: 123}} */
+            optionsByIdMap: _optionsByIdMap, /* {id: {id: 12, name: 123}} */
             options: _(_optionsByIdMap).values().value(),
             isLoading: false,
         };
@@ -96,23 +125,9 @@ const SelectStateEvaluator = WrappedComponent => class extends Component {
     }
 
     // --------------- Misc ---------------
-    preloadSelectedValues() {
-        // there's no need to preload sth, it's client's responsibility
-        const selectedValues = this.getValuesList();
-        if (_.isEmpty(selectedValues))
-            return;
-
-        let uri = URI(this.props.data).addSearch({ id__in: selectedValues });
-
-        this.setState({isLoading: true});
-        fetch(uri)
-            .then(resolveResponse)
-            .then(json => this.handleOptionsLoaded('', 1, json))
-            .catch((error) => this.props.onNetworkError({type: 'load', error}));
-    }
-
     handleOptionsLoaded(query, page, dataBundle) {
-        let data = dataBundle, nextPageNumber = 1;  /* without pagination */
+        let data = dataBundle, nextPageNumber = 1;
+        /* without pagination */
 
         if (_.isPlainObject(dataBundle)) {  /* with pagination */
             data = dataBundle.results;
@@ -151,7 +166,7 @@ const SelectStateEvaluator = WrappedComponent => class extends Component {
         return idsList(value);
     }
 
-    loadOptions = (query='', page=1, selectedValues=[]) => {
+    loadOptions = (query = '', page = 1, selectedValues = []) => {
         this.log.debug(`loadOptions(), with query=${query} page=${page} currentValues=${selectedValues}`);
 
         let uri = URI(this.props.data).addSearch({ q: query, page: page });
@@ -170,11 +185,11 @@ const SelectStateEvaluator = WrappedComponent => class extends Component {
         fetch(uri)
             .then(resolveResponse)
             .then(json => this.handleOptionsLoaded(query, page, json))
-            .catch((error) => this.props.onNetworkError({type: 'load', error}));
+            .catch((error) => this.props.onNetworkError({ type: 'load', error }));
     };
 
     handleChange = (val) => {
-        this.props.onChange(null, {name: this.props.name, value: idsList(val)});
+        this.props.onChange(null, { name: this.props.name, value: idsList(val) });
     };
 
     // --------------- React.js render ---------------
@@ -186,12 +201,12 @@ const SelectStateEvaluator = WrappedComponent => class extends Component {
             clearable: !this.props.required,
             closeOnSelect: true,
             disabled: !this.props.editable,
-            multi: this.props.multi || true,
+            multi: true,
             onChange: this.handleChange,
             placeholder: this.props.placeholder,
 
             value: _value,
-            inputProps: {type: 'react-type'},  // fixes broken semantic markup
+            inputProps: { type: 'react-type' },  // fixes broken semantic markup
             removeSelected: true,
 
             valueKey: 'id', /* server-side model should provide `id` for object */
@@ -225,7 +240,7 @@ const SelectStateEvaluator = WrappedComponent => class extends Component {
             onMenuScrollToBottom: () => {
                 const nextPageNumber = _.get(this.state.queryMap, `${this.state.query}.nextPageNumber`);
                 this.log.debug(`onMenuScrollToBottom(), for query="${this.state.query}" ` +
-                               `and nextPageNumber=${nextPageNumber}`);
+                    `and nextPageNumber=${nextPageNumber}`);
 
                 if (!nextPageNumber) return;
                 this.loadOptions(this.state.query, nextPageNumber, this.getValuesList());
@@ -241,7 +256,8 @@ const SelectStateEvaluator = WrappedComponent => class extends Component {
 };
 
 
-AsyncManyToManyField.propTypes = propTypes;
+AsyncManyToManyField.propTypes = __propTypes;
+
 function AsyncManyToManyField(props) {
     const fieldProps = _.pickBy(props, (value, key) => key !== 'selectProps');
 
@@ -256,7 +272,7 @@ function AsyncManyToManyField(props) {
         >
             <Label { ...fieldProps } />
             <Select { ...props.selectProps } />
-            { !props.helpTextOnHover ? <span className="help-text">{ props.help_text }</span> : '' }
+            { !props.helpTextOnHover ? <span className='help-text'>{ props.help_text }</span> : '' }
             <MessageList messages={ props.errors } />
         </Form.Field>
     );

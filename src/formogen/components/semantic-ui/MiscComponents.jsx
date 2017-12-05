@@ -1,9 +1,8 @@
+import _ from 'lodash';
+import PropTypes from 'prop-types';
 import React from 'react';
 
-import _ from 'lodash';
-
-import { Dimmer, Image, Loader, Segment } from 'semantic-ui-react';
-import { Message } from 'semantic-ui-react';
+import { Dimmer, Image, Loader, Message, Segment } from 'semantic-ui-react';
 
 
 export const LoaderComponent = () => (
@@ -16,8 +15,12 @@ export const LoaderComponent = () => (
     </Segment>
 );
 
-
-export const MessageList = ({ header = '', messages, color = 'red' }) => {
+MessageList.propTypes = {
+    header: PropTypes.string,
+    messages: PropTypes.arrayOf(PropTypes.string),
+    color: PropTypes.string,
+};
+export function MessageList({ header = '', messages, color = 'red' }) {
     if (_.isEmpty(messages)) {
         return null;
     }
@@ -25,8 +28,8 @@ export const MessageList = ({ header = '', messages, color = 'red' }) => {
         <Message color={ color }>
             { header && <Message.Header>{ header }</Message.Header> }
             <Message.List>
-                { !_.isEmpty(messages) && messages.map((msg, i) => <Message.Item key={ i }>{ msg }</Message.Item>) }
+                { messages.map((msg, i) => <Message.Item key={ i }>{ msg }</Message.Item>) }
             </Message.List>
         </Message>
     );
-};
+}

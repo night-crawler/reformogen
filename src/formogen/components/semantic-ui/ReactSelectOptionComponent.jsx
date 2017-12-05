@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 
 
 export default class ReactSelectOptionComponent extends Component {
@@ -29,12 +29,13 @@ export default class ReactSelectOptionComponent extends Component {
         this.props.onFocus(this.props.option, event);
     };
 
-    render () {
+    render() {
         let option = this.props.option,
             title = option.printable_name || option.name || option.title;
 
         return (
-            <div className={ this.props.className }
+            <div
+                className={ this.props.className }
                 onMouseDown={ this.handleMouseDown }
                 onMouseEnter={ this.handleMouseEnter }
                 onMouseMove={ this.handleMouseMove }
