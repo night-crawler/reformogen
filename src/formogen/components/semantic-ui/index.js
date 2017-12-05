@@ -10,17 +10,24 @@ import { Button, Form, Grid, Header } from 'semantic-ui-react';
 
 // Field imports
 import GenericField from './GenericField';
+
 import CharField from './CharField';
 import TextField from './TextField';
+
 import AutocompleteChoiceField from './AutocompleteChoiceField';
+
 import EmbeddedManyToManyField from './InlineManyToManyField';
 import EmbeddedForeignKeyField from './InlineForeignKeyField';
-import AsyncManyToManyField from './AsyncManyToManyField';
+
 import AsyncForeignKeyField from './AsyncForeignKeyField';
+import AsyncManyToManyField from './AsyncManyToManyField';
+
 import IntegerField from './IntegerField';
+
 import DateTimeField from './DateTimeField';
 import DateField from './DateField';
 import TimeField from './TimeField';
+
 import DropzoneField from './DropzoneField';
 
 import { MessageList } from './MiscComponents';
@@ -46,7 +53,6 @@ export {
     IntegerField,
 };
 
-
 export default class FormogenFormComponent extends React.Component {
     static defaultProps = {
         locale: 'en',
@@ -55,8 +61,7 @@ export default class FormogenFormComponent extends React.Component {
 
         fields: [],
         formData: {},
-        layoutTemplate: [{
-            /* declare a default layout template */
+        layoutTemplate: [{  /* declare a default layout template */
             header: '',
             fields: '*',
             width: 16,
@@ -95,7 +100,7 @@ export default class FormogenFormComponent extends React.Component {
         layoutTemplate: PropTypes.array,
 
         errorsFieldMap: PropTypes.object,
-        nonFieldErrorsMap: PropTypes.object, /* {title: [errors]} */
+        nonFieldErrorsMap: PropTypes.object,  /* {title: [errors]} */
 
         fieldUpdatePropsMap: PropTypes.object,
 
@@ -130,7 +135,6 @@ export default class FormogenFormComponent extends React.Component {
         const { fields, formData } = this.state;
         this.computeNewState(fields, formData, this.props.layoutTemplate);
     }
-
     componentWillReceiveProps({ fields, formData, nonFieldErrorsMap }) {
         this.log.debug('componentWillReceiveProps()');
 
@@ -147,7 +151,6 @@ export default class FormogenFormComponent extends React.Component {
 
         this.setState({ formData, fields, fieldPropsByNameMap, layout });
     }
-
     getFormData() {  // TODO: delete it after a while
         this.log.warn('method getFormData() is deprecated!');
 
@@ -161,7 +164,7 @@ export default class FormogenFormComponent extends React.Component {
             if (!fieldProps) {
                 const warnPresentKeys = JSON.stringify(_.keys(fieldPropsByNameMap), null, 4);
                 this.log.debug(`Field "${ fieldName }": "${ fieldValue }" is present in formData,` +
-                    `but is not present in metaData fields: ${ warnPresentKeys }`);
+                                   `but is not present in metaData fields: ${ warnPresentKeys }`);
                 dataFields[fieldName] = fieldValue;
                 continue;
             }
@@ -176,7 +179,6 @@ export default class FormogenFormComponent extends React.Component {
             files: fileFields
         };
     }
-
     pickFieldComponent(opts) {
         /* this.log.debug(...) is below, see code */
 
@@ -218,12 +220,11 @@ export default class FormogenFormComponent extends React.Component {
             .map((fieldObj) => {  /* object first key is field name or object itself */
                 return _.isString(fieldObj) ? fieldObj : _.keys(fieldObj)[0];
             })
-            .without('*');
-        /* we don't take wildcard as a field */
+            .without('*');  /* we don't take wildcard as a field */
 
         let allFieldNames = _(fieldPropsByNameMap).keys();
 
-        _ldLayout.find({ 'fields': '*' })['fields'] = allFieldNames.difference(usedFields.value()).value();
+        _ldLayout.find({'fields': '*'})['fields'] = allFieldNames.difference(usedFields.value()).value();
         return _ldLayout.value();
     }
 
@@ -265,7 +266,6 @@ export default class FormogenFormComponent extends React.Component {
 
         }) || null;
     }
-
     renderField(i, opts, layoutOpts) {
         this.log.debug('renderField()');
 
@@ -289,7 +289,6 @@ export default class FormogenFormComponent extends React.Component {
             />
         );
     }
-
     renderNonFieldErrors() {
         this.log.debug('renderNonFieldErrors()');
 
