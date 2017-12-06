@@ -47,7 +47,8 @@ class AuthorPhotoMetadata(MetaData):
     update_fields = {
         'photo': {
             # ensure upload_url is lazy (premature import case)
-            'upload_url': format_lazy('{}{}', 'http://localhost:8000', reverse_lazy('all-accept-file'))
+            'upload_url': format_lazy('{}{}', 'http://localhost:8000', reverse_lazy('all-accept-file')),
+            'multiple': True,
         }
     }
 

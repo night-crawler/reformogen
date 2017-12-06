@@ -74,7 +74,10 @@ export default class FormogenComponent extends Component {
             title: props.title,
 
             // metaData
-            metaDataReady: false,
+            isMetaDataReady: false,
+            isFormDataReady: false,
+            isFormSubmitComplete: true,
+
             receivedMetaData: null,
 
             errorsFieldMap: {},
@@ -104,7 +107,7 @@ export default class FormogenComponent extends Component {
             })
             .then(([newMetaData, newFormData]) => {
                 this.setState({
-                    metaDataReady: true,
+                    isMetaDataReady: true,
                     fields: newMetaData.fields,
                     fieldNames: _(newMetaData.fields).map('name').flatten().value(),
 
@@ -229,8 +232,7 @@ export default class FormogenComponent extends Component {
     // --------------- handle submit  ---------------
     submitForm(data) {
         this.log.debug('submitForm()', data);
-        const { objectCreateUrl, objectUpdateUrl } = this.props;
-        const { initialFormData } = this.state;
+        const { objectCreateUrl, objectUpdateUrl, initialFormData } = this.state;
 
         let options = {
             method: 'POST',
@@ -243,37 +245,115 @@ export default class FormogenComponent extends Component {
             url = objectUpdateUrl || _.get(initialFormData, 'urls.update') || _.get(initialFormData, 'urls.edit');
             options.method = 'PATCH';
         }
+        console.log('WE GOT THIS SHIT', url, _.get(initialFormData, 'id', 0));
 
         if (!url)
             throw new Error('URL is empty!');
 
-        return fetch(url, options)
-            .then(resolveResponse)
-            .then(data => this.handleSubmitSuccess(data))
-            .catch(error => this.dispatchNetworkError({ type: 'submit', error }));
+        return fetch(url, options).then(resolveResponse);
     }
 
+
+    /**
+     * Submit order:
+     *  0. Disable the form.
+     *  1. Send formData (payload without files).
+     *  2. Handle a response. This response may not contain a new object but a bundle like:
+     *     {
+     *         result: 'pending' | 'success' | 'error'
+     *         message: 'message'
+     *     }
+     *     NOTE:
+     *     If we got a 'pending' result, we need to skip enabling form to prevent our logic from corruption with
+     *     user's random actions on the incomplete transaction.
+     *     To prevent the handle logic from spreading over branches it's easier to ignore received data and perform
+     *     a new request to retrieve the whole instance.
+     *  3. Retrieve a new instance of object. This instance should contain a new set of urls we need: `urls.update`,
+     *     `urls.<file_field_name>_upload`
+     *  4. Extract urls for file upload
+     *  5. Upload files
+     */
     handleSubmit = () => {
         this.log.debug('handleSubmit()');
         const { data, files, changedFields } = this.getFieldData();
 
         // clear field errors before submit
-        this.setState({ errorsFieldMap: {}, nonFieldErrorsMap: {} });
+        this.setState({ errorsFieldMap: {}, nonFieldErrorsMap: {}, isFormSubmitComplete: false });
 
-        let promise = this.submitForm(this.pipePreSubmit(data));
-        promise.then((data) => {
-            console.log('azaza?', data);
-        });
+        this.submitForm(this.pipePreSubmit(data))
+            .then(data => this.handleSubmitFormDataSuccess(data))
+            .then(data => {
+                this.setState({initialFormData: data});
+                return data;
+            })
+            .then(data => this.handleSendFiles(files, data))
+            .then(data => {
+                this.setState({isFormSubmitComplete: true});
+            })
+            .catch(error => this.dispatchNetworkError({ type: 'submit', error }));
     };
 
-    handleSubmitSuccess(data) {
-        this.log.debug('handleSubmitSuccess()', data);
-
-        // update formData with received data
-        // TODO: update initialFormData ?
-        this.setState({ formData: this.pipePreSuccess(data) });
-        return data;
+    handleSubmitFormDataSuccess(data) {
+        return new Promise((resolve, reject) => {
+            this.log.debug('handleSubmitFormDataSuccess()', data);
+            if (data.result === 'pending') {
+                // handle pending
+                reject(new Error('Cannot handle "pending" result'));
+            }
+            // first set a new url to retrieve the instance
+            const objectUpdateUrl = _.get(data, 'urls.update') || _.get(data, 'urls.edit');
+            this.setState({objectUpdateUrl}, () => {
+                this.fetchFormData()
+                    .then(data => resolve(data))
+                    .catch(error => reject(error));
+            });
+        });
     }
+
+    /**
+     *
+     * @param {Object} filesFieldMap
+     * @param {Object} instanceData
+     * @returns {Array.<Object>}
+     */
+    prepareFileUploadQueue(filesFieldMap, instanceData) {
+        let fileUploadQueue = [];
+        for (let [fieldName, {defaultUploadUrl, files}] of Object.entries(filesFieldMap)) {
+            if (_.isEmpty(files)) {
+                this.log.warn(`Field "${fieldName}" contains no files - skipping`);
+                continue;
+            }
+            const uploadUrl = _.get(instanceData, `urls.${fieldName}_upload`) || defaultUploadUrl;
+            if (!uploadUrl)
+                throw new Error(`No upload url for field ${fieldName} specified in filesBundle`);
+
+            for (let file of files) {
+                let formData = new FormData();
+                formData.append(file.name, file);
+                fileUploadQueue.push({uploadUrl, formData});
+            }
+        }
+        return fileUploadQueue;
+    }
+
+    handleSendFiles(filesFieldMap, data) {
+        this.log.debug(`handleSendFiles(${Object.keys(filesFieldMap)})`);
+
+        const queue = this.prepareFileUploadQueue(filesFieldMap, data);
+
+        return new Promise((resolve, reject) => {
+            for (let chunks of _.chunk(queue, 1)) {
+                for (let { uploadUrl, formData } of chunks) {
+                    fetch(uploadUrl, {
+                        method: 'POST',
+                        body: formData,
+                    });
+                }
+            }
+            resolve(data);
+        });
+    }
+
 
     handleValidationErrors(errors) {
         this.log.debug('handleValidationErrors()', errors);
@@ -285,7 +365,8 @@ export default class FormogenComponent extends Component {
 
         this.setState({
             errorsFieldMap: errors,
-            nonFieldErrorsMap
+            nonFieldErrorsMap,
+            isFormSubmitComplete: true,
         });
     }
 
@@ -298,16 +379,22 @@ export default class FormogenComponent extends Component {
 
     // --------------- fetch-receive submit-receive methods (return promises) ---------------
     fetchFormData() {
-        const { formData } = this.state;
-        const { objectUrl } = this.props;
-
         return new Promise((resolve, reject) => {
-            if (!objectUrl)
-                return resolve(formData);
+            const { objectUrl } = this.props;
+            const { formData, objectUpdateUrl } = this.state;
+            const url = objectUpdateUrl || objectUrl;
 
-            fetch(objectUrl, { method: 'GET', headers: headers })
+            this.setState({isFormDataReady: false});
+
+            if (!url) {
+                this.setState({isFormDataReady: true});
+                return resolve(formData);
+            }
+
+            fetch(url, { method: 'GET', headers: headers })
                 .then(resolveResponse)
                 .then(data => {
+                    this.setState({isFormDataReady: true});
                     resolve(Object.assign({}, formData, data));
                 })
                 .catch(error => reject(error));
@@ -320,9 +407,11 @@ export default class FormogenComponent extends Component {
         2. metadata is only in metadataUrl: return Promise
         3. metadataUrl + metaData = return Promise
          */
-        const { metaData: initialMetaData, metaDataUrl } = this.props;
-
         return new Promise((resolve, reject) => {
+            const { metaData: initialMetaData, metaDataUrl } = this.props;
+
+            this.setState({isMetaDataReady: false});
+
             if (_.isEmpty(initialMetaData) && !metaDataUrl)
                 return reject(new Error('Formogen must be initialized with either metaData or metaDataUrl!'));
 
@@ -337,9 +426,11 @@ export default class FormogenComponent extends Component {
                     }
 
                     const initialFields = this.props.metaData ? this.props.metaData.fields : [];
-                    const receivedFields = data.fields.slice();
+                    const receivedFields = data.fields;
                     // TODO: cache initialFields before resolve!
                     const fields = FormogenComponent.concatFields(initialFields, receivedFields);
+
+                    this.setState({isMetaDataReady: true});
                     resolve({
                         title: _.get(initialMetaData, 'title', null) || data.title,
                         description: _.get(initialMetaData, 'description', null) || data.description,
@@ -379,12 +470,15 @@ export default class FormogenComponent extends Component {
     render() {
         this.log.debug('render()');
 
-        const { metaDataReady, title, formData, fields, errorsFieldMap, nonFieldErrorsMap } = this.state;
+        const {
+            isMetaDataReady, isFormDataReady, isFormSubmitComplete,
+            title, formData, fields, errorsFieldMap, nonFieldErrorsMap
+        } = this.state;
 
         return (
             <FormogenFormComponent
                 locale={ this.props.locale }
-                loading={ !metaDataReady }
+                loading={ !isMetaDataReady || !isFormDataReady || !isFormSubmitComplete }
                 showHeader={ this.props.showHeader }
                 title={ title }
                 upperFirstLabels={ this.props.upperFirstLabels }

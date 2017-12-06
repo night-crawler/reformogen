@@ -134,6 +134,7 @@ export default class DropzoneField extends React.Component {
         updateProps: PropTypes.func,
         widget: PropTypes.string,
         errors: errorsType,
+        upload_url: PropTypes.string,
 
         onChange: PropTypes.func.isRequired,
         getFileIcon: PropTypes.func,
@@ -156,22 +157,31 @@ export default class DropzoneField extends React.Component {
         this.state = { files: [] };
     }
 
-    handleDrop = (files) => {
+    handleDrop = (newFiles) => {
+        const { onChange, upload_url, name } = this.props;
+        const { files: oldFiles } = this.state;
+
         if (!this.state.multiple) {
-            this.setState({ files });
-            this.props.onChange(null, { name: this.props.name, value: files });
+            this.setState({ files: newFiles });
+            onChange(null, {
+                name,
+                value: {files: newFiles, defaultUploadUrl: upload_url}
+            });
             return;
         }
 
-        // build key by this triple to ensure we're adding different files
-        const keyBuilder = (item) => ( `${ item.lastModified }:${ item.size }:${ item.name }` );
-        const mergedFiles = _(this.state.files)
+        // build key by this triple to ensure we're adding different newFiles
+        const keyBuilder = (item) => `${ item.lastModified }:${ item.size }:${ item.name }`;
+        const mergedFiles = _(oldFiles)
             .keyBy(keyBuilder)
-            .merge(_.keyBy(files, keyBuilder))
+            .merge(_.keyBy(newFiles, keyBuilder))
             .values()
             .value();
         this.setState({ files: mergedFiles });
-        this.props.onChange(null, { name: this.props.name, value: mergedFiles });
+        onChange(null, {
+            name,
+            value: {files: mergedFiles, defaultUploadUrl: upload_url}
+        });
     };
 
     handleClearFiles = () => {

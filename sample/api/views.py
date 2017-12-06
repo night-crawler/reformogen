@@ -96,6 +96,12 @@ class AuthorPhotoViewSet(viewsets.ModelViewSet, DescribeMixin):
         md = metadata.AuthorPhotoWithoutAuthorMetadata().determine_metadata(request, self)
         return Response(md)
 
+    @detail_route(['POST'])
+    def photo_upload(self, request: Request, pk=None):
+        for filename, data in request.FILES.items():
+            print(filename, data, type(data))
+        return Response({'lol': 1})
+
 
 class BookViewSet(viewsets.ModelViewSet, DescribeMixin):
     serializer_class = s_serializers.BookSerializer

@@ -198,6 +198,7 @@ class App extends Component {
                                         locale={ 'ru' }
                                         showHeader={ true }
                                         metaDataUrl={ this.state.authorPhotosMetaDataUrl }
+                                        objectCreateUrl={ this.state.authorPhotosCreateUrl }
                                         formData={ {
                                             author: this.state.authorId,
                                         } }

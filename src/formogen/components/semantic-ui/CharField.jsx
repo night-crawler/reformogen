@@ -31,7 +31,7 @@ CharField.propTypes = {
     onChange: PropTypes.func,
 };
 export default function CharField(props) {
-    const isPassword = props.password || props.widget === 'HiddenInput';
+    const isPassword = props.password || props.widget === 'password';
 
     let _props = {
         name: props.name,

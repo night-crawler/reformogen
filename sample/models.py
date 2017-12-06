@@ -119,6 +119,14 @@ class AuthorPhoto(CRUDUrlsMixin, TimeStampedModel):
         verbose_name_plural = _('author photos')
         ordering = ('id',)
 
+    @property
+    def urls(self):
+        _urls = super(AuthorPhoto, self).urls
+        _urls.update({
+            'photo_upload': 'http://localhost:8000%s' % reverse('author-photos-photo-upload', (self.id,))
+        })
+        return _urls
+
 
 class Book(CRUDUrlsMixin, TimeStampedModel):
     author = models.ForeignKey('Author', verbose_name=_('author'))
