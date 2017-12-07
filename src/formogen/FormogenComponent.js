@@ -226,7 +226,7 @@ export default class FormogenComponent extends Component {
             return null;  // shut warning
         });
 
-        return {data, files, changedFields};
+        return { data, files, changedFields };
     }
 
     // --------------- handle submit  ---------------
@@ -241,7 +241,7 @@ export default class FormogenComponent extends Component {
         };
         let url = objectCreateUrl;
 
-        if (+( _.get(initialFormData, 'id', 0) || 0 )) {
+        if (+(_.get(initialFormData, 'id', 0) || 0)) {
             url = objectUpdateUrl || _.get(initialFormData, 'urls.update') || _.get(initialFormData, 'urls.edit');
             options.method = 'PATCH';
         }
@@ -283,12 +283,13 @@ export default class FormogenComponent extends Component {
         this.submitForm(this.pipePreSubmit(data))
             .then(data => this.handleSubmitFormDataSuccess(data))
             .then(data => {
-                this.setState({initialFormData: data});
+                this.setState({ initialFormData: data });
                 return data;
             })
             .then(data => this.handleSendFiles(files, data))
-            .then(data => {
-                this.setState({isFormSubmitComplete: true});
+            .then(({ objectInstance, uploadedFiles }) => {
+                console.log('WE UPLOADED SOME SHIT', objectInstance, uploadedFiles);
+                this.setState({ isFormSubmitComplete: true });
             })
             .catch(error => this.dispatchNetworkError({ type: 'submit', error }));
     };
@@ -302,7 +303,7 @@ export default class FormogenComponent extends Component {
             }
             // first set a new url to retrieve the instance
             const objectUpdateUrl = _.get(data, 'urls.update') || _.get(data, 'urls.edit');
-            this.setState({objectUpdateUrl}, () => {
+            this.setState({ objectUpdateUrl }, () => {
                 this.fetchFormData()
                     .then(data => resolve(data))
                     .catch(error => reject(error));
@@ -313,44 +314,74 @@ export default class FormogenComponent extends Component {
     /**
      *
      * @param {Object} filesFieldMap
-     * @param {Object} instanceData
+     * @param {Object} objectInstance
      * @returns {Array.<Object>}
      */
-    prepareFileUploadQueue(filesFieldMap, instanceData) {
+    prepareFileUploadQueue(filesFieldMap, objectInstance) {
         let fileUploadQueue = [];
-        for (let [fieldName, {defaultUploadUrl, files}] of Object.entries(filesFieldMap)) {
+        for (let [fieldName, { defaultUploadUrl, files }] of Object.entries(filesFieldMap)) {
             if (_.isEmpty(files)) {
                 this.log.warn(`Field "${fieldName}" contains no files - skipping`);
                 continue;
             }
-            const uploadUrl = _.get(instanceData, `urls.${fieldName}_upload`) || defaultUploadUrl;
+            const uploadUrl = _.get(objectInstance, `urls.${fieldName}_upload`) || defaultUploadUrl;
             if (!uploadUrl)
                 throw new Error(`No upload url for field ${fieldName} specified in filesBundle`);
 
             for (let file of files) {
                 let formData = new FormData();
                 formData.append(file.name, file);
-                fileUploadQueue.push({uploadUrl, formData});
+                fileUploadQueue.push({ uploadUrl, formData, fileName: file.name });
             }
         }
         return fileUploadQueue;
     }
 
-    handleSendFiles(filesFieldMap, data) {
+    handleSendFiles(filesFieldMap, objectInstance) {
         this.log.debug(`handleSendFiles(${Object.keys(filesFieldMap)})`);
 
-        const queue = this.prepareFileUploadQueue(filesFieldMap, data);
+        const
+            queue = this.prepareFileUploadQueue(filesFieldMap, objectInstance),
+            chunks = _.chunk(queue, 5);
+
+        let uploadedFiles = [];
+        let failedFiles = [];
+
+        if (_.isEmpty(queue))
+            return { objectInstance, uploadedFiles };
+
+        const getChunkFetchList = (chunk, reject) => {
+            return chunk.map(({ uploadUrl, formData, fileName }) => {
+                return fetch(uploadUrl, {
+                    method: 'POST',
+                    body: formData,
+                })
+                    .then(resolveResponse)
+                    .then(data => {
+                        uploadedFiles.push({ data, fileName, uploadUrl });
+                        return data;
+                    })
+                    .catch(error => {
+                        failedFiles.push({ error, fileName, uploadUrl });
+                    });
+            });
+        };
 
         return new Promise((resolve, reject) => {
-            for (let chunks of _.chunk(queue, 1)) {
-                for (let { uploadUrl, formData } of chunks) {
-                    fetch(uploadUrl, {
-                        method: 'POST',
-                        body: formData,
-                    });
-                }
+            const initialFetchList = getChunkFetchList(chunks[0], reject);
+            let initialPromise = Promise.all(initialFetchList);
+
+            for (let chunk of chunks.slice(1)) {
+                const fetchList = getChunkFetchList(chunk, reject);
+                initialPromise = initialPromise.then(() => Promise.all(fetchList));
             }
-            resolve(data);
+
+            initialPromise.then(() => {
+                if (!_.isEmpty(failedFiles)) {
+                    return reject(failedFiles);
+                }
+                resolve({ objectInstance, uploadedFiles });
+            });
         });
     }
 
@@ -373,7 +404,7 @@ export default class FormogenComponent extends Component {
     handleFieldChange = (event, { name, value }) => {
         this.log.debug(`handleFieldChange(): setting formData field "${ name }" to ${ typeof value }`, value);
         this.setState(currentState => {
-            return { formData: Object.assign({}, currentState.formData, {[name]: value}) };
+            return { formData: Object.assign({}, currentState.formData, { [name]: value }) };
         });
     };
 
@@ -384,17 +415,17 @@ export default class FormogenComponent extends Component {
             const { formData, objectUpdateUrl } = this.state;
             const url = objectUpdateUrl || objectUrl;
 
-            this.setState({isFormDataReady: false});
+            this.setState({ isFormDataReady: false });
 
             if (!url) {
-                this.setState({isFormDataReady: true});
+                this.setState({ isFormDataReady: true });
                 return resolve(formData);
             }
 
             fetch(url, { method: 'GET', headers: headers })
                 .then(resolveResponse)
                 .then(data => {
-                    this.setState({isFormDataReady: true});
+                    this.setState({ isFormDataReady: true });
                     resolve(Object.assign({}, formData, data));
                 })
                 .catch(error => reject(error));
@@ -410,7 +441,7 @@ export default class FormogenComponent extends Component {
         return new Promise((resolve, reject) => {
             const { metaData: initialMetaData, metaDataUrl } = this.props;
 
-            this.setState({isMetaDataReady: false});
+            this.setState({ isMetaDataReady: false });
 
             if (_.isEmpty(initialMetaData) && !metaDataUrl)
                 return reject(new Error('Formogen must be initialized with either metaData or metaDataUrl!'));
@@ -430,7 +461,7 @@ export default class FormogenComponent extends Component {
                     // TODO: cache initialFields before resolve!
                     const fields = FormogenComponent.concatFields(initialFields, receivedFields);
 
-                    this.setState({isMetaDataReady: true});
+                    this.setState({ isMetaDataReady: true });
                     resolve({
                         title: _.get(initialMetaData, 'title', null) || data.title,
                         description: _.get(initialMetaData, 'description', null) || data.description,
@@ -451,7 +482,7 @@ export default class FormogenComponent extends Component {
     }
 
     static updateFormDataWithDefaults(fields, formData) {
-        let data = {...formData};
+        let data = { ...formData };
         for (let field of fields) {
             if (field.name in data) {
                 continue;

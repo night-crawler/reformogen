@@ -158,10 +158,10 @@ export default class DropzoneField extends React.Component {
     }
 
     handleDrop = (newFiles) => {
-        const { onChange, upload_url, name } = this.props;
+        const { onChange, upload_url, name, multiple } = this.props;
         const { files: oldFiles } = this.state;
 
-        if (!this.state.multiple) {
+        if (!multiple) {
             this.setState({ files: newFiles });
             onChange(null, {
                 name,
@@ -185,14 +185,25 @@ export default class DropzoneField extends React.Component {
     };
 
     handleClearFiles = () => {
+        const { name, upload_url } = this.props;
         this.setState({ files: [] });
-        this.props.onChange(null, { name: this.props.name, value: [] });
+        this.props.onChange(
+            null, {
+                name: name,
+                value: {files: [], defaultUploadUrl: upload_url}
+            });
     };
 
     handleRemoveFile = (fileObject) => {
         const files = _.without(this.state.files, fileObject);
+        const { name, upload_url } = this.props;
+
         this.setState({ files });
-        this.props.onChange(null, { name: this.props.name, value: files });
+        this.props.onChange(
+            null, {
+                name: name,
+                value: {files, defaultUploadUrl: upload_url}
+            });
     };
 
     render() {

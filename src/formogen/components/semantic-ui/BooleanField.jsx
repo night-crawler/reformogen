@@ -15,6 +15,7 @@ BooleanField.propTypes = {
     value: PropTypes.bool,
     help_text: PropTypes.string.isRequired,
     placeholder: PropTypes.string,
+    widget: PropTypes.string,
     errors: errorsType,
 
     required: PropTypes.bool,
@@ -31,12 +32,15 @@ export default function BooleanField(props) {
         props.onChange(e, { name: props.name, value: newValue.checked });
     };
 
+    const { widget = '' } = props;
+
     let _props = {
         name: props.name,
         checked: props.value,
         placeholder: props.placeholder,
         onChange: handleChange,
-        toggle: true,
+        toggle: widget.toLowerCase() === 'toggle' || undefined,
+        slider: widget.toLowerCase() === 'slider' || undefined,
     };
 
     if (_.isFunction(props.updateProps)) {

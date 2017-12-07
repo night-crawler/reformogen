@@ -1,5 +1,6 @@
 from django.db import models
 from rest_framework.decorators import list_route, detail_route
+from rest_framework.exceptions import ValidationError
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework import viewsets
@@ -98,6 +99,7 @@ class AuthorPhotoViewSet(viewsets.ModelViewSet, DescribeMixin):
 
     @detail_route(['POST'])
     def photo_upload(self, request: Request, pk=None):
+        raise ValidationError({'detail': 'Die please'})
         for filename, data in request.FILES.items():
             print(filename, data, type(data))
         return Response({'lol': 1})

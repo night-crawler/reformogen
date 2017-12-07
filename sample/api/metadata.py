@@ -25,6 +25,9 @@ class AuthorMetadata(MetaData):
         # 'name': {'editable': False},
         'nickname': {
             'password': True,
+        },
+        'is_ghostwriter': {
+            'widget': 'toggle',
         }
     }
 
