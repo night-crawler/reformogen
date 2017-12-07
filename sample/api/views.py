@@ -99,7 +99,6 @@ class AuthorPhotoViewSet(viewsets.ModelViewSet, DescribeMixin):
 
     @detail_route(['POST'])
     def photo_upload(self, request: Request, pk=None):
-        raise ValidationError({'detail': 'Die please'})
         for filename, data in request.FILES.items():
             print(filename, data, type(data))
         return Response({'lol': 1})
