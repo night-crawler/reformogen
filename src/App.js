@@ -4,7 +4,7 @@ import prefix from 'loglevel-plugin-prefix';
 import { Segment } from 'semantic-ui-react';
 import React, { Component } from 'react';
 
-import Formogen from './formogen';
+import FormogenReduxContainer from './formogen-react-redux';
 
 import { Grid } from 'semantic-ui-react';
 import 'semantic-ui-css/semantic.css';
@@ -28,118 +28,6 @@ class App extends Component {
         };
     }
 
-    _render() {
-        return (
-            <div className='App'>
-
-                <Grid columns={ 3 } stackable={ true }>
-                    <Grid.Row>
-                        <Grid.Column>
-                            <Segment className='formogen'>
-                                <Formogen
-                                    upperFirstLabels={ true }
-
-                                    metaData={ preparedMetaData }
-
-                                    metaDataUrl={ 'http://localhost:8000/api/v1/sample/authors/describe/' }
-                                    objectCreateUrl={ 'http://localhost:8000/api/v1/sample/authors/' }
-                                />
-                            </Segment>
-                        </Grid.Column>
-
-                        <Grid.Column>
-                            <Segment className='formogen'>
-                                <Formogen
-                                    locale={ 'ru' }
-                                    showHeader={ true }
-                                    helpTextOnHover={ true }
-                                    upperFirstLabels={ true }
-
-                                    formData={ {name: 'That is prepopulated field!'} }
-
-                                    metaDataUrl={ 'http://localhost:8000/api/v1/sample/authors/describe/' }
-                                    objectCreateUrl={ 'http://localhost:8000/api/v1/sample/authors/' }
-
-                                    fieldUpdatePropsMap={ {
-                                        dt_birth: (_props, props) => Object.assign({}, _props, {timeIntervals: 5})
-                                    } }
-                                />
-                            </Segment>
-                        </Grid.Column>
-
-                        <Grid.Column>
-                            <Segment className='formogen'>
-                                <Formogen
-                                    locale={ 'ru' }
-                                    showHeader={ true }
-                                    helpTextOnHover={ true }
-                                    upperFirstLabels={ true }
-
-                                    metaDataUrl={ 'http://localhost:8000/api/v1/sample/all/describe/' }
-                                    objectCreateUrl={ 'http://localhost:8000/api/v1/sample/all/' }
-
-                                    fieldUpdatePropsMap={ {
-                                        dt_birth: (_props, props) => Object.assign({}, _props, {timeIntervals: 5})
-                                    } }
-                                    layoutTemplate={ [
-                                        {
-                                            header: 'Integer Group',
-                                            fields: [
-                                                {f_integer: {width: 8}},
-                                                {f_positive_integer: {width: 8}},
-                                                'f_small_integer',
-                                                'f_positive_small_integer'
-                                            ],
-                                            width: 8,
-                                        },
-                                        {
-                                            header: 'Float group',
-                                            fields: [
-                                                {f_decimal: {width: 4}},
-                                                {f_float: {width: 12}},
-                                            ]
-                                        },
-                                        {
-                                            header: 'Dates',
-                                            fields: [
-                                                {f_date: {width: 8}},
-                                                {f_time: {width: 8}},
-                                                {f_dt: {width: 16}},
-                                            ]
-                                        },
-                                        {
-                                            header: 'Relations',
-                                            fields: [
-                                                {f_fk_embed: {width: 8}},
-                                                {f_fk_rel: {width: 8}},
-                                                {f_m2m_embed: {width: 8}},
-                                                {f_m2m_rel: {width: 8}},
-                                                {f_choice: {width: 16}},
-                                            ]
-                                        },
-                                        {
-                                            header: 'Files',
-                                            fields: [
-                                                {f_file: {width: 8}},
-                                                {f_photo: {width: 8}}
-                                            ]
-                                        },
-                                        {
-                                            header: 'Other',
-                                            fields: '*',
-                                            width: 16,
-                                        }
-                                    ] }
-                                />
-                            </Segment>
-                        </Grid.Column>
-                    </Grid.Row>
-                </Grid>
-
-            </div>
-        );
-    }
-
     handleAuthorEditFormLoaded = (metaData, formData) => {
         if (!formData.id)
             return;
@@ -160,6 +48,7 @@ class App extends Component {
         const objectCreateUrl = 'http://localhost:8000/api/v1/sample/authors/';
 
         const prepopulatedFormData = {
+            assigned_test_field: 'hahahah!',
             name: 'Mr. Inconspicuous',
             dt_birth: new Date(),
             dt_death: new Date(),
@@ -175,7 +64,7 @@ class App extends Component {
                     <Grid.Row>
                         <Grid.Column>
                             <Segment className='formogen'>
-                                <Formogen
+                                <FormogenReduxContainer
                                     locale={ 'ru' }
                                     showHeader={ true }
                                     helpTextOnHover={ true }
@@ -183,46 +72,16 @@ class App extends Component {
 
                                     formData={ prepopulatedFormData }
 
+                                    metaData={ preparedMetaData }
+
                                     metaDataUrl={ metaDataUrl }
                                     objectUrl={ objectUrl }
+                                    // objectUpdateUrl={ objectUrl }
 
                                     onFetchComplete={ this.handleAuthorEditFormLoaded }
                                 />
                             </Segment>
                         </Grid.Column>
-
-                        { this.state.canRenderAuthorPhotosForms && (
-                            <Grid.Column>
-                                <Segment className='formogen'>
-                                    <Formogen
-                                        locale={ 'ru' }
-                                        showHeader={ true }
-                                        metaDataUrl={ this.state.authorPhotosMetaDataUrl }
-                                        objectCreateUrl={ this.state.authorPhotosCreateUrl }
-                                        formData={ {
-                                            author: this.state.authorId,
-                                        } }
-                                    />
-                                </Segment>
-                            </Grid.Column>
-                        ) }
-
-                        { this.state.canRenderAuthorPhotosForms && (
-                            <Grid.Column>
-                                <Segment className='formogen'>
-                                    <Formogen
-                                        locale={ 'ru' }
-                                        showHeader={ true }
-                                        metaDataUrl={ this.state.authorPhotosWithoutAuthorMetaDataUrl }
-                                        objectCreateUrl={ this.state.authorPhotosCreateUrl }
-
-                                        pipePreSubmit={ (data) => Object.assign(data, {author: this.state.authorId}) }
-                                    />
-                                </Segment>
-                            </Grid.Column>
-                        ) }
-
-
                     </Grid.Row>
                 </Grid>
 

@@ -32,7 +32,7 @@ import { MessageList } from './MiscComponents';
 DateTimeField.propTypes = {
     type: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
-    value: PropTypes.string,
+    value: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(Date)]),
     max_length: PropTypes.number,
     help_text: PropTypes.string.isRequired,
     placeholder: PropTypes.string,

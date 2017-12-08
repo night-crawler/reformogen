@@ -12,7 +12,7 @@ import { MessageList } from './MiscComponents';
 BooleanField.propTypes = {
     type: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
-    value: PropTypes.bool,
+    value: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
     help_text: PropTypes.string.isRequired,
     placeholder: PropTypes.string,
     widget: PropTypes.string,
@@ -36,7 +36,7 @@ export default function BooleanField(props) {
 
     let _props = {
         name: props.name,
-        checked: props.value,
+        checked: props.value || false,
         placeholder: props.placeholder,
         onChange: handleChange,
         toggle: widget.toLowerCase() === 'toggle' || undefined,

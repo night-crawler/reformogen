@@ -31,12 +31,12 @@ class AuthorMetadata(MetaData):
         }
     }
 
-    dataset_urls = {
-        'favorite_book': format_lazy('{}{}', 'http://localhost:8000', reverse_lazy('books-list'))
-    }
+    # dataset_urls = {
+    #     'favorite_book': format_lazy('{}{}', 'http://localhost:8000', reverse_lazy('books-list'))
+    # }
 
-    def get_inspire_source_dataset_url(self, field, obj):
-        return 'http://localhost:8000%s' % reverse_lazy('authors-list')
+    # def get_inspire_source_dataset_url(self, field, obj):
+    #     return 'http://localhost:8000%s' % reverse_lazy('authors-list')
 
     def get_title(self, request, view, obj: wf_models.Author):
         if obj:

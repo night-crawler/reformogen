@@ -83,7 +83,7 @@ class Author(CRUDUrlsMixin, TimeStampedModel, abstract.StateBundleMixin):
     dt_birth = models.DateTimeField(_('birth date time'), help_text=_('Select the day of birth'), default=now)
     dt_death = models.DateTimeField(_('death date time'), blank=True, null=True, default=now)
 
-    biography = models.TextField(_('biography'), blank=True)
+    biography = models.TextField(_('biography'), blank=True, default='----__----')
     state = models.PositiveSmallIntegerField(_('state'), choices=STATE, default=STATE.alive)
 
     favorite_book = models.ForeignKey('Book', blank=True, null=True, related_name='+')
