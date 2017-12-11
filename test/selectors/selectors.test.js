@@ -18,6 +18,11 @@ import {
     changedFormFileFieldNames,
     changedFormFile,
 
+
+
+    totalFieldsMap,
+    changedFieldsMap,
+
 } from 'formogen-react-redux/selectors';
 
 const state = {
@@ -34,6 +39,7 @@ const state = {
         receivedFormData: {
             'name_01': 'received_name_01',
             'name_02': 'received_name_02',
+            'name_03': [{id: 3}, {id: 4}]
         },
 
         pristineFormData: {
@@ -42,7 +48,7 @@ const state = {
     }
 };
 const props = {
-    metaData: {
+    initialMetaData: {
         title: 'assigned title',
         description: 'assigned description',
         fields: [
@@ -51,9 +57,11 @@ const props = {
         ]
     },
 
-    formData: {
+    initialFormData: {
         'name_00': 'assigned_name_00',
         'name_01': 'assigned_name_01',
+
+        'dipshit_dumbass': 'skip',
     },
 
     objectCreateUrl: 'http://example.com'
@@ -73,7 +81,7 @@ test('totalMetaData() selector', () => {
         ]
     });
 });
-test('metaDataFields() selector', () => {
+test('totalMetaDataFields() selector', () => {
     const res = metaDataFields(state, props);
     expect(res).toEqual([
         { name: 'name_00' },
@@ -135,6 +143,30 @@ test('changedFormDataFieldNames() selector', () => {
 test('changedFormData() selector', () => {
     const res = changedFormData(state, props);
     expect(res).toEqual({
+        'name_01': 'received_name_01',
+        'name_02': 'received_name_02',
+    });
+});
+
+
+
+
+
+test('totalFieldsMap() selector', () => {
+    const res = totalFieldsMap(state, props);
+
+    expect(res).toEqual({
+        'name_00': 'assigned_name_00',
+        'name_01': 'received_name_01',
+        'name_02': 'received_name_02',
+    });
+});
+
+test('changedFieldsMap() selector', () => {
+    const res = changedFieldsMap(state, props);
+
+    expect(res).toEqual({
+        'name_00': 'assigned_name_00',
         'name_01': 'received_name_01',
         'name_02': 'received_name_02',
     });

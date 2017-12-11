@@ -63,10 +63,9 @@ class FormogenReactReduxComponent extends React.Component {  // ACTUALLY WRAPPER
         return (
             <FormogenFormComponent
                 loading={ !this.props.isMetaDataReady }
-                fields={ this.props.metaData.fields }
-                title={ this.props.metaData.title }
-
-                formData={ this.props.formData }
+                title={ this.props.totalMetaData.title }
+                fields={ this.props.totalMetaData.fields }
+                formData={ this.props.totalFormData }
 
                 onSubmit={ () => this.props.submit() }
 
@@ -94,7 +93,10 @@ class FormogenReactReduxComponent extends React.Component {  // ACTUALLY WRAPPER
 export default connect(
     createStructuredSelector({
         isFormDataReady, isMetaDataReady,
-        metaData: totalMetaData, formData: totalFormData,
+
+        totalMetaData,
+        totalFormData,
+
         submitUrl, submitMethod,
 
         changedFormData,

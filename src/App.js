@@ -54,6 +54,7 @@ class App extends Component {
             dt_birth: new Date(),
             dt_death: new Date(),
             state: 30,
+            vasya: 42,
         };
 
         let trash = null;
@@ -71,9 +72,8 @@ class App extends Component {
                                     helpTextOnHover={ true }
                                     upperFirstLabels={ true }
 
-                                    formData={ prepopulatedFormData }
-
-                                    metaData={ preparedMetaData }
+                                    initialMetaData={ preparedMetaData }
+                                    initialFormData={ prepopulatedFormData }
 
                                     metaDataUrl={ metaDataUrl }
                                     objectUrl={ objectUrl }
