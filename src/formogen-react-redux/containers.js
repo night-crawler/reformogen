@@ -9,7 +9,7 @@ import FormogenFormComponent from '../formogen/components/semantic-ui';
 import { createStructuredSelector } from 'reselect';
 import {
     isFormDataReady, isMetaDataReady,
-    metaData, formData,
+    totalMetaData, totalFormData,
     submitUrl, submitMethod,
 
     changedFormData,
@@ -31,7 +31,7 @@ const mergeProps = (stateProps, dispatchProps, ownProps) => {
         ...stateProps,
         ...dispatchProps,
 
-        // stateProps.formData, stateProps.changedFormData
+        // stateProps.totalFormData, stateProps.changedFormData
         submit: () => {
             console.log('formData', ownProps.formData);
             console.log('receivedFormData', stateProps.formData);
@@ -94,7 +94,7 @@ class FormogenReactReduxComponent extends React.Component {  // ACTUALLY WRAPPER
 export default connect(
     createStructuredSelector({
         isFormDataReady, isMetaDataReady,
-        metaData, formData,
+        metaData: totalMetaData, formData: totalFormData,
         submitUrl, submitMethod,
 
         changedFormData,

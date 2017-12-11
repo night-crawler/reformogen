@@ -16,12 +16,12 @@ export const receivedMetaData = createSelector(formogen, formogen => formogen.re
 export const assignedMetaData = createSelector(formogenProps, formogenProps => formogenProps.metaData);
 export const isMetaDataReady = createSelector(formogen, formogen => formogen.isMetaDataReady);
 
-export const metaData = createSelector(
+export const totalMetaData = createSelector(
     [assignedMetaData, receivedMetaData],
     (assignedMetaData, receivedMetaData) => mergeMetaData(assignedMetaData, receivedMetaData)
 );
 
-export const metaDataFields = createSelector(metaData, (metaData) => metaData.fields);
+export const metaDataFields = createSelector(totalMetaData, (metaData) => metaData.fields);
 export const metaDataFieldMap = createSelector(metaDataFields, (metaDataFields) => _.keyBy(metaDataFields, 'name'));
 export const formFieldNames = createSelector(metaDataFields, metaDataFields => _.map(metaDataFields, 'name'));
 
@@ -32,7 +32,7 @@ export const receivedFormData = createSelector(formogen, formogen => formogen.re
 export const assignedFormData = createSelector(formogenProps, formogenProps => formogenProps.formData);
 export const isFormDataReady = createSelector(formogen, formogen => formogen.isFormDataReady);
 
-export const formData = createSelector(
+export const totalFormData = createSelector(
     [assignedFormData, receivedFormData, metaDataFields],
     (assignedFormData, receivedFormData, metaDataFields) => {
         return updateFormDataWithDefaults(metaDataFields, { ...assignedFormData, ...receivedFormData });
@@ -41,10 +41,10 @@ export const formData = createSelector(
 
 
 // SUBMIT
-export const hasId = createSelector(formData, formData => !!_.get(formData, 'id', null));
+export const hasId = createSelector(totalFormData, formData => !!_.get(formData, 'id', null));
 export const submitMethod = createSelector(hasId, hasId => hasId ? 'PATCH' : 'POST');
 export const submitUrl = createSelector(
-    [formogenProps, formData],
+    [formogenProps, totalFormData],
     (props, formData) => {
         if (!_.get(formData, 'id', null)) {
             return props.objectCreateUrl;
@@ -69,14 +69,14 @@ export const formFileFieldNames = createSelector(
     }
 );
 export const changedFormFileFieldNames = createSelector(
-    [formFileFieldNames, pristineFormData, formData],
+    [formFileFieldNames, pristineFormData, totalFormData],
     (fieldNames, pristine, current) => {
         return _.filter(fieldNames, name => !pristine[name] ? false : pristine[name] !== current[name]);
     }
 );
 
 export const currentFormFile = createSelector(
-    [changedFormFileFieldNames, formData],
+    [changedFormFileFieldNames, totalFormData],
     (fieldNames, currentFormData) => _(currentFormData).pick(fieldNames).value()
 );
 
@@ -89,13 +89,13 @@ export const formDataFieldNames = createSelector(
     }
 );
 export const changedFormDataFieldNames = createSelector(
-    [formDataFieldNames, pristineFormData, formData],
+    [formDataFieldNames, pristineFormData, totalFormData],
     (fieldNames, pristine, current) => {
         return _.filter(fieldNames, name => pristine[name] !== current[name]);
     }
 );
 
 export const changedFormData = createSelector(
-    [changedFormDataFieldNames, formData],
+    [changedFormDataFieldNames, totalFormData],
     (fieldNames, currentFormData) => _(currentFormData).pick(fieldNames).value()
 );

@@ -1,9 +1,9 @@
 import {
     // METADATA
-    metaData, metaDataFields, metaDataFieldMap, formFieldNames,
+    totalMetaData, metaDataFields, metaDataFieldMap, formFieldNames,
 
     // FORMDATA
-    formData,
+    totalFormData,
     pristineFormData,
 
     // SUBMIT
@@ -61,8 +61,8 @@ const props = {
 
 
 // METADATA
-test('metaData() selector', () => {
-    const res = metaData(state, props);
+test('totalMetaData() selector', () => {
+    const res = totalMetaData(state, props);
     expect(res).toEqual({
         title: 'assigned title',
         description: 'assigned description',
@@ -96,8 +96,8 @@ test('formFieldNames() selector', () => {
 
 
 // FORMDATA
-test('formData() selector', () => {
-    const res = formData(state, props);
+test('totalFormData() selector', () => {
+    const res = totalFormData(state, props);
     expect(res).toEqual({
         'name_00': 'assigned_name_00',
         'name_01': 'received_name_01',

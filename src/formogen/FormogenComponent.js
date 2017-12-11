@@ -88,7 +88,7 @@ export default class FormogenComponent extends Component {
             objectCreateUrl: props.objectCreateUrl,
             objectUpdateUrl: props.objectUpdateUrl,
 
-            // formData
+            // totalFormData
             formData: props.formData,
             initialFormData: {},
             defaultFormData: null,  // ?
@@ -240,7 +240,7 @@ export default class FormogenComponent extends Component {
     /**
      * Submit order:
      *  0. Disable the form.
-     *  1. Send formData (payload without files).
+     *  1. Send totalFormData (payload without files).
      *  2. Handle a response. This response may not contain a new object but a bundle like:
      *     {
      *         result: 'pending' | 'success' | 'error'
