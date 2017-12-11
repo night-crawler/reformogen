@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import FormogenFormComponent from '../formogen/components/semantic-ui';
-import { actualFormData } from './selectors';
 
 
 export default class FormogenReactReduxComponent extends React.Component {
