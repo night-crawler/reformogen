@@ -1,58 +1,104 @@
-import { connect } from 'react-redux';
+import React  from 'react';
 
-import _ from 'lodash';
+import { connect } from 'react-redux';
 
 import { fetchMetadata, fetchFormData, submitForm } from './actions';
 
-import FormogenComponent from '../formogen';
+import FormogenFormComponent from '../formogen/components/semantic-ui';
 
-import { isMetaDataReady, metaData, formData } from './selectors';
-import { getFieldData } from './utils';
+import { createStructuredSelector } from 'reselect';
+import {
+    isFormDataReady, isMetaDataReady,
+    metaData, formData,
+    submitUrl, submitMethod,
 
-
-const mapStateToProps = (state, props) => {
-    return {
-        isMetaDataReady: isMetaDataReady(state, props),
-        metaData: metaData(state, props),
-        formData: formData(state, props),
-    };
-};
+    changedFormData,
+} from './selectors';
 
 const mapDispatchToProps = (dispatch, props) => {
-    const fetchMetaData = () => dispatch(fetchMetadata(props.metaDataUrl));
-    const fetchFormData = () => props.objectUrl && dispatch(fetchFormData(props.objectUrl));
-    const submit = (url, method, formData) => () => dispatch(submitForm(url, method, formData));
-
     return {
-        submit,
-        fetchMetaData,
-        fetchFormData,
+        fetchMetaData: () => props.objectUrl && dispatch(fetchFormData(props.objectUrl)),
+        fetchFormData: () => dispatch(fetchMetadata(props.metaDataUrl)),
         dispatch,
     };
 };
 
 const mergeProps = (stateProps, dispatchProps, ownProps) => {
-    console.log('');
-    // let method = 'POST',
-    //     url = ownProps.objectCreateUrl;
-
-    // if (_.get(stateProps.formData, 'id')) {
-    //     method = 'PATCH';
-    //     url = ownProps.objectUpdateUrl || ownProps.objectUrl ||
-    //         _.get(stateProps, 'formData.urls.update') ||
-    //         _.get(stateProps, 'formData.urls.edit') ||
-    //         _.get(stateProps, 'formData.urls.view', null);
-    //     // if (!url) throw new Error('No update url specified');
-    // }
-
-    // if (!url) throw new Error('No create url specified');
+    const { dispatch } = dispatchProps;
 
     return {
         ...ownProps,
         ...stateProps,
         ...dispatchProps,
-        submit: dispatchProps.submit(url, method, getFieldData(stateProps))
+
+        // stateProps.formData, stateProps.changedFormData
+        submit: () => {
+            console.log('formData', ownProps.formData);
+            console.log('receivedFormData', stateProps.formData);
+            console.log('changedFormData', stateProps.changedFormData);
+            dispatch(submitForm(stateProps.submitUrl, stateProps.submitMethod, stateProps.changedFormData));
+        }
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps, mergeProps)(FormogenComponent);
+class FormogenReactReduxComponent extends React.Component {  // ACTUALLY WRAPPER
+    constructor(props) {
+        super(props);
+    }
+    componentDidMount() {
+        // только этот компонент должен что-либо знать о получении данных
+        this.props.fetchMetaData();
+        this.props.fetchFormData();
+    }
+    handleFieldChange = (event, { name, value }) => {
+        this.log.debug(`handleFieldChange(): setting formData field "${ name }" to ${ typeof value }`, value);
+
+
+        this.setState(currentState => {
+            return { formData: Object.assign({}, currentState.formData, { [name]: value }) };
+        });
+    };
+    render() {
+        // бедненький тупой формаген ничего не знает о получении данных (никаких fetch методов он не вызывает)
+        return (
+            <FormogenFormComponent
+                loading={ !this.props.isMetaDataReady }
+                fields={ this.props.metaData.fields }
+                title={ this.props.metaData.title }
+
+                formData={ this.props.formData }
+
+                onSubmit={ () => this.props.submit() }
+
+                locale={ this.props.locale }
+                showHeader={ this.props.showHeader }
+                upperFirstLabels={ this.props.upperFirstLabels }
+                helpTextOnHover={ this.props.helpTextOnHover }
+
+
+                layoutTemplate={ this.props.layoutTemplate }
+
+                errorsFieldMap={ {} }
+                nonFieldErrorsMap={ {} }
+
+                fieldUpdatePropsMap={ this.props.fieldUpdatePropsMap }
+
+                // callbacks
+                onFieldChange={ () => {} }
+                onNetworkError={ () => {} }
+            />
+        );
+    }
+}
+
+export default connect(
+    createStructuredSelector({
+        isFormDataReady, isMetaDataReady,
+        metaData, formData,
+        submitUrl, submitMethod,
+
+        changedFormData,
+    }),
+    mapDispatchToProps,
+    mergeProps
+)(FormogenReactReduxComponent);

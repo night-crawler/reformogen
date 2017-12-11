@@ -17,7 +17,7 @@ export function mergeMetaData(assigned, received) {
     return {
         title: _.get(assigned, 'title', null) || received.title,
         description: _.get(assigned, 'description', null) || received.description,
-        fields: concatFields(initialFields, receivedFields)
+        fields: _([...initialFields, ...receivedFields]).uniqBy('name').value()
     };
 }
 
