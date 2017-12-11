@@ -1,105 +1,71 @@
-import React  from 'react';
-
 import { connect } from 'react-redux';
 
-import { fetchMetadata, fetchFormData, submitForm } from './actions';
-
-import FormogenFormComponent from '../formogen/components/semantic-ui';
-
 import { createStructuredSelector } from 'reselect';
-import {
-    isFormDataReady, isMetaDataReady,
-    totalMetaData, totalFormData,
-    submitUrl, submitMethod,
 
-    changedFormData,
+import { fetchMetaData, fetchFormData, submitForm, fieldChanged } from './actions';
+import FormogenReactReduxComponent from './components';
+
+import {
+    title, description, fields,
+    pristineFormData, dirtyFormData, actualFormData,
+    isFormDataReady, isMetaDataReady,
+    submitUrl, submitMethod,
+    isFormDataPristine, isFormDataDirty,
 } from './selectors';
+
 
 const mapDispatchToProps = (dispatch, props) => {
     return {
-        fetchMetaData: () => props.objectUrl && dispatch(fetchFormData(props.objectUrl)),
-        fetchFormData: () => dispatch(fetchMetadata(props.metaDataUrl)),
         dispatch,
+
+        fetchMetaData: () => props.objectUrl && dispatch(fetchFormData(props.objectUrl)),
+        fetchFormData: () => dispatch(fetchMetaData(props.metaDataUrl)),
+        handleFieldChanged: (...args) => dispatch(fieldChanged(...args)),
     };
 };
 
 const mergeProps = (stateProps, dispatchProps, ownProps) => {
     const { dispatch } = dispatchProps;
 
+    const submit = () => {
+        const { submitUrl, submitMethod, dirtyFormData, isFormDataDirty } = stateProps;
+        if (isFormDataDirty)
+            dispatch(submitForm(submitUrl, submitMethod, dirtyFormData));
+        else
+            // TODO: ?
+            console.log('All form fields are pristine! Change something to submit');
+    };
+
     return {
-        ...ownProps,
         ...stateProps,
         ...dispatchProps,
+        ...ownProps,
 
-        // stateProps.totalFormData, stateProps.changedFormData
-        submit: () => {
-            console.log('formData', ownProps.formData);
-            console.log('receivedFormData', stateProps.formData);
-            console.log('changedFormData', stateProps.changedFormData);
-            dispatch(submitForm(stateProps.submitUrl, stateProps.submitMethod, stateProps.changedFormData));
-        }
+        submit,
     };
 };
 
-class FormogenReactReduxComponent extends React.Component {  // ACTUALLY WRAPPER
-    constructor(props) {
-        super(props);
-    }
-    componentDidMount() {
-        // только этот компонент должен что-либо знать о получении данных
-        this.props.fetchMetaData();
-        this.props.fetchFormData();
-    }
-    handleFieldChange = (event, { name, value }) => {
-        this.log.debug(`handleFieldChange(): setting formData field "${ name }" to ${ typeof value }`, value);
-
-
-        this.setState(currentState => {
-            return { formData: Object.assign({}, currentState.formData, { [name]: value }) };
-        });
-    };
-    render() {
-        // бедненький тупой формаген ничего не знает о получении данных (никаких fetch методов он не вызывает)
-        return (
-            <FormogenFormComponent
-                loading={ !this.props.isMetaDataReady }
-                title={ this.props.totalMetaData.title }
-                fields={ this.props.totalMetaData.fields }
-                formData={ this.props.totalFormData }
-
-                onSubmit={ () => this.props.submit() }
-
-                locale={ this.props.locale }
-                showHeader={ this.props.showHeader }
-                upperFirstLabels={ this.props.upperFirstLabels }
-                helpTextOnHover={ this.props.helpTextOnHover }
-
-
-                layoutTemplate={ this.props.layoutTemplate }
-
-                errorsFieldMap={ {} }
-                nonFieldErrorsMap={ {} }
-
-                fieldUpdatePropsMap={ this.props.fieldUpdatePropsMap }
-
-                // callbacks
-                onFieldChange={ () => {} }
-                onNetworkError={ () => {} }
-            />
-        );
-    }
-}
-
 export default connect(
     createStructuredSelector({
-        isFormDataReady, isMetaDataReady,
+        // metaData
+        title,
+        description,
+        fields,
 
-        totalMetaData,
-        totalFormData,
+        // formData
+        pristineFormData,
+        dirtyFormData,
+        actualFormData,
 
-        submitUrl, submitMethod,
+        // states
+        isFormDataReady,
+        isMetaDataReady,
+        isFormDataPristine,
+        isFormDataDirty,
 
-        changedFormData,
+        // submit data
+        submitUrl,
+        submitMethod,
     }),
     mapDispatchToProps,
     mergeProps

@@ -1,4 +1,4 @@
-import { headers, resolveResponse } from '../../formogen/utils';
+import { headers, resolveResponse } from '../formogen/utils';
 
 // BASE PREFIXES
 export const REQUEST = '?:REQUEST';
@@ -10,17 +10,17 @@ export const REQUEST_METADATA = `${REQUEST}:METADATA`;
 export const REQUEST_METADATA_FAIL = `${FAIL}:METADATA`;
 export const RECEIVE_METADATA = `${RECEIVE}:METADATA`;
 
-export const requestMetadata = (url) => ({
+export const requestMetaData = (url) => ({
     type: REQUEST_METADATA,
     payload: { url }
 });
 
-export const receiveMetadata = (data) => ({
+export const receiveMetaData = (data) => ({
     type: RECEIVE_METADATA,
     payload: Object.assign({}, data)
 });
 
-export function fetchMetadata(url) {
+export function fetchMetaData(url) {
     const options = {
         method: 'GET',
         mode: 'cors',
@@ -29,11 +29,11 @@ export function fetchMetadata(url) {
     };
 
     return dispatch => {
-        dispatch(requestMetadata(url));
+        dispatch(requestMetaData(url));
 
         fetch(url, options)
             .then(resolveResponse)
-            .then(data => dispatch(receiveMetadata(data)));
+            .then(data => dispatch(receiveMetaData(data)));
     };
 }
 
@@ -84,7 +84,7 @@ export const receiveSubmit = (data) => ({
     payload: data,
 });
 
-export function submitForm(url, method = 'POST', formData) {
+export function submitForm(url, method='POST', formData) {
     const options = {
         method: method,
         mode: 'cors',
@@ -101,3 +101,12 @@ export function submitForm(url, method = 'POST', formData) {
             .then(data => dispatch(receiveSubmit(data)));
     };
 }
+
+
+// TODO: performance issues?
+// FIELD CHANGE
+export const FIELD_CHANGED = 'FORMOGEN:FIELD_CHANGED';
+export const fieldChanged = (event, { name, value }) => ({
+    type: FIELD_CHANGED,
+    payload: { event, fieldName: name, fieldValue: value }
+});
