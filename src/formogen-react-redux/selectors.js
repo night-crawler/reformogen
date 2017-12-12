@@ -1,6 +1,7 @@
 import { createSelector } from 'reselect';
 
 import _ from 'lodash';
+import { idsList } from '../formogen/utils';
 
 import { updateFormDataWithDefaults } from './utils';
 
@@ -67,6 +68,8 @@ export const receivedFormData = createSelector(formogen, formogen => formogen.re
 export const pristineFormData = createSelector(
     [initialFormData, receivedFormData, fields],
     (initialFormData, receivedFormData, fields) => {
+        // TODO: update pristineFormData after submitting
+        // TODO: extract identities for m2m && fk fields (async only)
         return updateFormDataWithDefaults(fields, { ...initialFormData, ...receivedFormData });
     }
 );
@@ -76,11 +79,30 @@ export const pristineFormData = createSelector(
 export const dirtyFormData = createSelector(
     [formogen, pristineFormData],
     (formogen, pristineFormData)=> {
-        if (!_.get(pristineFormData, 'id', null)) {
-            return { ...pristineFormData, ...(formogen.dirtyFormData || {}) };
+        let dirty = formogen.dirtyFormData || {};
+
+        if (!_.get(pristineFormData, 'id', null))
+            return { ...pristineFormData, ...dirty };
+
+        for (const [fieldName, fieldValue] of Object.entries(dirty)) {
+            // TODO: if files are present it's changed
+            let changed = fieldValue !== pristineFormData[fieldName];
+
+            if (changed && (_.isObject(fieldValue) || _.isObject(pristineFormData[fieldName]))) {
+                const pristineFieldValueId = idsList(pristineFormData[fieldName]);
+                const fieldValueId = idsList(fieldValue);
+
+                if (_(fieldValueId).xor(pristineFieldValueId).isEmpty())
+                    changed = false;
+            }
+
+            if (!changed) {
+                delete dirty[fieldName];
+            }
+
         }
 
-        return formogen.dirtyFormData || {};
+        return dirty;
     }
 );
 

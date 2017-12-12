@@ -1,5 +1,6 @@
 import { RSAA } from 'redux-api-middleware';
-import { headers, resolveResponse } from '../formogen/utils';
+
+import { headers, getApiMiddlewareOptions } from './utils';
 
 // BASE PREFIXES
 export const REQUEST = '?:REQUEST';
@@ -10,21 +11,6 @@ export const RECEIVE = '+:RECEIVE';
 export const REQUEST_METADATA = `${REQUEST}:METADATA`;
 export const REQUEST_METADATA_FAIL = `${FAIL}:METADATA`;
 export const RECEIVE_METADATA = `${RECEIVE}:METADATA`;
-
-
-const getApiMiddlewareOptions = (headers = {}, options = {}, csrfToken='') => {
-    const _csrfHeader = csrfToken ? { 'X-CSRFToken': csrfToken } : {};
-    const _headers = { ...headers, ..._csrfHeader };
-
-    if (process.env.NODE_ENV !== 'production') {
-        return {
-            options: { ...options, mode: 'cors' },
-            credentials: 'include',
-            headers: _headers,
-        };
-    }
-    return { headers, options };
-};
 
 
 export const fetchMetaData = (url) => ({
@@ -62,7 +48,7 @@ export const submitForm = (url, method = 'POST', formData) => ({
         body: JSON.stringify(formData),
         method: method,
         types: [REQUEST_SUBMIT, RECEIVE_SUBMIT, REQUEST_SUBMIT_FAIL],
-        ...getApiMiddlewareOptions(headers),
+        ...getApiMiddlewareOptions({ headers, method }),
     }
 });
 

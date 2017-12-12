@@ -76,28 +76,28 @@ class App extends Component {
                                     initialFormData={ prepopulatedFormData }
 
                                     metaDataUrl={ metaDataUrl }
-                                    // objectUrl={ objectUrl }
-                                    // objectUpdateUrl={ objectUrl }
+                                    objectUrl={ objectUrl }
+                                    objectUpdateUrl={ objectUrl }
                                     objectCreateUrl={ objectCreateUrl }
 
                                     onFetchComplete={ this.handleAuthorEditFormLoaded }
 
-                                    layoutTemplate={ [
-                                        {
-                                            header: 'Integer Group',
-                                            fields: [
-                                                { name: { width: 8 } },
-                                                { assigned_test_field: { width: 8 } },
-                                                'is_ghostwriter',
-                                            ],
-                                            width: 8,
-                                        },
-                                        {
-                                            header: 'rest',
-                                            fields: '*',
-                                            width: 8,
-                                        }
-                                    ] }
+                                    // layoutTemplate={ [
+                                    //     {
+                                    //         header: 'Integer Group',
+                                    //         fields: [
+                                    //             { name: { width: 8 } },
+                                    //             { assigned_test_field: { width: 8 } },
+                                    //             'is_ghostwriter',
+                                    //         ],
+                                    //         width: 8,
+                                    //     },
+                                    //     {
+                                    //         header: 'rest',
+                                    //         fields: '*',
+                                    //         width: 8,
+                                    //     }
+                                    // ] }
                                 />
                             </Segment>
                         </Grid.Column>

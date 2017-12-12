@@ -1,4 +1,7 @@
 import _ from 'lodash';
+
+import Cookies from 'js-cookie';
+
 import { extractIdentity } from '../formogen/utils';
 
 
@@ -78,3 +81,30 @@ export function getFieldData(state) {
 
     return { data, files, changedFields };
 }
+
+
+function csrfSafeMethod(method) {
+    // these HTTP methods do not require CSRF protection
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+}
+
+
+export const getApiMiddlewareOptions = ({ headers = {}, options = {}, csrfToken = '', method = 'GET' } = {}) => {
+    const _csrfToken = csrfToken || Cookies.get('csrftoken');
+    const _csrfHeader = _csrfToken && !csrfSafeMethod(method) ? { 'X-CSRFToken': _csrfToken } : {};
+    const _headers = { ...headers, ..._csrfHeader };
+
+    if (process.env.NODE_ENV !== 'production') {
+        return {
+            options: { ...options, mode: 'cors' },
+            credentials: 'include',
+            headers: _headers,
+        };
+    }
+    return { headers: _headers, options };
+};
+
+export const headers = {
+    'Accept': 'application/json',
+    'Content-Type': 'application/json',
+};
