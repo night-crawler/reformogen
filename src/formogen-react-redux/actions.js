@@ -1,3 +1,4 @@
+import { RSAA } from 'redux-api-middleware';
 import { headers, resolveResponse } from '../formogen/utils';
 
 // BASE PREFIXES
@@ -10,103 +11,66 @@ export const REQUEST_METADATA = `${REQUEST}:METADATA`;
 export const REQUEST_METADATA_FAIL = `${FAIL}:METADATA`;
 export const RECEIVE_METADATA = `${RECEIVE}:METADATA`;
 
-export const requestMetaData = (url) => ({
-    type: REQUEST_METADATA,
-    payload: { url }
-});
 
-export const receiveMetaData = (data) => ({
-    type: RECEIVE_METADATA,
-    payload: Object.assign({}, data)
-});
+const getApiMiddlewareOptions = (headers = {}, options = {}, csrfToken='') => {
+    const _csrfHeader = csrfToken ? { 'X-CSRFToken': csrfToken } : {};
+    const _headers = { ...headers, ..._csrfHeader };
 
-export function fetchMetaData(url) {
-    const options = {
+    if (process.env.NODE_ENV !== 'production') {
+        return {
+            options: { ...options, mode: 'cors' },
+            credentials: 'include',
+            headers: _headers,
+        };
+    }
+    return { headers, options };
+};
+
+
+export const fetchMetaData = (url) => ({
+    [RSAA]: {
+        endpoint: url,
         method: 'GET',
-        mode: 'cors',
-        credentials: 'include',
-        headers: headers,
-    };
-
-    return dispatch => {
-        dispatch(requestMetaData(url));
-
-        fetch(url, options)
-            .then(resolveResponse)
-            .then(data => dispatch(receiveMetaData(data)));
-    };
-}
+        types: [REQUEST_METADATA, RECEIVE_METADATA, REQUEST_METADATA_FAIL],
+        ...getApiMiddlewareOptions(),
+    }
+});
 
 // FORMDATA
 export const REQUEST_FORMDATA = `${REQUEST}:FORMDATA`;
 export const REQUEST_FORMDATA_FAIL = `${FAIL}:FORMDATA`;
 export const RECEIVE_FORMDATA = `${RECEIVE}:FORMDATA`;
 
-export const requestFormData = (url) => ({
-    type: REQUEST_FORMDATA,
-    payload: { url }
-});
-
-export const receiveFormData = (data) => ({
-    type: RECEIVE_FORMDATA,
-    payload: Object.assign({}, data)
-});
-
-export function fetchFormData(url) {
-    const options = {
+export const fetchFormData = (url) => ({
+    [RSAA]: {
+        endpoint: url,
         method: 'GET',
-        mode: 'cors',
-        credentials: 'include',
-        headers: headers,
-    };
+        types: [REQUEST_FORMDATA, RECEIVE_FORMDATA, REQUEST_FORMDATA_FAIL],
+        ...getApiMiddlewareOptions(),
+    }
+});
 
-    return dispatch => {
-        dispatch(requestFormData(url));
-
-        fetch(url, options)
-            .then(resolveResponse)
-            .then(data => dispatch(receiveFormData(data)));
-    };
-}
 
 // SUBMIT
 export const REQUEST_SUBMIT = `${REQUEST}:SUBMIT`;
 export const REQUEST_SUBMIT_FAIL = `${FAIL}:SUBMIT`;
 export const RECEIVE_SUBMIT = `${RECEIVE}:SUBMIT`;
 
-export const requestSubmit = (url) => ({
-    type: REQUEST_SUBMIT,
-    payload: { url }
-});
-
-export const receiveSubmit = (data) => ({
-    type: RECEIVE_SUBMIT,
-    payload: data,
-});
-
-export function submitForm(url, method='POST', formData) {
-    const options = {
+export const submitForm = (url, method = 'POST', formData) => ({
+    [RSAA]: {
+        endpoint: url,
+        body: JSON.stringify(formData),
         method: method,
-        mode: 'cors',
-        credentials: 'include',
-        headers: headers,
-        body: JSON.stringify(formData)
-    };
-
-    return dispatch => {
-        dispatch(requestSubmit(url));
-
-        fetch(url, options)
-            .then(resolveResponse)
-            .then(data => dispatch(receiveSubmit(data)));
-    };
-}
+        types: [REQUEST_SUBMIT, RECEIVE_SUBMIT, REQUEST_SUBMIT_FAIL],
+        ...getApiMiddlewareOptions(),
+    }
+});
 
 
 // TODO: performance issues?
 // FIELD CHANGE
 export const FIELD_CHANGED = 'FORMOGEN:FIELD_CHANGED';
-export const fieldChanged = (event, { name, value }) => ({
+export const fieldChanged = (event, { name, value }) => ( {
     type: FIELD_CHANGED,
     payload: { event, fieldName: name, fieldValue: value }
-});
+} );
