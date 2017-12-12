@@ -114,3 +114,40 @@ export const submitUrl = createSelector(
             _.get(formData, 'urls.view', null);
     }
 );
+
+
+// =============== SUBMIT DATA ===============
+
+export const pipePreSubmit = createSelector(initial, initial => {
+    const { pipePreSubmit } = initial;
+
+    if (_.isFunction(pipePreSubmit)) {
+        return data => {
+            console.log('Using custom pipeline processing for pipePreSubmit()');
+            return pipePreSubmit(data);
+        };
+    }
+    return data => data;
+});
+export const pipePreValidationError = createSelector(initial, initial => {
+    const { pipePreValidationError } = initial;
+
+    if (_.isFunction(pipePreValidationError)) {
+        return data => {
+            console.log('Using custom pipeline processing for pipePreValidationError()');
+            return pipePreValidationError(data);
+        };
+    }
+    return data => data;
+});
+export const pipePreSuccess =  createSelector(initial, initial => {
+    const { pipePreSuccess } = initial;
+
+    if (_.isFunction(pipePreSuccess)) {
+        return data => {
+            console.log('Using custom pipeline processing for pipePreSuccess()');
+            return pipePreSuccess(data);
+        };
+    }
+    return data => data;
+});

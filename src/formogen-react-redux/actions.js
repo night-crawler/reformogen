@@ -62,7 +62,7 @@ export const submitForm = (url, method = 'POST', formData) => ({
         body: JSON.stringify(formData),
         method: method,
         types: [REQUEST_SUBMIT, RECEIVE_SUBMIT, REQUEST_SUBMIT_FAIL],
-        ...getApiMiddlewareOptions(),
+        ...getApiMiddlewareOptions(headers),
     }
 });
 

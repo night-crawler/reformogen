@@ -11,6 +11,7 @@ import {
     isFormDataReady, isMetaDataReady,
     submitUrl, submitMethod,
     isFormDataPristine, isFormDataDirty,
+    pipePreSubmit, pipePreSuccess, pipePreValidationError,
 } from './selectors';
 
 
@@ -28,9 +29,9 @@ const mergeProps = (stateProps, dispatchProps, ownProps) => {
     const { dispatch } = dispatchProps;
 
     const submit = () => {
-        const { submitUrl, submitMethod, dirtyFormData, isFormDataDirty } = stateProps;
+        const { submitUrl, submitMethod, dirtyFormData, isFormDataDirty, pipePreSubmit } = stateProps;
         if (isFormDataDirty)
-            dispatch(submitForm(submitUrl, submitMethod, dirtyFormData));
+            dispatch(submitForm(submitUrl, submitMethod, pipePreSubmit(dirtyFormData)));
         else
             // TODO: ?
             console.log('All form fields are pristine! Change something to submit');
@@ -66,6 +67,11 @@ export default connect(
         // submit data
         submitUrl,
         submitMethod,
+
+        // pipe line
+        pipePreSubmit,
+        pipePreSuccess,
+        pipePreValidationError,
     }),
     mapDispatchToProps,
     mergeProps
