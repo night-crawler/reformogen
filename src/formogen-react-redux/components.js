@@ -55,10 +55,8 @@ export default class FormogenReactReduxComponent extends React.Component {
                 layoutTemplate={ this.props.layoutTemplate }
                 fieldUpdatePropsMap={ this.props.fieldUpdatePropsMap }
 
-                onFieldChange={ (...args) => this.props.handleFieldChanged(...args) }
+                onFieldChange={ this.props.handleFieldChanged }
 
-
-                // TODO:
                 errorsFieldMap={ this.props.fieldErrorsMap }
                 nonFieldErrorsMap={ this.props.nonFieldErrorsMap }
 

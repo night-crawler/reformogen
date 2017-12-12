@@ -1,8 +1,8 @@
 import { createSelector } from 'reselect';
 
 import _ from 'lodash';
-import { idsList } from '../formogen/utils';
 
+import { idsList } from '../formogen/utils';
 import { updateFormDataWithDefaults } from './utils';
 
 
@@ -53,7 +53,9 @@ export const fields = createSelector(
     (initial, received) => _([...initial, ...received]).uniqBy('name').value()
 );
 
+// final field names
 export const fieldNames = createSelector(fields, (fields) => _.map(fields, 'name'));
+
 
 // =============== FORMDATA ===============
 
@@ -63,7 +65,6 @@ export const initialFormData = createSelector(initial, initial => initial.initia
 // should contain received (from remote server) form data
 export const receivedFormData = createSelector(formogen, formogen => formogen.receivedFormData);
 
-// TODO: is it correct?
 // should contain initialFormData && receivedFormData + should be updated with defaults
 export const pristineFormData = createSelector(
     [initialFormData, receivedFormData, fields],
@@ -106,10 +107,10 @@ export const dirtyFormData = createSelector(
     }
 );
 
-// truly if user has not changed any fields (NOTE: real diff does not matter)
+// truly if user has not changed any fields (NOTE: real diff DOES matter)
 export const isFormDataPristine = createSelector(dirtyFormData, dirtyFormData => _.isEmpty(dirtyFormData));
 
-// truly if user has changed some fields (NOTE: real diff does not matter)
+// truly if user has changed some fields (NOTE: real diff DOES matter)
 export const isFormDataDirty = createSelector(dirtyFormData, dirtyFormData => !_.isEmpty(dirtyFormData));
 
 // when form data ready to be rendered it's true
@@ -148,8 +149,9 @@ export const submitUrl = createSelector(
 );
 
 
-// =============== SUBMIT DATA ===============
+// =============== PIPE LINES ===============
 
+// callback that's executed before form's submitting
 export const pipePreSubmit = createSelector(initial, initial => {
     const { pipePreSubmit } = initial;
 
@@ -161,6 +163,8 @@ export const pipePreSubmit = createSelector(initial, initial => {
     }
     return data => data;
 });
+
+// callback that's executed before from's validation errors showing
 export const pipePreValidationError = createSelector(initial, initial => {
     const { pipePreValidationError } = initial;
 
@@ -172,6 +176,8 @@ export const pipePreValidationError = createSelector(initial, initial => {
     }
     return data => data;
 });
+
+// callback that's executed after form successful submitting
 export const pipePreSuccess =  createSelector(initial, initial => {
     const { pipePreSuccess } = initial;
 
@@ -185,17 +191,17 @@ export const pipePreSuccess =  createSelector(initial, initial => {
 });
 
 
+// =============== ERRORS ===============
 
-
-
+// contains all errors
 export const errors = createSelector(formogen, formogen => formogen.errors || {});
 
+// contains ONLY validation errors
 export const fieldErrorsMap = createSelector([errors, fieldNames], (errors, fieldNames) => {
     return _(errors).pick(fieldNames).value();
 });
 
+// contains ONLY non-field validation errors
 export const nonFieldErrorsMap = createSelector([errors, fieldNames], (errors, fieldNames) => {
-    return _(errors).pick(
-        _(errors).keys().difference(fieldNames).value()
-    ).value();
+    return _(errors).pick(_(errors).keys().difference(fieldNames).value()).value();
 });

@@ -4,7 +4,7 @@ import prefix from 'loglevel-plugin-prefix';
 import { Segment } from 'semantic-ui-react';
 import React, { Component } from 'react';
 
-import FormogenReduxContainer from './formogen-react-redux';
+import Formogen from './formogen-react-redux';
 
 import { Grid } from 'semantic-ui-react';
 import 'semantic-ui-css/semantic.css';
@@ -23,8 +23,14 @@ class App extends Component {
         this.log.debug('initialized');
 
         this.state = {
-            canRenderAuthorPhotosForms: false,
-            authorPhotosMetaDataUrl: null,
+            // canRenderAuthorPhotosForms: false,
+            // authorPhotosMetaDataUrl: null,
+
+            authorPhotosMetaDataUrl: 'http://localhost:8000/api/v1/sample/author-photos/describe/',
+            authorPhotosWithoutAuthorMetaDataUrl: 'http://localhost:8000/api/v1/sample/author-photos/describe_without_author/',
+            authorPhotosCreateUrl: 'http://localhost:8000/api/v1/sample/author-photos/',
+            canRenderAuthorPhotosForms: true,
+            // authorId: formData.id,
         };
     }
 
@@ -63,45 +69,19 @@ class App extends Component {
             <div className='App'>
 
                 <Grid columns={ 3 } stackable={ true }>
-                    <Grid.Row>
-                        <Grid.Column>
-                            <Segment className='formogen'>
-                                <FormogenReduxContainer
-                                    locale={ 'ru' }
-                                    showHeader={ true }
-                                    helpTextOnHover={ true }
-                                    upperFirstLabels={ true }
-
-                                    initialMetaData={ preparedMetaData }
-                                    initialFormData={ prepopulatedFormData }
-
-                                    metaDataUrl={ metaDataUrl }
-                                    objectUrl={ objectUrl }
-                                    objectUpdateUrl={ objectUrl }
-                                    objectCreateUrl={ objectCreateUrl }
-
-                                    onFetchComplete={ this.handleAuthorEditFormLoaded }
-
-                                    // layoutTemplate={ [
-                                    //     {
-                                    //         header: 'Integer Group',
-                                    //         fields: [
-                                    //             { name: { width: 8 } },
-                                    //             { assigned_test_field: { width: 8 } },
-                                    //             'is_ghostwriter',
-                                    //         ],
-                                    //         width: 8,
-                                    //     },
-                                    //     {
-                                    //         header: 'rest',
-                                    //         fields: '*',
-                                    //         width: 8,
-                                    //     }
-                                    // ] }
-                                />
-                            </Segment>
-                        </Grid.Column>
-                    </Grid.Row>
+                    <Grid.Column>
+                        <Segment className='formogen'>
+                            <Formogen
+                                locale={ 'ru' }
+                                showHeader={ true }
+                                metaDataUrl={ this.state.authorPhotosMetaDataUrl }
+                                objectCreateUrl={ this.state.authorPhotosCreateUrl }
+                                formData={ {
+                                    author: this.state.authorId,
+                                } }
+                            />
+                        </Segment>
+                    </Grid.Column>
                 </Grid>
 
             </div>

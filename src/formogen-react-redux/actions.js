@@ -53,7 +53,6 @@ export const submitForm = (url, method = 'POST', formData) => ({
 });
 
 
-// TODO: performance issues?
 // FIELD CHANGE
 export const FIELD_CHANGED = 'FORMOGEN:FIELD_CHANGED';
 export const fieldChanged = (event, { name, value }) => ( {
