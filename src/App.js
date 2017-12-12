@@ -12,7 +12,7 @@ import preparedMetaData from './form.json';
 
 // TODO: it should be in formogen module
 window.loglevel = loglevel;
-prefix.apply(loglevel, {template: '[%t] %l (%n)'});
+prefix.apply(loglevel, { template: '[%t] %l (%n)' });
 
 
 class App extends Component {
@@ -81,6 +81,23 @@ class App extends Component {
                                     objectCreateUrl={ objectCreateUrl }
 
                                     onFetchComplete={ this.handleAuthorEditFormLoaded }
+
+                                    layoutTemplate={ [
+                                        {
+                                            header: 'Integer Group',
+                                            fields: [
+                                                { name: { width: 8 } },
+                                                { assigned_test_field: { width: 8 } },
+                                                'is_ghostwriter',
+                                            ],
+                                            width: 8,
+                                        },
+                                        {
+                                            header: 'rest',
+                                            fields: '*',
+                                            width: 8,
+                                        }
+                                    ] }
                                 />
                             </Segment>
                         </Grid.Column>

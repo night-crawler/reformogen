@@ -123,12 +123,8 @@ export default class FormogenFormComponent extends React.Component {
         this.log.debug('Initialized');
 
         this.state = {
-            formData: props.formData,
             djangoFieldsMap: props.djangoFieldsMap,
-
             fields: props.fields,
-
-            nonFieldErrorsMap: props.nonFieldErrorsMap,
         };
     }
 
@@ -139,11 +135,10 @@ export default class FormogenFormComponent extends React.Component {
         const { fields, formData } = this.state;
         this.computeNewState(fields, formData, this.props.layoutTemplate);
     }
-    componentWillReceiveProps({ fields, formData, nonFieldErrorsMap }) {
+    componentWillReceiveProps({ fields, formData, layoutTemplate }) {
         this.log.debug('componentWillReceiveProps()');
 
-        this.setState({ nonFieldErrorsMap });
-        this.computeNewState(fields, formData, this.props.layoutTemplate);
+        this.computeNewState(fields, formData, layoutTemplate);
     }
 
     // --------------- miscellaneous methods ---------------
@@ -153,7 +148,7 @@ export default class FormogenFormComponent extends React.Component {
         const fieldPropsByNameMap = _(fields).map((fieldOpts) => [fieldOpts.name, fieldOpts]).fromPairs().value();
         const layout = FormogenFormComponent.unfoldWildcardFields(layoutTemplate, fieldPropsByNameMap);
 
-        this.setState({ formData, fields, fieldPropsByNameMap, layout });
+        this.setState({ fields, fieldPropsByNameMap, layout });
     }
 
     pickFieldComponent(opts) {
@@ -244,7 +239,7 @@ export default class FormogenFormComponent extends React.Component {
         return (
             <Field
                 key={ i }
-                value={ this.state.formData[opts.name] }
+                value={ this.props.formData[opts.name] }
                 onChange={ this.props.onFieldChange }
                 onNetworkError={ this.props.onNetworkError }
                 errors={ this.props.errorsFieldMap[opts.name] }
@@ -262,9 +257,9 @@ export default class FormogenFormComponent extends React.Component {
     renderNonFieldErrors() {
         this.log.debug('renderNonFieldErrors()');
 
-        if (_.isEmpty(this.state.nonFieldErrorsMap)) return null;
+        if (_.isEmpty(this.props.nonFieldErrorsMap)) return null;
 
-        const renderedMsgs = _(this.state.nonFieldErrorsMap).toPairs().value().map(([title, errors], i) =>
+        const renderedMsgs = _(this.props.nonFieldErrorsMap).toPairs().value().map(([title, errors], i) =>
             <Grid.Row key={ i }>
                 <div className='sixteen wide column'>
                     <MessageList header={ title } messages={ errors } />
@@ -276,6 +271,7 @@ export default class FormogenFormComponent extends React.Component {
 
     // --------------- React.js render ---------------
     render() {
+
         return (
             <Form loading={ this.props.loading }>
                 { this.props.showHeader ? <Header as='h2' dividing={ true }>{ this.props.title }</Header> : null }

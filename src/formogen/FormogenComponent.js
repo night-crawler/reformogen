@@ -465,21 +465,15 @@ export default class FormogenComponent extends Component {
                 upperFirstLabels={ this.props.upperFirstLabels }
                 helpTextOnHover={ this.props.helpTextOnHover }
 
-
-
-
-
-                layoutTemplate={ this.props.layoutTemplate }
+                onFieldChange={ this.handleFieldChange }
 
                 errorsFieldMap={ errorsFieldMap }
                 nonFieldErrorsMap={ nonFieldErrorsMap }
 
-                fieldUpdatePropsMap={ this.props.fieldUpdatePropsMap }
 
-                // callbacks
-                onFieldChange={ this.handleFieldChange }
-                onSubmit={ this.handleSubmit }
-                onNetworkError={ this.dispatchNetworkError }
+                // todo
+                layoutTemplate={ this.props.layoutTemplate }
+                fieldUpdatePropsMap={ this.props.fieldUpdatePropsMap }
             />
         );
     }
