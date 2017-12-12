@@ -6,7 +6,9 @@ import FormogenFormComponent from '../formogen/components/semantic-ui';
 
 export default class FormogenReactReduxComponent extends React.Component {
     static propTypes = {
+        actualFormData: PropTypes.object.isRequired,
         description: PropTypes.string,
+        fieldErrorsMap: PropTypes.object,
         fetchFormData: PropTypes.func.isRequired,
         fetchMetaData: PropTypes.func.isRequired,
         fieldUpdatePropsMap: PropTypes.any,
@@ -16,7 +18,7 @@ export default class FormogenReactReduxComponent extends React.Component {
         isMetaDataReady: PropTypes.bool,
         layoutTemplate: PropTypes.object,
         locale: PropTypes.string,
-        actualFormData: PropTypes.object.isRequired,
+        nonFieldErrorsMap: PropTypes.object,
         showHeader: PropTypes.bool,
         submit: PropTypes.func,
         title: PropTypes.string,
@@ -57,8 +59,8 @@ export default class FormogenReactReduxComponent extends React.Component {
 
 
                 // TODO:
-                errorsFieldMap={ {} }
-                nonFieldErrorsMap={ {} }
+                errorsFieldMap={ this.props.fieldErrorsMap }
+                nonFieldErrorsMap={ this.props.nonFieldErrorsMap }
 
                 onNetworkError={ () => {} }
             />

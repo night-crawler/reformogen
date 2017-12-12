@@ -3,6 +3,11 @@
     padding: 0 !important;
 }
 
+.formogen .react-datepicker-popper {
+    padding: 0 !important;
+    z-index: 3;
+}
+
 .formogen .react-datepicker__input-container {
     width: 100%;
 }
@@ -10,7 +15,6 @@
 .formogen .react-datepicker-wrapper input {
     width: 100% !important;
 }
-
 
 .formogen .react-datepicker-wrapper {
     width: 100% !important;

@@ -51,8 +51,8 @@ class App extends Component {
             assigned_test_field: 'hahahah!',
 
             name: 'Mr. Inconspicuous',
-            dt_birth: new Date(),
-            dt_death: new Date(),
+            // dt_birth: new Date(),
+            // dt_death: new Date(),
             state: 30,
             vasya: 42,
         };
@@ -76,8 +76,9 @@ class App extends Component {
                                     initialFormData={ prepopulatedFormData }
 
                                     metaDataUrl={ metaDataUrl }
-                                    objectUrl={ objectUrl }
+                                    // objectUrl={ objectUrl }
                                     // objectUpdateUrl={ objectUrl }
+                                    objectCreateUrl={ objectCreateUrl }
 
                                     onFetchComplete={ this.handleAuthorEditFormLoaded }
                                 />

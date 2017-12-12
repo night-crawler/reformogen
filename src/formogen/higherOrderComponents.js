@@ -68,7 +68,7 @@ export default function ({ WrappedComponent, multi = true }) {
             // TEMP & CRUTCH: trigger handleChange() to make sure the field's value is in correct format.
             const value = multi ? idsList(this.props.value) : this.props.value;
 
-            this.handleChange(value);
+            // this.handleChange(value);
         }
 
         // --------------- Misc ---------------

@@ -38,17 +38,8 @@ class AuthorPlainSerializer(CRUDUrlsSerializerMixin, serializers.ModelSerializer
         model = s_models.Author
         fields = '__all__'
 
-
-class AuthorSerializer(CRUDUrlsSerializerMixin, serializers.ModelSerializer):
-    inspire_source = AuthorPlainSerializer(many=True)
-    favorite_book = BookSerializer()
-
-    class Meta:
-        model = s_models.Author
-        fields = '__all__'
-
     def validate(self, attrs):
-        if attrs.get('name') == 'loshara':
+        if attrs.get('name') == '666':
             raise ValidationError({
                 'non-field validation error 1': ['This is the first error'],
                 'non-field validation error 2': [
@@ -57,6 +48,15 @@ class AuthorSerializer(CRUDUrlsSerializerMixin, serializers.ModelSerializer):
                 ],
             })
         return attrs
+
+
+class AuthorSerializer(CRUDUrlsSerializerMixin, serializers.ModelSerializer):
+    inspire_source = AuthorPlainSerializer(many=True)
+    favorite_book = BookSerializer()
+
+    class Meta:
+        model = s_models.Author
+        fields = '__all__'
 
 
 class AllModelFieldsSerializer(CRUDUrlsSerializerMixin, serializers.ModelSerializer):

@@ -67,9 +67,10 @@ export default function DateTimeField(props) {
         locale: props.locale,
         placeholderText: props.placeholder,
         todayButton: 'Now',
+        // todo: get from momemt
         dateFormat: 'YYYY.MM.DD HH:mm',
         showYearDropdown: true,
-        showMonthDropdown: true,
+        // showMonthDropdown: true,
         dropdownMode: 'select',
     };
 

@@ -36,7 +36,7 @@ export default function BooleanField(props) {
 
     let _props = {
         name: props.name,
-        checked: props.value || false,
+        checked: !!props.value || false,
         placeholder: props.placeholder,
         onChange: handleChange,
         toggle: widget.toLowerCase() === 'toggle' || undefined,

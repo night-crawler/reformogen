@@ -52,6 +52,7 @@ export const fields = createSelector(
     (initial, received) => _([...initial, ...received]).uniqBy('name').value()
 );
 
+export const fieldNames = createSelector(fields, (fields) => _.map(fields, 'name'));
 
 // =============== FORMDATA ===============
 
@@ -72,7 +73,16 @@ export const pristineFormData = createSelector(
 
 // should contain only changed fields (USER INPUT ONLY)
 // when isObjectCreate === true, dirtyFormData contains all fields in form
-export const dirtyFormData = createSelector(formogen, formogen => formogen.dirtyFormData || {});
+export const dirtyFormData = createSelector(
+    [formogen, pristineFormData],
+    (formogen, pristineFormData)=> {
+        if (!_.get(pristineFormData, 'id', null)) {
+            return { ...pristineFormData, ...(formogen.dirtyFormData || {}) };
+        }
+
+        return formogen.dirtyFormData || {};
+    }
+);
 
 // truly if user has not changed any fields (NOTE: real diff does not matter)
 export const isFormDataPristine = createSelector(dirtyFormData, dirtyFormData => _.isEmpty(dirtyFormData));
@@ -150,4 +160,20 @@ export const pipePreSuccess =  createSelector(initial, initial => {
         };
     }
     return data => data;
+});
+
+
+
+
+
+export const errors = createSelector(formogen, formogen => formogen.errors || {});
+
+export const fieldErrorsMap = createSelector([errors, fieldNames], (errors, fieldNames) => {
+    return _(errors).pick(fieldNames).value();
+});
+
+export const nonFieldErrorsMap = createSelector([errors, fieldNames], (errors, fieldNames) => {
+    return _(errors).pick(
+        _(errors).keys().difference(fieldNames).value()
+    ).value();
 });
