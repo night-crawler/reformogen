@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import Select from 'react-select';
 import { Form } from 'semantic-ui-react';
+import { extractIdentity } from '../../utils';
 
 import { errorsType, layoutOptsType } from '../fieldPropTypes';
 import Label from './Label';
@@ -27,7 +28,7 @@ function makeOptions(fieldData) {
 InlineForeignKeyField.propTypes = {
     type: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
-    value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    value: PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.object]),
     data: PropTypes.arrayOf(PropTypes.shape({
         id: PropTypes.number.isRequired,
         name: PropTypes.string.isRequired,
@@ -60,7 +61,7 @@ export default function InlineForeignKeyField(props) {
         options: makeOptions(props.data),
         placeholder: props.placeholder,
         simpleValue: true,
-        value: props.value * 1,
+        value: extractIdentity(props.value),
         inputProps: { type: 'react-type' },  // fixes broken semantic markup
         removeSelected: true,
         // rtl: this.state.rtl,

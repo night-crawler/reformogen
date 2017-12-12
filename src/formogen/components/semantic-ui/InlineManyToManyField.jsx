@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import Select from 'react-select';
 import { Form } from 'semantic-ui-react';
+import { extractIdentity } from '../../utils';
 
 import { errorsType, layoutOptsType } from '../fieldPropTypes';
 
@@ -23,10 +24,7 @@ function makeOptions(fieldData) {
 InlineManyToManyField.propTypes = {
     type: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
-    value: PropTypes.arrayOf(PropTypes.shape({
-        id: PropTypes.number,
-        name: PropTypes.string,
-    })),
+    value: PropTypes.arrayOf(PropTypes.any),
     data: PropTypes.arrayOf(PropTypes.shape({
         id: PropTypes.number.isRequired,
         name: PropTypes.string.isRequired,
@@ -59,7 +57,7 @@ export default function InlineManyToManyField(props) {
         options: makeOptions(props.data),
         placeholder: props.placeholder,
         // simpleValue: true,
-        value: props.value,
+        value: extractIdentity(props.value),
         inputProps: { type: 'react-type' },  // fixes broken semantic markup
         removeSelected: true,
         // rtl: this.state.rtl,
