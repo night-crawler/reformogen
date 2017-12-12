@@ -2,7 +2,7 @@ import _ from 'lodash';
 
 import Cookies from 'js-cookie';
 
-import { extractIdentity } from '../formogen/utils';
+import { extractIdentity, idsList } from '../formogen/utils';
 
 
 export function concatFields(fieldSet = [], anotherFieldSet = []) {
@@ -108,3 +108,31 @@ export const headers = {
     'Accept': 'application/json',
     'Content-Type': 'application/json',
 };
+
+
+export function getDirtyFields(prevDirtyData, pristineData) {
+    let dirty = prevDirtyData || {};
+
+    if (!_.get(pristineData, 'id', null))
+        return { ...pristineData, ...dirty };
+
+    for (const [fieldName, fieldValue] of Object.entries(dirty)) {
+        // TODO: if files are present it's changed
+        let changed = fieldValue !== pristineData[fieldName];
+
+        if (changed && (_.isObject(fieldValue) || _.isObject(pristineData[fieldName]))) {
+            const pristineFieldValueId = idsList(pristineData[fieldName]);
+            const fieldValueId = idsList(fieldValue);
+
+            if (_(fieldValueId).xor(pristineFieldValueId).isEmpty())
+                changed = false;
+        }
+
+        if (!changed) {
+            delete dirty[fieldName];
+        }
+
+    }
+
+    return dirty;
+}

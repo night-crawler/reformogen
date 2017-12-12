@@ -3,7 +3,7 @@ import { createSelector } from 'reselect';
 import _ from 'lodash';
 
 import { idsList } from '../formogen/utils';
-import { updateFormDataWithDefaults } from './utils';
+import { getDirtyFields, updateFormDataWithDefaults } from './utils';
 
 
 // =============== STARTERS ===============
@@ -54,7 +54,13 @@ export const fields = createSelector(
 );
 
 // final field names
-export const fieldNames = createSelector(fields, (fields) => _.map(fields, 'name'));
+export const fieldNames = createSelector(fields, fields => _.map(fields, 'name'));
+
+export const fileFields = createSelector(fields, fields => _.filter(fields, { type: 'FileField' }));
+
+export const fileFieldNames = createSelector(fileFields, fileFields => _.map(fileFields, 'name'));
+
+
 
 
 // =============== FORMDATA ===============
@@ -78,34 +84,26 @@ export const pristineFormData = createSelector(
 // should contain only changed fields (USER INPUT ONLY)
 // when isObjectCreate === true, dirtyFormData contains all fields in form
 export const dirtyFormData = createSelector(
-    [formogen, pristineFormData],
-    (formogen, pristineFormData)=> {
-        let dirty = formogen.dirtyFormData || {};
-
-        if (!_.get(pristineFormData, 'id', null))
-            return { ...pristineFormData, ...dirty };
-
-        for (const [fieldName, fieldValue] of Object.entries(dirty)) {
-            // TODO: if files are present it's changed
-            let changed = fieldValue !== pristineFormData[fieldName];
-
-            if (changed && (_.isObject(fieldValue) || _.isObject(pristineFormData[fieldName]))) {
-                const pristineFieldValueId = idsList(pristineFormData[fieldName]);
-                const fieldValueId = idsList(fieldValue);
-
-                if (_(fieldValueId).xor(pristineFieldValueId).isEmpty())
-                    changed = false;
-            }
-
-            if (!changed) {
-                delete dirty[fieldName];
-            }
-
-        }
-
-        return dirty;
+    [formogen, pristineFormData, fileFieldNames],
+    (formogen, pristineFormData, fileFieldNames) => {
+        const { dirtyFormData } = formogen;
+        const dirtyDataFieldMap = _.pickBy(dirtyFormData, (t, fieldName) => !(fileFieldNames.indexOf(fieldName) + 1));
+        const pristineFieldMap = _.pickBy(pristineFormData, (t, fieldName) => !(fileFieldNames.indexOf(fieldName) + 1));
+        return getDirtyFields(dirtyDataFieldMap, pristineFieldMap);
     }
 );
+
+
+export const dirtyFiles = createSelector(
+    [formogen, pristineFormData, fileFieldNames],
+    (formogen, pristineFormData, fileFieldNames) => {
+        return _.pickBy(formogen.dirtyFormData, (val, fieldName) =>
+            !!(fileFieldNames.indexOf(fieldName) + 1) && !_.isEmpty(val)
+        );
+    }
+);
+
+
 
 // truly if user has not changed any fields (NOTE: real diff DOES matter)
 export const isFormDataPristine = createSelector(dirtyFormData, dirtyFormData => _.isEmpty(dirtyFormData));

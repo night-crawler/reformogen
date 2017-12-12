@@ -7,7 +7,7 @@ import FormogenReactReduxComponent from './components';
 
 import {
     title, description, fields,
-    pristineFormData, dirtyFormData, actualFormData,
+    pristineFormData, dirtyFormData, actualFormData, dirtyFiles,
     isFormDataReady, isMetaDataReady,
     submitUrl, submitMethod,
     isFormDataPristine, isFormDataDirty,
@@ -30,11 +30,10 @@ const mergeProps = (stateProps, dispatchProps, ownProps) => {
     const { dispatch } = dispatchProps;
 
     const submit = () => {
-        const { submitUrl, submitMethod, dirtyFormData, isFormDataDirty, pipePreSubmit } = stateProps;
+        const { submitUrl, submitMethod, dirtyFormData, isFormDataDirty, pipePreSubmit, dirtyFiles } = stateProps;
 
         if (isFormDataDirty) {
-            dispatch(submitForm(submitUrl, submitMethod, pipePreSubmit(dirtyFormData)));
-            return;
+            return dispatch(submitForm(submitUrl, submitMethod, pipePreSubmit(dirtyFormData)));
         }
         console.log('All form fields are pristine! Change something to submit');
     };
@@ -59,6 +58,7 @@ export default connect(
         pristineFormData,
         dirtyFormData,
         actualFormData,
+        dirtyFiles,
 
         // states
         isFormDataReady,
