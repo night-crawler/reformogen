@@ -2,7 +2,7 @@ import _ from 'lodash';
 
 import Cookies from 'js-cookie';
 
-import { extractIdentity, idsList } from '../formogen/utils';
+import { extractIdentity, idsList, resolveResponse } from '../formogen/utils';
 
 
 export function concatFields(fieldSet = [], anotherFieldSet = []) {
@@ -135,4 +135,73 @@ export function getDirtyFields(prevDirtyData, pristineData) {
     }
 
     return dirty;
+}
+
+
+function prepareFileUploadQueue(filesFieldMap, objectUrls = {}) {
+    let fileUploadQueue = [];
+    for (let [fieldName, { defaultUploadUrl, files }] of Object.entries(filesFieldMap)) {
+        if (_.isEmpty(files)) {
+            console.warning(`Field "${fieldName}" contains no files - skipping`);
+            continue;
+        }
+        const uploadUrl = objectUrls[`${fieldName}_upload`] || defaultUploadUrl;
+        if (!uploadUrl)
+            throw new Error(`No upload url for field ${fieldName} specified in filesBundle`);
+
+        for (let file of files) {
+            let formData = new FormData();
+            formData.append(file.name, file);
+            fileUploadQueue.push({ uploadUrl, formData, fileName: file.name });
+        }
+    }
+    return fileUploadQueue;
+}
+
+export function handleSendFiles(filesFieldMap, objectUrls) {
+    console.log(`handleSendFiles(${Object.keys(filesFieldMap)})`);
+
+    const
+        queue = prepareFileUploadQueue(filesFieldMap, objectUrls),
+        chunks = _.chunk(queue, 5);
+
+    let uploadedFiles = [];
+    let failedFiles = [];
+
+    if (_.isEmpty(queue))
+        return { uploadedFiles, failedFiles };
+
+    const getChunkFetchList = (chunk, reject) => {
+        return chunk.map(({ uploadUrl, formData, fileName }) => {
+            return fetch(uploadUrl, {
+                method: 'POST',
+                body: formData,
+            })
+                .then(resolveResponse)
+                .then(data => {
+                    uploadedFiles.push({ data, fileName, uploadUrl });
+                    return data;
+                })
+                .catch(error => {
+                    failedFiles.push({ error, fileName, uploadUrl });
+                });
+        });
+    };
+
+    return new Promise((resolve, reject) => {
+        const initialFetchList = getChunkFetchList(chunks[0], reject);
+        let initialPromise = Promise.all(initialFetchList);
+
+        for (let chunk of chunks.slice(1)) {
+            const fetchList = getChunkFetchList(chunk, reject);
+            initialPromise = initialPromise.then(() => Promise.all(fetchList));
+        }
+
+        initialPromise.then(() => {
+            if (!_.isEmpty(failedFiles)) {
+                return reject(failedFiles);
+            }
+            resolve({ uploadedFiles, failedFiles });
+        });
+    });
 }

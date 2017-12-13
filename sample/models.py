@@ -86,7 +86,7 @@ class Author(CRUDUrlsMixin, TimeStampedModel, abstract.StateBundleMixin):
     biography = models.TextField(_('biography'), blank=True, default='----__----')
     state = models.PositiveSmallIntegerField(_('state'), choices=STATE, default=STATE.alive)
 
-    favorite_book = models.ForeignKey('Book', blank=True, null=True, related_name='+')
+    favorite_book = models.ForeignKey('Book', blank=True, null=True, related_name='+', on_delete=models.SET_NULL)
     inspire_source = models.ManyToManyField('self', symmetrical=False, blank=True)
 
     is_ghostwriter = models.BooleanField(_('Ghostwriter'))
@@ -110,7 +110,7 @@ class Author(CRUDUrlsMixin, TimeStampedModel, abstract.StateBundleMixin):
 
 
 class AuthorPhoto(CRUDUrlsMixin, TimeStampedModel):
-    author = models.ForeignKey('Author', verbose_name=_('author'))
+    author = models.ForeignKey('Author', verbose_name=_('author'), on_delete=models.CASCADE)
     photo = ThumbnailerImageField(_('photo'), blank=True, null=True,
                                   help_text=_('logo image'))
 
@@ -129,7 +129,7 @@ class AuthorPhoto(CRUDUrlsMixin, TimeStampedModel):
 
 
 class Book(CRUDUrlsMixin, TimeStampedModel):
-    author = models.ForeignKey('Author', verbose_name=_('author'))
+    author = models.ForeignKey('Author', verbose_name=_('author'), on_delete=models.CASCADE)
     title = models.CharField(_('title'), max_length=255)
     score = models.DecimalField(_('score'), max_digits=10, decimal_places=4)
 
@@ -180,10 +180,14 @@ class AllModelFields(CRUDUrlsMixin, models.Model):
     f_decimal = models.DecimalField(_('decimal'), max_digits=10, decimal_places=4, default=3.1415)
     f_float = models.FloatField(_('float'), default=3.14)
 
-    f_fk_embed = models.ForeignKey(Author,
-                                   verbose_name=_('embedded foreign key'), blank=True, null=True, related_name='+')
+    f_fk_embed = models.ForeignKey(
+        Author, verbose_name=_('embedded foreign key'),
+        blank=True, null=True,
+        related_name='+', on_delete=models.SET_NULL
+    )
     f_fk_rel = models.ForeignKey(Book,
-                                 verbose_name=_('foreign key with relation'), blank=True, null=True, related_name='+')
+                                 verbose_name=_('foreign key with relation'), blank=True, null=True, related_name='+',
+                                 on_delete=models.SET_NULL)
 
     f_m2m_embed = models.ManyToManyField(Author, verbose_name=_('embedded M2M'), blank=True, related_name='+')
     f_m2m_rel = models.ManyToManyField(Author, verbose_name=_('related M2M'), blank=True, related_name='+')

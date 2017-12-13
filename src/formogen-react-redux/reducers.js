@@ -33,8 +33,10 @@ export const formogen = (state = {}, action) => {
             };
 
         case RECEIVE_SUBMIT:
+            // TODO: case with result == pending
             return {
                 ...state,
+                receivedFormData: action.payload,
                 errors: {},
             };
 

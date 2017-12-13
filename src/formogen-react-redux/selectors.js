@@ -93,7 +93,7 @@ export const dirtyFormData = createSelector(
     }
 );
 
-
+//
 export const dirtyFiles = createSelector(
     [formogen, pristineFormData, fileFieldNames],
     (formogen, pristineFormData, fileFieldNames) => {
@@ -143,6 +143,41 @@ export const submitUrl = createSelector(
             _.get(formData, 'urls.update') ||
             _.get(formData, 'urls.edit') ||
             _.get(formData, 'urls.view', null);
+    }
+);
+
+
+export const hasFilesToSend = createSelector(
+    dirtyFiles,
+    dirtyFiles => !_(dirtyFiles).values().map('files').flatten().isEmpty()
+);
+
+//
+export const shouldSendFiles = createSelector(
+    [isObjectCreate, hasFilesToSend, isFormDataDirty],
+    (isObjectCreate, hasFilesToSend, isFormDataDirty) => {
+        // we have nothing to send
+        if (!hasFilesToSend) {
+            console.log(1);
+            return false;
+        }
+
+        // don't send files if we have no object instance loaded (after creating)
+        if (isObjectCreate) {
+            console.log(2);
+            return false;
+        }
+
+
+        // if user just want files to upload and didn't touch anything
+        if (isObjectUpdate && !isFormDataDirty) {
+            console.log(3);
+            return true;
+        }
+
+        // just no.
+        console.log(4);
+        return false;
     }
 );
 

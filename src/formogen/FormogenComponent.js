@@ -73,7 +73,7 @@ export default class FormogenComponent extends Component {
 
             title: props.title,
 
-            // makeMetaDataSelector
+            // metaData
             isMetaDataReady: false,
             isFormDataReady: false,
             isFormSubmitComplete: true,
@@ -84,11 +84,12 @@ export default class FormogenComponent extends Component {
             nonFieldErrorsMap: {},
 
             // urls
+            metaDataUrl: props.metaDataUrl,
             objectUrl: props.objectUrl,
             objectCreateUrl: props.objectCreateUrl,
             objectUpdateUrl: props.objectUpdateUrl,
 
-            // totalFormData
+            // formData
             formData: props.formData,
             initialFormData: {},
             defaultFormData: null,  // ?
@@ -98,8 +99,24 @@ export default class FormogenComponent extends Component {
     // --------------- React.js standard ---------------
     componentWillMount() {
         this.log.debug('componentWillMount()');
-        this.props.fetchMetaData();
-        this.props.fetchFormData();
+        Promise
+            .all([this.fetchMetaData(), this.fetchFormData()])
+            .then(([newMetaData, newFormData]) => {
+                this.props.onFetchComplete(newMetaData, newFormData);
+                return [newMetaData, newFormData];
+            })
+            .then(([newMetaData, newFormData]) => {
+                this.setState({
+                    isMetaDataReady: true,
+                    fields: newMetaData.fields,
+                    fieldNames: _(newMetaData.fields).map('name').flatten().value(),
+
+                    title: this.props.title || newMetaData.title,
+                    formData: FormogenComponent.updateFormDataWithDefaults(newMetaData.fields, newFormData),
+                    initialFormData: _.cloneDeep(newFormData),
+                });
+            })
+            .catch((error) => this.dispatchNetworkError({ type: 'load', error }));
     }
 
     /**
@@ -240,7 +257,7 @@ export default class FormogenComponent extends Component {
     /**
      * Submit order:
      *  0. Disable the form.
-     *  1. Send totalFormData (payload without files).
+     *  1. Send formData (payload without files).
      *  2. Handle a response. This response may not contain a new object but a bundle like:
      *     {
      *         result: 'pending' | 'success' | 'error'
@@ -257,26 +274,24 @@ export default class FormogenComponent extends Component {
      *  5. Upload files
      */
     handleSubmit = () => {
-        this.props.submit();
+        this.log.debug('handleSubmit()');
+        const { data, files, changedFields } = this.getFieldData();
 
-        // this.log.debug('handleSubmit()');
-        // const { data, files, changedFields } = this.getFieldData();
-        //
-        // // clear field errors before submit
-        // this.setState({ errorsFieldMap: {}, nonFieldErrorsMap: {}, isFormSubmitComplete: false });
-        //
-        // this.submitForm(this.pipePreSubmit(data))
-        //     .then(data => this.handleSubmitFormDataSuccess(data))
-        //     .then(data => {
-        //         this.setState({ initialFormData: data });
-        //         return data;
-        //     })
-        //     .then(data => this.handleSendFiles(files, data))
-        //     .then(({ objectInstance, uploadedFiles }) => {
-        //         console.log('WE UPLOADED SOME SHIT', objectInstance, uploadedFiles);
-        //         this.setState({ isFormSubmitComplete: true });
-        //     })
-        //     .catch(error => this.dispatchNetworkError({ type: 'submit', error }));
+        // clear field errors before submit
+        this.setState({ errorsFieldMap: {}, nonFieldErrorsMap: {}, isFormSubmitComplete: false });
+
+        this.submitForm(this.pipePreSubmit(data))
+            .then(data => this.handleSubmitFormDataSuccess(data))
+            .then(data => {
+                this.setState({ initialFormData: data });
+                return data;
+            })
+            .then(data => this.handleSendFiles(files, data))
+            .then(({ objectInstance, uploadedFiles }) => {
+                console.log('WE UPLOADED SOME SHIT', objectInstance, uploadedFiles);
+                this.setState({ isFormSubmitComplete: true });
+            })
+            .catch(error => this.dispatchNetworkError({ type: 'submit', error }));
     };
 
     handleSubmitFormDataSuccess(data) {
@@ -417,6 +432,46 @@ export default class FormogenComponent extends Component {
         });
     }
 
+    fetchMetaData() {
+        /*
+        1. form metadata key in cache: return resolved promise
+        2. metadata is only in metadataUrl: return Promise
+        3. metadataUrl + metaData = return Promise
+         */
+        return new Promise((resolve, reject) => {
+            const { metaData: initialMetaData, metaDataUrl } = this.props;
+
+            this.setState({ isMetaDataReady: false });
+
+            if (_.isEmpty(initialMetaData) && !metaDataUrl)
+                return reject(new Error('Formogen must be initialized with either metaData or metaDataUrl!'));
+
+            if (!metaDataUrl)
+                return resolve(initialMetaData);
+
+            fetch(metaDataUrl, { method: 'GET', headers: headers })
+                .then(resolveResponse)
+                .then(data => {
+                    if (!data.fields) {
+                        return reject(new Error(`Not found "fields" key in dataset from "${metaDataUrl}"`));
+                    }
+
+                    const initialFields = this.props.metaData ? this.props.metaData.fields : [];
+                    const receivedFields = data.fields;
+                    // TODO: cache initialFields before resolve!
+                    const fields = FormogenComponent.concatFields(initialFields, receivedFields);
+
+                    this.setState({ isMetaDataReady: true });
+                    resolve({
+                        title: _.get(initialMetaData, 'title', null) || data.title,
+                        description: _.get(initialMetaData, 'description', null) || data.description,
+                        fields
+                    });
+                })
+                .catch(error => reject(error));
+        });
+    }
+
     // --------------- get methods ---------------
     static concatFields(fieldSet, anotherFieldSet = []) {
         const fields = [
@@ -453,27 +508,26 @@ export default class FormogenComponent extends Component {
 
         return (
             <FormogenFormComponent
-                loading={ !this.props.isMetaDataReady }
-                fields={ this.props.metaData.fields }
-                title={ this.props.metaData.title }
-                formData={ this.props.formData }
-
-
-
                 locale={ this.props.locale }
+                loading={ !isMetaDataReady || !isFormDataReady || !isFormSubmitComplete }
                 showHeader={ this.props.showHeader }
+                title={ title }
                 upperFirstLabels={ this.props.upperFirstLabels }
                 helpTextOnHover={ this.props.helpTextOnHover }
 
-                onFieldChange={ this.handleFieldChange }
+                fields={ fields }
+                formData={ formData }
+                layoutTemplate={ this.props.layoutTemplate }
 
                 errorsFieldMap={ errorsFieldMap }
                 nonFieldErrorsMap={ nonFieldErrorsMap }
 
-
-                // todo
-                layoutTemplate={ this.props.layoutTemplate }
                 fieldUpdatePropsMap={ this.props.fieldUpdatePropsMap }
+
+                // callbacks
+                onFieldChange={ this.handleFieldChange }
+                onSubmit={ this.handleSubmit }
+                onNetworkError={ this.dispatchNetworkError }
             />
         );
     }

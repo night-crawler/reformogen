@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 
 import { createStructuredSelector } from 'reselect';
 
-import { fetchMetaData, fetchFormData, submitForm, fieldChanged } from './actions';
+import { fetchMetaData, fetchFormData, submitForm, fieldChanged, sendFiles } from './actions';
 import FormogenReactReduxComponent from './components';
 
 import {
@@ -13,6 +13,9 @@ import {
     isFormDataPristine, isFormDataDirty,
     pipePreSubmit, pipePreSuccess, pipePreValidationError,
     fieldErrorsMap, nonFieldErrorsMap,
+
+
+    shouldSendFiles,
 } from './selectors';
 
 
@@ -28,14 +31,16 @@ const mapDispatchToProps = (dispatch, props) => {
 
 const mergeProps = (stateProps, dispatchProps, ownProps) => {
     const { dispatch } = dispatchProps;
+    const { shouldSendFiles, pristineFormData, dirtyFiles } = stateProps;
+
+    if (shouldSendFiles)
+        dispatch(sendFiles(dirtyFiles, pristineFormData.urls));
 
     const submit = () => {
-        const { submitUrl, submitMethod, dirtyFormData, isFormDataDirty, pipePreSubmit, dirtyFiles } = stateProps;
+        const { submitUrl, submitMethod, dirtyFormData, isFormDataDirty, pipePreSubmit } = stateProps;
 
-        if (isFormDataDirty) {
+        if (isFormDataDirty)
             return dispatch(submitForm(submitUrl, submitMethod, pipePreSubmit(dirtyFormData)));
-        }
-        console.log('All form fields are pristine! Change something to submit');
     };
 
     return {
@@ -78,6 +83,9 @@ export default connect(
         // errors
         fieldErrorsMap,
         nonFieldErrorsMap,
+
+
+        shouldSendFiles,
     }),
     mapDispatchToProps,
     mergeProps
