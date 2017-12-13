@@ -1,4 +1,10 @@
-import { RECEIVE_METADATA, RECEIVE_FORMDATA, FIELD_CHANGED, REQUEST_SUBMIT_FAIL, RECEIVE_SUBMIT } from './actions';
+import {
+    RECEIVE_METADATA,
+    RECEIVE_FORMDATA,
+    FIELD_CHANGED,
+
+    REQUEST_SUBMIT_FAIL, RECEIVE_SUBMIT
+} from './actions';
 
 
 export const formogen = (state = {}, action) => {
@@ -16,7 +22,7 @@ export const formogen = (state = {}, action) => {
                 ...state,
                 errors: {},
                 isFormDataReady: true,
-                receivedFormData: action.payload,
+                receivedFormData: { ...action.payload },
             };
 
         case FIELD_CHANGED:

@@ -2,17 +2,19 @@ import { RSAA } from 'redux-api-middleware';
 
 import { headers, getApiMiddlewareOptions, handleSendFiles } from './utils';
 
+
 // BASE PREFIXES
 export const FORMOGEN_ACTION_PREFIX = 'FORMOGEN';
 
-export const REQUEST = '?:REQUEST';
-export const FAIL = '!:FAIL';
-export const RECEIVE = '+:RECEIVE';
+export const REQUEST = 'REQUEST';
+export const FAIL = 'FAIL';
+export const RECEIVE = 'RECEIVE';
+
 
 // METADATA
-export const REQUEST_METADATA = `${FORMOGEN_ACTION_PREFIX}:${REQUEST}:METADATA`;
-export const REQUEST_METADATA_FAIL = `${FORMOGEN_ACTION_PREFIX}:${FAIL}:METADATA`;
-export const RECEIVE_METADATA = `${FORMOGEN_ACTION_PREFIX}:${RECEIVE}:METADATA`;
+export const REQUEST_METADATA = `${FORMOGEN_ACTION_PREFIX}:METADATA:${REQUEST}`;
+export const REQUEST_METADATA_FAIL = `${FORMOGEN_ACTION_PREFIX}:METADATA:${FAIL}`;
+export const RECEIVE_METADATA = `${FORMOGEN_ACTION_PREFIX}:METADATA:${RECEIVE}`;
 
 export const fetchMetaData = (url) => ({
     [RSAA]: {
@@ -23,10 +25,11 @@ export const fetchMetaData = (url) => ({
     }
 });
 
+
 // FORMDATA
-export const REQUEST_FORMDATA = `${FORMOGEN_ACTION_PREFIX}:${REQUEST}:FORMDATA`;
-export const REQUEST_FORMDATA_FAIL = `${FORMOGEN_ACTION_PREFIX}:${FAIL}:FORMDATA`;
-export const RECEIVE_FORMDATA = `${FORMOGEN_ACTION_PREFIX}:${RECEIVE}:FORMDATA`;
+export const REQUEST_FORMDATA = `${FORMOGEN_ACTION_PREFIX}:FORMDATA:${REQUEST}`;
+export const REQUEST_FORMDATA_FAIL = `${FORMOGEN_ACTION_PREFIX}:FORMDATA:${FAIL}`;
+export const RECEIVE_FORMDATA = `${FORMOGEN_ACTION_PREFIX}:FORMDATA:${RECEIVE}`;
 
 export const fetchFormData = (url) => ({
     [RSAA]: {
@@ -48,9 +51,9 @@ export const fieldChanged = (event, { name, value }) => ( {
 
 
 // SUBMIT
-export const REQUEST_SUBMIT = `${FORMOGEN_ACTION_PREFIX}:${REQUEST}:SUBMIT`;
-export const REQUEST_SUBMIT_FAIL = `${FORMOGEN_ACTION_PREFIX}:${FAIL}:SUBMIT`;
-export const RECEIVE_SUBMIT = `${FORMOGEN_ACTION_PREFIX}:${RECEIVE}:SUBMIT`;
+export const REQUEST_SUBMIT = `${FORMOGEN_ACTION_PREFIX}:SUBMIT:${REQUEST}`;
+export const REQUEST_SUBMIT_FAIL = `${FORMOGEN_ACTION_PREFIX}:SUBMIT:${FAIL}`;
+export const RECEIVE_SUBMIT = `${FORMOGEN_ACTION_PREFIX}:SUBMIT:${RECEIVE}`;
 
 export const submitForm = (url, method = 'POST', formData) => ({
     [RSAA]: {
@@ -64,9 +67,9 @@ export const submitForm = (url, method = 'POST', formData) => ({
 
 
 // FILES PROCESSING
-export const FILE_UPLOADING_START = `${FORMOGEN_ACTION_PREFIX}:FILE_UPLOADING_START`;
-export const FILE_UPLOADING_END = `${FORMOGEN_ACTION_PREFIX}:FILE_UPLOADING_END`;
-export const FILE_UPLOADING_FAIL = `${FORMOGEN_ACTION_PREFIX}:FILE_UPLOADING_FAIL`;
+export const FILE_UPLOADING_START = `${FORMOGEN_ACTION_PREFIX}:FILE_UPLOADING:${REQUEST}`;
+export const FILE_UPLOADING_END = `${FORMOGEN_ACTION_PREFIX}:FILE_UPLOADING:${RECEIVE}`;
+export const FILE_UPLOADING_FAIL = `${FORMOGEN_ACTION_PREFIX}:FILE_UPLOADING:${FAIL}`;
 
 export const initiateFileUploading = () => ({
     type: FILE_UPLOADING_START

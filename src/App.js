@@ -74,11 +74,9 @@ class App extends Component {
                             <Formogen
                                 locale={ 'ru' }
                                 showHeader={ true }
-                                metaDataUrl={ this.state.authorPhotosMetaDataUrl }
-                                objectCreateUrl={ this.state.authorPhotosCreateUrl }
-                                formData={ {
-                                    author: this.state.authorId,
-                                } }
+
+                                metaDataUrl={ 'http://localhost:8000/api/v1/sample/author-photos/describe/' }
+                                objectUrl={ 'http://localhost:8000/api/v1/sample/author-photos/1/' }
                             />
                         </Segment>
                     </Grid.Column>

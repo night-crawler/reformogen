@@ -53,14 +53,14 @@ export const fields = createSelector(
     (initial, received) => _([...initial, ...received]).uniqBy('name').value()
 );
 
-// final field names
+// names of all fields that's presented in the form
 export const fieldNames = createSelector(fields, fields => _.map(fields, 'name'));
 
+// all file fields that's presented in the form
 export const fileFields = createSelector(fields, fields => _.filter(fields, { type: 'FileField' }));
 
+// names of all file fields that's presented in the form
 export const fileFieldNames = createSelector(fileFields, fileFields => _.map(fileFields, 'name'));
-
-
 
 
 // =============== FORMDATA ===============
@@ -93,7 +93,7 @@ export const dirtyFormData = createSelector(
     }
 );
 
-//
+// it contains only changed file fields (USER INPUT ONLY)
 export const dirtyFiles = createSelector(
     [formogen, pristineFormData, fileFieldNames],
     (formogen, pristineFormData, fileFieldNames) => {
@@ -102,7 +102,6 @@ export const dirtyFiles = createSelector(
         );
     }
 );
-
 
 
 // truly if user has not changed any fields (NOTE: real diff DOES matter)
@@ -147,36 +146,29 @@ export const submitUrl = createSelector(
 );
 
 
-export const hasFilesToSend = createSelector(
+// it signals if there are some files to be uploaded
+export const hasFilesToUpload = createSelector(
     dirtyFiles,
     dirtyFiles => !_(dirtyFiles).values().map('files').flatten().isEmpty()
 );
 
-//
-export const shouldSendFiles = createSelector(
-    [isObjectCreate, hasFilesToSend, isFormDataDirty],
-    (isObjectCreate, hasFilesToSend, isFormDataDirty) => {
-        // we have nothing to send
-        if (!hasFilesToSend) {
-            console.log(1);
+// it signals that files can be uploaded
+export const shouldUploadFiles = createSelector(
+    [isObjectCreate, hasFilesToUpload, isFormDataDirty],
+    (isObjectCreate, hasFilesToUpload, isFormDataDirty) => {
+        // there's nothing to send
+        if (!hasFilesToUpload)
             return false;
-        }
 
-        // don't send files if we have no object instance loaded (after creating)
-        if (isObjectCreate) {
-            console.log(2);
+        // don't send files if an object instance wasn't loaded (after creating)
+        if (isObjectCreate)
             return false;
-        }
 
-
-        // if user just want files to upload and didn't touch anything
-        if (isObjectUpdate && !isFormDataDirty) {
-            console.log(3);
+        // if user just want files to be uploaded and didn't touch anything
+        if (isObjectUpdate && !isFormDataDirty)
             return true;
-        }
 
-        // just no.
-        console.log(4);
+        // just no
         return false;
     }
 );

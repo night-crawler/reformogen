@@ -8,14 +8,11 @@ import FormogenReactReduxComponent from './components';
 import {
     title, description, fields,
     pristineFormData, dirtyFormData, actualFormData, dirtyFiles,
-    isFormDataReady, isMetaDataReady,
+    isFormDataReady, isMetaDataReady, shouldUploadFiles,
     submitUrl, submitMethod,
     isFormDataPristine, isFormDataDirty,
     pipePreSubmit, pipePreSuccess, pipePreValidationError,
     fieldErrorsMap, nonFieldErrorsMap,
-
-
-    shouldSendFiles,
 } from './selectors';
 
 
@@ -31,9 +28,9 @@ const mapDispatchToProps = (dispatch, props) => {
 
 const mergeProps = (stateProps, dispatchProps, ownProps) => {
     const { dispatch } = dispatchProps;
-    const { shouldSendFiles, pristineFormData, dirtyFiles } = stateProps;
+    const { shouldUploadFiles, pristineFormData, dirtyFiles } = stateProps;
 
-    if (shouldSendFiles)
+    if (shouldUploadFiles)
         dispatch(sendFiles(dirtyFiles, pristineFormData.urls));
 
     const submit = () => {
@@ -70,6 +67,7 @@ export default connect(
         isMetaDataReady,
         isFormDataPristine,
         isFormDataDirty,
+        shouldUploadFiles,
 
         // submit data
         submitUrl,
@@ -83,9 +81,6 @@ export default connect(
         // errors
         fieldErrorsMap,
         nonFieldErrorsMap,
-
-
-        shouldSendFiles,
     }),
     mapDispatchToProps,
     mergeProps

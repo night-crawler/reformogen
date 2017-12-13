@@ -128,12 +128,9 @@ export function getDirtyFields(prevDirtyData, pristineData) {
                 changed = false;
         }
 
-        if (!changed) {
+        if (!changed)
             delete dirty[fieldName];
-        }
-
     }
-
     return dirty;
 }
 
@@ -159,8 +156,6 @@ function prepareFileUploadQueue(filesFieldMap, objectUrls = {}) {
 }
 
 export function handleSendFiles(filesFieldMap, objectUrls) {
-    console.log(`handleSendFiles(${Object.keys(filesFieldMap)})`);
-
     const
         queue = prepareFileUploadQueue(filesFieldMap, objectUrls),
         chunks = _.chunk(queue, 5);
