@@ -3,7 +3,7 @@ import { RSAA } from 'redux-api-middleware';
 import _ from 'lodash';
 import { resolveResponse } from '../formogen/utils';
 
-import { headers, getApiMiddlewareOptions, handleSendFiles, getFetchOptions } from './utils';
+import { getApiMiddlewareOptions, getFetchOptions, prepareFileUploadQueue } from './utils';
 
 
 // BASE PREFIXES
@@ -67,7 +67,7 @@ export const formSubmitComplete = (data) => ({
     payload: data,
 });
 
-export function submitForm({ submitUrl, submitMethod = 'POST', formData, formFiles }) {
+export function submitForm({ submitUrl, submitMethod = 'POST', formData, formFiles, sendFileQueueLength = 1 }) {
     return dispatch => {
 
         dispatch(formSubmitInit());
@@ -76,7 +76,7 @@ export function submitForm({ submitUrl, submitMethod = 'POST', formData, formFil
             .then(({ type, payload }) => payload)
             .then(data => dispatch(fetchFormData(data ? data.urls.update : submitUrl)))
             .then(({ type, payload }) => payload)
-            .then(data => dispatch(sendFormFiles(formFiles, data.urls)))
+            .then(data => dispatch(sendFormFiles(formFiles, data.urls, sendFileQueueLength)))
             .then(data => dispatch(formSubmitComplete(data)))
             .catch(error => {
                 if (error.name !== 'FormogenError' || +error.status !== 400)
@@ -145,17 +145,70 @@ export const formFilesUploadSuccess = (data) => ({
     payload: data
 });
 
-export const sendFormFiles = (formFiles, urls) => {
+export const sendFormFiles = (formFiles, urls, sendFileQueueLength=1) => {
     return dispatch => {
-        if (_.isEmpty(formFiles)) {
+        if (_.isEmpty(formFiles))
             return dispatch(formFilesUploadSkip());
-        }
 
         dispatch(formFilesUploadStart());
 
-        return handleSendFiles(formFiles, urls, dispatch)
-            .then(
-                data => dispatch(formFilesUploadSuccess(data))
-            );
+        return handleSendFiles(formFiles, urls, dispatch, sendFileQueueLength)
+            .then(data => dispatch(formFilesUploadSuccess(data)));
     };
 };
+
+export const SINGLE_FILE_UPLOAD_START = `${FORMOGEN_ACTION_PREFIX}:SINGLE_FILE_UPLOAD_START`;
+export const SINGLE_FILE_UPLOAD_FAIL = `${FORMOGEN_ACTION_PREFIX}:SINGLE_FILE_UPLOAD_FAIL`;
+export const SINGLE_FILE_UPLOAD_SUCCESS = `${FORMOGEN_ACTION_PREFIX}:SINGLE_FILE_UPLOAD_SUCCESS`;
+
+
+export const singleFileUploadStart = (url, data, fileName) => ({
+    type: SINGLE_FILE_UPLOAD_START,
+    payload: {url, data, fileName},
+});
+export const singleFileUploadFail = (url, error, fileName) => ({
+    type: SINGLE_FILE_UPLOAD_FAIL,
+    payload: {url, error, fileName},
+});
+export const singleFileUploadSuccess = (url, data, fileName) => ({
+    type: SINGLE_FILE_UPLOAD_SUCCESS,
+    payload: { url, data, fileName }
+});
+
+export const sendSingleFile = (uploadUrl, formData, fileName, dispatch) => {
+    dispatch(singleFileUploadStart(uploadUrl, formData, fileName));
+
+    const options = { ...getFetchOptions({method: 'POST', headers: {}}), body: formData };
+    return fetch(uploadUrl, options)
+        .then(resolveResponse)
+        .then(data => dispatch(singleFileUploadSuccess(uploadUrl, data, fileName)))
+        .catch(error => dispatch(singleFileUploadFail(uploadUrl, error, fileName)));
+};
+
+const getChunkFetchList = (chunk, dispatch) => {
+    return chunk.map(({ uploadUrl, formData, fileName }) => {
+        return sendSingleFile(uploadUrl, formData, fileName, dispatch);
+    });
+};
+
+export function handleSendFiles(filesFieldMap, objectUrls, dispatch, queueLength=1) {
+    const
+        queue = prepareFileUploadQueue(filesFieldMap, objectUrls),
+        chunks = _.chunk(queue, queueLength);
+
+    if (_.isEmpty(queue))
+        return Promise.resolve();
+
+    return new Promise(resolve => {
+        const initialFetchList = getChunkFetchList(chunks[0], dispatch);
+
+        let initialPromise = Promise.all(initialFetchList);
+
+        initialPromise = initialPromise.then(() => {
+            for (let chunk of chunks.slice(1)) {
+                initialPromise = initialPromise.then(() => Promise.all(getChunkFetchList(chunk, dispatch)));
+            }
+            initialPromise.then(() => resolve(initialPromise));
+        });
+    });
+}

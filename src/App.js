@@ -82,6 +82,8 @@ class App extends Component {
                                 // objectUrl={ 'http://localhost:8000/api/v1/sample/author-photos/1/' }
                                 // metaDataUrl={ objectUrl + 'describe_object/' }
                                 // objectUrl={ objectUrl }
+                                sendFileQueueLength={ 3 }
+
                             />
                         </Segment>
                     </Grid.Column>

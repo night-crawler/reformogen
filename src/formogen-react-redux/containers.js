@@ -31,14 +31,14 @@ const mergeProps = (stateProps, dispatchProps, ownProps) => {
 
     const submit = () => {
         const { submitUrl, submitMethod, dirtyFormData, pipePreSubmit, dirtyFiles } = stateProps;
+        const { sendFileQueueLength } = ownProps;
 
         return dispatch(
             submitForm({
-                submitUrl,
-                submitMethod,
+                submitUrl, submitMethod,
                 // TODO: add pipePreSubmit for formFiles
-                formData: pipePreSubmit(dirtyFormData),
-                formFiles: dirtyFiles
+                formData: pipePreSubmit(dirtyFormData), formFiles: dirtyFiles,
+                sendFileQueueLength
             })
         );
     };
