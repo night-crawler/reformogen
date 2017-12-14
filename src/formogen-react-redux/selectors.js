@@ -2,7 +2,6 @@ import { createSelector } from 'reselect';
 
 import _ from 'lodash';
 
-import { idsList } from '../formogen/utils';
 import { getDirtyFields, updateFormDataWithDefaults } from './utils';
 
 

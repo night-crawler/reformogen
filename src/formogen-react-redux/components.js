@@ -26,9 +26,6 @@ export default class FormogenReactReduxComponent extends React.Component {
         totalMetaData: PropTypes.object
     };
 
-    constructor(props) {
-        super(props);
-    }
     componentDidMount() {
         this.props.fetchMetaData();
         this.props.fetchFormData();

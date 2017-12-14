@@ -59,18 +59,6 @@ export default function ({ WrappedComponent, multi = true }) {
             };
 
         }
-
-        // --------------- React.js standard ---------------
-        componentWillMount() {
-            this.log.debug('componentWillMount()');
-
-            // TODO:
-            // TEMP & CRUTCH: trigger handleChange() to make sure the field's value is in correct format.
-            const value = multi ? idsList(this.props.value) : this.props.value;
-
-            // this.handleChange(value);
-        }
-
         // --------------- Misc ---------------
         handleOptionsLoaded(query, page, dataBundle) {
             /* without pagination */
