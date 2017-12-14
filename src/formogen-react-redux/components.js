@@ -23,8 +23,17 @@ export default class FormogenReactReduxComponent extends React.Component {
         submit: PropTypes.func,
         title: PropTypes.string,
         upperFirstLabels: PropTypes.bool,
-        totalMetaData: PropTypes.object
+        totalMetaData: PropTypes.object,
+        submitUrl: PropTypes.string.isRequired,
     };
+
+    constructor(props) {
+        super(props);
+        const { submitUrl } = props;
+
+        if (!submitUrl)
+            throw new Error('Got an empty submitUrl');
+    }
 
     componentDidMount() {
         this.props.fetchMetaData();

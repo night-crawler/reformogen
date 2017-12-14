@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 
 import { createStructuredSelector } from 'reselect';
 
-import { fetchMetaData, fetchFormData, submitForm, fieldChanged, sendFiles } from './actions';
+import { fetchMetaData, fetchFormData, submitForm, fieldChanged } from './actions';
 import FormogenReactReduxComponent from './components';
 
 import {
@@ -28,16 +28,19 @@ const mapDispatchToProps = (dispatch, props) => {
 
 const mergeProps = (stateProps, dispatchProps, ownProps) => {
     const { dispatch } = dispatchProps;
-    const { shouldUploadFiles, pristineFormData, dirtyFiles } = stateProps;
-
-    if (shouldUploadFiles)
-        dispatch(sendFiles(dirtyFiles, pristineFormData.urls));
 
     const submit = () => {
-        const { submitUrl, submitMethod, dirtyFormData, isFormDataDirty, pipePreSubmit } = stateProps;
+        const { submitUrl, submitMethod, dirtyFormData, pipePreSubmit, dirtyFiles } = stateProps;
 
-        if (isFormDataDirty)
-            return dispatch(submitForm(submitUrl, submitMethod, pipePreSubmit(dirtyFormData)));
+        return dispatch(
+            submitForm({
+                submitUrl,
+                submitMethod,
+                // TODO: add pipePreSubmit for formFiles
+                formData: pipePreSubmit(dirtyFormData),
+                formFiles: dirtyFiles
+            })
+        );
     };
 
     return {

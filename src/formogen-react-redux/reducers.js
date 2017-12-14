@@ -3,7 +3,7 @@ import {
     RECEIVE_FORMDATA,
     FIELD_CHANGED,
 
-    REQUEST_SUBMIT_FAIL, RECEIVE_SUBMIT
+    FORM_DATA_SEND_FAIL, FORM_DATA_SEND_SUCCESS,
 } from './actions';
 
 
@@ -38,7 +38,7 @@ export const formogen = (state = {}, action) => {
                 }
             };
 
-        case RECEIVE_SUBMIT:
+        case FORM_DATA_SEND_SUCCESS:
             // TODO: case with result == pending
             return {
                 ...state,
@@ -46,11 +46,11 @@ export const formogen = (state = {}, action) => {
                 errors: {},
             };
 
-        case REQUEST_SUBMIT_FAIL:
+        case FORM_DATA_SEND_FAIL:
             if (+action.payload.status === 400) {
                 return {
                     ...state,
-                    errors: action.payload.response
+                    errors: action.payload.data
                 };
             }
             return { ...state, errors: {} };

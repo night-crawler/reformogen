@@ -1,6 +1,9 @@
 import { RSAA } from 'redux-api-middleware';
 
-import { headers, getApiMiddlewareOptions, handleSendFiles } from './utils';
+import _ from 'lodash';
+import { resolveResponse } from '../formogen/utils';
+
+import { headers, getApiMiddlewareOptions, handleSendFiles, getFetchOptions } from './utils';
 
 
 // BASE PREFIXES
@@ -50,49 +53,109 @@ export const fieldChanged = (event, { name, value }) => ( {
 
 
 
-// SUBMIT
-export const REQUEST_SUBMIT = `${FORMOGEN_ACTION_PREFIX}:SUBMIT:${REQUEST}`;
-export const REQUEST_SUBMIT_FAIL = `${FORMOGEN_ACTION_PREFIX}:SUBMIT:${FAIL}`;
-export const RECEIVE_SUBMIT = `${FORMOGEN_ACTION_PREFIX}:SUBMIT:${RECEIVE}`;
+/*
+========================================================================================================================
+ */
 
-export const submitForm = (url, method = 'POST', formData) => ({
-    [RSAA]: {
-        endpoint: url,
-        body: JSON.stringify(formData),
-        method: method,
-        types: [REQUEST_SUBMIT, RECEIVE_SUBMIT, REQUEST_SUBMIT_FAIL],
-        ...getApiMiddlewareOptions({ headers, method }),
-    }
+export const FORM_SUBMIT_INIT = `${FORMOGEN_ACTION_PREFIX}:FORM_SUBMIT_INIT`;
+export const FORM_SUBMIT_COMPLETE = `${FORMOGEN_ACTION_PREFIX}:FORM_SUBMIT_COMPLETE`;
+export const formSubmitInit = () => ({
+    type: FORM_SUBMIT_INIT,
+});
+export const formSubmitComplete = (data) => ({
+    type: FORM_SUBMIT_COMPLETE,
+    payload: data,
 });
 
-
-// FILES PROCESSING
-export const FILE_UPLOADING_START = `${FORMOGEN_ACTION_PREFIX}:FILE_UPLOADING:${REQUEST}`;
-export const FILE_UPLOADING_END = `${FORMOGEN_ACTION_PREFIX}:FILE_UPLOADING:${RECEIVE}`;
-export const FILE_UPLOADING_FAIL = `${FORMOGEN_ACTION_PREFIX}:FILE_UPLOADING:${FAIL}`;
-
-export const initiateFileUploading = () => ({
-    type: FILE_UPLOADING_START
-});
-
-export const receiveFileUploading = (data) => ({
-    type: FILE_UPLOADING_END,
-    payload: { ...data }
-});
-
-export const failFileUploading = (error) => ({
-    type: FILE_UPLOADING_FAIL,
-    payload: { ...error }
-});
-
-export const sendFiles = (filesFieldMap, objectUrls) => {
+export function submitForm({ submitUrl, submitMethod = 'POST', formData, formFiles }) {
     return dispatch => {
-        dispatch(initiateFileUploading());
 
-        return handleSendFiles(filesFieldMap, objectUrls)
+        dispatch(formSubmitInit());
+
+        return dispatch(sendFormData(submitUrl, submitMethod, formData))
+            .then(({ type, payload }) => payload)
+            .then(data => dispatch(fetchFormData(data ? data.urls.update : submitUrl)))
+            .then(({ type, payload }) => payload)
+            .then(data => dispatch(sendFormFiles(formFiles, data.urls)))
+            .then(data => dispatch(formSubmitComplete(data)))
+            .catch(error => {
+                if (error.name !== 'FormogenError' || +error.status !== 400)
+                    return dispatch(otherNetworkError(error));
+
+                return dispatch(formDataSendFail(error));
+            });
+    };
+}
+
+
+export const FORM_DATA_SEND_START = `${FORMOGEN_ACTION_PREFIX}:FORM_DATA_SEND_START`;
+export const FORM_DATA_SEND_FAIL = `${FORMOGEN_ACTION_PREFIX}:FORM_DATA_SEND_FAIL`;
+export const FORM_DATA_SEND_SUCCESS = `${FORMOGEN_ACTION_PREFIX}:FORM_DATA_SEND_SUCCESS`;
+export const FORM_DATA_SEND_SKIP = `${FORMOGEN_ACTION_PREFIX}:FORM_DATA_SEND_SKIP`;
+export const FORM_DATA_OTHER_NETWORK_ERROR = `${FORMOGEN_ACTION_PREFIX}:FORM_DATA_OTHER_NETWORK_ERROR`;
+
+export const otherNetworkError = (error) => ({
+    type: FORM_DATA_OTHER_NETWORK_ERROR,
+    payload: error,
+});
+
+export const formDataSendSkip = () => ({
+    type: FORM_DATA_SEND_SKIP,
+    payload: null
+});
+
+export const formDataSendStart = (data) => ({
+    type: FORM_DATA_SEND_START,
+    payload: data
+});
+export const formDataSendFail = (error) => ({
+    type: FORM_DATA_SEND_FAIL,
+    payload: error,
+});
+export const formDataSendSuccess = (status='success') => ({
+    type: FORM_DATA_SEND_SUCCESS,
+    payload: status,
+});
+
+export const sendFormData = (url, method = 'POST', formData) => {
+    return dispatch => {
+        if (_.isEmpty(formData))
+            return dispatch(formDataSendSkip());
+
+        dispatch(formDataSendStart(formData));
+
+        return fetch(url, { ...getFetchOptions({ method }), body: JSON.stringify(formData) })
+            .then(resolveResponse)
+            .then(data => dispatch(formDataSendSuccess(data)));
+    };
+};
+
+export const FORM_FILES_UPLOAD_START = `${FORMOGEN_ACTION_PREFIX}:FORM_FILES_UPLOAD_START`;
+export const FORM_FILES_UPLOAD_SUCCESS = `${FORMOGEN_ACTION_PREFIX}:FORM_FILES_UPLOAD_SUCCESS`;
+export const FORM_FILES_UPLOAD_SKIP = `${FORMOGEN_ACTION_PREFIX}:FORM_FILES_UPLOAD_SKIP`;
+
+export const formFilesUploadSkip = () => ({
+    type: FORM_FILES_UPLOAD_SKIP,
+});
+export const formFilesUploadStart = () => ({
+    type: FORM_FILES_UPLOAD_START,
+});
+export const formFilesUploadSuccess = (data) => ({
+    type: FORM_FILES_UPLOAD_SUCCESS,
+    payload: data
+});
+
+export const sendFormFiles = (formFiles, urls) => {
+    return dispatch => {
+        if (_.isEmpty(formFiles)) {
+            return dispatch(formFilesUploadSkip());
+        }
+
+        dispatch(formFilesUploadStart());
+
+        return handleSendFiles(formFiles, urls, dispatch)
             .then(
-                data => dispatch(receiveFileUploading(data)),
-                error => dispatch(failFileUploading(error))
+                data => dispatch(formFilesUploadSuccess(data))
             );
     };
 };

@@ -104,10 +104,28 @@ export const getApiMiddlewareOptions = ({ headers = {}, options = {}, csrfToken 
     return { headers: _headers, options };
 };
 
-export const headers = {
+export const defaultHeaders = {
     'Accept': 'application/json',
     'Content-Type': 'application/json',
 };
+
+
+export const getFetchOptions = ({ headers = defaultHeaders, csrfToken = '', method = 'GET' } = {}) => {
+    const _csrfToken = csrfToken || Cookies.get('csrftoken');
+    const _csrfHeader = _csrfToken && !csrfSafeMethod(method) ? { 'X-CSRFToken': _csrfToken } : {};
+    const _headers = { ...headers, ..._csrfHeader };
+
+    if (process.env.NODE_ENV !== 'production') {
+        return {
+            mode: 'cors',
+            credentials: 'include',
+            headers: _headers,
+            method,
+        };
+    }
+    return { headers: _headers, method };
+};
+
 
 
 export function getDirtyFields(prevDirtyData, pristineData) {

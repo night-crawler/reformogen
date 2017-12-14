@@ -67,8 +67,6 @@ class App extends Component {
             vasya: 42,
         };
 
-        let trash = null;
-
         return (
             <div className='App'>
 
@@ -79,10 +77,11 @@ class App extends Component {
                                 locale={ 'ru' }
                                 showHeader={ true }
 
-                                // metaDataUrl={ 'http://localhost:8000/api/v1/sample/author-photos/describe/' }
+                                metaDataUrl={ 'http://localhost:8000/api/v1/sample/author-photos/describe/' }
+                                objectCreateUrl={ 'http://localhost:8000/api/v1/sample/author-photos/' }
                                 // objectUrl={ 'http://localhost:8000/api/v1/sample/author-photos/1/' }
-                                metaDataUrl={ objectUrl + 'describe_object/' }
-                                objectUrl={ objectUrl }
+                                // metaDataUrl={ objectUrl + 'describe_object/' }
+                                // objectUrl={ objectUrl }
                             />
                         </Segment>
                     </Grid.Column>
