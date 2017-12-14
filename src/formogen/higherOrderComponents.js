@@ -41,6 +41,11 @@ export default function ({ WrappedComponent, multi = true }) {
                 }
             }
 
+            this.log.debug('WE GOT optionsByKeyMap', optionsByKeyMap);
+            this.log.debug('WE GOT keysList', keysList);
+            this.log.debug('WE GOT options', _(optionsByKeyMap).values().value());
+
+
             this.state = {
                 isLoading: false,
                 options: _(optionsByKeyMap).values().value(),
@@ -79,10 +84,10 @@ export default function ({ WrappedComponent, multi = true }) {
             const keysList = _(selectedKeys).concat(receivedKeys).uniq().value();
 
             /* we should not remove options from current value */
-            this.log.debug('pre handleOptionsLoaded(), keysList', keysList);
-            this.log.debug('pre handleOptionsLoaded(), getValueKeyList', this.getValueKeyList());
+            // this.log.debug('pre handleOptionsLoaded(), keysList', keysList);
+            // this.log.debug('pre handleOptionsLoaded(), getValueKeyList', this.getValueKeyList());
             const keysWithSelectedKeys = _(keysList).concat(this.getValueKeyList()).value();
-            this.log.debug('pre handleOptionsLoaded(), keysWithSelectedKeys', keysWithSelectedKeys);
+            // this.log.debug('pre handleOptionsLoaded(), keysWithSelectedKeys', keysWithSelectedKeys);
 
             const options = _(currentOptionsByKeyMap).pick(keysWithSelectedKeys).values().value();
 
