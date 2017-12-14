@@ -2,7 +2,7 @@ import _ from 'lodash';
 import PropTypes from 'prop-types';
 import React from 'react';
 import Dropzone from 'react-dropzone';
-import { Button, Form, Icon, Image, List } from 'semantic-ui-react';
+import { Button, Form, Icon, Image, List, Progress, Grid } from 'semantic-ui-react';
 
 import mt_msword from '../../images/mimetypes/application-msword.png';
 import mt_pdf from '../../images/mimetypes/application-pdf.png';
@@ -64,6 +64,28 @@ function bytesToSize(bytes) {
 }
 
 
+ListContentWithProgress.propTypes = {
+    percent: PropTypes.number,
+    color: PropTypes.string,
+    styles: PropTypes.object,
+    children: PropTypes.any,
+};
+function ListContentWithProgress({ percent = 50, color = 'LimeGreen', styles = {}, children = {} }) {
+    const defaultStyles = {
+        background: `linear-gradient(90deg, #fff, ${color} ${percent}%, #fff ${percent}%, #fff 100%)`,
+        backgroundRepeat: 'no-repeat',
+        border: '1px solid #999',
+        borderRadius: 4,  // don't touch this it's a magic number!
+        height: '37px',
+    };
+    return (
+        <List.Content className='list-content-with-progress' style={ { ...defaultStyles, styles } }>
+            { children }
+        </List.Content>
+    );
+}
+
+
 const fileShape = PropTypes.shape({
     lastModified: PropTypes.number,
     lastModifiedDate: PropTypes.object,
@@ -72,14 +94,12 @@ const fileShape = PropTypes.shape({
     type: PropTypes.string,
 });
 
-
 FilesPreviews.propTypes = {
     files: PropTypes.arrayOf(fileShape).isRequired,
     onClear: PropTypes.func.isRequired,
     onRemoveFile: PropTypes.func.isRequired,
     getFileIcon: PropTypes.func.isRequired,
 };
-
 function FilesPreviews({ files, onClear, getFileIcon, onRemoveFile }) {
     if (_.isEmpty(files)) {
         return null;
@@ -104,19 +124,16 @@ FileItem.propTypes = {
     getFileIcon: PropTypes.func.isRequired,
     onRemove: PropTypes.func.isRequired,
 };
-
 function FileItem({ file, getFileIcon, onRemove }) {
     return (
         <List.Item>
-            <List.Content floated='right' className='left aligned'>
-                <Button icon={ true } size='mini' onClick={ () => onRemove(file) }>
-                    <Icon name='remove' />
-                </Button>
-            </List.Content>
-            <List.Content>
+            <ListContentWithProgress percent={ 56 }>
                 <Image verticalAlign='middle' size='mini' src={ getFileIcon(file) } floated='left' />
                 { file.name } [{ bytesToSize(file.size) }]
-            </List.Content>
+                <Button icon={ true } size='mini' attached='right' floated='right' onClick={ () => onRemove(file) }>
+                    <Icon name='remove' />
+                </Button>
+            </ListContentWithProgress>
         </List.Item>
     );
 }

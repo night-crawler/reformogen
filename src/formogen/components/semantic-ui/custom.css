@@ -55,3 +55,13 @@
 .formogen .Select-menu-outer {
     z-index: 3;
 }
+
+.formogen .filename-description {
+    height: 35px;
+    display: flex;
+    align-items: center;
+}
+
+.formogen .list-content-with-progress .button {
+    height: 35px;
+}

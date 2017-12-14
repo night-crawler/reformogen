@@ -4,6 +4,8 @@ import {
     FIELD_CHANGED,
 
     FORM_DATA_SEND_FAIL, FORM_DATA_SEND_SUCCESS,
+
+    SINGLE_FILE_UPLOAD_FAIL, SINGLE_FILE_UPLOAD_SUCCESS,
 } from './actions';
 
 
@@ -54,6 +56,12 @@ export const formogen = (state = {}, action) => {
                 };
             }
             return { ...state, errors: {} };
+
+        case SINGLE_FILE_UPLOAD_FAIL:
+            return { ...state };
+
+        case SINGLE_FILE_UPLOAD_SUCCESS:
+            return { ...state };
 
         default:
             return state;
