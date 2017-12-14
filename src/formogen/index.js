@@ -58,7 +58,6 @@
 // https://github.com/sunnylqm/react-native-storage
 
 /* All used locales (from moment.js, excepting the 'en' locale) MUST be imported explicitly HERE! */
-import 'moment/locale/ru';
 
 import Formogen from './FormogenComponent';
 export default Formogen;

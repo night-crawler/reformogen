@@ -1,3 +1,6 @@
+import './formogen/components/semantic-ui/styles';
+import 'moment/locale/ru';
+
 import loglevel from 'loglevel';
 import prefix from 'loglevel-plugin-prefix';
 
@@ -9,6 +12,7 @@ import Formogen from './formogen-react-redux';
 import { Grid } from 'semantic-ui-react';
 import 'semantic-ui-css/semantic.css';
 import preparedMetaData from './form.json';
+
 
 // TODO: it should be in formogen module
 window.loglevel = loglevel;
@@ -75,8 +79,10 @@ class App extends Component {
                                 locale={ 'ru' }
                                 showHeader={ true }
 
-                                metaDataUrl={ 'http://localhost:8000/api/v1/sample/author-photos/describe/' }
-                                objectUrl={ 'http://localhost:8000/api/v1/sample/author-photos/1/' }
+                                // metaDataUrl={ 'http://localhost:8000/api/v1/sample/author-photos/describe/' }
+                                // objectUrl={ 'http://localhost:8000/api/v1/sample/author-photos/1/' }
+                                metaDataUrl={ objectUrl + 'describe_object/' }
+                                objectUrl={ objectUrl }
                             />
                         </Segment>
                     </Grid.Column>

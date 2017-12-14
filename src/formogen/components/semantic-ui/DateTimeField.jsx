@@ -70,7 +70,7 @@ export default function DateTimeField(props) {
         // todo: get from momemt
         dateFormat: 'YYYY.MM.DD HH:mm',
         showYearDropdown: true,
-        // showMonthDropdown: true,
+        showMonthDropdown: true,
         dropdownMode: 'select',
     };
 
