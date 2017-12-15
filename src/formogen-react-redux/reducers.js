@@ -1,25 +1,23 @@
 import {
-    RECEIVE_METADATA,
-    RECEIVE_FORMDATA,
-    FIELD_CHANGED,
-
-    FORM_DATA_SEND_FAIL, FORM_DATA_SEND_SUCCESS,
-
+    METADATA_REQUEST_SUCCESS,
+    FORMDATA_REQUEST_SUCCESS,
+    FORMDATA_SEND_FAIL, FORMDATA_SEND_SUCCESS,
     SINGLE_FILE_UPLOAD_FAIL, SINGLE_FILE_UPLOAD_SUCCESS,
+    FIELD_CHANGED,
 } from './actions';
 
 
 export const formogen = (state = {}, action) => {
     switch (action.type) {
 
-        case RECEIVE_METADATA:
+        case METADATA_REQUEST_SUCCESS:
             return {
                 ...state,
                 isMetaDataReady: true,
                 receivedMetaData: action.payload
             };
 
-        case RECEIVE_FORMDATA:
+        case FORMDATA_REQUEST_SUCCESS:
             return {
                 ...state,
                 errors: {},
@@ -40,7 +38,7 @@ export const formogen = (state = {}, action) => {
                 }
             };
 
-        case FORM_DATA_SEND_SUCCESS:
+        case FORMDATA_SEND_SUCCESS:
             // TODO: case with result == pending
             return {
                 ...state,
@@ -48,7 +46,7 @@ export const formogen = (state = {}, action) => {
                 errors: {},
             };
 
-        case FORM_DATA_SEND_FAIL:
+        case FORMDATA_SEND_FAIL:
             if (+action.payload.status === 400) {
                 return {
                     ...state,

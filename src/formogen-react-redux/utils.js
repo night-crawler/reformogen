@@ -2,28 +2,6 @@ import _ from 'lodash';
 
 import Cookies from 'js-cookie';
 
-import { extractIdentity, idsList, resolveResponse } from '../formogen/utils';
-
-
-export function concatFields(fieldSet = [], anotherFieldSet = []) {
-    const fields = [
-        ...fieldSet,
-        ...anotherFieldSet,
-    ];
-    return _.differenceBy(fields, 'name');
-}
-
-export function mergeMetaData(assigned, received) {
-    const initialFields = _.get(assigned, 'fields', []);
-    const receivedFields = _.get(received, 'fields', []);
-
-    return {
-        title: _.get(assigned, 'title', null) || received.title,
-        description: _.get(assigned, 'description', null) || received.description,
-        fields: _([...initialFields, ...receivedFields]).uniqBy('name').value()
-    };
-}
-
 
 /**
  * Each field contains a default value.
@@ -48,42 +26,7 @@ export function updateFormDataWithDefaults(fields, formData) {
 }
 
 
-export function getFieldData(state) {
-    const { formData, initialFormData } = state;
-    const { fields } = state.metaData;
-
-    let files = {}, data = {}, changedFields = [];
-    fields.map(({ type, name, upload_url = null }) => {
-        const
-            value = formData[name],
-            ptr = (upload_url || type in ['FileField', 'ImageField']) ? files : data,
-            initialValue = initialFormData[name];
-        let isChanged = value !== initialValue;
-
-        // go deeper with checks only when the basic comparision returned true
-        // this check applies on arrays or object
-        if (isChanged && _.isObject(initialValue)) {
-            const _initialValueIdentity = extractIdentity(initialValue);
-            const _valueIdentity = extractIdentity(value);
-
-            if (_.isArray(_initialValueIdentity)) {
-                isChanged = !_(_initialValueIdentity).difference(_valueIdentity).isEmpty();
-            } else {
-                isChanged = _initialValueIdentity !== _valueIdentity;
-            }
-        }
-
-        isChanged && changedFields.push(name);
-        ptr[name] = value;
-
-        return null;  // shut warning
-    });
-
-    return { data, files, changedFields };
-}
-
-
-function csrfSafeMethod(method) {
+export function csrfSafeMethod(method) {
     // these HTTP methods do not require CSRF protection
     return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
 }
@@ -125,7 +68,6 @@ export const getFetchOptions = ({ headers = defaultHeaders, csrfToken = '', meth
     }
     return { headers: _headers, method };
 };
-
 
 
 export function getDirtyFields(prevDirtyData, pristineData) {
@@ -171,4 +113,61 @@ export function prepareFileUploadQueue(filesFieldMap, objectUrls = {}) {
         }
     }
     return fileUploadQueue;
+}
+
+
+export function idsList(value) {
+    if (_.isArray(value))
+        return extractIdentity(value);
+    return [extractIdentity(value)];
+}
+
+
+export function extractIdentity(value) {
+    if (!value)
+        return null;
+
+    if (_.isPlainObject(value))
+        return +value.id;
+
+    if (_.isArray(value)) {
+        if (_.isEmpty(value))
+            return [];
+
+        if (_.isPlainObject(value[0]))
+            return _(value).map('id').map((v) => +v).value();
+        else
+            return _.map(value, (v) => +v);
+    }
+
+    if (_.isString(value) || _.isNumber(value))
+        return +value;
+
+    throw new Error(`Cannot extract identity from ${value}`);
+}
+
+
+export function resolveResponse(response) {
+    if (response.ok) {
+        return response.json();
+    }
+
+    // there was a response.json() recently
+    return response.text().then(data => {
+        let _data = data, isJson = false;
+        try {
+            _data = JSON.parse(data);
+            isJson = true;
+        } catch (err) {}
+
+        let error = new Error();
+        error.name = 'FormogenError';
+        error.data = _data;
+        error.status = response.status;
+        error.statusText = response.statusText;
+        error.origResponse = response;
+        error.isJson = isJson;
+        error.url = response.url;
+        throw error;
+    });
 }

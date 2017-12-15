@@ -1,3 +1,7 @@
+/*
+    TODO: it's deprecated! Remove it on beta-stage!
+ */
+
 import _ from 'lodash';
 
 import loglevel from 'loglevel';

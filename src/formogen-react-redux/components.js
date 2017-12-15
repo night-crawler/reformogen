@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import FormogenFormComponent from '../formogen/components/semantic-ui';
+import FormogenFormComponent from '../formogen';
 
 
-export default class FormogenReactReduxComponent extends React.Component {
+export default class FormogenComponent extends Component {
     static propTypes = {
         actualFormData: PropTypes.object.isRequired,
         description: PropTypes.string,

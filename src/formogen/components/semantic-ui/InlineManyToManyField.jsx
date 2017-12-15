@@ -1,12 +1,14 @@
-import _ from 'lodash';
-import PropTypes from 'prop-types';
 import React from 'react';
-import Select from 'react-select';
+import PropTypes from 'prop-types';
+
+import _ from 'lodash';
+
 import { Form } from 'semantic-ui-react';
+
+import Select from 'react-select';
+
 import { extractIdentity } from '../../utils';
-
 import { errorsType, layoutOptsType } from '../fieldPropTypes';
-
 import Label from './Label';
 import { MessageList } from './MiscComponents';
 

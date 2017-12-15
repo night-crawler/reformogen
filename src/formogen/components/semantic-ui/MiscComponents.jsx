@@ -1,6 +1,7 @@
-import _ from 'lodash';
-import PropTypes from 'prop-types';
 import React from 'react';
+import PropTypes from 'prop-types';
+
+import _ from 'lodash';
 
 import { Dimmer, Image, Loader, Message, Segment } from 'semantic-ui-react';
 

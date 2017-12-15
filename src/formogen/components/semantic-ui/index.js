@@ -1,5 +1,4 @@
 import React from 'react';
-
 import PropTypes from 'prop-types';
 
 import _ from 'lodash';
@@ -33,9 +32,6 @@ import TimeField from './TimeField';
 import DropzoneField from './DropzoneField';
 
 import { MessageList } from './MiscComponents';
-
-
-
 
 export {
     CharField,
@@ -235,15 +231,18 @@ export default class FormogenFormComponent extends React.Component {
         return (
             <Field
                 key={ i }
-                value={ this.props.formData[opts.name] }
-                onChange={ this.props.onFieldChange }
-                onNetworkError={ this.props.onNetworkError }
-                errors={ this.props.errorsFieldMap[opts.name] }
-                updateProps={ this.props.fieldUpdatePropsMap[opts.name] }
+                locale={ this.props.locale }
                 upperFirstLabel={ this.props.upperFirstLabels }
                 helpTextOnHover={ this.props.helpTextOnHover }
-                locale={ this.props.locale }
 
+                value={ this.props.formData[opts.name] }
+
+                onChange={ this.props.onFieldChange }
+                onNetworkError={ this.props.onNetworkError }
+
+                errors={ this.props.errorsFieldMap[opts.name] }
+
+                updateProps={ this.props.fieldUpdatePropsMap[opts.name] }
                 layoutOpts={ layoutOpts }
 
                 { ...opts }

@@ -2,8 +2,8 @@ import { connect } from 'react-redux';
 
 import { createStructuredSelector } from 'reselect';
 
-import { fetchMetaData, fetchFormData, submitForm, fieldChanged } from './actions';
-import FormogenReactReduxComponent from './components';
+import { requestMetaData, requestFormData, submitForm, fieldChanged } from './actions';
+import FormogenComponent from './components';
 
 import {
     title, description, fields,
@@ -20,8 +20,8 @@ const mapDispatchToProps = (dispatch, props) => {
     return {
         dispatch,
 
-        fetchMetaData: () => props.objectUrl && dispatch(fetchFormData(props.objectUrl)),
-        fetchFormData: () => dispatch(fetchMetaData(props.metaDataUrl)),
+        fetchMetaData: () => props.objectUrl && dispatch(requestFormData(props.objectUrl)),
+        fetchFormData: () => dispatch(requestMetaData(props.metaDataUrl)),
         handleFieldChanged: (...args) => dispatch(fieldChanged(...args)),
     };
 };
@@ -87,4 +87,4 @@ export default connect(
     }),
     mapDispatchToProps,
     mergeProps
-)(FormogenReactReduxComponent);
+)(FormogenComponent);

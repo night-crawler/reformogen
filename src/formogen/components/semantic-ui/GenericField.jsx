@@ -1,12 +1,13 @@
-import _ from 'lodash';
-import loglevel from 'loglevel';
 import React from 'react';
-import { Form } from 'semantic-ui-react';
-
 import propTypes from '../fieldPropTypes';
 
-import Label from './Label';
+import _ from 'lodash';
 
+import loglevel from 'loglevel';
+
+import { Form } from 'semantic-ui-react';
+
+import Label from './Label';
 import { MessageList } from './MiscComponents';
 
 

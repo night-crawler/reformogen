@@ -3,13 +3,13 @@ import _ from 'lodash';
 import * as URI from 'urijs';
 
 
-export const headers = {
+export const headers = {  // TODO: remove it
     'Accept': 'application/json',
     'Content-Type': 'application/json',
 };
 
 
-export function resolveResponse(response) {
+export function resolveResponse(response) {  // TODO: remove it
     if (response.ok) {
         return response.json();
     }
@@ -48,13 +48,13 @@ export function extractPageNumber(uri) {
  * @param {Number|String|Array.<Number>|Array.<String>|Array.<Object>} value
  * @returns {Array.<Number>|Array}
  */
-export function idsList(value) {
+export function idsList(value) {  // TODO: remove it
     if (_.isArray(value))
         return extractIdentity(value);
     return [extractIdentity(value)];
 }
 
-export function extractIdentity(value) {
+export function extractIdentity(value) {  // TODO: remove it
     if (!value)
         return null;
 
