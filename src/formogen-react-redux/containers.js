@@ -13,6 +13,7 @@ import {
     isFormDataPristine, isFormDataDirty,
     pipePreSubmit, pipePreSuccess, pipePreValidationError,
     fieldErrorsMap, nonFieldErrorsMap,
+    formFilesUploadProgress,
 } from './selectors';
 
 
@@ -84,6 +85,10 @@ export default connect(
         // errors
         fieldErrorsMap,
         nonFieldErrorsMap,
+
+
+
+        formFilesUploadProgress,
     }),
     mapDispatchToProps,
     mergeProps

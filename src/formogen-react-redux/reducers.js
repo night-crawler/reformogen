@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 import {
     METADATA_REQUEST_SUCCESS,
     FORMDATA_REQUEST_SUCCESS,
@@ -56,10 +58,45 @@ export const formogen = (state = {}, action) => {
             return { ...state, errors: {} };
 
         case SINGLE_FILE_UPLOAD_FAIL:
-            return { ...state };
+            return {
+                ...state,
+                formFilesUploadProgress: {
+                    ...state.formFilesUploadProgress,
+                    [action.payload.fieldName]: {
+                        ..._.get(state.formFilesUploadProgress, action.payload.fieldName, {}),
+                        [action.payload.fileName]: {
+                            percent: 0,
+                            status: 'fail'
+                        }
+                    }
+                }
+            };
 
+
+        /**
+         * {
+         *     formFilesUploadProgress: {
+         *         <fieldName>: {
+         *              <fileName>: {percent: 100, status: 'ok|fail'}
+         *         }
+         *     }
+         * }
+         */
         case SINGLE_FILE_UPLOAD_SUCCESS:
-            return { ...state };
+            return {
+                ...state,
+                formFilesUploadProgress: {
+                    ...state.formFilesUploadProgress,
+                    [action.payload.fieldName]: {
+                        ..._.get(state.formFilesUploadProgress, action.payload.fieldName, {}),
+                        [action.payload.fileName]: {
+                            percent: 100,
+                            status: 'ok'
+                        }
+                    }
+                }
+            };
+            
 
         default:
             return state;

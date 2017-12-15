@@ -246,6 +246,8 @@ export default class FormogenFormComponent extends React.Component {
                 layoutOpts={ layoutOpts }
 
                 { ...opts }
+
+                formFilesUploadProgress={ this.props.formFilesUploadProgress[opts.name] }
             />
         );
     }

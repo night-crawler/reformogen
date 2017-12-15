@@ -110,7 +110,7 @@ export function prepareFileUploadQueue(filesFieldMap, objectUrls = {}) {
         for (let file of files) {
             let formData = new FormData();
             formData.append(file.name, file);
-            fileUploadQueue.push({ uploadUrl, formData, fileName: file.name });
+            fileUploadQueue.push({ fieldName, uploadUrl, formData, fileName: file.name });
         }
     }
     return fileUploadQueue;

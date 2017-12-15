@@ -66,6 +66,8 @@ export default class FormogenComponent extends Component {
                 errorsFieldMap={ this.props.fieldErrorsMap }
                 nonFieldErrorsMap={ this.props.nonFieldErrorsMap }
 
+                formFilesUploadProgress={ this.props.formFilesUploadProgress }
+
                 onNetworkError={ () => {} }
             />
         );

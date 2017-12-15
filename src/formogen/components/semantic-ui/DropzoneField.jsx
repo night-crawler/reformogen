@@ -44,13 +44,26 @@ const fileShape = PropTypes.shape({
     type: PropTypes.string,
 });
 
+
+
+/**
+ * {
+ *     formFilesUploadProgress: {
+ *         <fieldName>: {
+ *              <fileName>: {percent: 100, status: 'ok|fail'}
+ *         }
+ *     }
+ * }
+ */
+
 FilesPreviews.propTypes = {
     files: PropTypes.arrayOf(fileShape).isRequired,
     onClear: PropTypes.func.isRequired,
     onRemoveFile: PropTypes.func.isRequired,
     getFileIcon: PropTypes.func.isRequired,
+    formFilesUploadProgress: PropTypes.object
 };
-function FilesPreviews({ files, onClear, getFileIcon, onRemoveFile }) {
+function FilesPreviews({ files, onClear, getFileIcon, onRemoveFile, formFilesUploadProgress }) {
     if (_.isEmpty(files)) {
         return null;
     }
@@ -58,9 +71,16 @@ function FilesPreviews({ files, onClear, getFileIcon, onRemoveFile }) {
     return (
         <div className='ui segment attached'>
             <List divided={ true } relaxed={ true } className='files-previews'>
-                { files.map((file, i) => (
-                    <FileItem file={ file } key={ i } getFileIcon={ getFileIcon } onRemove={ onRemoveFile } />
-                )) }
+                { files.map((file, i) => {
+                    const progress = _.get(formFilesUploadProgress, file.name, {});
+                    return <FileItem
+                        key={ i }
+                        file={ file }
+                        getFileIcon={ getFileIcon }
+                        onRemove={ onRemoveFile }
+                        progress={ progress }
+                    />;
+                }) }
             </List>
             <Button size='mini' fluid={ true } icon={ true } onClick={ onClear }>
                 <Icon name='remove' />
@@ -73,9 +93,12 @@ FileItem.propTypes = {
     file: fileShape.isRequired,
     getFileIcon: PropTypes.func.isRequired,
     onRemove: PropTypes.func.isRequired,
+    progress: PropTypes.object.isRequired,
 };
-function FileItem({ file, getFileIcon, onRemove }) {
+function FileItem({ file, getFileIcon, onRemove, progress }) {
     const [fileName, fileExt] = splitExt(file.name);
+    const { status: uploadStatus, percent = 0 } = progress;
+    const color = uploadStatus === 'fail' ? '#db2828' : 'LimeGreen';
 
     return (
         <List.Item>
@@ -83,7 +106,7 @@ function FileItem({ file, getFileIcon, onRemove }) {
                 {
                     ({ measureRef, contentRect }) =>
                         <div ref={ measureRef }>
-                            <ListContentWithProgress percent={ 56 }>
+                            <ListContentWithProgress percent={ percent } color={ color }>
                                 <Image verticalAlign='middle' size='mini' src={ getFileIcon(file) } floated='left' />
                                 <div className='file-representation' title={ `[${bytesToSize(file.size)}] ${file.name}` }>
                                     <strong>{ `[${bytesToSize(file.size)}]` }&nbsp;</strong>
@@ -122,6 +145,7 @@ export default class DropzoneField extends React.Component {
         accept: PropTypes.string,
 
         layoutOpts: PropTypes.object,
+        formFilesUploadProgress: PropTypes.object,
     };
 
     static defaultProps = {
@@ -220,6 +244,7 @@ export default class DropzoneField extends React.Component {
                     onClear={ this.handleClearFiles }
                     getFileIcon={ this.props.getFileIcon }
                     onRemoveFile={ this.handleRemoveFile }
+                    formFilesUploadProgress={ this.props.formFilesUploadProgress }
                 />
                 <MessageList messages={ this.props.errors } />
             </Form.Field>

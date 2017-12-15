@@ -160,34 +160,34 @@ export const SINGLE_FILE_UPLOAD_START = `${FORMOGEN_ACTION_PREFIX}:SINGLE_FILE_U
 export const SINGLE_FILE_UPLOAD_FAIL = `${FORMOGEN_ACTION_PREFIX}:SINGLE_FILE_UPLOAD:${FAIL}`;
 export const SINGLE_FILE_UPLOAD_SUCCESS = `${FORMOGEN_ACTION_PREFIX}:SINGLE_FILE_UPLOAD:${SUCCESS}`;
 
-export const singleFileUploadStart = (url, data, fileName) => ({
+export const singleFileUploadStart = (fieldName, url, data, fileName) => ({
     type: SINGLE_FILE_UPLOAD_START,
-    payload: { url, data, fileName },
+    payload: { fieldName, url, data, fileName },
 });
 
-export const singleFileUploadFail = (url, error, fileName) => ({
+export const singleFileUploadFail = (fieldName, url, error, fileName) => ({
     type: SINGLE_FILE_UPLOAD_FAIL,
-    payload: { url, error, fileName },
+    payload: { fieldName, url, error, fileName },
 });
 
-export const singleFileUploadSuccess = (url, data, fileName) => ({
+export const singleFileUploadSuccess = (fieldName, url, data, fileName) => ({
     type: SINGLE_FILE_UPLOAD_SUCCESS,
-    payload: { url, data, fileName }
+    payload: { fieldName, url, data, fileName }
 });
 
-export const uploadSingleFile = (uploadUrl, formData, fileName, dispatch) => {
-    dispatch(singleFileUploadStart(uploadUrl, formData, fileName));
+export const uploadSingleFile = (fieldName, uploadUrl, formData, fileName, dispatch) => {
+    dispatch(singleFileUploadStart(fieldName, uploadUrl, formData, fileName));
 
     const options = { ...getFetchOptions({ method: 'POST', headers: {} }), body: formData };
     return fetch(uploadUrl, options)
         .then(resolveResponse)
-        .then(data => dispatch(singleFileUploadSuccess(uploadUrl, data, fileName)))
-        .catch(error => dispatch(singleFileUploadFail(uploadUrl, error, fileName)));
+        .then(data => dispatch(singleFileUploadSuccess(fieldName, uploadUrl, data, fileName)))
+        .catch(error => dispatch(singleFileUploadFail(fieldName, uploadUrl, error, fileName)));
 };
 
 const evaluateUploadFileChunk = (chunk, dispatch) => {
-    return chunk.map(({ uploadUrl, formData, fileName }) => {
-        return uploadSingleFile(uploadUrl, formData, fileName, dispatch);
+    return chunk.map(({ fieldName, uploadUrl, formData, fileName }) => {
+        return uploadSingleFile(fieldName, uploadUrl, formData, fileName, dispatch);
     });
 };
 

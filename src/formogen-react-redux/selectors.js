@@ -229,3 +229,8 @@ export const fieldErrorsMap = createSelector([errors, fieldNames], (errors, fiel
 export const nonFieldErrorsMap = createSelector([errors, fieldNames], (errors, fieldNames) => {
     return _(errors).pick(_(errors).keys().difference(fieldNames).value()).value();
 });
+
+
+
+
+export const formFilesUploadProgress = createSelector(formogen, formogen => formogen.formFilesUploadProgress || {});
