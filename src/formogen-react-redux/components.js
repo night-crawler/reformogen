@@ -24,26 +24,26 @@ export default class FormogenComponent extends Component {
         title: PropTypes.string,
         upperFirstLabels: PropTypes.bool,
         totalMetaData: PropTypes.object,
-        submitUrl: PropTypes.string.isRequired,
+        submitUrl: PropTypes.string,
     };
-
-    constructor(props) {
-        super(props);
-        const { submitUrl } = props;
-
-        if (!submitUrl)
-            throw new Error('Got an empty submitUrl');
-    }
 
     componentDidMount() {
         this.props.fetchMetaData();
         this.props.fetchFormData();
     }
+    componentWillReceiveProps({ isMetaDataReady, isFormDataReady }) {
+        if (isMetaDataReady && isFormDataReady) {
+            const { submitUrl } = this.props;
+
+            if (!submitUrl)
+                throw new Error('Got an empty submitUrl');
+        }
+    }
 
     render() {
         return (
             <FormogenFormComponent
-                loading={ !this.props.isMetaDataReady }
+                loading={ !(this.props.isMetaDataReady && this.props.isFormDataReady) }
 
                 locale={ this.props.locale }
                 showHeader={ this.props.showHeader }

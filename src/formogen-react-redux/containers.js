@@ -21,6 +21,7 @@ const mapDispatchToProps = (dispatch, props) => {
     return {
         dispatch,
 
+        // TODO: objectUrl
         fetchMetaData: () => props.objectUrl && dispatch(requestFormData(props.objectUrl)),
         fetchFormData: () => dispatch(requestMetaData(props.metaDataUrl)),
         handleFieldChanged: (...args) => dispatch(fieldChanged(...args)),
