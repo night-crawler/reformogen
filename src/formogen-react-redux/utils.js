@@ -47,6 +47,7 @@ export const getApiMiddlewareOptions = ({ headers = {}, options = {}, csrfToken 
     return { headers: _headers, options };
 };
 
+
 export const defaultHeaders = {
     'Accept': 'application/json',
     'Content-Type': 'application/json',

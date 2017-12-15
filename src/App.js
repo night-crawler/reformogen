@@ -13,6 +13,8 @@ import { Grid } from 'semantic-ui-react';
 import 'semantic-ui-css/semantic.css';
 import preparedMetaData from './form.json';
 
+import './App.css';
+
 
 // TODO: it should be in formogen module
 window.loglevel = loglevel;

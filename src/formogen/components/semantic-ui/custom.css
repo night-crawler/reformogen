@@ -62,6 +62,18 @@
     align-items: center;
 }
 
+.formogen .list-content-with-progress {
+    display: flex;
+    align-items: center;
+}
 .formogen .list-content-with-progress .button {
     height: 35px;
+    margin-left: auto !important;
+    display: flex !important;
+    align-items: center !important;
+}
+
+.formogen .file-representation {
+    display: flex;
+    align-items: center;
 }

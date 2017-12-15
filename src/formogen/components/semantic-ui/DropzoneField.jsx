@@ -3,27 +3,17 @@ import PropTypes from 'prop-types';
 
 import _ from 'lodash';
 
-import { Button, Form, Icon, Image, List } from 'semantic-ui-react';
+import { Button, Form, Icon, Image, List, Popup } from 'semantic-ui-react';
+
+import Measure from 'react-measure';
 
 import Dropzone from 'react-dropzone';
 
 import { fileTypeImageMapping, UNKNOWN_FILE_TYPE } from '../../fileTypeImageMapping';
+import { splitExt, bytesToSize } from '../../utils';
 import { errorsType } from '../fieldPropTypes';
-import { MessageList } from './MiscComponents';
+import { MessageList, CaptionTruncator } from './MiscComponents';
 
-
-function bytesToSize(bytes) {
-    if (bytes === 0) return 'n/a';
-
-    const
-        sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'],
-        i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)), 10);
-
-    if (i === 0) {
-        return `${ bytes } ${ sizes[i] }`;
-    }
-    return `${ ( bytes / ( 1024 ** i ) ).toFixed(1) } ${ sizes[i] }`;
-}
 
 ListContentWithProgress.propTypes = {
     percent: PropTypes.number,
@@ -67,7 +57,7 @@ function FilesPreviews({ files, onClear, getFileIcon, onRemoveFile }) {
 
     return (
         <div className='ui segment attached'>
-            <List divided={ true } relaxed={ true }>
+            <List divided={ true } relaxed={ true } className='files-previews'>
                 { files.map((file, i) => (
                     <FileItem file={ file } key={ i } getFileIcon={ getFileIcon } onRemove={ onRemoveFile } />
                 )) }
@@ -85,15 +75,29 @@ FileItem.propTypes = {
     onRemove: PropTypes.func.isRequired,
 };
 function FileItem({ file, getFileIcon, onRemove }) {
+    const [fileName, fileExt] = splitExt(file.name);
+
     return (
         <List.Item>
-            <ListContentWithProgress percent={ 56 }>
-                <Image verticalAlign='middle' size='mini' src={ getFileIcon(file) } floated='left' />
-                { file.name } [{ bytesToSize(file.size) }]
-                <Button icon={ true } size='mini' attached='right' floated='right' onClick={ () => onRemove(file) }>
-                    <Icon name='remove' />
-                </Button>
-            </ListContentWithProgress>
+            <Measure bounds={ true }>
+                {
+                    ({ measureRef, contentRect }) =>
+                        <div ref={ measureRef }>
+                            <ListContentWithProgress percent={ 56 }>
+                                <Image verticalAlign='middle' size='mini' src={ getFileIcon(file) } floated='left' />
+                                <div className='file-representation' title={ `[${bytesToSize(file.size)}] ${file.name}` }>
+                                    <strong>{ `[${bytesToSize(file.size)}]` }&nbsp;</strong>
+                                    <CaptionTruncator caption={ fileName } width={ (contentRect.bounds.width || 200) - 200 } />
+                                    <span>.{ fileExt }</span>
+                                </div>
+                                <Button icon={ true } size='mini' attached='right' floated='right'
+                                    onClick={ () => onRemove(file) }>
+                                    <Icon name='remove' />
+                                </Button>
+                            </ListContentWithProgress>
+                        </div>
+                }
+            </Measure>
         </List.Item>
     );
 }

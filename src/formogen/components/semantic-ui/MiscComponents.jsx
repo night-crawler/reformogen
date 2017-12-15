@@ -34,3 +34,24 @@ export function MessageList({ header = '', messages, color = 'red' }) {
         </Message>
     );
 }
+
+CaptionTruncator.propTypes = {
+    caption: PropTypes.string,
+    width: PropTypes.number
+};
+export function CaptionTruncator({ caption, width = 0 }) {
+    return (
+        <span
+            style={ {
+                display: 'inline-block',
+                maxWidth: width,
+                textShadow: '0 0 1px white',
+                whiteSpace: 'nowrap',
+                textOverflow: 'ellipsis',
+                overflow: 'hidden',
+            } }
+        >
+            { caption }
+        </span>
+    );
+}
