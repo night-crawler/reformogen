@@ -1,9 +1,8 @@
 import { RSAA } from 'redux-api-middleware';
 
 import _ from 'lodash';
-import { resolveResponse } from '../formogen/utils';
 
-import { getApiMiddlewareOptions, getFetchOptions, prepareFileUploadQueue } from './utils';
+import { getApiMiddlewareOptions, getFetchOptions, prepareFileUploadQueue, resolveResponse } from './utils';
 
 
 // BASE PREFIXES
