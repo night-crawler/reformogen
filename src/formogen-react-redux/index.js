@@ -1,16 +1,22 @@
 /*
     ========================= TODOLIST =========================
-
+    [ ] selected value for files (show additional checkbox to clear && show currently selected file name)
+    [ ] two forms on one page
     [ ] do some tests, we need a bit more tests
+    [ ] deal with response.status == pending
+    [ ] modal forms support (modal-mode)
+    [ ] cache metadata
+    [ ] fk & m2m - check loading options without paginator (server-side)
+    [ ] reload form
+    [ ] validate (simple) user input (js-side validators)
+    [?] i18n (it's not project's responsibility)
+    [ ] fix re-render issue (see logs)
 
     [+] edit && save support (implemented POST, PATCH logic)
     [+] action URL (old formogen: objUrl, objCreateUrl)
-    [ ] modal forms support (modal-mode)
-    [?] dropzone
-    [?] state save between requests
-    [ ] m2m async (pagination etc)
-    [ ] cache metadata
-    [ ] fk & m2m - check loading options without paginator (server-side)
+    [+] dropzone
+    [+] state save between requests
+    [+] m2m async (pagination etc)
 
     [+] render json metadata (got from sever-side)
     [+] dynamic metadata (without serverside endpoints)
@@ -23,14 +29,11 @@
     [+] non-field errors
     [+] initial form field state (via props formData)
     [+] custom react-select option && value renderers
-    [ ] custom react-select option && value renderers deal with initial values before component's data loaded
-    [ ] reload form
+    [+] custom react-select option && value renderers deal with initial values before component's data loaded
     [+] misc error display (500, 300 etc) (it's not project's responsibility)
-    [ ] validate (simple) user input (js-side validators)
-    [ ] populate from (*) custom user data values
-    [?] i18n (it's not project's responsibility)
-    [ ] fix re-render issue (see logs)
-    [ ] proper tab index for fields
+
+    [+] populate from (*) custom user data values
+    [+] proper tab index for fields
 
     ============================================================
 */

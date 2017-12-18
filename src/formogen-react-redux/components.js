@@ -9,14 +9,14 @@ export default class FormogenComponent extends Component {
         actualFormData: PropTypes.object.isRequired,
         description: PropTypes.string,
         fieldErrorsMap: PropTypes.object,
-        fetchFormData: PropTypes.func.isRequired,
-        fetchMetaData: PropTypes.func.isRequired,
+        getFormData: PropTypes.func.isRequired,
+        getMetaData: PropTypes.func.isRequired,
         fieldUpdatePropsMap: PropTypes.any,
         fields: PropTypes.array.isRequired,
         handleFieldChanged: PropTypes.func.isRequired,
         helpTextOnHover: PropTypes.bool,
-        isMetaDataReady: PropTypes.bool,
         layoutTemplate: PropTypes.object,
+
         locale: PropTypes.string,
         nonFieldErrorsMap: PropTypes.object,
         showHeader: PropTypes.bool,
@@ -25,14 +25,17 @@ export default class FormogenComponent extends Component {
         upperFirstLabels: PropTypes.bool,
         totalMetaData: PropTypes.object,
         submitUrl: PropTypes.string,
+
+        formFilesUploadProgress: PropTypes.object,
+        isLoading: PropTypes.bool,
     };
 
     componentDidMount() {
-        this.props.fetchMetaData();
-        this.props.fetchFormData();
+        this.props.getMetaData();
+        this.props.getFormData();
     }
-    componentWillReceiveProps({ isMetaDataReady, isFormDataReady }) {
-        if (isMetaDataReady && isFormDataReady) {
+    componentWillReceiveProps({ isLoading }) {
+        if (!isLoading) {
             const { submitUrl } = this.props;
 
             if (!submitUrl)
@@ -43,7 +46,7 @@ export default class FormogenComponent extends Component {
     render() {
         return (
             <FormogenFormComponent
-                loading={ !(this.props.isMetaDataReady && this.props.isFormDataReady) }
+                loading={ this.props.isLoading }
 
                 locale={ this.props.locale }
                 showHeader={ this.props.showHeader }

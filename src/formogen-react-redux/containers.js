@@ -8,12 +8,14 @@ import FormogenComponent from './components';
 import {
     title, description, fields,
     pristineFormData, dirtyFormData, actualFormData, dirtyFiles,
-    isFormDataReady, isMetaDataReady, shouldUploadFiles,
+    // isFormDataReady, isMetaDataReady,
+    shouldUploadFiles,
     submitUrl, submitMethod,
     isFormDataPristine, isFormDataDirty,
     pipePreSubmit, pipePreSuccess, pipePreValidationError,
     fieldErrorsMap, nonFieldErrorsMap,
     formFilesUploadProgress,
+    isLoading,
 } from './selectors';
 
 
@@ -22,8 +24,10 @@ const mapDispatchToProps = (dispatch, props) => {
         dispatch,
 
         // TODO: objectUrl
-        fetchMetaData: () => props.objectUrl && dispatch(requestFormData(props.objectUrl)),
-        fetchFormData: () => dispatch(requestMetaData(props.metaDataUrl)),
+        getFormData: () => props.objectUrl && dispatch(requestFormData(props.objectUrl)),
+
+        getMetaData: () => dispatch(requestMetaData(props.metaDataUrl)),
+
         handleFieldChanged: (...args) => dispatch(fieldChanged(...args)),
     };
 };
@@ -37,10 +41,10 @@ const mergeProps = (stateProps, dispatchProps, ownProps) => {
 
         return dispatch(
             submitForm({
-                submitUrl, submitMethod,
+                submitUrl, submitMethod, sendFileQueueLength,
                 // TODO: add pipePreSubmit for formFiles
-                formData: pipePreSubmit(dirtyFormData), formFiles: dirtyFiles,
-                sendFileQueueLength
+                formData: pipePreSubmit(dirtyFormData),
+                formFiles: dirtyFiles
             })
         );
     };
@@ -68,8 +72,8 @@ export default connect(
         dirtyFiles,
 
         // states
-        isFormDataReady,
-        isMetaDataReady,
+        // isFormDataReady,
+        // isMetaDataReady,
         isFormDataPristine,
         isFormDataDirty,
         shouldUploadFiles,
@@ -87,7 +91,7 @@ export default connect(
         fieldErrorsMap,
         nonFieldErrorsMap,
 
-
+        isLoading,
 
         formFilesUploadProgress,
     }),

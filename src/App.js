@@ -79,11 +79,17 @@ class App extends Component {
                                 locale={ 'ru' }
                                 showHeader={ true }
 
-                                metaDataUrl={ 'http://localhost:8000/api/v1/sample/author-photos/describe/' }
-                                objectCreateUrl={ 'http://localhost:8000/api/v1/sample/author-photos/' }
+                                /* 1 */
+                                // metaDataUrl={ 'http://localhost:8000/api/v1/sample/author-photos/describe/' }
+                                // objectCreateUrl={ 'http://localhost:8000/api/v1/sample/author-photos/' }
                                 // objectUrl={ 'http://localhost:8000/api/v1/sample/author-photos/1/' }
-                                // metaDataUrl={ objectUrl + 'describe_object/' }
-                                // objectUrl={ objectUrl }
+
+                                metaDataUrl={ metaDataUrl }
+                                // objectCreateUrl={ 'http://localhost:8000/api/v1/sample/author-photos/' }
+                                objectUrl={ objectUrl }
+
+
+
                                 sendFileQueueLength={ 3 }
 
                             />

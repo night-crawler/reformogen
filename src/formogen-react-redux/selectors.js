@@ -109,8 +109,9 @@ export const isFormDataPristine = createSelector(dirtyFormData, dirtyFormData =>
 // truly if user has changed some fields (NOTE: real diff DOES matter)
 export const isFormDataDirty = createSelector(dirtyFormData, dirtyFormData => !_.isEmpty(dirtyFormData));
 
+// DEPRECATED:
 // when form data ready to be rendered it's true
-export const isFormDataReady = createSelector(formogen, formogen => formogen.isFormDataReady);
+// export const isFormDataReady = createSelector(formogen, formogen => formogen.isFormDataReady);
 
 // it contains current form data state (for form rendering with actual form data)
 export const actualFormData = createSelector(
@@ -121,8 +122,23 @@ export const actualFormData = createSelector(
 
 // =============== SUBMIT DATA ===============
 
+export const objectUpdateUrl = createSelector(
+    [initial, pristineFormData],
+    (initial, formData) => {
+        const v = initial.objectUpdateUrl || initial.objectUrl ||
+            _.get(formData, 'urls.update') ||
+            _.get(formData, 'urls.edit') ||
+            _.get(formData, 'urls.view', null);
+        console.log('objectUpdateUrl', v);
+        return v;
+    }
+);
+
 // truly if FormogenForm should create an object when submitting
-export const isObjectCreate = createSelector(pristineFormData, formData => !_.get(formData, 'id', null));
+export const isObjectCreate = createSelector(
+    objectUpdateUrl,
+    objectUpdateUrl => !objectUpdateUrl
+);
 
 // truly if FormogenForm should update an object when submitting
 export const isObjectUpdate = createSelector(pristineFormData, formData => !!_.get(formData, 'id', null));
@@ -132,15 +148,10 @@ export const submitMethod = createSelector(isObjectUpdate, isObjectUpdate => isO
 
 // URL of XML Http Request when FormogenForm is submitted
 export const submitUrl = createSelector(
-    [initial, pristineFormData, isObjectCreate],
-    (initial, formData, isObjectCreate) => {
-        if (isObjectCreate)
-            return initial.objectCreateUrl;
-
-        return initial.objectUpdateUrl || initial.objectUrl ||
-            _.get(formData, 'urls.update') ||
-            _.get(formData, 'urls.edit') ||
-            _.get(formData, 'urls.view', null);
+    [initial, isObjectCreate, objectUpdateUrl],
+    (initial, isObjectCreate, objectUpdateUrl) => {
+        // console.log(isObjectCreate, )
+        return isObjectCreate ? initial.objectCreateUrl : objectUpdateUrl
     }
 );
 
@@ -234,3 +245,9 @@ export const nonFieldErrorsMap = createSelector([errors, fieldNames], (errors, f
 
 
 export const formFilesUploadProgress = createSelector(formogen, formogen => formogen.formFilesUploadProgress || {});
+
+export const isLoading = createSelector([formogen, isObjectUpdate], (formogen, isObjectUpdate) => {
+    if (isObjectUpdate)
+        return !(formogen.isFormDataReady && formogen.isMetaDataReady);
+    return !formogen.isMetaDataReady;
+});

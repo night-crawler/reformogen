@@ -104,7 +104,7 @@ export default class FormogenComponent extends Component {
     componentWillMount() {
         this.log.debug('componentWillMount()');
         Promise
-            .all([this.fetchMetaData(), this.fetchFormData()])
+            .all([this.getMetaData(), this.getFormData()])
             .then(([newMetaData, newFormData]) => {
                 this.props.onFetchComplete(newMetaData, newFormData);
                 return [newMetaData, newFormData];
@@ -308,7 +308,7 @@ export default class FormogenComponent extends Component {
             // first set a new url to retrieve the instance
             const objectUpdateUrl = _.get(data, 'urls.update') || _.get(data, 'urls.edit');
             this.setState({ objectUpdateUrl }, () => {
-                this.fetchFormData()
+                this.getFormData()
                     .then(data => resolve(data))
                     .catch(error => reject(error));
             });
