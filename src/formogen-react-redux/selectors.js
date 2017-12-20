@@ -64,7 +64,10 @@ export const fileFieldNames = createSelector(fileFields, fileFields => _.map(fil
 
 // =============== FORMDATA ===============
 
-// should contains form data (from own props)
+// should contain data objects that present file uploading progress
+export const formFilesUploadProgress = createSelector(formogen, formogen => formogen.formFilesUploadProgress || {});
+
+// should contain form data (from own props)
 export const initialFormData = createSelector(initial, initial => initial.initialFormData);
 
 // should contain received (from remote server) form data
@@ -125,12 +128,10 @@ export const actualFormData = createSelector(
 export const objectUpdateUrl = createSelector(
     [initial, pristineFormData],
     (initial, formData) => {
-        const v = initial.objectUpdateUrl || initial.objectUrl ||
+        return initial.objectUpdateUrl || initial.objectUrl ||
             _.get(formData, 'urls.update') ||
             _.get(formData, 'urls.edit') ||
             _.get(formData, 'urls.view', null);
-        console.log('objectUpdateUrl', v);
-        return v;
     }
 );
 
@@ -149,10 +150,7 @@ export const submitMethod = createSelector(isObjectUpdate, isObjectUpdate => isO
 // URL of XML Http Request when FormogenForm is submitted
 export const submitUrl = createSelector(
     [initial, isObjectCreate, objectUpdateUrl],
-    (initial, isObjectCreate, objectUpdateUrl) => {
-        // console.log(isObjectCreate, )
-        return isObjectCreate ? initial.objectCreateUrl : objectUpdateUrl
-    }
+    (initial, isObjectCreate, objectUpdateUrl) => isObjectCreate ? initial.objectCreateUrl : objectUpdateUrl
 );
 
 
@@ -242,10 +240,9 @@ export const nonFieldErrorsMap = createSelector([errors, fieldNames], (errors, f
 });
 
 
+// =============== MISC ===============
 
-
-export const formFilesUploadProgress = createSelector(formogen, formogen => formogen.formFilesUploadProgress || {});
-
+// it signals if the formogen form is loading its data (form data, meta data, etc)
 export const isLoading = createSelector([formogen, isObjectUpdate], (formogen, isObjectUpdate) => {
     if (isObjectUpdate)
         return !(formogen.isFormDataReady && formogen.isMetaDataReady);

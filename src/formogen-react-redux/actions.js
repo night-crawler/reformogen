@@ -60,14 +60,20 @@ export const formSubmitComplete = (data) => ({
     payload: data,
 });
 
-export function submitForm({ submitUrl, submitMethod = 'POST', formData, formFiles, sendFileQueueLength = 1 }) {
+export function submitForm({
+    submitUrl, submitMethod = 'POST', formData, formFiles, sendFileQueueLength = 1,
+    pipePreSubmit, pipePreValidationError, pipePreSuccess,
+}) {
     return dispatch => {
 
         dispatch(formSubmitInit());
 
-        return dispatch(sendFormData(submitUrl, submitMethod, formData))
-            .then(({ payload }) => payload)
-            .then(data => dispatch(requestFormData(data ? data.urls.update : submitUrl)))
+        return dispatch(sendFormData(submitUrl, submitMethod, pipePreSubmit(formData)))
+            .then(({ payload }) => pipePreSuccess(payload))
+            // .then(data => dispatch(requestFormData(data ? data.urls.update : submitUrl)))
+            // TODO: client (user) should have some possibility to redefine standard submitForm flow
+            // what if the form is used for login or sth like this?
+            .then(data => dispatch(requestFormData(data && data.urls && data.urls.update || submitUrl)))
             .then(({ payload }) => payload)
             .then(data => dispatch(uploadFormFiles(formFiles, data.urls, sendFileQueueLength)))
             .then(data => dispatch(formSubmitComplete(data)))
