@@ -2,20 +2,25 @@ import { connect } from 'react-redux';
 
 import { createStructuredSelector } from 'reselect';
 
-import { requestMetaData, requestFormData, submitForm, fieldChanged } from './actions';
+import {
+    formogenComponentDidMount, formogenComponentWillUnmount,
+    requestMetaData, requestFormData,
+    submitForm,
+    fieldChanged
+} from './actions';
 import FormogenComponent from './components';
 
 import {
+    formogenName,
     title, description, fields,
     pristineFormData, dirtyFormData, actualFormData, dirtyFiles,
-    // isFormDataReady, isMetaDataReady,
     shouldUploadFiles,
     submitUrl, submitMethod,
     isFormDataPristine, isFormDataDirty,
-    pipePreSubmit, pipePreSuccess, pipePreValidationError,
+    submitMiddlewares,
     fieldErrorsMap, nonFieldErrorsMap,
     formFilesUploadProgress,
-    isLoading,
+    isLoading, skipFetchingObject
 } from './selectors';
 
 
@@ -23,11 +28,12 @@ const mapDispatchToProps = (dispatch, props) => {
     return {
         dispatch,
 
+        formogenComponentDidMount: name => dispatch(formogenComponentDidMount(name)),
+        formogenComponentWillUnmount: name => dispatch(formogenComponentWillUnmount(name)),
+
         // TODO: objectUrl
         getFormData: () => props.objectUrl && dispatch(requestFormData(props.objectUrl)),
-
         getMetaData: () => dispatch(requestMetaData(props.metaDataUrl)),
-
         handleFieldChanged: (...args) => dispatch(fieldChanged(...args)),
     };
 };
@@ -39,7 +45,8 @@ const mergeProps = (stateProps, dispatchProps, ownProps) => {
         const {
             submitUrl, submitMethod,
             dirtyFormData, dirtyFiles,
-            pipePreSubmit, pipePreValidationError, pipePreSuccess
+            submitMiddlewares,
+            skipFetchingObject,
         } = stateProps;
         const { sendFileQueueLength } = ownProps;
 
@@ -47,10 +54,8 @@ const mergeProps = (stateProps, dispatchProps, ownProps) => {
             submitForm({
                 submitUrl, submitMethod, sendFileQueueLength,
                 formData: dirtyFormData, formFiles: dirtyFiles,
-
-                // TODO: add pipePreSubmit for formFiles
-                // callbacks
-                pipePreSubmit, pipePreValidationError, pipePreSuccess,
+                middlewares: submitMiddlewares,
+                skipFetchingObject,
             })
         );
     };
@@ -66,6 +71,8 @@ const mergeProps = (stateProps, dispatchProps, ownProps) => {
 
 export default connect(
     createStructuredSelector({
+        formogenName,
+
         // metaData
         title,
         description,
@@ -83,23 +90,20 @@ export default connect(
         isFormDataPristine,
         isFormDataDirty,
         shouldUploadFiles,
+        formFilesUploadProgress,
 
         // submit data
         submitUrl,
         submitMethod,
 
-        // pipe line
-        pipePreSubmit,
-        pipePreSuccess,
-        pipePreValidationError,
+        // middlewares
+        submitMiddlewares,
 
         // errors
         fieldErrorsMap,
         nonFieldErrorsMap,
 
-        isLoading,
-
-        formFilesUploadProgress,
+        isLoading, skipFetchingObject,
     }),
     mapDispatchToProps,
     mergeProps

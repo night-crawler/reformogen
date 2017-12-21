@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import _ from 'lodash';
 
-import { Button, Form, Icon, Image, List, Popup } from 'semantic-ui-react';
+import { Button, Form, Icon, Image, List } from 'semantic-ui-react';
 
 import Measure from 'react-measure';
 

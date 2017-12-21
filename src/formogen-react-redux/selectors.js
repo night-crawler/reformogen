@@ -182,47 +182,85 @@ export const shouldUploadFiles = createSelector(
 );
 
 
-// =============== PIPE LINES ===============
+// =============== SUBMIT MIDDLEWARES ===============
+
+export const initialSubmitMiddlewares = createSelector(initial, initial => initial.submitMiddlewares || {});
 
 // callback that's executed before form's submitting
-export const pipePreSubmit = createSelector(initial, initial => {
-    const { pipePreSubmit } = initial;
+export const initialMiddleware = createSelector(initialSubmitMiddlewares, middlewares => {
+    const { initial } = middlewares;
 
-    if (_.isFunction(pipePreSubmit)) {
+    if (_.isFunction(initial)) {
         return data => {
-            console.log('Using custom pipeline processing for pipePreSubmit()');
-            return pipePreSubmit(data);
+            console.warn('Using custom pipeline processing');
+            return initial(data);
+        };
+    }
+    return data => data;
+});
+
+// callback that's executed before form's submitting
+export const sendFormDataMiddleware = createSelector(initialSubmitMiddlewares, middlewares => {
+    const { sendFormData } = middlewares;
+
+    if (_.isFunction(sendFormData)) {
+        return data => {
+            console.warn('Using custom pipeline processing');
+            return sendFormData(data);
         };
     }
     return data => data;
 });
 
 // callback that's executed before from's validation errors showing
-export const pipePreValidationError = createSelector(initial, initial => {
-    const { pipePreValidationError } = initial;
+export const requestFormDataMiddleware = createSelector(initialSubmitMiddlewares, middlewares => {
+    const { requestFormData } = middlewares;
 
-    if (_.isFunction(pipePreValidationError)) {
+    if (_.isFunction(requestFormData)) {
         return data => {
-            console.log('Using custom pipeline processing for pipePreValidationError()');
-            return pipePreValidationError(data);
+            console.warn('Using custom pipeline processing');
+            return requestFormData(data);
         };
     }
     return data => data;
 });
 
 // callback that's executed after form successful submitting
-export const pipePreSuccess =  createSelector(initial, initial => {
-    const { pipePreSuccess } = initial;
+export const formDataSendFailMiddleware =  createSelector(initialSubmitMiddlewares, middlewares => {
+    const { formDataSendFail } = middlewares;
 
-    if (_.isFunction(pipePreSuccess)) {
+    if (_.isFunction(formDataSendFail)) {
         return data => {
-            console.log('Using custom pipeline processing for pipePreSuccess()');
-            return pipePreSuccess(data);
+            console.warn('Using custom pipeline processing');
+            return formDataSendFail(data);
         };
     }
     return data => data;
 });
 
+// callback that's executed after form successful submitting
+export const otherNetworkErrorMiddleware =  createSelector(initialSubmitMiddlewares, middlewares => {
+    const { otherNetworkError } = middlewares;
+
+    if (_.isFunction(otherNetworkError)) {
+        return data => {
+            console.warn('Using custom pipeline processing');
+            return otherNetworkError(data);
+        };
+    }
+    return data => data;
+});
+
+// callback that's executed before form's submitting
+export const submitMiddlewares = createSelector(
+    [
+        initialMiddleware, sendFormDataMiddleware, requestFormDataMiddleware,
+        formDataSendFailMiddleware, otherNetworkErrorMiddleware
+    ],
+    (initial, sendFormData, requestFormData, formDataSendFail, otherNetworkError) => {
+        return { initial, sendFormData, requestFormData, formDataSendFail, otherNetworkError };
+    }
+);
 
 // =============== ERRORS ===============
 
@@ -242,9 +280,14 @@ export const nonFieldErrorsMap = createSelector([errors, fieldNames], (errors, f
 
 // =============== MISC ===============
 
+export const formogenName = createSelector(initial, initial => initial.name || 'formogen');
+
 // it signals if the formogen form is loading its data (form data, meta data, etc)
 export const isLoading = createSelector([formogen, isObjectUpdate], (formogen, isObjectUpdate) => {
     if (isObjectUpdate)
         return !(formogen.isFormDataReady && formogen.isMetaDataReady);
     return !formogen.isMetaDataReady;
 });
+
+//
+export const skipFetchingObject = createSelector(initial, initial => !!initial.skipFetchingObject);

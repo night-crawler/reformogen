@@ -49,6 +49,7 @@ export const formogen = (state = {}, action) => {
             };
 
         case FORMDATA_SEND_FAIL:
+            // TODO: what's about 401? The 401 status is correct in this context.
             if (+action.payload.status === 400) {
                 return {
                     ...state,

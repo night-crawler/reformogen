@@ -13,6 +13,23 @@ const FAIL = 'FAIL';
 const SUCCESS = 'SUCCESS';
 
 
+// =============== STATE ===============
+
+export const FORMOGEN_COMPONENT_DID_MOUNT = `${FORMOGEN_ACTION_PREFIX}:DID_MOUNT`;
+export const FORMOGEN_COMPONENT_WILL_UNMOUNT = `${FORMOGEN_ACTION_PREFIX}:WILL_UNMOUNT`;
+
+export const formogenComponentDidMount = name => ({
+    // what's about `FORMOGEN:DID_MOUNT:${name}` or sth like this? Client could able to reduce this type of action
+    type: FORMOGEN_COMPONENT_DID_MOUNT,
+    payload: { name }
+});
+
+export const formogenComponentWillUnmount = name => ({
+    type: FORMOGEN_COMPONENT_WILL_UNMOUNT,
+    payload: { name }
+});
+
+
 // =============== METADATA ===============
 
 export const METADATA_REQUEST_START = `${FORMOGEN_ACTION_PREFIX}:METADATA_REQUEST:${START}`;
@@ -61,27 +78,34 @@ export const formSubmitComplete = (data) => ({
 });
 
 export function submitForm({
-    submitUrl, submitMethod = 'POST', formData, formFiles, sendFileQueueLength = 1,
-    pipePreSubmit, pipePreValidationError, pipePreSuccess,
+    submitUrl, submitMethod = 'POST',
+    formData, formFiles,
+    sendFileQueueLength = 1, skipFetchingObject = false,
+    middlewares
 }) {
     return dispatch => {
-
         dispatch(formSubmitInit());
 
-        return dispatch(sendFormData(submitUrl, submitMethod, pipePreSubmit(formData)))
-            .then(({ payload }) => pipePreSuccess(payload))
-            // .then(data => dispatch(requestFormData(data ? data.urls.update : submitUrl)))
-            // TODO: client (user) should have some possibility to redefine standard submitForm flow
-            // what if the form is used for login or sth like this?
-            .then(data => dispatch(requestFormData(data && data.urls && data.urls.update || submitUrl)))
-            .then(({ payload }) => payload)
-            .then(data => dispatch(uploadFormFiles(formFiles, data.urls, sendFileQueueLength)))
+        return dispatch(sendFormData(submitUrl, submitMethod, middlewares.initial(formData)))
+            .then(({ payload }) => middlewares.sendFormData(payload))
+            .then(data => {
+                if (skipFetchingObject)
+                    return Promise.resolve({ payload: data });
+
+                const formDataUrl = (data && data.urls && data.urls.update) || submitUrl;
+                return dispatch(requestFormData(formDataUrl));
+            })
+            .then(({ payload }) => middlewares.requestFormData(payload))
+            .then(data => {
+                const formFilesUrls = { ...data.urls };
+                return dispatch(uploadFormFiles(formFiles, formFilesUrls, sendFileQueueLength));
+            })
             .then(data => dispatch(formSubmitComplete(data)))
             .catch(error => {
                 if (error.name !== 'FormogenError' || +error.status !== 400)
-                    return dispatch(otherNetworkError(error));
+                    return dispatch(otherNetworkError(middlewares.otherNetworkError(error)));
 
-                return dispatch(formDataSendFail(error));
+                return dispatch(formDataSendFail(middlewares.formDataSendFail(error)));
             });
     };
 }
