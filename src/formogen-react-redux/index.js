@@ -49,7 +49,7 @@
 /*
     +++++++++++++++++++++++++ BUGS +++++++++++++++++++++++++
 
-    [ ] when async field and init values weren't loaded they can be deleted by one click (just press backspace)
+    [+] when async field and init values weren't loaded they can be deleted by one click (just press backspace)
 
     ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 */

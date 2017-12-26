@@ -75,10 +75,6 @@ class App extends Component {
     };
 
     render() {
-        const metaDataUrl = 'http://localhost:8000/api/v1/sample/authors/describe/';
-        const objectUrl = 'http://localhost:8000/api/v1/sample/authors/23/';
-        const objectCreateUrl = 'http://localhost:8000/api/v1/sample/authors/';
-
         const prepopulatedFormData = {
             assigned_test_field: 'hahahah!',
 
@@ -100,14 +96,15 @@ class App extends Component {
                                 locale={ 'ru' }
                                 showHeader={ true }
 
-                                /* 1 */
+                                /* author photo form */
                                 // metaDataUrl={ 'http://localhost:8000/api/v1/sample/author-photos/describe/' }
                                 // objectCreateUrl={ 'http://localhost:8000/api/v1/sample/author-photos/' }
                                 // objectUrl={ 'http://localhost:8000/api/v1/sample/author-photos/1/' }
 
-                                metaDataUrl={ metaDataUrl }
-                                // objectCreateUrl={ 'http://localhost:8000/api/v1/sample/author-photos/' }
-                                objectUrl={ objectUrl }
+                                /* author form */
+                                metaDataUrl={ 'http://localhost:8000/api/v1/sample/authors/describe/' }
+                                objectCreateUrl={ 'http://localhost:8000/api/v1/sample/authors/' }
+                                objectUrl={ 'http://localhost:8000/api/v1/sample/authors/23/' }
 
                                 /* misc */
                                 sendFileQueueLength={ 3 }
