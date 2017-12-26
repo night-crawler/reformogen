@@ -1,6 +1,8 @@
 import re
 
+from django.conf import settings
 from django.contrib.postgres.fields import ArrayField
+from django.core.files.storage import FileSystemStorage
 from django.db import models
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
@@ -11,6 +13,8 @@ from rest_framework.reverse import reverse
 
 from sample import states
 from sample import abstract
+
+media_storage = FileSystemStorage(location=settings.MEDIA_ROOT, base_url=settings.MEDIA_URL)
 
 
 def positive_integer_validator(value):
@@ -112,7 +116,7 @@ class Author(CRUDUrlsMixin, TimeStampedModel, abstract.StateBundleMixin):
 class AuthorPhoto(CRUDUrlsMixin, TimeStampedModel):
     author = models.ForeignKey('Author', verbose_name=_('author'), on_delete=models.CASCADE)
     photo = ThumbnailerImageField(_('photo'), blank=True, null=True,
-                                  help_text=_('logo image'))
+                                  storage=media_storage, help_text=_('logo image'))
 
     class Meta:
         verbose_name = _('author photo')

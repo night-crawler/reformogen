@@ -97,14 +97,14 @@ class App extends Component {
                                 showHeader={ true }
 
                                 /* author photo form */
-                                // metaDataUrl={ 'http://localhost:8000/api/v1/sample/author-photos/describe/' }
-                                // objectCreateUrl={ 'http://localhost:8000/api/v1/sample/author-photos/' }
-                                // objectUrl={ 'http://localhost:8000/api/v1/sample/author-photos/1/' }
+                                metaDataUrl={ 'http://localhost:8000/api/v1/sample/author-photos/describe/' }
+                                objectCreateUrl={ 'http://localhost:8000/api/v1/sample/author-photos/' }
+                                objectUrl={ 'http://localhost:8000/api/v1/sample/author-photos/1/' }
 
                                 /* author form */
-                                metaDataUrl={ 'http://localhost:8000/api/v1/sample/authors/describe/' }
-                                objectCreateUrl={ 'http://localhost:8000/api/v1/sample/authors/' }
-                                objectUrl={ 'http://localhost:8000/api/v1/sample/authors/23/' }
+                                // metaDataUrl={ 'http://localhost:8000/api/v1/sample/authors/describe/' }
+                                // objectCreateUrl={ 'http://localhost:8000/api/v1/sample/authors/' }
+                                // objectUrl={ 'http://localhost:8000/api/v1/sample/authors/23/' }
 
                                 /* misc */
                                 sendFileQueueLength={ 3 }

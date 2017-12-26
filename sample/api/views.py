@@ -1,6 +1,6 @@
 from django.db import models
 from rest_framework.decorators import list_route, detail_route
-from rest_framework.exceptions import ValidationError
+from rest_framework.exceptions import ValidationError, NotAcceptable
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework import viewsets
@@ -99,9 +99,19 @@ class AuthorPhotoViewSet(viewsets.ModelViewSet, DescribeMixin):
 
     @detail_route(['POST'])
     def photo_upload(self, request: Request, pk=None):
-        for filename, data in request.FILES.items():
-            print(filename, data, type(data))
-        return Response({'lol': 1})
+        uploaded_file = None
+        for filename in request.FILES.keys():
+            uploaded_file = request.FILES.get(filename, None)
+            break
+
+        if not uploaded_file:
+            raise NotAcceptable(detail='No file present')
+
+        obj = self.get_object()
+        obj.photo.save(uploaded_file.name, uploaded_file)
+        obj.save()
+
+        return Response({'detail': 'Avatar uploaded successfully'})
 
 
 class BookViewSet(viewsets.ModelViewSet, DescribeMixin):
