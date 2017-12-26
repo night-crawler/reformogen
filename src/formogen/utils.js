@@ -3,13 +3,13 @@ import _ from 'lodash';
 import * as URI from 'urijs';
 
 
-export const headers = {
+export const headers = {  // TODO: remove it
     'Accept': 'application/json',
     'Content-Type': 'application/json',
 };
 
 
-export function resolveResponse(response) {
+export function resolveResponse(response) {  // TODO: remove it
     if (response.ok) {
         return response.json();
     }
@@ -48,13 +48,13 @@ export function extractPageNumber(uri) {
  * @param {Number|String|Array.<Number>|Array.<String>|Array.<Object>} value
  * @returns {Array.<Number>|Array}
  */
-export function idsList(value) {
+export function idsList(value) {  // TODO: remove it
     if (_.isArray(value))
         return extractIdentity(value);
     return [extractIdentity(value)];
 }
 
-export function extractIdentity(value) {
+export function extractIdentity(value) {  // TODO: remove it
     if (!value)
         return null;
 
@@ -75,4 +75,29 @@ export function extractIdentity(value) {
         return +value;
 
     throw new Error(`Cannot extract identity from ${value}`);
+}
+
+export function splitExt(fileName) {
+    const
+        fparts = fileName.split('.'),
+        fname = fparts.slice(0, -1).join('.'),
+        ext = fparts.slice(-1).join('');
+
+    if (ext && !fname)
+        return [ext, fname];
+
+    return [fname, ext];
+}
+
+export function bytesToSize(bytes) {
+    if (bytes === 0) return 'n/a';
+
+    const
+        sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'],
+        i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)), 10);
+
+    if (i === 0) {
+        return `${ bytes } ${ sizes[i] }`;
+    }
+    return `${ ( bytes / ( 1024 ** i ) ).toFixed(1) } ${ sizes[i] }`;
 }

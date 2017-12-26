@@ -1,6 +1,7 @@
-import _ from 'lodash';
-import PropTypes from 'prop-types';
 import React from 'react';
+import PropTypes from 'prop-types';
+
+import _ from 'lodash';
 
 import { Dimmer, Image, Loader, Message, Segment } from 'semantic-ui-react';
 
@@ -31,5 +32,26 @@ export function MessageList({ header = '', messages, color = 'red' }) {
                 { messages.map((msg, i) => <Message.Item key={ i }>{ msg }</Message.Item>) }
             </Message.List>
         </Message>
+    );
+}
+
+CaptionTruncator.propTypes = {
+    caption: PropTypes.string,
+    width: PropTypes.number
+};
+export function CaptionTruncator({ caption, width = 0 }) {
+    return (
+        <span
+            style={ {
+                display: 'inline-block',
+                maxWidth: width,
+                textShadow: '0 0 1px white',
+                whiteSpace: 'nowrap',
+                textOverflow: 'ellipsis',
+                overflow: 'hidden',
+            } }
+        >
+            { caption }
+        </span>
     );
 }

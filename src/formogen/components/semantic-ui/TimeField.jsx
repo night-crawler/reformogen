@@ -1,9 +1,14 @@
-import _ from 'lodash';
-import moment from 'moment';
-import PropTypes from 'prop-types';
 import React from 'react';
-import TimePicker from 'react-times';
+import PropTypes from 'prop-types';
+
+import _ from 'lodash';
+
+import moment from 'moment';
+
 import { Form } from 'semantic-ui-react';
+
+import TimePicker from 'react-times';
+
 import { errorsType, layoutOptsType } from '../fieldPropTypes';
 import Label from './Label';
 import { MessageList } from './MiscComponents';

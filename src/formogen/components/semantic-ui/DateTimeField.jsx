@@ -1,15 +1,15 @@
+import React from 'react';
+import PropTypes from 'prop-types';
+
 import _ from 'lodash';
 
 import moment from 'moment';
-import PropTypes from 'prop-types';
-import React from 'react';
 
 import DatePicker from 'react-datepicker';
 
 import { Form } from 'semantic-ui-react';
 import { errorsType, layoutOptsType } from '../fieldPropTypes';
 import Label from './Label';
-
 import { MessageList } from './MiscComponents';
 
 
@@ -32,7 +32,7 @@ import { MessageList } from './MiscComponents';
 DateTimeField.propTypes = {
     type: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
-    value: PropTypes.string,
+    value: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(Date)]),
     max_length: PropTypes.number,
     help_text: PropTypes.string.isRequired,
     placeholder: PropTypes.string,
@@ -67,6 +67,7 @@ export default function DateTimeField(props) {
         locale: props.locale,
         placeholderText: props.placeholder,
         todayButton: 'Now',
+        // todo: get from momemt
         dateFormat: 'YYYY.MM.DD HH:mm',
         showYearDropdown: true,
         showMonthDropdown: true,

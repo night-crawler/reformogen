@@ -12,6 +12,7 @@ import ModelInstanceOption from './components/ReactSelectOptionComponent';
 import ModelInstanceValue from './components/ReactSelectValueComponent';
 
 
+// TODO: it's crappy so refactor this (with tests)
 export default function ({ WrappedComponent, multi = true }) {
     class WithSelectState extends React.Component {
         static propTypes = propTypes;
@@ -24,29 +25,53 @@ export default function ({ WrappedComponent, multi = true }) {
             this.log = loglevel.getLogger(`${WithSelectState.displayName} id=${WithSelectState.id}`);
             this.log.debug('Initialized');
 
-            // TODO: fetch it from props
-            const valueKey = 'id';
+            this.state = {
+                initiated: false,
+                isLoading: false,
+                valueKey: 'id',
+                options: [],
+                optionsByKeyMap: {},
+                query: '',
+                queryMap: {
+                    '': {
+                        keysList: [],
+                        page: 1,
+                        completed: false,
+                    }
+                },
+            };
 
-            // TODO: user can assign custom values as a React-Select's valueKey
-            const keysList = idsList(props.value);
+        }
+        componentWillReceiveProps({ value }) {
+            this.log.debug('componentWillReceiveProps', value);
+
+            const { initiated } = this.state;
+            if (!initiated && WithSelectState.isNotPreparedValue(value)) {
+                this.setState({ initiated: true }, () => this.initiate(value));
+            }
+        }
+
+        initiate(value) {
+            this.log.debug('initiate(), by value =', value);
+
+            const { valueKey } = this.state;
+
+            const keysList = idsList(value);
             let optionsByKeyMap = {};
 
             if (!_.isEmpty(keysList)) {
-                if (multi && _.isPlainObject(props.value[0])) {
-                    optionsByKeyMap = _.keyBy(props.value, valueKey);
+                if (multi && _.isPlainObject(value[0])) {
+                    optionsByKeyMap = _.keyBy(value, valueKey);
                 }
-                if (!multi && _.isPlainObject(props.value)) {
-                    const key = props.value[valueKey];
-                    optionsByKeyMap = { [key]: props.value };
+                if (!multi && _.isPlainObject(value)) {
+                    const key = value[valueKey];
+                    optionsByKeyMap = { [key]: value };
                 }
             }
 
-            this.state = {
-                isLoading: false,
+            this.setState({
+                initiated: true,
                 options: _(optionsByKeyMap).values().value(),
-
-                valueKey,
-
                 optionsByKeyMap,
                 query: '',
                 queryMap: {
@@ -56,19 +81,7 @@ export default function ({ WrappedComponent, multi = true }) {
                         completed: false,
                     }
                 },
-            };
-
-        }
-
-        // --------------- React.js standard ---------------
-        componentWillMount() {
-            this.log.debug('componentWillMount()');
-
-            // TODO:
-            // TEMP & CRUTCH: trigger handleChange() to make sure the field's value is in correct format.
-            const value = multi ? idsList(this.props.value) : this.props.value;
-
-            this.handleChange(value);
+            });
         }
 
         // --------------- Misc ---------------
@@ -91,10 +104,10 @@ export default function ({ WrappedComponent, multi = true }) {
             const keysList = _(selectedKeys).concat(receivedKeys).uniq().value();
 
             /* we should not remove options from current value */
-            this.log.debug('pre handleOptionsLoaded(), keysList', keysList);
-            this.log.debug('pre handleOptionsLoaded(), getValueKeyList', this.getValueKeyList());
+            // this.log.debug('pre handleOptionsLoaded(), keysList', keysList);
+            // this.log.debug('pre handleOptionsLoaded(), getValueKeyList', this.getValueKeyList());
             const keysWithSelectedKeys = _(keysList).concat(this.getValueKeyList()).value();
-            this.log.debug('pre handleOptionsLoaded(), keysWithSelectedKeys', keysWithSelectedKeys);
+            // this.log.debug('pre handleOptionsLoaded(), keysWithSelectedKeys', keysWithSelectedKeys);
 
             const options = _(currentOptionsByKeyMap).pick(keysWithSelectedKeys).values().value();
 
@@ -144,13 +157,23 @@ export default function ({ WrappedComponent, multi = true }) {
                 .catch((error) => this.props.onNetworkError({ type: 'load', error }));
         };
 
-        handleChange = (val) => {
+        handleChange = val => {
             // TODO: user can assign custom values as a React-Select's valueKey
             const value = multi ? idsList(val) : _.get(val, this.state.valueKey, null);
             this.log.debug(`handleChange(), name="${this.props.name}", value=`, value);
 
             this.props.onChange(null, { name: this.props.name, value: value });
         };
+
+        // --------------- static ---------------
+        static isNotPreparedValue(value) {
+            const keysList = idsList(value);
+            if (!_.isEmpty(keysList)) {
+                if (_.isPlainObject(value[0])) return true;
+                if (_.isPlainObject(value)) return true;
+            }
+            return false;
+        }
 
         // --------------- React.js render ---------------
         render() {
@@ -207,7 +230,7 @@ export default function ({ WrappedComponent, multi = true }) {
 
                     this.loadOptions(query, _.get(queryMap, `${query}.page`), this.getValueKeyList());
                 },
-                onInputChange: (inputValue) => {
+                onInputChange: inputValue => {
                     this.log.debug(`onInputChange(), inputValue="${inputValue}"`);
                     this.loadOptions(inputValue, undefined, this.getValueKeyList());
                 },

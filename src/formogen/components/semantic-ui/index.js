@@ -1,5 +1,4 @@
 import React from 'react';
-
 import PropTypes from 'prop-types';
 
 import _ from 'lodash';
@@ -32,14 +31,9 @@ import TimeField from './TimeField';
 
 import DropzoneField from './DropzoneField';
 
+// Misc helper components
+import Modal from './Modal';
 import { MessageList } from './MiscComponents';
-
-// CSS imports
-import 'react-select/dist/react-select.css';
-import './custom.css';
-import 'react-datepicker/dist/react-datepicker.css';
-import 'react-times/css/material/default.css';
-
 
 export {
     CharField,
@@ -90,6 +84,12 @@ export default class FormogenFormComponent extends React.Component {
             FileField: DropzoneField,
             BooleanField,
         },
+
+        showAsModal: false,
+        modalComponent: Modal,
+
+        formComponent: Form,
+        submitComponent: Button,
     };
     static propTypes = {
         locale: PropTypes.string,
@@ -113,6 +113,14 @@ export default class FormogenFormComponent extends React.Component {
         onNetworkError: PropTypes.func,
 
         djangoFieldsMap: PropTypes.object,
+
+        showAsModal: PropTypes.bool,
+        modalComponent: PropTypes.element,
+        modalTriggerComponent: PropTypes.element,
+        modalProps: PropTypes.object,
+
+        formComponent: PropTypes.element,
+        submitComponent: PropTypes.element,
     };
 
     // --------------- constructor ---------------
@@ -123,12 +131,8 @@ export default class FormogenFormComponent extends React.Component {
         this.log.debug('Initialized');
 
         this.state = {
-            formData: props.formData,
             djangoFieldsMap: props.djangoFieldsMap,
-
             fields: props.fields,
-
-            nonFieldErrorsMap: props.nonFieldErrorsMap,
         };
     }
 
@@ -139,11 +143,10 @@ export default class FormogenFormComponent extends React.Component {
         const { fields, formData } = this.state;
         this.computeNewState(fields, formData, this.props.layoutTemplate);
     }
-    componentWillReceiveProps({ fields, formData, nonFieldErrorsMap }) {
+    componentWillReceiveProps({ fields, formData, layoutTemplate }) {
         this.log.debug('componentWillReceiveProps()');
 
-        this.setState({ nonFieldErrorsMap });
-        this.computeNewState(fields, formData, this.props.layoutTemplate);
+        this.computeNewState(fields, formData, layoutTemplate);
     }
 
     // --------------- miscellaneous methods ---------------
@@ -153,7 +156,7 @@ export default class FormogenFormComponent extends React.Component {
         const fieldPropsByNameMap = _(fields).map((fieldOpts) => [fieldOpts.name, fieldOpts]).fromPairs().value();
         const layout = FormogenFormComponent.unfoldWildcardFields(layoutTemplate, fieldPropsByNameMap);
 
-        this.setState({ formData, fields, fieldPropsByNameMap, layout });
+        this.setState({ fields, fieldPropsByNameMap, layout });
     }
 
     pickFieldComponent(opts) {
@@ -244,27 +247,32 @@ export default class FormogenFormComponent extends React.Component {
         return (
             <Field
                 key={ i }
-                value={ this.state.formData[opts.name] }
-                onChange={ this.props.onFieldChange }
-                onNetworkError={ this.props.onNetworkError }
-                errors={ this.props.errorsFieldMap[opts.name] }
-                updateProps={ this.props.fieldUpdatePropsMap[opts.name] }
+                locale={ this.props.locale }
                 upperFirstLabel={ this.props.upperFirstLabels }
                 helpTextOnHover={ this.props.helpTextOnHover }
-                locale={ this.props.locale }
 
+                value={ this.props.formData[opts.name] }
+
+                onChange={ this.props.onFieldChange }
+                onNetworkError={ this.props.onNetworkError }
+
+                errors={ this.props.errorsFieldMap[opts.name] }
+
+                updateProps={ this.props.fieldUpdatePropsMap[opts.name] }
                 layoutOpts={ layoutOpts }
 
                 { ...opts }
+
+                formFilesUploadProgress={ this.props.formFilesUploadProgress[opts.name] }
             />
         );
     }
     renderNonFieldErrors() {
         this.log.debug('renderNonFieldErrors()');
 
-        if (_.isEmpty(this.state.nonFieldErrorsMap)) return null;
+        if (_.isEmpty(this.props.nonFieldErrorsMap)) return null;
 
-        const renderedMsgs = _(this.state.nonFieldErrorsMap).toPairs().value().map(([title, errors], i) =>
+        const renderedMsgs = _(this.props.nonFieldErrorsMap).toPairs().value().map(([title, errors], i) =>
             <Grid.Row key={ i }>
                 <div className='sixteen wide column'>
                     <MessageList header={ title } messages={ errors } />
@@ -276,8 +284,44 @@ export default class FormogenFormComponent extends React.Component {
 
     // --------------- React.js render ---------------
     render() {
+        const {
+            showAsModal,
+            formComponent: FormComponent,
+            submitComponent: SubmitComponent
+        } = this.props;
+
+        if (showAsModal) {
+            const {
+                modalComponent: ModalComponent,
+                modalTriggerComponent: ModalTriggerComponent,
+            } = this.props;
+
+            return (
+                <ModalComponent
+                    trigger={ ModalTriggerComponent ? ModalTriggerComponent : <Button content='show modal' /> }
+                    header={ this.props.showHeader ? <Header as='h2'>{ this.props.title }</Header> : null }
+                    actions={
+                        <SubmitComponent
+                            type='submit'
+                            content={ 'Submit' }
+
+                            onClick={ this.props.onSubmit }
+                            onKeyPress={ this.props.onSubmit }
+                        />
+                    }
+                    modalProps={ this.props.modalProps }
+                >
+                    <FormComponent loading={ this.props.loading }>
+                        <div className='layouts'>
+                            { this.renderNonFieldErrors() }
+                            { this.renderLayout() }
+                        </div>
+                    </FormComponent>
+                </ModalComponent>
+            );
+        }
         return (
-            <Form loading={ this.props.loading }>
+            <FormComponent loading={ this.props.loading }>
                 { this.props.showHeader ? <Header as='h2' dividing={ true }>{ this.props.title }</Header> : null }
 
                 <div className='layouts'>
@@ -285,7 +329,7 @@ export default class FormogenFormComponent extends React.Component {
                     { this.renderLayout() }
                 </div>
 
-                <Button
+                <SubmitComponent
                     type='submit'
                     content={ 'Submit' }
                     fluid={ true }
@@ -293,7 +337,7 @@ export default class FormogenFormComponent extends React.Component {
                     onClick={ this.props.onSubmit }
                     onKeyPress={ this.props.onSubmit }
                 />
-            </Form>
+            </FormComponent>
         );
     }
 }

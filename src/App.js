@@ -1,18 +1,44 @@
+import './formogen/components/semantic-ui/styles';
+import 'moment/locale/ru';
+
 import loglevel from 'loglevel';
 import prefix from 'loglevel-plugin-prefix';
 
 import { Segment } from 'semantic-ui-react';
 import React, { Component } from 'react';
 
-import Formogen from './formogen';
+import Formogen from './formogen-react-redux';
 
-import { Grid } from 'semantic-ui-react';
+import { Button, Form, Grid } from 'semantic-ui-react';
 import 'semantic-ui-css/semantic.css';
 import preparedMetaData from './form.json';
 
+import './App.css';
+
+
 // TODO: it should be in formogen module
 window.loglevel = loglevel;
-prefix.apply(loglevel, {template: '[%t] %l (%n)'});
+prefix.apply(loglevel, { template: '[%t] %l (%n)' });
+
+
+function FormComponent(props) {
+    // it's here as an example of formogen form redefinition via props
+    const _props = {
+        ...props,
+    };
+    return <Form { ..._props } />;
+}
+
+function SubmitComponent(props) {
+    // it's here as an example of formogen submit redefinition via props
+    const _props = {
+        ...props,
+        primary: true,
+        content: 'Primary',
+        fluid: false,
+    };
+    return <Button { ..._props } />;
+}
 
 
 class App extends Component {
@@ -23,121 +49,15 @@ class App extends Component {
         this.log.debug('initialized');
 
         this.state = {
-            canRenderAuthorPhotosForms: false,
-            authorPhotosMetaDataUrl: null,
+            // canRenderAuthorPhotosForms: false,
+            // authorPhotosMetaDataUrl: null,
+
+            authorPhotosMetaDataUrl: 'http://localhost:8000/api/v1/sample/author-photos/describe/',
+            authorPhotosWithoutAuthorMetaDataUrl: 'http://localhost:8000/api/v1/sample/author-photos/describe_without_author/',
+            authorPhotosCreateUrl: 'http://localhost:8000/api/v1/sample/author-photos/',
+            canRenderAuthorPhotosForms: true,
+            // authorId: formData.id,
         };
-    }
-
-    _render() {
-        return (
-            <div className='App'>
-
-                <Grid columns={ 3 } stackable={ true }>
-                    <Grid.Row>
-                        <Grid.Column>
-                            <Segment className='formogen'>
-                                <Formogen
-                                    upperFirstLabels={ true }
-
-                                    metaData={ preparedMetaData }
-
-                                    metaDataUrl={ 'http://localhost:8000/api/v1/sample/authors/describe/' }
-                                    objectCreateUrl={ 'http://localhost:8000/api/v1/sample/authors/' }
-                                />
-                            </Segment>
-                        </Grid.Column>
-
-                        <Grid.Column>
-                            <Segment className='formogen'>
-                                <Formogen
-                                    locale={ 'ru' }
-                                    showHeader={ true }
-                                    helpTextOnHover={ true }
-                                    upperFirstLabels={ true }
-
-                                    formData={ {name: 'That is prepopulated field!'} }
-
-                                    metaDataUrl={ 'http://localhost:8000/api/v1/sample/authors/describe/' }
-                                    objectCreateUrl={ 'http://localhost:8000/api/v1/sample/authors/' }
-
-                                    fieldUpdatePropsMap={ {
-                                        dt_birth: (_props, props) => Object.assign({}, _props, {timeIntervals: 5})
-                                    } }
-                                />
-                            </Segment>
-                        </Grid.Column>
-
-                        <Grid.Column>
-                            <Segment className='formogen'>
-                                <Formogen
-                                    locale={ 'ru' }
-                                    showHeader={ true }
-                                    helpTextOnHover={ true }
-                                    upperFirstLabels={ true }
-
-                                    metaDataUrl={ 'http://localhost:8000/api/v1/sample/all/describe/' }
-                                    objectCreateUrl={ 'http://localhost:8000/api/v1/sample/all/' }
-
-                                    fieldUpdatePropsMap={ {
-                                        dt_birth: (_props, props) => Object.assign({}, _props, {timeIntervals: 5})
-                                    } }
-                                    layoutTemplate={ [
-                                        {
-                                            header: 'Integer Group',
-                                            fields: [
-                                                {f_integer: {width: 8}},
-                                                {f_positive_integer: {width: 8}},
-                                                'f_small_integer',
-                                                'f_positive_small_integer'
-                                            ],
-                                            width: 8,
-                                        },
-                                        {
-                                            header: 'Float group',
-                                            fields: [
-                                                {f_decimal: {width: 4}},
-                                                {f_float: {width: 12}},
-                                            ]
-                                        },
-                                        {
-                                            header: 'Dates',
-                                            fields: [
-                                                {f_date: {width: 8}},
-                                                {f_time: {width: 8}},
-                                                {f_dt: {width: 16}},
-                                            ]
-                                        },
-                                        {
-                                            header: 'Relations',
-                                            fields: [
-                                                {f_fk_embed: {width: 8}},
-                                                {f_fk_rel: {width: 8}},
-                                                {f_m2m_embed: {width: 8}},
-                                                {f_m2m_rel: {width: 8}},
-                                                {f_choice: {width: 16}},
-                                            ]
-                                        },
-                                        {
-                                            header: 'Files',
-                                            fields: [
-                                                {f_file: {width: 8}},
-                                                {f_photo: {width: 8}}
-                                            ]
-                                        },
-                                        {
-                                            header: 'Other',
-                                            fields: '*',
-                                            width: 16,
-                                        }
-                                    ] }
-                                />
-                            </Segment>
-                        </Grid.Column>
-                    </Grid.Row>
-                </Grid>
-
-            </div>
-        );
     }
 
     handleAuthorEditFormLoaded = (metaData, formData) => {
@@ -155,77 +75,54 @@ class App extends Component {
     };
 
     render() {
-        const metaDataUrl = 'http://localhost:8000/api/v1/sample/authors/describe/';
-        const objectUrl = 'http://localhost:8000/api/v1/sample/authors/23/';
-        const objectCreateUrl = 'http://localhost:8000/api/v1/sample/authors/';
-
         const prepopulatedFormData = {
-            name: 'Mr. Inconspicuous',
-            dt_birth: new Date(),
-            dt_death: new Date(),
-            state: 30,
-        };
+            assigned_test_field: 'hahahah!',
 
-        let trash = null;
+            name: 'Mr. Inconspicuous',
+            // dt_birth: new Date(),
+            // dt_death: new Date(),
+            state: 30,
+            vasya: 42,
+        };
 
         return (
             <div className='App'>
-
                 <Grid columns={ 3 } stackable={ true }>
-                    <Grid.Row>
-                        <Grid.Column>
-                            <Segment className='formogen'>
-                                <Formogen
-                                    locale={ 'ru' }
-                                    showHeader={ true }
-                                    helpTextOnHover={ true }
-                                    upperFirstLabels={ true }
-
-                                    formData={ prepopulatedFormData }
-
-                                    metaDataUrl={ metaDataUrl }
-                                    objectUrl={ objectUrl }
-
-                                    onFetchComplete={ this.handleAuthorEditFormLoaded }
-                                />
-                            </Segment>
-                        </Grid.Column>
-
-                        { this.state.canRenderAuthorPhotosForms && (
-                            <Grid.Column>
-                                <Segment className='formogen'>
-                                    <Formogen
-                                        locale={ 'ru' }
-                                        showHeader={ true }
-                                        metaDataUrl={ this.state.authorPhotosMetaDataUrl }
-                                        objectCreateUrl={ this.state.authorPhotosCreateUrl }
-                                        formData={ {
-                                            author: this.state.authorId,
-                                        } }
-                                    />
-                                </Segment>
-                            </Grid.Column>
-                        ) }
-
-                        { this.state.canRenderAuthorPhotosForms && (
-                            <Grid.Column>
-                                <Segment className='formogen'>
-                                    <Formogen
-                                        locale={ 'ru' }
-                                        showHeader={ true }
-                                        metaDataUrl={ this.state.authorPhotosWithoutAuthorMetaDataUrl }
-                                        objectCreateUrl={ this.state.authorPhotosCreateUrl }
-
-                                        pipePreSubmit={ (data) => Object.assign(data, {author: this.state.authorId}) }
-                                    />
-                                </Segment>
-                            </Grid.Column>
-                        ) }
+                    <Grid.Column>
+                        <Segment className='formogen'>
 
 
-                    </Grid.Row>
+                            <Formogen
+                                locale={ 'ru' }
+                                showHeader={ true }
+
+                                /* author photo form */
+                                metaDataUrl={ 'http://localhost:8000/api/v1/sample/author-photos/describe/' }
+                                objectCreateUrl={ 'http://localhost:8000/api/v1/sample/author-photos/' }
+                                objectUrl={ 'http://localhost:8000/api/v1/sample/author-photos/1/' }
+
+                                /* author form */
+                                // metaDataUrl={ 'http://localhost:8000/api/v1/sample/authors/describe/' }
+                                // objectCreateUrl={ 'http://localhost:8000/api/v1/sample/authors/' }
+                                // objectUrl={ 'http://localhost:8000/api/v1/sample/authors/23/' }
+
+                                /* misc */
+                                sendFileQueueLength={ 3 }
+
+                                /* modal opts */
+                                // showAsModal={ true }
+                                // modalComponent={ null }
+                                // modalTriggerComponent={ <Button>Rise up evil!</Button> }
+                                // modalProps={ { dimmer: 'blurring' } }
+
+                                // formComponent={ FormComponent }
+                                // submitComponent={ SubmitComponent }
+                            />
+
+
+                        </Segment>
+                    </Grid.Column>
                 </Grid>
-
             </div>
         );
     }

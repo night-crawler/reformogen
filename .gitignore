@@ -69,6 +69,7 @@ target/
 /static/
 /frontend/static/frontend/node_components/node_modules/
 /media/payee/
+/media/
 
 # Generated
 gen_admin.py

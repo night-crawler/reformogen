@@ -3,6 +3,11 @@
     padding: 0 !important;
 }
 
+.formogen .react-datepicker-popper {
+    padding: 0 !important;
+    z-index: 3;
+}
+
 .formogen .react-datepicker__input-container {
     width: 100%;
 }
@@ -10,7 +15,6 @@
 .formogen .react-datepicker-wrapper input {
     width: 100% !important;
 }
-
 
 .formogen .react-datepicker-wrapper {
     width: 100% !important;
@@ -46,4 +50,30 @@
 .formogen .layouts {
     padding-top: 10px;
     padding-bottom: 25px;
+}
+
+.formogen .Select-menu-outer {
+    z-index: 3;
+}
+
+.formogen .filename-description {
+    height: 35px;
+    display: flex;
+    align-items: center;
+}
+
+.formogen .list-content-with-progress {
+    display: flex;
+    align-items: center;
+}
+.formogen .list-content-with-progress .button {
+    height: 35px;
+    margin-left: auto !important;
+    display: flex !important;
+    align-items: center !important;
+}
+
+.formogen .file-representation {
+    display: flex;
+    align-items: center;
 }
