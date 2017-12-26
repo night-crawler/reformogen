@@ -35,6 +35,9 @@
     [+] populate from (*) custom user data values
     [+] proper tab index for fields
 
+    [+] form component as a prop
+    [+] submit component as a prop
+
     ============================================================
 */
 

@@ -82,6 +82,9 @@ export default class FormogenFormComponent extends React.Component {
             FileField: DropzoneField,
             BooleanField,
         },
+
+        formComponent: Form,
+        SubmitComponent: Button,
     };
     static propTypes = {
         locale: PropTypes.string,
@@ -105,6 +108,9 @@ export default class FormogenFormComponent extends React.Component {
         onNetworkError: PropTypes.func,
 
         djangoFieldsMap: PropTypes.object,
+
+        formComponent: PropTypes.element,
+        submitComponent: PropTypes.element,
     };
 
     // --------------- constructor ---------------
@@ -268,9 +274,11 @@ export default class FormogenFormComponent extends React.Component {
 
     // --------------- React.js render ---------------
     render() {
+        const { formComponent: FormComponent } = this.props;
+        const { submitComponent: SubmitComponent } = this.props;
 
         return (
-            <Form loading={ this.props.loading }>
+            <FormComponent loading={ this.props.loading }>
                 { this.props.showHeader ? <Header as='h2' dividing={ true }>{ this.props.title }</Header> : null }
 
                 <div className='layouts'>
@@ -278,7 +286,7 @@ export default class FormogenFormComponent extends React.Component {
                     { this.renderLayout() }
                 </div>
 
-                <Button
+                <SubmitComponent
                     type='submit'
                     content={ 'Submit' }
                     fluid={ true }
@@ -286,7 +294,7 @@ export default class FormogenFormComponent extends React.Component {
                     onClick={ this.props.onSubmit }
                     onKeyPress={ this.props.onSubmit }
                 />
-            </Form>
+            </FormComponent>
         );
     }
 }

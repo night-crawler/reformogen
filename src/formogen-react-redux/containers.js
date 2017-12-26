@@ -8,20 +8,17 @@ import {
     submitForm,
     fieldChanged
 } from './actions';
-import FormogenComponent from './components';
-
 import {
     formogenName,
+    skipFetchingObject,
     title, description, fields,
     pristineFormData, dirtyFormData, actualFormData, dirtyFiles,
-    shouldUploadFiles,
+    isLoading, isFormDataPristine, isFormDataDirty, shouldUploadFiles, formFilesUploadProgress,
     submitUrl, submitMethod,
-    isFormDataPristine, isFormDataDirty,
     submitMiddlewares,
     fieldErrorsMap, nonFieldErrorsMap,
-    formFilesUploadProgress,
-    isLoading, skipFetchingObject
 } from './selectors';
+import FormogenComponent from './components';
 
 
 const mapDispatchToProps = (dispatch, props) => {
@@ -39,71 +36,49 @@ const mapDispatchToProps = (dispatch, props) => {
 };
 
 const mergeProps = (stateProps, dispatchProps, ownProps) => {
-    const { dispatch } = dispatchProps;
-
     const submit = () => {
-        const {
-            submitUrl, submitMethod,
-            dirtyFormData, dirtyFiles,
-            submitMiddlewares,
-            skipFetchingObject,
-        } = stateProps;
+        const { skipFetchingObject, submitUrl, submitMethod,
+            dirtyFormData, dirtyFiles, submitMiddlewares } = stateProps;
+        const { dispatch } = dispatchProps;
         const { sendFileQueueLength } = ownProps;
 
-        return dispatch(
-            submitForm({
-                submitUrl, submitMethod, sendFileQueueLength,
-                formData: dirtyFormData, formFiles: dirtyFiles,
-                middlewares: submitMiddlewares,
-                skipFetchingObject,
-            })
-        );
+        const _props = {
+            submitUrl,
+            submitMethod,
+            sendFileQueueLength,
+            formData: dirtyFormData,
+            formFiles: dirtyFiles,
+            middlewares: submitMiddlewares,
+            skipFetchingObject,
+        };
+
+        return dispatch(submitForm(_props));
     };
 
     return {
-        ...stateProps,
-        ...dispatchProps,
-        ...ownProps,
-
+        ...stateProps, ...dispatchProps, ...ownProps,
         submit,
     };
 };
 
 export default connect(
     createStructuredSelector({
+        // helps identify form
         formogenName,
-
+        // misc flags
+        skipFetchingObject,
         // metaData
-        title,
-        description,
-        fields,
-
+        title, description, fields,
         // formData
-        pristineFormData,
-        dirtyFormData,
-        actualFormData,
-        dirtyFiles,
-
+        pristineFormData, dirtyFormData, actualFormData, dirtyFiles,
         // states
-        // isFormDataReady,
-        // isMetaDataReady,
-        isFormDataPristine,
-        isFormDataDirty,
-        shouldUploadFiles,
-        formFilesUploadProgress,
-
-        // submit data
-        submitUrl,
-        submitMethod,
-
-        // middlewares
+        isLoading, isFormDataPristine, isFormDataDirty, shouldUploadFiles, formFilesUploadProgress,
+        // submit action url and method
+        submitUrl, submitMethod,
+        // middlewares (data flow)
         submitMiddlewares,
-
         // errors
-        fieldErrorsMap,
-        nonFieldErrorsMap,
-
-        isLoading, skipFetchingObject,
+        fieldErrorsMap, nonFieldErrorsMap,
     }),
     mapDispatchToProps,
     mergeProps

@@ -14,8 +14,10 @@ export default class FormogenComponent extends Component {
         actualFormData: PropTypes.object.isRequired,
         description: PropTypes.string,
         fieldErrorsMap: PropTypes.object,
+
         getFormData: PropTypes.func.isRequired,
         getMetaData: PropTypes.func.isRequired,
+
         fieldUpdatePropsMap: PropTypes.any,
         fields: PropTypes.array.isRequired,
         handleFieldChanged: PropTypes.func.isRequired,
@@ -33,6 +35,9 @@ export default class FormogenComponent extends Component {
 
         formFilesUploadProgress: PropTypes.object,
         isLoading: PropTypes.bool,
+
+        formComponent: PropTypes.element,
+        submitComponent: PropTypes.element,
     };
 
     componentDidMount() {
@@ -69,19 +74,19 @@ export default class FormogenComponent extends Component {
 
                 formData={ this.props.actualFormData }
 
-                onSubmit={ () => this.props.submit() }
-
                 layoutTemplate={ this.props.layoutTemplate }
                 fieldUpdatePropsMap={ this.props.fieldUpdatePropsMap }
-
-                onFieldChange={ this.props.handleFieldChanged }
 
                 errorsFieldMap={ this.props.fieldErrorsMap }
                 nonFieldErrorsMap={ this.props.nonFieldErrorsMap }
 
                 formFilesUploadProgress={ this.props.formFilesUploadProgress }
 
-                onNetworkError={ () => {} }
+                formComponent={ this.props.formComponent }
+                submitComponent={ this.props.submitComponent }
+
+                onFieldChange={ this.props.handleFieldChanged }
+                onSubmit={ () => this.props.submit() }
             />
         );
     }
