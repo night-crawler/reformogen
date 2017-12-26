@@ -31,6 +31,8 @@ import TimeField from './TimeField';
 
 import DropzoneField from './DropzoneField';
 
+// Misc helper components
+import Modal from './Modal';
 import { MessageList } from './MiscComponents';
 
 export {
@@ -83,8 +85,11 @@ export default class FormogenFormComponent extends React.Component {
             BooleanField,
         },
 
+        showAsModal: false,
+        modalComponent: Modal,
+
         formComponent: Form,
-        SubmitComponent: Button,
+        submitComponent: Button,
     };
     static propTypes = {
         locale: PropTypes.string,
@@ -108,6 +113,11 @@ export default class FormogenFormComponent extends React.Component {
         onNetworkError: PropTypes.func,
 
         djangoFieldsMap: PropTypes.object,
+
+        showAsModal: PropTypes.bool,
+        modalComponent: PropTypes.element,
+        modalTriggerComponent: PropTypes.element,
+        modalProps: PropTypes.object,
 
         formComponent: PropTypes.element,
         submitComponent: PropTypes.element,
@@ -274,9 +284,42 @@ export default class FormogenFormComponent extends React.Component {
 
     // --------------- React.js render ---------------
     render() {
-        const { formComponent: FormComponent } = this.props;
-        const { submitComponent: SubmitComponent } = this.props;
+        const {
+            showAsModal,
+            formComponent: FormComponent,
+            submitComponent: SubmitComponent
+        } = this.props;
 
+        if (showAsModal) {
+            const {
+                modalComponent: ModalComponent,
+                modalTriggerComponent: ModalTriggerComponent,
+            } = this.props;
+
+            return (
+                <ModalComponent
+                    trigger={ ModalTriggerComponent ? ModalTriggerComponent : <Button content='show modal' /> }
+                    header={ this.props.showHeader ? <Header as='h2'>{ this.props.title }</Header> : null }
+                    actions={
+                        <SubmitComponent
+                            type='submit'
+                            content={ 'Submit' }
+
+                            onClick={ this.props.onSubmit }
+                            onKeyPress={ this.props.onSubmit }
+                        />
+                    }
+                    modalProps={ this.props.modalProps }
+                >
+                    <FormComponent loading={ this.props.loading }>
+                        <div className='layouts'>
+                            { this.renderNonFieldErrors() }
+                            { this.renderLayout() }
+                        </div>
+                    </FormComponent>
+                </ModalComponent>
+            );
+        }
         return (
             <FormComponent loading={ this.props.loading }>
                 { this.props.showHeader ? <Header as='h2' dividing={ true }>{ this.props.title }</Header> : null }

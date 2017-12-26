@@ -36,6 +36,11 @@ export default class FormogenComponent extends Component {
         formFilesUploadProgress: PropTypes.object,
         isLoading: PropTypes.bool,
 
+        showAsModal: PropTypes.bool,
+        modalComponent: PropTypes.element,
+        modalTriggerComponent: PropTypes.element,
+        modalProps: PropTypes.object,
+
         formComponent: PropTypes.element,
         submitComponent: PropTypes.element,
     };
@@ -61,6 +66,7 @@ export default class FormogenComponent extends Component {
     render() {
         return (
             <FormogenFormComponent
+                /* misc */
                 loading={ this.props.isLoading }
 
                 locale={ this.props.locale }
@@ -68,23 +74,35 @@ export default class FormogenComponent extends Component {
                 upperFirstLabels={ this.props.upperFirstLabels }
                 helpTextOnHover={ this.props.helpTextOnHover }
 
+                /* metadata */
                 title={ this.props.title }
                 description={ this.props.description }
                 fields={ this.props.fields }
 
+                /* formdata */
                 formData={ this.props.actualFormData }
+
+                /* errors */
+                errorsFieldMap={ this.props.fieldErrorsMap }
+                nonFieldErrorsMap={ this.props.nonFieldErrorsMap }
+
+                /* represents file progress */
+                formFilesUploadProgress={ this.props.formFilesUploadProgress }
+
+                /* modal opts */
+                showAsModal={ this.props.showAsModal }
+                modalComponent={ this.props.modalComponent }
+                modalTriggerComponent={ this.props.modalTriggerComponent }
+                modalProps={ this.props.modalProps }
+
+                /* view redefinition opts */
+                formComponent={ this.props.formComponent }
+                submitComponent={ this.props.submitComponent }
 
                 layoutTemplate={ this.props.layoutTemplate }
                 fieldUpdatePropsMap={ this.props.fieldUpdatePropsMap }
 
-                errorsFieldMap={ this.props.fieldErrorsMap }
-                nonFieldErrorsMap={ this.props.nonFieldErrorsMap }
-
-                formFilesUploadProgress={ this.props.formFilesUploadProgress }
-
-                formComponent={ this.props.formComponent }
-                submitComponent={ this.props.submitComponent }
-
+                /* on actions */
                 onFieldChange={ this.props.handleFieldChanged }
                 onSubmit={ () => this.props.submit() }
             />

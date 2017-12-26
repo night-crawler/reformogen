@@ -91,10 +91,11 @@ class App extends Component {
 
         return (
             <div className='App'>
-
                 <Grid columns={ 3 } stackable={ true }>
                     <Grid.Column>
                         <Segment className='formogen'>
+
+
                             <Formogen
                                 locale={ 'ru' }
                                 showHeader={ true }
@@ -111,13 +112,20 @@ class App extends Component {
                                 /* misc */
                                 sendFileQueueLength={ 3 }
 
-                                formComponent={ FormComponent }
-                                submitComponent={ SubmitComponent }
+                                /* modal opts */
+                                // showAsModal={ true }
+                                // modalComponent={ null }
+                                // modalTriggerComponent={ <Button>Rise up evil!</Button> }
+                                // modalProps={ { dimmer: 'blurring' } }
+
+                                // formComponent={ FormComponent }
+                                // submitComponent={ SubmitComponent }
                             />
+
+
                         </Segment>
                     </Grid.Column>
                 </Grid>
-
             </div>
         );
     }

@@ -1,13 +1,13 @@
 /*
     ========================= TODOLIST =========================
-    [ ] selected value for files (show additional checkbox to clear && show currently selected file name)
+
     [ ] two forms on one page
     [ ] do some tests, we need a bit more tests
     [ ] deal with response.status == pending
-    [ ] modal forms support (modal-mode)
-    [ ] cache metadata
-    [ ] fk & m2m - check loading options without paginator (server-side)
+
     [ ] reload form
+    [?] cache metadata
+    [ ] fk & m2m - check loading options without paginator (server-side)
     [ ] validate (simple) user input (js-side validators)
     [?] i18n (it's not project's responsibility)
     [ ] fix re-render issue (see logs)
@@ -23,7 +23,7 @@
     [+] dynamic data loading (data='/url/')
     [+] additional fields (via <Formogen metaData={ ... }/>
     [+] populate with default values
-    [+] layouts
+
     [+] request interceptions (pipeline)
     [+] error display
     [+] non-field errors
@@ -35,10 +35,23 @@
     [+] populate from (*) custom user data values
     [+] proper tab index for fields
 
+    [+] modal support (pseudo modal, see - looks like)
     [+] form component as a prop
     [+] submit component as a prop
+    [+] layouts support
+
+    [ ] showing initial values for the dropzone field
+    [ ] selected value for files (show additional checkbox to clear && show currently selected file name)
 
     ============================================================
+*/
+
+/*
+    +++++++++++++++++++++++++ BUGS +++++++++++++++++++++++++
+
+    [ ] when async field and init values weren't loaded they can be deleted by one click (just press backspace)
+
+    ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 */
 
 /*
