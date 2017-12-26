@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import _ from 'lodash';
 
-import { Button, Form, Icon, Image, List } from 'semantic-ui-react';
+import { Button, Form, Icon, Image, List, Segment } from 'semantic-ui-react';
 
 import Measure from 'react-measure';
 
@@ -13,6 +13,14 @@ import { fileTypeImageMapping, UNKNOWN_FILE_TYPE } from '../../fileTypeImageMapp
 import { splitExt, bytesToSize } from '../../utils';
 import { errorsType } from '../fieldPropTypes';
 import { MessageList, CaptionTruncator } from './MiscComponents';
+
+const fileShape = PropTypes.shape({
+    lastModified: PropTypes.number,
+    lastModifiedDate: PropTypes.object,
+    preview: PropTypes.string,
+    size: PropTypes.number,
+    type: PropTypes.string,
+});
 
 
 ListContentWithProgress.propTypes = {
@@ -36,15 +44,6 @@ function ListContentWithProgress({ percent = 50, color = 'LimeGreen', styles = {
     );
 }
 
-const fileShape = PropTypes.shape({
-    lastModified: PropTypes.number,
-    lastModifiedDate: PropTypes.object,
-    preview: PropTypes.string,
-    size: PropTypes.number,
-    type: PropTypes.string,
-});
-
-
 
 /**
  * {
@@ -56,20 +55,19 @@ const fileShape = PropTypes.shape({
  * }
  */
 
-FilesPreviews.propTypes = {
+FilesPreview.propTypes = {
     files: PropTypes.arrayOf(fileShape).isRequired,
     onClear: PropTypes.func.isRequired,
     onRemoveFile: PropTypes.func.isRequired,
     getFileIcon: PropTypes.func.isRequired,
     formFilesUploadProgress: PropTypes.object
 };
-function FilesPreviews({ files, onClear, getFileIcon, onRemoveFile, formFilesUploadProgress }) {
-    if (_.isEmpty(files)) {
+function FilesPreview({ files, onClear, getFileIcon, onRemoveFile, formFilesUploadProgress }) {
+    if (_.isEmpty(files))
         return null;
-    }
 
     return (
-        <div className='ui segment attached'>
+        <Segment attached={ true }>
             <List divided={ true } relaxed={ true } className='files-previews'>
                 { files.map((file, i) => {
                     const progress = _.get(formFilesUploadProgress, file.name, {});
@@ -85,9 +83,42 @@ function FilesPreviews({ files, onClear, getFileIcon, onRemoveFile, formFilesUpl
             <Button size='mini' fluid={ true } icon={ true } onClick={ onClear }>
                 <Icon name='remove' />
             </Button>
-        </div>
+        </Segment>
     );
 }
+
+
+CurrentFilesPreview.propTypes = {
+    currentFiles: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.arrayOf(PropTypes.string),
+    ]),
+    hidden: PropTypes.bool,
+};
+function CurrentFilesPreview({ currentFiles, hidden = true }) {
+    const files = _.isArray(currentFiles) ? currentFiles : [currentFiles];
+
+    if (_.isEmpty(files) || hidden)
+        return null;
+
+    const listItems = files.map((value, i) => (
+        <List.Item key={ i }>
+            <a href={ value } target='_blank'>{ value.split('/').slice(-1) || 'File' }</a>
+        </List.Item>
+    ));
+
+    return (
+        <Segment attached={ true }>
+            <List>
+                <List.Header>Currently:</List.Header>
+                <List.Item>
+                    <List bulleted={ true }>{ listItems }</List>
+                </List.Item>
+            </List>
+        </Segment>
+    );
+}
+
 
 FileItem.propTypes = {
     file: fileShape.isRequired,
@@ -125,6 +156,7 @@ function FileItem({ file, getFileIcon, onRemove, progress }) {
     );
 }
 
+
 export default class DropzoneField extends React.Component {
     static propTypes = {
         type: PropTypes.string.isRequired,
@@ -146,8 +178,9 @@ export default class DropzoneField extends React.Component {
 
         layoutOpts: PropTypes.object,
         formFilesUploadProgress: PropTypes.object,
-    };
 
+        value: PropTypes.string,
+    };
     static defaultProps = {
         getFileIcon: (fileObject) => {
             let ext = fileObject.name.split('.').pop().toLowerCase();
@@ -187,7 +220,6 @@ export default class DropzoneField extends React.Component {
             value: {files: mergedFiles, defaultUploadUrl: upload_url}
         });
     };
-
     handleClearFiles = () => {
         const { name, upload_url } = this.props;
         this.setState({ files: [] });
@@ -197,7 +229,6 @@ export default class DropzoneField extends React.Component {
                 value: {files: [], defaultUploadUrl: upload_url}
             });
     };
-
     handleRemoveFile = (fileObject) => {
         const files = _.without(this.state.files, fileObject);
         const { name, upload_url } = this.props;
@@ -206,7 +237,7 @@ export default class DropzoneField extends React.Component {
         this.props.onChange(
             null, {
                 name: name,
-                value: {files, defaultUploadUrl: upload_url}
+                value: { files, defaultUploadUrl: upload_url }
             });
     };
 
@@ -230,7 +261,6 @@ export default class DropzoneField extends React.Component {
                 width={ this.props.layoutOpts.width }
                 error={ !_.isEmpty(this.props.errors) }
             >
-
                 <Dropzone className='ui center aligned dropzone segment attached top'  { ..._props }>
                     <strong>{ labelText } { this.props.required && <span className='ui red'>*</span> }</strong>
                     { this.props.help_text && <div className='help-text'>{ this.props.help_text }</div> }
@@ -239,13 +269,16 @@ export default class DropzoneField extends React.Component {
                     </div>
                 </Dropzone>
 
-                <FilesPreviews
+                <FilesPreview
                     files={ this.state.files }
                     onClear={ this.handleClearFiles }
                     getFileIcon={ this.props.getFileIcon }
                     onRemoveFile={ this.handleRemoveFile }
                     formFilesUploadProgress={ this.props.formFilesUploadProgress }
                 />
+
+                <CurrentFilesPreview currentFiles={ this.props.value } hidden={ !_.isEmpty(this.state.files) } />
+
                 <MessageList messages={ this.props.errors } />
             </Form.Field>
         );
