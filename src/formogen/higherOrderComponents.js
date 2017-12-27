@@ -42,8 +42,18 @@ export default function ({ WrappedComponent, multi = true }) {
             };
 
         }
+        componentWillMount() {
+            this.log.debug('componentWillMount()');
+
+            const { value } = this.props;
+            const { initiated } = this.state;
+
+            if (!initiated && WithSelectState.isNotPreparedValue(value)) {
+                this.setState({ initiated: true }, () => this.initiate(value));
+            }
+        }
         componentWillReceiveProps({ value }) {
-            this.log.debug('componentWillReceiveProps', value);
+            this.log.debug('componentWillReceiveProps()');
 
             const { initiated } = this.state;
             if (!initiated && WithSelectState.isNotPreparedValue(value)) {

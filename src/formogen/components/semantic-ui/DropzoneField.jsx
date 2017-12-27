@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import _ from 'lodash';
 
-import { Button, Form, Icon, Image, List, Segment } from 'semantic-ui-react';
+import { Button, Checkbox, Form, Icon, Image, List, Segment } from 'semantic-ui-react';
 
 import Measure from 'react-measure';
 
@@ -93,17 +93,17 @@ CurrentFilesPreview.propTypes = {
         PropTypes.string,
         PropTypes.arrayOf(PropTypes.string),
     ]),
-    hidden: PropTypes.bool,
+    removable: PropTypes.bool,
+    onRemove: PropTypes.func,
 };
-function CurrentFilesPreview({ currentFiles, hidden = true }) {
+function CurrentFilesPreview({ currentFiles, removable = true, onRemove }) {
     const files = _.isArray(currentFiles) ? currentFiles : [currentFiles];
-
-    if (_.isEmpty(files) || hidden)
-        return null;
 
     const listItems = files.map((value, i) => (
         <List.Item key={ i }>
-            <a href={ value } target='_blank'>{ value.split('/').slice(-1) || 'File' }</a>
+            <a href={ value } target='_blank'>
+                { typeof value === 'string' ? value.split('/').slice(-1) : 'File' }
+            </a>
         </List.Item>
     ));
 
@@ -112,6 +112,9 @@ function CurrentFilesPreview({ currentFiles, hidden = true }) {
             <List>
                 <List.Header>Currently:</List.Header>
                 <List.Item>
+                    <List.Content floated='right'>
+                        { removable && <Checkbox label='clear' floated='right' onChange={ onRemove } /> }
+                    </List.Content>
                     <List bulleted={ true }>{ listItems }</List>
                 </List.Item>
             </List>
@@ -169,7 +172,9 @@ export default class DropzoneField extends React.Component {
         updateProps: PropTypes.func,
         widget: PropTypes.string,
         errors: errorsType,
+
         upload_url: PropTypes.string,
+        delete_url: PropTypes.string,
 
         onChange: PropTypes.func.isRequired,
         getFileIcon: PropTypes.func,
@@ -194,17 +199,37 @@ export default class DropzoneField extends React.Component {
         this.state = { files: [] };
     }
 
+    handleRemoveCurrentFiles = (event, { checked }) => {
+        if (checked) {
+            return this.props.onChange(
+                null,
+                {
+                    name: this.props.name,
+                    value: { files: [{ name: this.props.value }], url: this.props.delete_url, action: 'delete' }
+                }
+            );
+        }
+
+        return this.props.onChange(
+            null,
+            {
+                name: this.props.name,
+                value: { files: [], url: this.props.upload_url, action: 'upload' }
+            }
+        );
+    };
     handleDrop = (newFiles) => {
-        const { onChange, upload_url, name, multiple } = this.props;
         const { files: oldFiles } = this.state;
 
-        if (!multiple) {
+        if (!this.props.multiple) {
             this.setState({ files: newFiles });
-            onChange(null, {
-                name,
-                value: {files: newFiles, defaultUploadUrl: upload_url}
-            });
-            return;
+            return this.props.onChange(
+                null,
+                {
+                    name: this.props.name,
+                    value: { files: newFiles, url: this.props.upload_url, action: 'upload' }
+                }
+            );
         }
 
         // build key by this triple to ensure we're adding different newFiles
@@ -214,31 +239,37 @@ export default class DropzoneField extends React.Component {
             .merge(_.keyBy(newFiles, keyBuilder))
             .values()
             .value();
+
         this.setState({ files: mergedFiles });
-        onChange(null, {
-            name,
-            value: {files: mergedFiles, defaultUploadUrl: upload_url}
-        });
+        return this.props.onChange(
+            null,
+            {
+                name: this.props.name,
+                value: { files: mergedFiles, url: this.props.upload_url, action: 'upload' }
+            }
+        );
     };
     handleClearFiles = () => {
-        const { name, upload_url } = this.props;
         this.setState({ files: [] });
         this.props.onChange(
-            null, {
-                name: name,
-                value: {files: [], defaultUploadUrl: upload_url}
-            });
+            null,
+            {
+                name: this.props.name,
+                value: { files: [], url: this.props.upload_url, action: 'upload' }
+            }
+        );
     };
     handleRemoveFile = (fileObject) => {
         const files = _.without(this.state.files, fileObject);
-        const { name, upload_url } = this.props;
-
         this.setState({ files });
-        this.props.onChange(
-            null, {
-                name: name,
-                value: { files, defaultUploadUrl: upload_url }
-            });
+
+        return this.props.onChange(
+            null,
+            {
+                name: this.props.name,
+                value: { files, url: this.props.upload_url, action: 'upload' }
+            }
+        );
     };
 
     render() {
@@ -253,6 +284,8 @@ export default class DropzoneField extends React.Component {
         if (_.isFunction(this.props.updateProps)) {
             _props = this.props.updateProps(_props, this.props);
         }
+
+        const showCurrentFilesPreview = this.props.value && _.isEmpty(this.state.files);
 
         return (
             <Form.Field
@@ -277,7 +310,14 @@ export default class DropzoneField extends React.Component {
                     formFilesUploadProgress={ this.props.formFilesUploadProgress }
                 />
 
-                <CurrentFilesPreview currentFiles={ this.props.value } hidden={ !_.isEmpty(this.state.files) } />
+                {
+                    showCurrentFilesPreview &&
+                    <CurrentFilesPreview
+                        currentFiles={ this.props.value }
+                        removable={ !!this.props.delete_url }
+                        onRemove={ this.handleRemoveCurrentFiles }
+                    />
+                }
 
                 <MessageList messages={ this.props.errors } />
             </Form.Field>

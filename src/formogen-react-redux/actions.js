@@ -2,7 +2,7 @@ import { RSAA } from 'redux-api-middleware';
 
 import _ from 'lodash';
 
-import { getApiMiddlewareOptions, getFetchOptions, prepareFileUploadQueue, resolveResponse } from './utils';
+import { getApiMiddlewareOptions, getFetchOptions, prepareFileProcessQueue, resolveResponse } from './utils';
 
 
 // BASE PREFIXES
@@ -98,7 +98,7 @@ export function submitForm({
             .then(({ payload }) => middlewares.requestFormData(payload))
             .then(data => {
                 const formFilesUrls = { ...data.urls };
-                return dispatch(uploadFormFiles(formFiles, formFilesUrls, sendFileQueueLength));
+                return dispatch(processFormFiles(formFiles, formFilesUrls, sendFileQueueLength));
             })
             .then(data => dispatch(formSubmitComplete(data)))
             .catch(error => {
@@ -155,33 +155,33 @@ export const sendFormData = (url, method = 'POST', formData) => {
     };
 };
 
-// FORMFILES UPLOAD
-export const FORMFILES_UPLOAD_START = `${FORMOGEN_ACTION_PREFIX}:FORMFILES_UPLOAD:${START}`;
-export const FORMFILES_UPLOAD_SUCCESS = `${FORMOGEN_ACTION_PREFIX}:FORMFILES_UPLOAD:${SUCCESS}`;
-export const FORMFILES_UPLOAD_SKIP = `${FORMOGEN_ACTION_PREFIX}:FORMFILES_UPLOAD:SKIP`;
+// FORMFILES PROCESS
+export const FORMFILES_PROCESS_START = `${FORMOGEN_ACTION_PREFIX}:FORMFILES_PROCESS:${START}`;
+export const FORMFILES_PROCESS_SUCCESS = `${FORMOGEN_ACTION_PREFIX}:FORMFILES_PROCESS:${SUCCESS}`;
+export const FORMFILES_PROCESS_SKIP = `${FORMOGEN_ACTION_PREFIX}:FORMFILES_PROCESS:SKIP`;
 
-export const formFilesUploadStart = () => ({
-    type: FORMFILES_UPLOAD_START,
+export const formFilesProcessStart = () => ({
+    type: FORMFILES_PROCESS_START,
 });
 
-export const formFilesUploadSuccess = (data) => ({
-    type: FORMFILES_UPLOAD_SUCCESS,
+export const formFilesProcessSuccess = (data) => ({
+    type: FORMFILES_PROCESS_SUCCESS,
     payload: data
 });
 
-export const formFilesUploadSkip = () => ({
-    type: FORMFILES_UPLOAD_SKIP,
+export const formFilesProcessSkip = () => ({
+    type: FORMFILES_PROCESS_SKIP,
 });
 
-export const uploadFormFiles = (formFiles, urls, sendFileQueueLength = 1) => {
+export const processFormFiles = (formFiles, urls, sendFileQueueLength = 1) => {
     return dispatch => {
         if (_.isEmpty(formFiles))
-            return dispatch(formFilesUploadSkip());
+            return dispatch(formFilesProcessSkip());
 
-        dispatch(formFilesUploadStart());
+        dispatch(formFilesProcessStart());
 
-        return handleFormFilesUpload(formFiles, urls, dispatch, sendFileQueueLength)
-            .then(data => dispatch(formFilesUploadSuccess(data)));
+        return handleFormFilesProcess(formFiles, urls, dispatch, sendFileQueueLength)
+            .then(data => dispatch(formFilesProcessSuccess(data)));
     };
 };
 
@@ -215,25 +215,60 @@ export const uploadSingleFile = (fieldName, uploadUrl, formData, fileName, dispa
         .catch(error => dispatch(singleFileUploadFail(fieldName, uploadUrl, error, fileName)));
 };
 
-const evaluateUploadFileChunk = (chunk, dispatch) => {
-    return chunk.map(({ fieldName, uploadUrl, formData, fileName }) => {
-        return uploadSingleFile(fieldName, uploadUrl, formData, fileName, dispatch);
+// SINGLE FILE DELETE
+export const SINGLE_FILE_DELETE_START = `${FORMOGEN_ACTION_PREFIX}:SINGLE_FILE_DELETE:${START}`;
+export const SINGLE_FILE_DELETE_FAIL = `${FORMOGEN_ACTION_PREFIX}:SINGLE_FILE_DELETE:${FAIL}`;
+export const SINGLE_FILE_DELETE_SUCCESS = `${FORMOGEN_ACTION_PREFIX}:SINGLE_FILE_DELETE:${SUCCESS}`;
+
+export const singleFileDeleteStart = (fieldName, url, fileName) => ({
+    type: SINGLE_FILE_DELETE_START,
+    payload: { fieldName, url, fileName },
+});
+
+export const singleFileDeleteFail = (fieldName, url, data, fileName) => ({
+    type: SINGLE_FILE_DELETE_FAIL,
+    payload: { fieldName, url, data, fileName }
+});
+
+export const singleFileDeleteSuccess = (fieldName, url, error, fileName) => ({
+    type: SINGLE_FILE_DELETE_SUCCESS,
+    payload: { fieldName, url, error, fileName },
+});
+
+export const deleteSingleFile = (fieldName, deleteUrl, fileName, dispatch) => {
+    dispatch(singleFileDeleteStart(fieldName, deleteUrl, fileName));
+
+    const options = { ...getFetchOptions({ method: 'POST', headers: {} }) };
+    return fetch(deleteUrl, options)
+        .then(resolveResponse)
+        .then(data => dispatch(singleFileDeleteSuccess(fieldName, deleteUrl, data, fileName)))
+        .catch(error => dispatch(singleFileDeleteFail(fieldName, deleteUrl, error, fileName)));
+};
+
+const evaluateProcessFileChunk = (chunk, dispatch) => {
+    return chunk.map(({ fieldName, url, formData, fileName, action }) => {
+        if (action === 'upload')
+            return uploadSingleFile(fieldName, url, formData, fileName, dispatch);
+        if (action === 'delete')
+            return deleteSingleFile(fieldName, url, fileName, dispatch);
+
+        throw new Error(`Unknown action type ${action}`);
     });
 };
 
-export function handleFormFilesUpload(filesFieldMap, objectUrls, dispatch, queueLength = 1) {
-    const queue = prepareFileUploadQueue(filesFieldMap, objectUrls);
+export function handleFormFilesProcess(filesFieldMap, objectUrls, dispatch, queueLength = 1) {
+    const queue = prepareFileProcessQueue(filesFieldMap, objectUrls);
     const chunks = _.chunk(queue, queueLength);
 
     if (_.isEmpty(queue))
         return Promise.resolve();
 
     return new Promise(resolve => {
-        const beginningPromise = Promise.all(evaluateUploadFileChunk(chunks[0], dispatch));
+        const beginningPromise = Promise.all(evaluateProcessFileChunk(chunks[0], dispatch));
 
         let followingPromise = beginningPromise.then(() => {
             for (let chunk of chunks.slice(1)) {
-                followingPromise = followingPromise.then(() => Promise.all(evaluateUploadFileChunk(chunk, dispatch)));
+                followingPromise = followingPromise.then(() => Promise.all(evaluateProcessFileChunk(chunk, dispatch)));
             }
             followingPromise.then(() => resolve(followingPromise));
         });

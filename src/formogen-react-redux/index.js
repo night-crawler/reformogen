@@ -40,8 +40,10 @@
     [+] submit component as a prop
     [+] layouts support
 
+    [ ] colorpicker
+
     [+] showing initial values for the dropzone field
-    [ ] selected value for files (show additional checkbox to clear && show currently selected file name)
+    [+] selected value for files (show additional checkbox to clear && show currently selected file name)
 
     ============================================================
 */

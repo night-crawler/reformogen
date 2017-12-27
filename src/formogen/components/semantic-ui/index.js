@@ -52,20 +52,12 @@ export {
 
 export default class FormogenFormComponent extends React.Component {
     static defaultProps = {
+        /* misc */
         locale: 'en',
         upperFirstLabels: false,
         helpTextOnHover: false,
 
-        fields: [],
-        formData: {},
-        layoutTemplate: [{  /* declare a default layout template */
-            header: '',
-            fields: '*',
-            width: 16,
-        }],
-
-        fieldUpdatePropsMap: {},
-
+        /* field map redefinition */
         djangoFieldsMap: {
             CharField,
             TextField,
@@ -85,42 +77,70 @@ export default class FormogenFormComponent extends React.Component {
             BooleanField,
         },
 
+        /* metadata */
+        fields: [],
+
+        /* formdata */
+        formData: {},
+
+        /* modal opts */
         showAsModal: false,
         modalComponent: Modal,
 
+        /* view redefinition opts */
         formComponent: Form,
         submitComponent: Button,
+
+        layoutTemplate: [{  /* declare a default layout template */
+            header: '',
+            fields: '*',
+            width: 16,
+        }],
+        fieldUpdatePropsMap: {},
     };
     static propTypes = {
-        locale: PropTypes.string,
+        /* misc */
         loading: PropTypes.bool,
+
+        locale: PropTypes.string,
         showHeader: PropTypes.bool,
-        title: PropTypes.string,
         upperFirstLabels: PropTypes.bool,
         helpTextOnHover: PropTypes.bool,
 
-        fields: PropTypes.arrayOf(PropTypes.object).isRequired,
-        formData: PropTypes.object,
-        layoutTemplate: PropTypes.array,
+        /* field map redefinition */
+        djangoFieldsMap: PropTypes.object,
 
+        /* metadata */
+        title: PropTypes.string,
+        fields: PropTypes.arrayOf(PropTypes.object).isRequired,
+
+        /* formdata */
+        formData: PropTypes.object,
+
+        /* errors */
         errorsFieldMap: PropTypes.object,
         nonFieldErrorsMap: PropTypes.object,  /* {title: [errors]} */
 
-        fieldUpdatePropsMap: PropTypes.object,
+        /* represents file progress */
+        formFilesUploadProgress: PropTypes.object,
 
-        onFieldChange: PropTypes.func,
-        onSubmit: PropTypes.func,
-        onNetworkError: PropTypes.func,
-
-        djangoFieldsMap: PropTypes.object,
-
+        /* modal opts */
         showAsModal: PropTypes.bool,
         modalComponent: PropTypes.element,
         modalTriggerComponent: PropTypes.element,
         modalProps: PropTypes.object,
 
+        /* view redefinition opts */
         formComponent: PropTypes.element,
         submitComponent: PropTypes.element,
+
+        layoutTemplate: PropTypes.array,
+        fieldUpdatePropsMap: PropTypes.object,
+
+        /* on actions */
+        onFieldChange: PropTypes.func,
+        onSubmit: PropTypes.func,
+        onNetworkError: PropTypes.func,
     };
 
     // --------------- constructor ---------------
@@ -282,47 +302,65 @@ export default class FormogenFormComponent extends React.Component {
         return <Grid className='non-field-errors layout' columns={ 16 }>{ renderedMsgs }</Grid>;
     }
 
-    // --------------- React.js render ---------------
-    render() {
+    renderAsModal() {
+        this.log.debug('renderAsModal()');
+
         const {
-            showAsModal,
+            loading,
+            showHeader,
+            title,
+
+            submitComponent: SubmitComponent,
             formComponent: FormComponent,
-            submitComponent: SubmitComponent
+
+            modalComponent: ModalComponent,
+            modalTriggerComponent: ModalTriggerComponent,
+            modalProps,
+
+            onSubmit
         } = this.props;
 
-        if (showAsModal) {
-            const {
-                modalComponent: ModalComponent,
-                modalTriggerComponent: ModalTriggerComponent,
-            } = this.props;
-
-            return (
-                <ModalComponent
-                    trigger={ ModalTriggerComponent ? ModalTriggerComponent : <Button content='show modal' /> }
-                    header={ this.props.showHeader ? <Header as='h2'>{ this.props.title }</Header> : null }
-                    actions={
-                        <SubmitComponent
-                            type='submit'
-                            content={ 'Submit' }
-
-                            onClick={ this.props.onSubmit }
-                            onKeyPress={ this.props.onSubmit }
-                        />
-                    }
-                    modalProps={ this.props.modalProps }
-                >
-                    <FormComponent loading={ this.props.loading }>
-                        <div className='layouts'>
-                            { this.renderNonFieldErrors() }
-                            { this.renderLayout() }
-                        </div>
-                    </FormComponent>
-                </ModalComponent>
-            );
-        }
         return (
-            <FormComponent loading={ this.props.loading }>
-                { this.props.showHeader ? <Header as='h2' dividing={ true }>{ this.props.title }</Header> : null }
+            <ModalComponent
+                trigger={ ModalTriggerComponent ? ModalTriggerComponent : <Button content='show modal' /> }
+                header={ showHeader ? <Header as='h2'>{ title }</Header> : null }
+                actions={
+                    <SubmitComponent
+                        type='submit'
+                        content={ 'Submit' }
+
+                        onClick={ onSubmit }
+                        onKeyPress={ onSubmit }
+                    />
+                }
+                modalProps={ modalProps }
+            >
+                <FormComponent loading={ loading }>
+                    <div className='layouts'>
+                        { this.renderNonFieldErrors() }
+                        { this.renderLayout() }
+                    </div>
+                </FormComponent>
+            </ModalComponent>
+        );
+    }
+    renderAsEmbedded() {
+        this.log.debug('renderAsEmbedded()');
+
+        const {
+            loading,
+            showHeader,
+            title,
+
+            submitComponent: SubmitComponent,
+            formComponent: FormComponent,
+
+            onSubmit
+        } = this.props;
+
+        return (
+            <FormComponent loading={ loading }>
+                { showHeader ? <Header as='h2' dividing={ true }>{ title }</Header> : null }
 
                 <div className='layouts'>
                     { this.renderNonFieldErrors() }
@@ -334,10 +372,20 @@ export default class FormogenFormComponent extends React.Component {
                     content={ 'Submit' }
                     fluid={ true }
 
-                    onClick={ this.props.onSubmit }
-                    onKeyPress={ this.props.onSubmit }
+                    onClick={ onSubmit }
+                    onKeyPress={ onSubmit }
                 />
             </FormComponent>
         );
+    }
+
+    // --------------- React.js render ---------------
+    render() {
+        const { showAsModal } = this.props;
+
+        if (showAsModal)
+            return this.renderAsModal();
+
+        return this.renderAsEmbedded();
     }
 }

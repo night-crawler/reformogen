@@ -111,7 +111,15 @@ class AuthorPhotoViewSet(viewsets.ModelViewSet, DescribeMixin):
         obj.photo.save(uploaded_file.name, uploaded_file)
         obj.save()
 
-        return Response({'detail': 'Avatar uploaded successfully'})
+        return Response({'detail': 'photo was uploaded successfully'})
+
+    @detail_route(['POST'])
+    def photo_delete(self, request: Request, pk=None):
+        obj = self.get_object()
+        obj.photo.delete()
+        obj.save()
+
+        return Response({'detail': 'photo was deleted successfully'})
 
 
 class BookViewSet(viewsets.ModelViewSet, DescribeMixin):

@@ -127,7 +127,8 @@ class AuthorPhoto(CRUDUrlsMixin, TimeStampedModel):
     def urls(self):
         _urls = super(AuthorPhoto, self).urls
         _urls.update({
-            'photo_upload': 'http://localhost:8000%s' % reverse('author-photos-photo-upload', (self.id,))
+            'photo_upload': 'http://localhost:8000%s' % reverse('author-photos-photo-upload', (self.id,)),
+            'photo_delete': 'http://localhost:8000%s' % reverse('author-photos-photo-delete', (self.id,)),
         })
         return _urls
 

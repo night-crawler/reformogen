@@ -96,24 +96,41 @@ export function getDirtyFields(prevDirtyData, pristineData) {
 }
 
 
-export function prepareFileUploadQueue(filesFieldMap, objectUrls = {}) {
-    let fileUploadQueue = [];
-    for (let [fieldName, { defaultUploadUrl, files }] of Object.entries(filesFieldMap)) {
+export function prepareFileProcessQueue(filesFieldMap, objectUrls = {}) {
+    let fileProcessQueue = [];
+    for (let [fieldName, { files, action, url }] of Object.entries(filesFieldMap)) {
         if (_.isEmpty(files)) {
-            console.warning(`Field "${fieldName}" contains no files - skipping`);
+            console.warn(`Field "${fieldName}" contains no files - skipping`);
             continue;
         }
-        const uploadUrl = objectUrls[`${fieldName}_upload`] || defaultUploadUrl;
-        if (!uploadUrl)
-            throw new Error(`No upload url for field ${fieldName} specified in filesBundle`);
 
-        for (let file of files) {
-            let formData = new FormData();
-            formData.append(file.name, file);
-            fileUploadQueue.push({ fieldName, uploadUrl, formData, fileName: file.name });
+        // delete file
+        if (action === 'delete') {
+            const deleteUrl = objectUrls[`${fieldName}_delete`] || url;
+
+            if (!deleteUrl)
+                throw new Error(`No delete url for field ${fieldName} specified in filesBundle`);
+
+            for (let file of files) {
+                fileProcessQueue.push({ fieldName, url: deleteUrl, formData: undefined, fileName: file.name, action });
+            }
+        }
+
+        // upload files
+        if (action === 'upload') {
+            const uploadUrl = objectUrls[`${fieldName}_upload`] || url;
+
+            if (!uploadUrl)
+                throw new Error(`No upload url for field ${fieldName} specified in filesBundle`);
+
+            for (let file of files) {
+                let formData = new FormData();
+                formData.append(file.name, file);
+                fileProcessQueue.push({ fieldName, url: uploadUrl, formData, fileName: file.name, action });
+            }
         }
     }
-    return fileUploadQueue;
+    return fileProcessQueue;
 }
 
 
