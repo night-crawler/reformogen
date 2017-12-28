@@ -18,15 +18,14 @@ const SUCCESS = 'SUCCESS';
 export const FORMOGEN_COMPONENT_DID_MOUNT = `${FORMOGEN_ACTION_PREFIX}:DID_MOUNT`;
 export const FORMOGEN_COMPONENT_WILL_UNMOUNT = `${FORMOGEN_ACTION_PREFIX}:WILL_UNMOUNT`;
 
-export const formogenComponentDidMount = name => ({
-    // what's about `FORMOGEN:DID_MOUNT:${name}` or sth like this? Client could able to reduce this type of action
+export const formogenComponentDidMount = namespace => ({
     type: FORMOGEN_COMPONENT_DID_MOUNT,
-    payload: { name }
+    payload: { namespace }
 });
 
-export const formogenComponentWillUnmount = name => ({
+export const formogenComponentWillUnmount = namespace => ({
     type: FORMOGEN_COMPONENT_WILL_UNMOUNT,
-    payload: { name }
+    payload: { namespace }
 });
 
 

@@ -280,7 +280,7 @@ export const nonFieldErrorsMap = createSelector([errors, fieldNames], (errors, f
 
 // =============== MISC ===============
 
-export const formogenName = createSelector(initial, initial => initial.name || 'formogen');
+export const formogenNamespace = createSelector(initial, initial => initial.namespace || 'default');
 
 // it signals if the formogen form is loading its data (form data, meta data, etc)
 export const isLoading = createSelector([formogen, isObjectUpdate], (formogen, isObjectUpdate) => {

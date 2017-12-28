@@ -6,7 +6,7 @@ import FormogenFormComponent from '../formogen';
 
 export default class FormogenComponent extends Component {
     static propTypes = {
-        formogenName: PropTypes.string.isRequired,
+        formogenNamespace: PropTypes.string.isRequired,
 
         formogenComponentDidMount: PropTypes.func.isRequired,
         formogenComponentWillUnmount: PropTypes.func.isRequired,
@@ -46,7 +46,7 @@ export default class FormogenComponent extends Component {
     };
 
     componentDidMount() {
-        this.props.formogenComponentDidMount(this.props.formogenName);
+        this.props.formogenComponentDidMount(this.props.formogenNamespace);
 
         this.props.getMetaData();
         this.props.getFormData();
@@ -60,7 +60,7 @@ export default class FormogenComponent extends Component {
         }
     }
     componentWillUnmount() {
-        this.props.formogenComponentWillUnmount(this.props.formogenName);
+        this.props.formogenComponentWillUnmount(this.props.formogenNamespace);
     }
 
     render() {

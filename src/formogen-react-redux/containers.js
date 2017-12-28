@@ -9,7 +9,7 @@ import {
     fieldChanged
 } from './actions';
 import {
-    formogenName,
+    formogenNamespace,
     skipFetchingObject,
     title, description, fields,
     pristineFormData, dirtyFormData, actualFormData, dirtyFiles,
@@ -64,7 +64,7 @@ const mergeProps = (stateProps, dispatchProps, ownProps) => {
 export default connect(
     createStructuredSelector({
         // helps identify form
-        formogenName,
+        formogenNamespace,
         // misc flags
         skipFetchingObject,
         // metaData

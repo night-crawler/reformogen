@@ -95,6 +95,7 @@ class App extends Component {
                             <Formogen
                                 locale={ 'ru' }
                                 showHeader={ true }
+                                title={ 'default namespace' }
 
                                 /* author photo form */
                                 metaDataUrl={ 'http://localhost:8000/api/v1/sample/author-photos/describe/' }
@@ -105,6 +106,45 @@ class App extends Component {
                                 // metaDataUrl={ 'http://localhost:8000/api/v1/sample/authors/describe/' }
                                 // objectCreateUrl={ 'http://localhost:8000/api/v1/sample/authors/' }
                                 // objectUrl={ 'http://localhost:8000/api/v1/sample/authors/23/' }
+
+                                /* misc */
+                                sendFileQueueLength={ 3 }
+
+                                /* modal opts */
+                                // showAsModal={ true }
+                                // modalComponent={ null }
+                                // modalTriggerComponent={ <Button>Rise up evil!</Button> }
+                                // modalProps={ { dimmer: 'blurring' } }
+
+                                // formComponent={ FormComponent }
+                                // submitComponent={ SubmitComponent }
+                            />
+
+
+                        </Segment>
+                    </Grid.Column>
+
+
+                    <Grid.Column>
+                        <Segment className='formogen'>
+
+
+                            <Formogen
+                                namespace='trololo'
+
+                                locale={ 'ru' }
+                                showHeader={ true }
+                                title={ '"trololo" namespace' }
+
+                                /* author photo form */
+                                // metaDataUrl={ 'http://localhost:8000/api/v1/sample/author-photos/describe/' }
+                                // objectCreateUrl={ 'http://localhost:8000/api/v1/sample/author-photos/' }
+                                // objectUrl={ 'http://localhost:8000/api/v1/sample/author-photos/1/' }
+
+                                /* author form */
+                                metaDataUrl={ 'http://localhost:8000/api/v1/sample/authors/describe/' }
+                                objectCreateUrl={ 'http://localhost:8000/api/v1/sample/authors/' }
+                                objectUrl={ 'http://localhost:8000/api/v1/sample/authors/23/' }
 
                                 /* misc */
                                 sendFileQueueLength={ 3 }
