@@ -9,7 +9,7 @@ import {
     fieldChanged
 } from './actions';
 import {
-    formogenNamespace,
+    namespace,
     skipFetchingObject,
     title, description, fields,
     pristineFormData, dirtyFormData, actualFormData, dirtyFiles,
@@ -21,28 +21,34 @@ import {
 import FormogenComponent from './components';
 
 
-const mapDispatchToProps = (dispatch, props) => {
-    return {
-        dispatch,
-
-        formogenComponentDidMount: name => dispatch(formogenComponentDidMount(name)),
-        formogenComponentWillUnmount: name => dispatch(formogenComponentWillUnmount(name)),
-
-        // TODO: objectUrl
-        getFormData: () => props.objectUrl && dispatch(requestFormData(props.objectUrl)),
-        getMetaData: () => dispatch(requestMetaData(props.metaDataUrl)),
-        handleFieldChanged: (...args) => dispatch(fieldChanged(...args)),
-    };
-};
+const mapDispatchToProps = dispatch => ({ dispatch });
 
 const mergeProps = (stateProps, dispatchProps, ownProps) => {
+    const { namespace } = stateProps;
+    const { dispatch } = dispatchProps;
+
+    const componentDidMount = () => dispatch(formogenComponentDidMount(namespace));
+    const componentWillUnmount = () => dispatch(formogenComponentWillUnmount(namespace));
+    const getFormData = () => {
+        const { objectUrl } = ownProps;
+        if (objectUrl) return dispatch(requestFormData(objectUrl, namespace));
+        return Promise.resolve({});
+    };
+    const getMetaData = () => {
+        const { metaDataUrl } = ownProps;
+        return dispatch(requestMetaData(metaDataUrl, namespace));
+    };
+    const handleFieldChanged = (event, data) => {
+        return dispatch(fieldChanged(event, data, namespace));
+    };
     const submit = () => {
         const { skipFetchingObject, submitUrl, submitMethod,
             dirtyFormData, dirtyFiles, submitMiddlewares } = stateProps;
-        const { dispatch } = dispatchProps;
+
         const { sendFileQueueLength } = ownProps;
 
         const _props = {
+            namespace,
             submitUrl,
             submitMethod,
             sendFileQueueLength,
@@ -57,14 +63,15 @@ const mergeProps = (stateProps, dispatchProps, ownProps) => {
 
     return {
         ...stateProps, ...dispatchProps, ...ownProps,
-        submit,
+        componentDidMount, componentWillUnmount,
+        getFormData, getMetaData, handleFieldChanged, submit,
     };
 };
 
 export default connect(
     createStructuredSelector({
-        // helps identify form
-        formogenNamespace,
+        // helps identify state's namespace of current formogen form
+        namespace,
         // misc flags
         skipFetchingObject,
         // metaData

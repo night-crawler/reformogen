@@ -6,10 +6,10 @@ import FormogenFormComponent from '../formogen';
 
 export default class FormogenComponent extends Component {
     static propTypes = {
-        formogenNamespace: PropTypes.string.isRequired,
+        namespace: PropTypes.string.isRequired,
 
-        formogenComponentDidMount: PropTypes.func.isRequired,
-        formogenComponentWillUnmount: PropTypes.func.isRequired,
+        componentDidMount: PropTypes.func.isRequired,
+        componentWillUnmount: PropTypes.func.isRequired,
 
         actualFormData: PropTypes.object.isRequired,
         description: PropTypes.string,
@@ -46,26 +46,26 @@ export default class FormogenComponent extends Component {
     };
 
     componentDidMount() {
-        this.props.formogenComponentDidMount(this.props.formogenNamespace);
-
+        this.props.componentDidMount();
         this.props.getMetaData();
         this.props.getFormData();
     }
     componentWillReceiveProps({ isLoading }) {
-        if (!isLoading) {
-            const { submitUrl } = this.props;
+        if (isLoading) return;
 
-            if (!submitUrl)
-                throw new Error('Got an empty submitUrl');
-        }
+        if (!this.props.submitUrl)
+            throw new Error('Got an empty submitUrl');
     }
     componentWillUnmount() {
-        this.props.formogenComponentWillUnmount(this.props.formogenNamespace);
+        this.props.componentWillUnmount();
     }
 
     render() {
         return (
             <FormogenFormComponent
+                /* name-spacing */
+                namespace={ this.props.namespace }
+
                 /* misc */
                 loading={ this.props.isLoading }
 

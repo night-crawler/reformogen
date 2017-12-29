@@ -130,16 +130,16 @@ class App extends Component {
 
 
                             <Formogen
-                                namespace='trololo'
+                                namespace='formogenSpecialNamespace'
 
                                 locale={ 'ru' }
                                 showHeader={ true }
-                                title={ '"trololo" namespace' }
+                                title={ '"formogenSpecialNamespace" namespace' }
 
                                 /* author photo form */
                                 // metaDataUrl={ 'http://localhost:8000/api/v1/sample/author-photos/describe/' }
                                 // objectCreateUrl={ 'http://localhost:8000/api/v1/sample/author-photos/' }
-                                // objectUrl={ 'http://localhost:8000/api/v1/sample/author-photos/1/' }
+                                // objectUrl={ 'http://localhost:8000/api/v1/sample/author-photos/100/' }
 
                                 /* author form */
                                 metaDataUrl={ 'http://localhost:8000/api/v1/sample/authors/describe/' }
