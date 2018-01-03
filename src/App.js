@@ -95,7 +95,7 @@ class App extends Component {
                             <Formogen
                                 locale={ 'ru' }
                                 showHeader={ true }
-                                title={ 'default namespace' }
+                                title={ 'default formId aka "default"' }
 
                                 /* author photo form */
                                 metaDataUrl={ 'http://localhost:8000/api/v1/sample/author-photos/describe/' }
@@ -128,13 +128,12 @@ class App extends Component {
                     <Grid.Column>
                         <Segment className='formogen'>
 
-
                             <Formogen
-                                namespace='formogenSpecialNamespace'
+                                formId='formogen-1'
 
                                 locale={ 'ru' }
                                 showHeader={ true }
-                                title={ '"formogenSpecialNamespace" namespace' }
+                                title={ 'formId = "formogen-1"' }
 
                                 /* author photo form */
                                 // metaDataUrl={ 'http://localhost:8000/api/v1/sample/author-photos/describe/' }

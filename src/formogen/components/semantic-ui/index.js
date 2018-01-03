@@ -99,7 +99,7 @@ export default class FormogenFormComponent extends React.Component {
         fieldUpdatePropsMap: {},
     };
     static propTypes = {
-        namespace: PropTypes.string.isRequired,
+        formId: PropTypes.string.isRequired,
 
         /* misc */
         loading: PropTypes.bool,
@@ -149,7 +149,7 @@ export default class FormogenFormComponent extends React.Component {
     constructor(props) {
         super(props);
 
-        this.log = loglevel.getLogger(`FormogenFormComponent[${props.namespace}]`);
+        this.log = loglevel.getLogger(`FormogenFormComponent[${props.formId}]`);
         this.log.debug('Initialized');
 
         this.state = {

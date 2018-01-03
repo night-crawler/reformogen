@@ -14,15 +14,15 @@ export const props = (state, props) => props;
 
 // =============== NAME-SPACING ===============
 
-export const namespace = createSelector(props, props => props.namespace || 'default');
+export const namespace = createSelector(props, props => props.formId || 'default');
 
-export const formogen = createSelector([state, namespace], (state, namespace) => state[namespace] || {});
+export const concreteForm = createSelector([state, namespace], (state, namespace) => state[namespace] || {});
 
 
 // =============== METADATA ===============
 
 // received meta data (from remote server)
-export const receivedMetaData = createSelector(formogen, formogen => formogen.receivedMetaData || {});
+export const receivedMetaData = createSelector(concreteForm, form => form.receivedMetaData || {});
 
 // received meta data fields (from remote server)
 export const receivedFields = createSelector(receivedMetaData, metaData => metaData.fields || []);
@@ -34,7 +34,7 @@ export const initialMetaData = createSelector(props, props => props.propsMetaDat
 export const initialFields = createSelector(initialMetaData, metaData => metaData.fields || []);
 
 // when meta data ready to be rendered it's true
-export const isMetaDataReady = createSelector(formogen, formogen => formogen.isMetaDataReady);
+export const isMetaDataReady = createSelector(concreteForm, formogen => formogen.isMetaDataReady);
 
 
 // =============== FINAL DATA (TOTAL DATA) ===============
@@ -70,13 +70,13 @@ export const fileFieldNames = createSelector(fileFields, fileFields => _.map(fil
 // =============== FORMDATA ===============
 
 // should contain data objects that present file uploading progress
-export const formFilesUploadProgress = createSelector(formogen, formogen => formogen.formFilesUploadProgress || {});
+export const formFilesUploadProgress = createSelector(concreteForm, form => form.formFilesUploadProgress);
 
 // should contain form data (from own props)
 export const initialFormData = createSelector(props, props => props.initialFormData);
 
 // should contain received (from remote server) form data
-export const receivedFormData = createSelector(formogen, formogen => formogen.receivedFormData);
+export const receivedFormData = createSelector(concreteForm, form => form.receivedFormData);
 
 // should contain initialFormData && receivedFormData + should be updated with defaults
 export const pristineFormData = createSelector(
@@ -91,9 +91,9 @@ export const pristineFormData = createSelector(
 // should contain only changed fields (USER INPUT ONLY)
 // when isObjectCreate === true, dirtyFormData contains all fields in form
 export const dirtyFormData = createSelector(
-    [formogen, pristineFormData, fileFieldNames],
-    (formogen, pristineFormData, fileFieldNames) => {
-        const { dirtyFormData } = formogen;
+    [concreteForm, pristineFormData, fileFieldNames],
+    (form, pristineFormData, fileFieldNames) => {
+        const { dirtyFormData } = form;
         const dirtyDataFieldMap = _.pickBy(dirtyFormData, (t, fieldName) => !(fileFieldNames.indexOf(fieldName) + 1));
         const pristineFieldMap = _.pickBy(pristineFormData, (t, fieldName) => !(fileFieldNames.indexOf(fieldName) + 1));
         return getDirtyFields(dirtyDataFieldMap, pristineFieldMap);
@@ -102,9 +102,9 @@ export const dirtyFormData = createSelector(
 
 // it contains only changed file fields (USER INPUT ONLY)
 export const dirtyFiles = createSelector(
-    [formogen, pristineFormData, fileFieldNames],
-    (formogen, pristineFormData, fileFieldNames) => {
-        return _.pickBy(formogen.dirtyFormData, (val, fieldName) =>
+    [concreteForm, pristineFormData, fileFieldNames],
+    (form, pristineFormData, fileFieldNames) => {
+        return _.pickBy(form.dirtyFormData, (val, fieldName) =>
             !!(fileFieldNames.indexOf(fieldName) + 1) && !_.isEmpty(val)
         );
     }
@@ -270,7 +270,7 @@ export const submitMiddlewares = createSelector(
 // =============== ERRORS ===============
 
 // contains all errors
-export const errors = createSelector(formogen, formogen => formogen.errors || {});
+export const errors = createSelector(concreteForm, form => form.errors || {});
 
 // contains ONLY validation errors
 export const fieldErrorsMap = createSelector([errors, fieldNames], (errors, fieldNames) => {
@@ -286,10 +286,10 @@ export const nonFieldErrorsMap = createSelector([errors, fieldNames], (errors, f
 // =============== MISC ===============
 
 // it signals if the formogen form is loading its data (form data, meta data, etc)
-export const isLoading = createSelector([formogen, isObjectUpdate], (formogen, isObjectUpdate) => {
+export const isLoading = createSelector([concreteForm, isObjectUpdate], (form, isObjectUpdate) => {
     if (isObjectUpdate)
-        return !(formogen.isFormDataReady && formogen.isMetaDataReady);
-    return !formogen.isMetaDataReady;
+        return !(form.isFormDataReady && form.isMetaDataReady);
+    return !form.isMetaDataReady;
 });
 
 //

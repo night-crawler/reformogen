@@ -10,13 +10,13 @@ import {
 
 
 export const formogen = (state = {}, action) => {
-    /* all formogen's actions have one important property - 'namespace'
+    /* all formogen's actions have one important property - 'formId'
      * if an action doesn't have it - skip reducer execution
      */
-    if (!_.get(action, 'meta.namespace', false)) return state;
+    if (!_.get(action, 'meta.formId', false)) return state;
 
-    const { namespace } = action.meta;
-    let subState = state[namespace] || {};
+    const { formId } = action.meta;
+    let subState = state[formId] || {};
 
     switch (action.type) {
 
@@ -33,7 +33,7 @@ export const formogen = (state = {}, action) => {
                 ...subState,
                 errors: {},
                 isFormDataReady: true,
-                receivedFormData: { ...action.payload },
+                receivedFormData: action.payload,
             };
             break;
 
@@ -105,5 +105,5 @@ export const formogen = (state = {}, action) => {
             return state;
     }
 
-    return { ...state, [namespace]: subState };
+    return { ...state, [formId]: subState };
 };

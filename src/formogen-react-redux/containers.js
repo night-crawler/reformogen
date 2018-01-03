@@ -8,38 +8,78 @@ import {
     submitForm,
     fieldChanged
 } from './actions';
-import {
-    namespace,
-    skipFetchingObject,
-    title, description, fields,
-    pristineFormData, dirtyFormData, actualFormData, dirtyFiles,
-    isLoading, isFormDataPristine, isFormDataDirty, shouldUploadFiles, formFilesUploadProgress,
-    submitUrl, submitMethod,
-    submitMiddlewares,
-    fieldErrorsMap, nonFieldErrorsMap,
-} from './selectors';
+import selectorFactories from './selectorFactories';
 import FormogenComponent from './components';
 
+
+const makeMapStateToProps = () => {
+    // create private selectors (one for each instance of component)
+    const formId = selectorFactories.makeFormId();
+
+    const skipFetchingObject = selectorFactories.makeSkipFetchingObject();
+    const formFilesUploadProgress = selectorFactories.makeFormFilesUploadProgress();
+
+    const isLoading = selectorFactories.makeIsLoading();
+    const isFormDataPristine = selectorFactories.makeIsFormDataPristine();
+    const isFormDataDirty = selectorFactories.makeIsFormDataDirty();
+    const shouldUploadFiles = selectorFactories.makeShouldUploadFiles();
+
+    const title = selectorFactories.makeTitle();
+    const description = selectorFactories.makeDescription();
+    const fields = selectorFactories.makeFields();
+
+    const pristineFormData = selectorFactories.makePristineFormData();
+    const dirtyFormData = selectorFactories.makeDirtyFormData();
+    const actualFormData = selectorFactories.makeActualFormData();
+    const dirtyFiles = selectorFactories.makeDirtyFileData();
+
+    const submitMethod = selectorFactories.makeSubmitMethod();
+    const submitUrl = selectorFactories.makeSubmitUrl();
+
+    const submitMiddlewares = selectorFactories.makeSubmitMiddlewares();
+
+    const fieldErrorsMap = selectorFactories.makeFieldErrorsMap();
+    const nonFieldErrorsMap = selectorFactories.makeNonFieldErrorsMap();
+
+    return createStructuredSelector({
+        // helps identify state's namespace of current formogen form
+        formId,
+        // misc flags
+        skipFetchingObject,
+        // states
+        isLoading, isFormDataPristine, isFormDataDirty, shouldUploadFiles, formFilesUploadProgress,
+        // metaData
+        title, description, fields,
+        // formData
+        pristineFormData, dirtyFormData, actualFormData, dirtyFiles,
+        // submit action url and method
+        submitUrl, submitMethod,
+        // middlewares (data flow)
+        submitMiddlewares,
+        // errors
+        fieldErrorsMap, nonFieldErrorsMap,
+    });
+};
 
 const mapDispatchToProps = dispatch => ({ dispatch });
 
 const mergeProps = (stateProps, dispatchProps, ownProps) => {
-    const { namespace } = stateProps;
+    const { formId } = stateProps;
     const { dispatch } = dispatchProps;
 
-    const componentDidMount = () => dispatch(formogenComponentDidMount(namespace));
-    const componentWillUnmount = () => dispatch(formogenComponentWillUnmount(namespace));
+    const componentDidMount = () => dispatch(formogenComponentDidMount(formId));
+    const componentWillUnmount = () => dispatch(formogenComponentWillUnmount(formId));
     const getFormData = () => {
         const { objectUrl } = ownProps;
-        if (objectUrl) return dispatch(requestFormData(objectUrl, namespace));
+        if (objectUrl) return dispatch(requestFormData(objectUrl, formId));
         return Promise.resolve({});
     };
     const getMetaData = () => {
         const { metaDataUrl } = ownProps;
-        return dispatch(requestMetaData(metaDataUrl, namespace));
+        return dispatch(requestMetaData(metaDataUrl, formId));
     };
     const handleFieldChanged = (event, data) => {
-        return dispatch(fieldChanged(event, data, namespace));
+        return dispatch(fieldChanged(event, data, formId));
     };
     const submit = () => {
         const { skipFetchingObject, submitUrl, submitMethod,
@@ -48,7 +88,7 @@ const mergeProps = (stateProps, dispatchProps, ownProps) => {
         const { sendFileQueueLength } = ownProps;
 
         const _props = {
-            namespace,
+            formId,
             submitUrl,
             submitMethod,
             sendFileQueueLength,
@@ -69,24 +109,7 @@ const mergeProps = (stateProps, dispatchProps, ownProps) => {
 };
 
 export default connect(
-    createStructuredSelector({
-        // helps identify state's namespace of current formogen form
-        namespace,
-        // misc flags
-        skipFetchingObject,
-        // metaData
-        title, description, fields,
-        // formData
-        pristineFormData, dirtyFormData, actualFormData, dirtyFiles,
-        // states
-        isLoading, isFormDataPristine, isFormDataDirty, shouldUploadFiles, formFilesUploadProgress,
-        // submit action url and method
-        submitUrl, submitMethod,
-        // middlewares (data flow)
-        submitMiddlewares,
-        // errors
-        fieldErrorsMap, nonFieldErrorsMap,
-    }),
+    makeMapStateToProps,
     mapDispatchToProps,
     mergeProps
 )(FormogenComponent);
