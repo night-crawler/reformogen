@@ -85,6 +85,9 @@ class App extends Component {
             vasya: 42,
         };
 
+        // TODO: add lazy evaluation for modal mode
+        // TODO: add X (cancel) to modal window
+        // TODO: check undefined metaDataUrl
         return (
             <div className='App'>
                 <Grid columns={ 3 } stackable={ true }>

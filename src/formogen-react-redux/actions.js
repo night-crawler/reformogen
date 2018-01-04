@@ -154,6 +154,7 @@ export const formDataSendSkip = formId => ({
 export const otherNetworkError = (error, formId) => ({
     type: FORMDATA_SEND_OTHER_NETWORK_ERROR,
     payload: error,
+    error: true,
     meta: { formId }
 });
 
@@ -217,6 +218,7 @@ export const singleFileUploadStart = (fieldName, url, data, fileName, formId) =>
 export const singleFileUploadFail = (fieldName, url, error, fileName, formId) => ({
     type: SINGLE_FILE_UPLOAD_FAIL,
     payload: { fieldName, url, error, fileName },
+    error: true,
     meta: { formId }
 });
 
@@ -250,6 +252,7 @@ export const singleFileDeleteStart = (fieldName, url, fileName, formId) => ({
 export const singleFileDeleteFail = (fieldName, url, data, fileName, formId) => ({
     type: SINGLE_FILE_DELETE_FAIL,
     payload: { fieldName, url, data, fileName },
+    error: true,
     meta: { formId }
 });
 
