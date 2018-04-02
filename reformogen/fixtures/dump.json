@@ -122,6 +122,7 @@
         "dt_death": "2017-11-14T12:21:05Z",
         "biography": "",
         "state": 30,
+        "is_ghostwriter": false,
         "inspire_source": []
     }
 },
@@ -136,6 +137,7 @@
         "dt_death": "2017-11-15T10:29:17Z",
         "biography": "\u043b\u043e\u0445",
         "state": 255,
+        "is_ghostwriter": false,
         "inspire_source": []
     }
 },
