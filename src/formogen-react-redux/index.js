@@ -80,4 +80,7 @@
 
 /* All used locales (from moment.js, excepting the 'en' locale) MUST be imported explicitly HERE! */
 
+
+// https://stackoverflow.com/questions/42906358/having-multiple-instance-of-same-reusable-redux-react-components-on-the-same-pag/42939732
+
 export { default } from './containers';

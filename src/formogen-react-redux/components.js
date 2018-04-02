@@ -1,25 +1,29 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
+import loglevel from 'loglevel';
+
 import FormogenFormComponent from '../formogen';
 
 
 export default class FormogenComponent extends Component {
     static propTypes = {
-        formogenName: PropTypes.string.isRequired,
+        formId: PropTypes.string.isRequired,
 
-        formogenComponentDidMount: PropTypes.func.isRequired,
-        formogenComponentWillUnmount: PropTypes.func.isRequired,
+        componentDidMount: PropTypes.func.isRequired,
+        componentWillUnmount: PropTypes.func.isRequired,
 
         actualFormData: PropTypes.object.isRequired,
-        description: PropTypes.string,
         fieldErrorsMap: PropTypes.object,
 
         getFormData: PropTypes.func.isRequired,
         getMetaData: PropTypes.func.isRequired,
 
-        fieldUpdatePropsMap: PropTypes.any,
+        title: PropTypes.string,
+        description: PropTypes.string,
         fields: PropTypes.array.isRequired,
+
+        fieldUpdatePropsMap: PropTypes.any,
         handleFieldChanged: PropTypes.func.isRequired,
         helpTextOnHover: PropTypes.bool,
         layoutTemplate: PropTypes.object,
@@ -28,7 +32,6 @@ export default class FormogenComponent extends Component {
         nonFieldErrorsMap: PropTypes.object,
         showHeader: PropTypes.bool,
         submit: PropTypes.func,
-        title: PropTypes.string,
         upperFirstLabels: PropTypes.bool,
         totalMetaData: PropTypes.object,
         submitUrl: PropTypes.string,
@@ -44,28 +47,43 @@ export default class FormogenComponent extends Component {
         formComponent: PropTypes.element,
         submitComponent: PropTypes.element,
     };
+    static defaultProps = {
+        fields: [],
+
+        formFilesUploadProgress: {},
+        fieldErrorsMap: {},
+    };
+
+    constructor(props) {
+        super(props);
+
+        this.logger = loglevel.getLogger(`FormogenReduxComponent[${props.formId}]`);
+        this.logger.debug('Initialized');
+    }
 
     componentDidMount() {
-        this.props.formogenComponentDidMount(this.props.formogenName);
-
+        this.props.componentDidMount();
         this.props.getMetaData();
         this.props.getFormData();
     }
     componentWillReceiveProps({ isLoading }) {
-        if (!isLoading) {
-            const { submitUrl } = this.props;
+        this.logger.debug('componentWillReceiveProps()');
 
-            if (!submitUrl)
-                throw new Error('Got an empty submitUrl');
-        }
+        if (isLoading) return;
+
+        if (!this.props.submitUrl)
+            throw new Error('Got an empty submitUrl');
     }
     componentWillUnmount() {
-        this.props.formogenComponentWillUnmount(this.props.formogenName);
+        this.props.componentWillUnmount();
     }
-
     render() {
+        this.logger.debug('render()');
         return (
             <FormogenFormComponent
+                /* unique form id */
+                formId={ this.props.formId }
+
                 /* misc */
                 loading={ this.props.isLoading }
 

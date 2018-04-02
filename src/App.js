@@ -85,6 +85,9 @@ class App extends Component {
             vasya: 42,
         };
 
+        // TODO: add lazy evaluation for modal mode
+        // TODO: add X (cancel) to modal window
+        // TODO: check undefined metaDataUrl
         return (
             <div className='App'>
                 <Grid columns={ 3 } stackable={ true }>
@@ -95,6 +98,7 @@ class App extends Component {
                             <Formogen
                                 locale={ 'ru' }
                                 showHeader={ true }
+                                title={ 'default formId aka "default"' }
 
                                 /* author photo form */
                                 metaDataUrl={ 'http://localhost:8000/api/v1/sample/author-photos/describe/' }
@@ -105,6 +109,44 @@ class App extends Component {
                                 // metaDataUrl={ 'http://localhost:8000/api/v1/sample/authors/describe/' }
                                 // objectCreateUrl={ 'http://localhost:8000/api/v1/sample/authors/' }
                                 // objectUrl={ 'http://localhost:8000/api/v1/sample/authors/23/' }
+
+                                /* misc */
+                                sendFileQueueLength={ 3 }
+
+                                /* modal opts */
+                                // showAsModal={ true }
+                                // modalComponent={ null }
+                                // modalTriggerComponent={ <Button>Rise up evil!</Button> }
+                                // modalProps={ { dimmer: 'blurring' } }
+
+                                // formComponent={ FormComponent }
+                                // submitComponent={ SubmitComponent }
+                            />
+
+
+                        </Segment>
+                    </Grid.Column>
+
+
+                    <Grid.Column>
+                        <Segment className='formogen'>
+
+                            <Formogen
+                                formId='formogen-1'
+
+                                locale={ 'ru' }
+                                showHeader={ true }
+                                title={ 'formId = "formogen-1"' }
+
+                                /* author photo form */
+                                // metaDataUrl={ 'http://localhost:8000/api/v1/sample/author-photos/describe/' }
+                                // objectCreateUrl={ 'http://localhost:8000/api/v1/sample/author-photos/' }
+                                // objectUrl={ 'http://localhost:8000/api/v1/sample/author-photos/100/' }
+
+                                /* author form */
+                                metaDataUrl={ 'http://localhost:8000/api/v1/sample/authors/describe/' }
+                                objectCreateUrl={ 'http://localhost:8000/api/v1/sample/authors/' }
+                                objectUrl={ 'http://localhost:8000/api/v1/sample/authors/23/' }
 
                                 /* misc */
                                 sendFileQueueLength={ 3 }

@@ -11,7 +11,7 @@ import createLogger from 'redux-logger';
 
 import createConfiguredStore from './store';
 import { apiMiddleware } from 'redux-api-middleware';
-import formogen from './formogen-react-redux/reducers';
+import { formogen } from './formogen-react-redux/reducers';
 
 
 let store = createConfiguredStore(
