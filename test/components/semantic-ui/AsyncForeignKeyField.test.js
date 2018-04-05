@@ -1,4 +1,4 @@
-// import AsyncForeignKeyField from 'formogen/components/semantic-ui/AsyncForeignKeyField';
+// import AsyncForeignKeyField from 'formogen/components/semantic-ui-fields/AsyncForeignKeyField';
 
 
 it('should render AsyncForeignKeyField', () => {

@@ -1,4 +1,4 @@
-// import ReactSelectValueComponent from 'formogen/components/semantic-ui/ReactSelectValueComponent';
+// import ReactSelectValueComponent from 'formogen/components/semantic-ui-fields/ReactSelectValueComponent';
 
 
 it('should render ReactSelectValueComponent', () => {

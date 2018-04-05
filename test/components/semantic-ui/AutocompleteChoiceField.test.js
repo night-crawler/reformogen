@@ -1,4 +1,4 @@
-// import AutocompleteChoiceField from 'formogen/components/semantic-ui/AutocompleteChoiceField';
+// import AutocompleteChoiceField from 'formogen/components/semantic-ui-fields/AutocompleteChoiceField';
 
 
 it('should render AutocompleteChoiceField', () => {

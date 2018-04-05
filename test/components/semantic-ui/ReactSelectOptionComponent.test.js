@@ -1,4 +1,4 @@
-// import ReactSelectOptionComponent from 'formogen/components/semantic-ui/ReactSelectOptionComponent';
+// import ReactSelectOptionComponent from 'formogen/components/semantic-ui-fields/ReactSelectOptionComponent';
 
 
 it('should render ReactSelectOptionComponent', () => {

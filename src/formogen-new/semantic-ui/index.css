@@ -1,0 +1,79 @@
+/*fix the extra big padding issue with semantic ui */
+.formogen .react-datepicker ul {
+    padding: 0 !important;
+}
+
+.formogen .react-datepicker-popper {
+    padding: 0 !important;
+    z-index: 3;
+}
+
+.formogen .react-datepicker__input-container {
+    width: 100%;
+}
+
+.formogen .react-datepicker-wrapper input {
+    width: 100% !important;
+}
+
+.formogen .react-datepicker-wrapper {
+    width: 100% !important;
+}
+
+.formogen .field .help-text {
+    float: right;
+    padding-right: 10px;
+    color: gray;
+}
+
+.formogen .ui.red {
+    color: red;
+}
+
+.formogen .ui.segment.dropzone {
+    border: 1px dashed lightgray;
+}
+
+.formogen .ui.segment.dropzone .help-text {
+    float: none;
+    display: block !important;
+}
+
+.formogen .ui.segment.dropzone .clear {
+    clear: both;
+}
+
+.formogen .ui.segment.dropzone {
+    cursor: pointer;
+}
+
+.formogen .layouts {
+    padding-top: 10px;
+    padding-bottom: 25px;
+}
+
+.formogen .Select-menu-outer {
+    z-index: 3;
+}
+
+.formogen .filename-description {
+    height: 35px;
+    display: flex;
+    align-items: center;
+}
+
+.formogen .list-content-with-progress {
+    display: flex;
+    align-items: center;
+}
+.formogen .list-content-with-progress .button {
+    height: 35px;
+    margin-left: auto !important;
+    display: flex !important;
+    align-items: center !important;
+}
+
+.formogen .file-representation {
+    display: flex;
+    align-items: center;
+}

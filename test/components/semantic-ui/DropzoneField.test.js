@@ -1,4 +1,4 @@
-// import DropzoneField from 'formogen/components/semantic-ui/DropzoneField';
+// import DropzoneField from 'formogen/components/semantic-ui-fields/DropzoneField';
 
 
 it('should render DropzoneField', () => {

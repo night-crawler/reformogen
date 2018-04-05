@@ -1,4 +1,4 @@
-import Label from 'formogen/components/semantic-ui/Label';
+import Label from 'formogen/components/semantic-ui-fields/Label';
 
 
 it('should render Label', () => {

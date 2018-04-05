@@ -23,7 +23,7 @@ import {
     totalFieldsMap,
     changedFieldsMap,
 
-} from 'formogen-react-redux/selectors';
+} from 'formogen-fields-redux/selectors';
 
 const state = {
     formogen: {

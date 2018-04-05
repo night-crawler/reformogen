@@ -146,7 +146,7 @@ class App extends Component {
                                 /* author form */
                                 metaDataUrl={ 'http://localhost:8000/api/v1/sample/authors/describe/' }
                                 objectCreateUrl={ 'http://localhost:8000/api/v1/sample/authors/' }
-                                objectUrl={ 'http://localhost:8000/api/v1/sample/authors/23/' }
+                                objectUrl={ 'http://localhost:8000/api/v1/sample/authors/1/' }
 
                                 /* misc */
                                 sendFileQueueLength={ 3 }

@@ -1,4 +1,4 @@
-import CharField from 'formogen/components/semantic-ui/CharField';
+import CharField from 'formogen/components/semantic-ui-fields/CharField';
 
 
 it('should render CharField', () => {

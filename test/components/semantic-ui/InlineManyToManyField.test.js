@@ -1,4 +1,4 @@
-// import InlineManyToManyField from 'formogen/components/semantic-ui/InlineManyToManyField';
+// import InlineManyToManyField from 'formogen/components/semantic-ui-fields/InlineManyToManyField';
 
 
 it('should render InlineManyToManyField', () => {

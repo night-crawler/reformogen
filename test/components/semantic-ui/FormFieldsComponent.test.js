@@ -1,4 +1,4 @@
-// import FormFieldsComponent from 'formogen/components/semantic-ui/FormFieldsComponent';
+// import FormFieldsComponent from 'formogen/components/semantic-ui-fields/FormFieldsComponent';
 
 
 it('should render FormogenFormComponent', () => {

@@ -1,4 +1,4 @@
-// import DateTimeField from 'formogen/components/semantic-ui/DateTimeField';
+// import DateTimeField from 'formogen/components/semantic-ui-fields/DateTimeField';
 
 
 it('should render DateTimeField', () => {

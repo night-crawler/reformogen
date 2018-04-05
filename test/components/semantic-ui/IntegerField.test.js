@@ -1,4 +1,4 @@
-import IntegerField from 'formogen/components/semantic-ui/IntegerField';
+import IntegerField from 'formogen/components/semantic-ui-fields/IntegerField';
 
 
 it('should render IntegerField', () => {

@@ -1,4 +1,4 @@
-// import TimeField from 'formogen/components/semantic-ui/TimeField';
+// import TimeField from 'formogen/components/semantic-ui-fields/TimeField';
 
 
 it('should render TimeField', () => {

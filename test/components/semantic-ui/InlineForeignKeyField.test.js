@@ -1,4 +1,4 @@
-// import InlineForeignKeyField from 'formogen/components/semantic-ui/InlineForeignKeyField';
+// import InlineForeignKeyField from 'formogen/components/semantic-ui-fields/InlineForeignKeyField';
 
 
 it('should render InlineForeignKeyField', () => {

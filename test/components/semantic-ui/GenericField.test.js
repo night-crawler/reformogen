@@ -1,4 +1,4 @@
-import GenericField from 'formogen/components/semantic-ui/GenericField';
+import GenericField from 'formogen/components/semantic-ui-fields/GenericField';
 
 
 it('should render GenericField', () => {

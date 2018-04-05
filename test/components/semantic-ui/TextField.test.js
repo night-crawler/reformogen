@@ -1,4 +1,4 @@
-import TextField from 'formogen/components/semantic-ui/TextField';
+import TextField from 'formogen/components/semantic-ui-fields/TextField';
 
 
 it('should render TextField', () => {

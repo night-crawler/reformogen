@@ -1,4 +1,4 @@
-// import AsyncManyToManyField from 'formogen/components/semantic-ui/AsyncManyToManyField';
+// import AsyncManyToManyField from 'formogen/components/semantic-ui-fields/AsyncManyToManyField';
 
 
 it('should render AsyncManyToManyField', () => {

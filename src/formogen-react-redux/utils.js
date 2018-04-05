@@ -137,8 +137,12 @@ export function prepareFileProcessQueue(filesFieldMap, objectUrls = {}) {
 
 
 export function idsList(value) {
+    if (!value)
+        return [];
+
     if (_.isArray(value))
         return extractIdentity(value);
+
     return [extractIdentity(value)];
 }
 
