@@ -7,7 +7,8 @@ import { Form } from 'semantic-ui-react';
 
 import Select from 'react-select';
 
-import { extractIdentity } from '../../utils';
+import { extractIdentity } from '../../../formogen-react-redux/utils';
+
 import { errorsType, layoutOptsType } from '../fieldPropTypes';
 import Label from './Label';
 import { MessageList } from './MiscComponents';

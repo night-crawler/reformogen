@@ -8,7 +8,6 @@ import {
     FIELD_CHANGED,
 } from './actions';
 
-
 export const formogen = (state = {}, action) => {
     /* all formogen's actions have one important property - 'formId'
      * if an action doesn't have it - skip reducer execution
@@ -61,8 +60,7 @@ export const formogen = (state = {}, action) => {
             break;
 
         case FORMDATA_SEND_FAIL:
-            // TODO: what's about 401? The 401 status is correct in this context.
-            if (+action.payload.status === 400) {
+            if ([400, 401].includes(+action.payload.status)) {
                 subState = { ...subState, errors: action.payload.data };
                 break;
             }

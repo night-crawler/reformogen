@@ -1,7 +1,7 @@
 /*
     ========================= TODOLIST =========================
 
-    [ ] two forms on one page
+    [+] two forms on one page
     [ ] do some tests, we need a bit more tests
     [ ] deal with response.status == pending
 

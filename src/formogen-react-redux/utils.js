@@ -1,43 +1,27 @@
 import _ from 'lodash';
 
 import Cookies from 'js-cookie';
+import * as URI from 'urijs';
 
 
-/**
- * Each field contains a default value.
- * @param {Array} fields
- * @param {Object} formData
- * @returns {Object}
- */
-export function updateFormDataWithDefaults(fields, formData) {
-    let data = { ...formData };
-    for (let field of fields) {
-        if (field.name in data) {
-            continue;
-        }
-        // should be undefined for uncontrolled components, not null
-        data[field.name] = field.default || '';
-
-        // DRF expects M2M values as a list (empty or not), so empty string is not acceptable here
-        if (!data[field.name] && field.type === 'ManyToManyField')
-            data[field.name] = [];
-    }
-    return data;
-}
+export const DEFAULT_HEADERS = {
+    'Accept': 'application/json',
+    'Content-Type': 'application/json',
+};
 
 
-export function csrfSafeMethod(method) {
+export function isSafeCSRFMethod(method) {
     // these HTTP methods do not require CSRF protection
     return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
 }
 
 
-export const getApiMiddlewareOptions = ({ headers = {}, options = {}, csrfToken = '', method = 'GET' } = {}) => {
+export function getRSAAOptions({ headers = DEFAULT_HEADERS, options = {}, csrfToken = '', method = 'GET' } = {}) {
     const isProduction = process.env.NODE_ENV === 'production';
-    const params = {
+    return {
         method: method,
         headers: {
-            ...!csrfSafeMethod(method) && { 'X-CSRFToken': csrfToken || Cookies.get('csrftoken') },
+            ...!isSafeCSRFMethod(method) && { 'X-CSRFToken': csrfToken || Cookies.get('csrftoken') },
             ...headers,
         },
         options: {
@@ -47,31 +31,29 @@ export const getApiMiddlewareOptions = ({ headers = {}, options = {}, csrfToken 
         },
         credentials: isProduction ? 'same-origin' : 'include',
     };
-    console.log('getApiMiddlewareOptions', params);
-    return params;
-};
+}
 
 
-export const defaultHeaders = {
-    'Accept': 'application/json',
-    'Content-Type': 'application/json',
-};
-
-
-export const getFetchOptions = ({ headers = defaultHeaders, csrfToken = '', method = 'GET' } = {}) => {
+export function getFetchOptions({ headers = DEFAULT_HEADERS, csrfToken = '', method = 'GET' } = {}) {
     const isProduction = process.env.NODE_ENV === 'production';
-    const params = {
+    return {
         method: method,
         headers: {
-            ...!csrfSafeMethod(method) && { 'X-CSRFToken': csrfToken || Cookies.get('csrftoken') },
+            ...!isSafeCSRFMethod(method) && { 'X-CSRFToken': csrfToken || Cookies.get('csrftoken') },
             ...headers,
         },
         mode: isProduction ? 'same-origin' : 'cors',
         credentials: isProduction ? 'same-origin' : 'include',
     };
-    console.log('getFetchOptions', params);
-    return params;
-};
+}
+
+
+export function getFields(init, received) {
+    const initialFields = _.get(init, 'fields', []);
+    const receivedFields = _.get(received, 'fields', []);
+
+    return _([...initialFields, ...receivedFields]).uniqBy('name').value();
+}
 
 
 export function getDirtyFields(prevDirtyData, pristineData) {
@@ -96,6 +78,23 @@ export function getDirtyFields(prevDirtyData, pristineData) {
             delete dirty[fieldName];
     }
     return dirty;
+}
+
+
+export function updateFormDataWithDefaults(fields, formData) {
+    let data = { ...formData };
+    for (let field of fields) {
+        if (field.name in data) {
+            continue;
+        }
+        // should be undefined for uncontrolled components, not null
+        data[field.name] = field.default || '';
+
+        // DRF expects M2M values as a list (empty or not), so empty string is not acceptable here
+        if (!data[field.name] && field.type === 'ManyToManyField')
+            data[field.name] = [];
+    }
+    return data;
 }
 
 
@@ -179,7 +178,10 @@ export function resolveResponse(response) {
         try {
             _data = JSON.parse(data);
             isJson = true;
-        } catch (err) {}
+        } catch (err) {
+            console.log('resolveResponse(...), error > do nothing');
+            console.log(err);
+        }
 
         let error = new Error();
         error.name = 'FormogenError';
@@ -192,3 +194,37 @@ export function resolveResponse(response) {
         throw error;
     });
 }
+
+
+export function extractPageNumber(uri) {
+    const query = new URI(uri).query(true);
+    return query.page || query.p || query.page_num;
+}
+
+
+export function getDisplayName(WrappedComponent) {
+    return WrappedComponent.displayName || WrappedComponent.name || 'Component';
+}
+
+
+export default {
+    DEFAULT_HEADERS,
+
+    isSafeCSRFMethod,
+    getRSAAOptions,
+    getFetchOptions,
+
+    getFields,
+    getDirtyFields,
+    updateFormDataWithDefaults,
+
+    prepareFileProcessQueue,
+
+    idsList,
+    extractIdentity,
+
+    resolveResponse,
+    extractPageNumber,
+
+    getDisplayName,
+};

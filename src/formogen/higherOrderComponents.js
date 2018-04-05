@@ -6,7 +6,8 @@ import _ from 'lodash';
 
 import * as URI from 'urijs';
 
-import { resolveResponse, getDisplayName, idsList, extractPageNumber } from './utils';
+import { resolveResponse, getDisplayName, idsList, extractPageNumber } from '../formogen-react-redux/utils';
+
 import propTypes from './components/fieldPropTypes';
 import ModelInstanceOption from './components/ReactSelectOptionComponent';
 import ModelInstanceValue from './components/ReactSelectValueComponent';

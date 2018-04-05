@@ -11,7 +11,6 @@ import {
 import selectorFactories from './selectorFactories';
 import FormogenComponent from './components';
 
-
 const makeMapStateToProps = () => {
     // create private selectors (one for each instance of component)
     const formId = selectorFactories.makeFormId();

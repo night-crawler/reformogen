@@ -1,24 +1,18 @@
-import { createSelector, createSelectorCreator, defaultMemoize } from 'reselect';
+import { createSelector } from 'reselect';
 
 import _ from 'lodash';
 
 import loglevel from 'loglevel';
 import prefix from 'loglevel-plugin-prefix';
 
-import { getDirtyFields, updateFormDataWithDefaults } from './utils';
+import {
+    getFields,
+    getDirtyFields,
+    updateFormDataWithDefaults,
+} from './utils';
 
 prefix.apply(loglevel, { template: '[%t] %l (%n)' });
 const logger = loglevel.getLogger('selectorFactories');
-
-
-// ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★ UTILS ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★
-
-function getFields(init, received) {
-    const initialFields = init && init.fields || [];
-    const receivedFields = received && received.fields || [];
-
-    return _([...initialFields, ...receivedFields]).uniqBy('name').value();
-}
 
 
 // ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★ PLAIN (used by factory's instances) ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★
