@@ -6,11 +6,11 @@ import _ from 'lodash';
 
 import * as URI from 'urijs';
 
-import { resolveResponse, getDisplayName, idsList, extractPageNumber } from '../formogen-react-redux/utils';
+import { resolveResponse, getDisplayName, idsList, extractPageNumber } from '../formogen-redux/utils';
 
-import propTypes from './components/fieldPropTypes';
-import ModelInstanceOption from './components/ReactSelectOptionComponent';
-import ModelInstanceValue from './components/ReactSelectValueComponent';
+import propTypes from './fieldPropTypes';
+import ModelInstanceOption from './ReactSelectOptionComponent';
+import ModelInstanceValue from './ReactSelectValueComponent';
 
 
 // TODO: it's crappy so refactor this (with tests)

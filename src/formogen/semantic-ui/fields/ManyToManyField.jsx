@@ -4,14 +4,12 @@ import PropTypes from 'prop-types';
 import _ from 'lodash';
 
 import { Form } from 'semantic-ui-react';
-
 import Select from 'react-select';
 
-import { extractIdentity } from '../../../formogen-react-redux/utils';
-
-import { errorsType, layoutOptsType } from '../fieldPropTypes';
-import Label from './Label';
-import { MessageList } from './MiscComponents';
+import { extractIdentity } from '../../../formogen-redux/utils';  // TODO: this is not THIS place for it
+import { errorsType, layoutOptsType } from '../../fieldPropTypes';
+import Label from '../common/Label';
+import ErrorsList from '../common/ErrorsList';
 
 
 makeOptions.propTypes = PropTypes.arrayOf(PropTypes.shape({
@@ -81,7 +79,7 @@ export default function InlineManyToManyField(props) {
             <Select { ..._props } />
 
             { !props.helpTextOnHover ? <span className='help-text'>{ props.help_text }</span> : '' }
-            <MessageList messages={ props.errors } />
+            <ErrorsList messages={ props.errors } />
         </Form.Field>
     );
 }

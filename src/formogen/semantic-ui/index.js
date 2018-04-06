@@ -30,7 +30,11 @@ import ModalForm from './common/ModalForm';
 import ErrorsList from './common/ErrorsList';
 import NonFieldErrorsList from './common/NonFieldErrorsList';
 
-// styles import
+// WARN! Important styles
+import 'react-datepicker/dist/react-datepicker.css';
+import 'react-select/dist/react-select.css';
+import 'react-times/css/material/default.css';
+
 import './index.css';
 
 export const fields = {

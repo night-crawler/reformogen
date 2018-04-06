@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import loglevel from 'loglevel';
 
-import FormogenFormComponent from '../formogen-new';
+import FormogenFormComponent from '../formogen';
 
 
 export default class FormogenComponent extends Component {
