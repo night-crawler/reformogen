@@ -1,3 +1,4 @@
+// fields import
 import AsyncForeignKeyField from './fields/AsyncForeignKeyField';
 import AsyncManyToManyField from './fields/AsyncManyToManyField';
 
@@ -19,6 +20,17 @@ import TimeField from './fields/TimeField';
 
 import DropzoneField from './fields/DropzoneField';
 
+// common import
+import Label from './common/Label';
+import CaptionTruncator from './common/CaptionTruncator';
+
+import Form from './common/Form';
+import ModalForm from './common/ModalForm';
+
+import ErrorsList from './common/ErrorsList';
+import NonFieldErrorsList from './common/NonFieldErrorsList';
+
+// styles import
 import './index.css';
 
 export const fields = {
@@ -42,4 +54,15 @@ export const fields = {
     DropzoneField,
 
     GenericField,
+};
+
+export const common = {
+    Label,
+    CaptionTruncator,
+
+    Form,
+    ModalForm,
+
+    ErrorsList,
+    NonFieldErrorsList,
 };

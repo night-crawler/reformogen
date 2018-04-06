@@ -3,12 +3,11 @@ import React from 'react';
 import _ from 'lodash';
 
 import { Form } from 'semantic-ui-react';
-
 import Select from 'react-select';
 
 import propTypes from '../../fieldPropTypes';
-import Label from './Label';
-import { MessageList } from './MiscComponents';
+import Label from '../common/Label';
+import ErrorsList from '../common/ErrorsList';
 
 
 AsyncManyToManyField.propTypes = propTypes;
@@ -24,8 +23,12 @@ export default function AsyncManyToManyField(props) {
         >
             <Label { ...fieldProps } />
             <Select { ...props.selectProps } />
-            { !props.helpTextOnHover ? <span className="help-text">{ props.help_text }</span> : '' }
-            <MessageList messages={ props.errors } />
+            {
+                !props.helpTextOnHover
+                    ? <span className='help-text'>{ props.help_text }</span>
+                    : ''
+            }
+            <ErrorsList messages={ props.errors } />
         </Form.Field>
     );
 }

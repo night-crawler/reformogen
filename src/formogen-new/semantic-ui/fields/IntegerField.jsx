@@ -6,8 +6,8 @@ import _ from 'lodash';
 import { Form } from 'semantic-ui-react';
 
 import { errorsType, layoutOptsType } from '../../fieldPropTypes';
-import Label from './Label';
-import { MessageList } from './MiscComponents';
+import Label from '../common/Label';
+import ErrorsList from '../common/ErrorsList';
 
 
 IntegerField.propTypes = {
@@ -96,8 +96,12 @@ export default function IntegerField(props) {
         >
             <Label { ...props } />
             <Form.Input { ..._props } { ...input_options } />
-            { !props.helpTextOnHover ? <span className="help-text">{ props.help_text }</span> : ''}
-            <MessageList messages={ props.errors } />
+            {
+                !props.helpTextOnHover
+                    ? <span className='help-text'>{ props.help_text }</span>
+                    : ''
+            }
+            <ErrorsList messages={ props.errors } />
         </Form.Field>
     );
 }

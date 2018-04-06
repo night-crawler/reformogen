@@ -2,15 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import _ from 'lodash';
-
 import moment from 'moment';
 
+import { Form } from 'semantic-ui-react';
 import DatePicker from 'react-datepicker';
 
-import { Form } from 'semantic-ui-react';
 import { errorsType, layoutOptsType } from '../../fieldPropTypes';
-import Label from './Label';
-import { MessageList } from './MiscComponents';
+import Label from '../common/Label';
+import ErrorsList from '../common/ErrorsList';
 
 
 /**
@@ -87,8 +86,12 @@ export default function DateTimeField(props) {
         >
             <Label { ...props } />
             <DatePicker { ..._props } />
-            { !props.helpTextOnHover ? <span className='help-text'>{ props.help_text }</span> : '' }
-            <MessageList messages={ props.errors } />
+            {
+                !props.helpTextOnHover
+                    ? <span className='help-text'>{ props.help_text }</span>
+                    : ''
+            }
+            <ErrorsList messages={ props.errors } />
         </Form.Field>
     );
 }

@@ -4,15 +4,14 @@ import PropTypes from 'prop-types';
 import _ from 'lodash';
 
 import { Button, Checkbox, Form, Icon, Image, List, Segment } from 'semantic-ui-react';
-
 import Measure from 'react-measure';
-
 import Dropzone from 'react-dropzone';
 
+import { errorsType } from '../../fieldPropTypes';
 import { fileTypeImageMapping, UNKNOWN_FILE_TYPE } from '../../fileTypeImageMapping';
 import { splitExt, bytesToSize } from '../../utils';
-import { errorsType } from '../../fieldPropTypes';
-import { MessageList, CaptionTruncator } from './MiscComponents';
+import ErrorsList from '../common/ErrorsList';
+import CaptionTruncator from '../common/CaptionTruncator';
 
 const fileShape = PropTypes.shape({
     lastModified: PropTypes.number,
@@ -319,7 +318,7 @@ export default class DropzoneField extends React.Component {
                     />
                 }
 
-                <MessageList messages={ this.props.errors } />
+                <ErrorsList messages={ this.props.errors } />
             </Form.Field>
         );
     }

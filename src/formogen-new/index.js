@@ -4,17 +4,13 @@ import PropTypes from 'prop-types';
 import _ from 'lodash';
 import loglevel from 'loglevel';
 
-// ui components
-import { Button, Form, Grid, Header } from 'semantic-ui-react';
-
-// Misc helper components
-import Modal from './semantic-ui/fields/Modal';
-import { MessageList } from './semantic-ui/fields/MiscComponents';
-
-import { fields as semanticUIFields } from './semantic-ui';
+import {
+    fields as semanticUIFields,
+    common as semanticUICommon
+} from './semantic-ui';
 import WithSelectState from './higherOrderComponents';
 
-const DEFAULT_FIELDS_MAP = {
+const defaultFieldComponentMap = {
     // Django's
     CharField: semanticUIFields.CharField,
     TextField: semanticUIFields.TextField,
@@ -47,36 +43,6 @@ const DEFAULT_FIELDS_MAP = {
 
 
 export default class FormogenFormComponent extends React.Component {
-    static defaultProps = {
-        /* misc */
-        locale: 'en',
-        upperFirstLabels: false,
-        helpTextOnHover: false,
-
-        /* field map redefinition */
-        fieldsMap: DEFAULT_FIELDS_MAP,
-
-        /* metadata */
-        fields: [],
-
-        /* formdata */
-        formData: {},
-
-        /* modal opts */
-        showAsModal: false,
-        modalComponent: Modal,
-
-        /* view redefinition opts */
-        formComponent: Form,
-        submitComponent: Button,
-
-        layoutTemplate: [{  /* declare a default layout template */
-            header: '',
-            fields: '*',
-            width: 16,
-        }],
-        fieldUpdatePropsMap: {},
-    };
     static propTypes = {
         formId: PropTypes.string.isRequired,
 
@@ -87,9 +53,6 @@ export default class FormogenFormComponent extends React.Component {
         showHeader: PropTypes.bool,
         upperFirstLabels: PropTypes.bool,
         helpTextOnHover: PropTypes.bool,
-
-        /* field map redefinition */
-        fieldsMap: PropTypes.object,
 
         /* metadata */
         title: PropTypes.string,
@@ -107,14 +70,9 @@ export default class FormogenFormComponent extends React.Component {
 
         /* modal opts */
         showAsModal: PropTypes.bool,
-        modalComponent: PropTypes.element,
-        modalTriggerComponent: PropTypes.element,
         modalProps: PropTypes.object,
 
         /* view redefinition opts */
-        formComponent: PropTypes.element,
-        submitComponent: PropTypes.element,
-
         layoutTemplate: PropTypes.array,
         fieldUpdatePropsMap: PropTypes.object,
 
@@ -122,6 +80,40 @@ export default class FormogenFormComponent extends React.Component {
         onFieldChange: PropTypes.func,
         onSubmit: PropTypes.func,
         onNetworkError: PropTypes.func,
+
+        /* components */
+        fieldComponentMap: PropTypes.object,
+        formComponent: PropTypes.element,
+        modalFormComponent: PropTypes.element,
+        modalFormTriggerComponent: PropTypes.element,
+    };
+    static defaultProps = {
+        /* misc */
+        locale: 'en',
+        upperFirstLabels: false,
+        helpTextOnHover: false,
+
+        /* metadata */
+        fields: [],
+
+        /* formdata */
+        formData: {},
+
+        /* modal opts */
+        showAsModal: false,
+
+        /* view redefinition opts */
+        layoutTemplate: [{  /* declare a default layout template */
+            title: '',
+            fields: '*',
+            width: 16,
+        }],
+        fieldUpdatePropsMap: {},
+
+        /* components */
+        fieldComponentMap: defaultFieldComponentMap,
+        formComponent: semanticUICommon.Form,
+        modalFormComponent: semanticUICommon.ModalForm,
     };
 
     // --------------- constructor ---------------
@@ -139,13 +131,10 @@ export default class FormogenFormComponent extends React.Component {
     // --------------- React.js standard ---------------
     componentWillMount() {
         this.log.debug('componentWillMount()');
-
-        const { fields, formData } = this.state;
-        this.computeNewState(fields, formData, this.props.layoutTemplate);
+        this.computeNewState(this.state.fields, this.state.formData, this.props.layoutTemplate);
     }
     componentWillReceiveProps({ fields, formData, layoutTemplate }) {
         this.log.debug('componentWillReceiveProps()');
-
         this.computeNewState(fields, formData, layoutTemplate);
     }
 
@@ -173,7 +162,6 @@ export default class FormogenFormComponent extends React.Component {
         if(!fieldsMap[fieldName])
             fieldName = 'GenericField';
 
-        console.log('pickFieldComponent', fieldName);
         return fieldsMap[fieldName];
     }
 
@@ -194,12 +182,10 @@ export default class FormogenFormComponent extends React.Component {
     }
 
     // --------------- render methods ---------------
-    renderLayout() {
+    buildLayout() {
         this.log.debug('renderLayout()');
 
-        const { layout, fieldPropsByNameMap } = this.state;
-
-        return layout.map(({ header, fields, width }, i) => {
+        return this.state.layout.map(({ header, fields, width }) => {
             /* fields: ['field1', 'field2'] || [{field1: {...opts}}, 'field42'] */
 
             // render all fields in layout section
@@ -215,30 +201,25 @@ export default class FormogenFormComponent extends React.Component {
                     layoutFieldOpts = Object.assign(layoutFieldOpts, fieldObj[fieldName]);
                 }
 
-                let fieldProps = fieldPropsByNameMap[fieldName];
-                if (!fieldProps) {
+                let fieldProps = this.state.fieldPropsByNameMap[fieldName];
+                if (!fieldProps)
                     return null;
-                }
-                return this.renderField('field:' + j, fieldProps, layoutFieldOpts);
+
+                return this.renderField(j, fieldProps, layoutFieldOpts);
             });
 
-            return (
-                <Grid columns={ 16 } key={ 'grid:' + i } className='layout'>
-                    { header && <div className='sixteen wide column'><Header>{ header }</Header></div> }
-                    { renderedFields }
-                </Grid>
-            );
-
+            return { header, fields: renderedFields };
         }) || null;
     }
     renderField(i, opts, layoutOpts) {
-        const Field = FormogenFormComponent.pickFieldComponent(this.props.fieldsMap, opts);
+        const FieldComponent = FormogenFormComponent.pickFieldComponent(this.props.fieldComponentMap, opts);
 
-        this.log.debug(`renderField(${i}, ${opts.name}, ${opts.type} as ${Field.name})`);
+        this.log.debug(`renderField(${i}, ${opts.name}, ${opts.type} as ${FieldComponent.name})`);
 
         return (
-            <Field
-                key={ i }
+            <FieldComponent
+                key={ `field:${i}` }
+
                 locale={ this.props.locale }
                 upperFirstLabel={ this.props.upperFirstLabels }
                 helpTextOnHover={ this.props.helpTextOnHover }
@@ -259,107 +240,45 @@ export default class FormogenFormComponent extends React.Component {
             />
         );
     }
-    renderNonFieldErrors() {
-        this.log.debug('renderNonFieldErrors()');
-
-        if (_.isEmpty(this.props.nonFieldErrorsMap)) return null;
-
-        const renderedMsgs = _(this.props.nonFieldErrorsMap).toPairs().value().map(([title, errors], i) =>
-            <Grid.Row key={ i }>
-                <div className='sixteen wide column'>
-                    <MessageList header={ title } messages={ errors } />
-                </div>
-            </Grid.Row>
-        );
-        return <Grid className='non-field-errors layout' columns={ 16 }>{ renderedMsgs }</Grid>;
-    }
-
-    renderAsModal() {
-        this.log.debug('renderAsModal()');
-
-        const {
-            loading,
-            showHeader,
-            title,
-
-            submitComponent: SubmitComponent,
-            formComponent: FormComponent,
-
-            modalComponent: ModalComponent,
-            modalTriggerComponent: ModalTriggerComponent,
-            modalProps,
-
-            onSubmit
-        } = this.props;
-
-        return (
-            <ModalComponent
-                trigger={ ModalTriggerComponent ? ModalTriggerComponent : <Button content='show modal' /> }
-                header={ showHeader ? <Header as='h2'>{ title }</Header> : null }
-                actions={
-                    <SubmitComponent
-                        type='submit'
-                        content={ 'Submit' }
-
-                        onClick={ onSubmit }
-                        onKeyPress={ onSubmit }
-                    />
-                }
-                modalProps={ modalProps }
-            >
-                <FormComponent loading={ loading }>
-                    <div className='layouts'>
-                        { this.renderNonFieldErrors() }
-                        { this.renderLayout() }
-                    </div>
-                </FormComponent>
-            </ModalComponent>
-        );
-    }
-    renderAsEmbedded() {
-        this.log.debug('renderAsEmbedded()');
-
-        const {
-            loading,
-            showHeader,
-            title,
-
-            submitComponent: SubmitComponent,
-            formComponent: FormComponent,
-
-            onSubmit
-        } = this.props;
-
-        return (
-            <FormComponent loading={ loading }>
-                { showHeader ? <Header as='h2' dividing={ true }>{ title }</Header> : null }
-
-                <div className='layouts'>
-                    { this.renderNonFieldErrors() }
-                    { this.renderLayout() }
-                </div>
-
-                <SubmitComponent
-                    type='submit'
-                    content={ 'Submit' }
-                    fluid={ true }
-
-                    onClick={ onSubmit }
-                    onKeyPress={ onSubmit }
-                />
-            </FormComponent>
-        );
-    }
 
     // --------------- React.js render ---------------
     render() {
-        this.log.debug('render()');
+        this.log.debug(`render(), render as ${ this.props.showAsModal ? 'modal' : 'embedded' }`);
 
-        const { showAsModal } = this.props;
+        const {
+            formComponent: FormComponent,
+            modalFormComponent: ModalFormComponent,
+            modalFormTriggerComponent: ModalFormTriggerComponent,
+        } = this.props;
 
-        if (showAsModal)
-            return this.renderAsModal();
+        if (this.props.showAsModal)
+            return (
+                <ModalFormComponent
+                    loading={ this.props.loading }
 
-        return this.renderAsEmbedded();
+                    title={ this.props.title }
+                    showTitle={ this.props.showHeader }
+
+                    formLayout={ this.buildLayout() }
+                    nonFieldErrorsMap={ this.props.nonFieldErrorsMap }
+                    onSubmit={ this.props.onSubmit }
+
+                    triggerComponent={ ModalFormTriggerComponent }
+                    formComponent={ FormComponent }
+                />
+            );
+
+        return (
+            <FormComponent
+                loading={ this.props.loading }
+
+                title={ this.props.title }
+                showTitle={ this.props.showHeader }
+
+                formLayout={ this.buildLayout() }
+                nonFieldErrorsMap={ this.props.nonFieldErrorsMap }
+                onSubmit={ this.props.onSubmit }
+            />
+        );
     }
 }

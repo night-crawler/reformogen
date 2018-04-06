@@ -3,12 +3,12 @@ import React from 'react';
 
 import _ from 'lodash';
 
-import Select from 'react-select';
 import { Form } from 'semantic-ui-react';
+import Select from 'react-select';
 
 import { errorsType, layoutOptsType } from '../../fieldPropTypes';
-import Label from './Label';
-import { MessageList } from './MiscComponents';
+import Label from '../common/Label';
+import ErrorsList from '../common/ErrorsList';
 
 
 const makeReactSelectOptions = (choices) => {
@@ -71,8 +71,12 @@ export default function AutocompleteChoiceField(props) {
         >
             <Label { ...props } />
             <Select { ..._props } />
-            { !props.helpTextOnHover ? <span className='help-text'>{ props.help_text }</span> : '' }
-            <MessageList messages={ props.errors } />
+            {
+                !props.helpTextOnHover
+                    ? <span className='help-text'>{ props.help_text }</span>
+                    : ''
+            }
+            <ErrorsList messages={ props.errors } />
         </Form.Field>
     );
 }
