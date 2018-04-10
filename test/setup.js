@@ -11,9 +11,9 @@ global.shallow = shallow;
 global.render = render;
 global.mount = mount;
 
-window.requestAnimationFrame = function (callback) {
-  setTimeout(callback, 0);
-  return 0;
+window.requestAnimationFrame = (callback) => {
+    setTimeout(callback, 0);
+    return 0;
 };
 
 console.error = message => {

@@ -14,17 +14,17 @@ export default class ReactSelectOptionComponent extends Component {
         option: PropTypes.object.isRequired,
     };
 
-    handleMouseDown = (event) => {
+    handleMouseDown = event => {
         event.preventDefault();
         event.stopPropagation();
         this.props.onSelect(this.props.option, event);
     };
 
-    handleMouseEnter = (event) => {
+    handleMouseEnter = event => {
         this.props.onFocus(this.props.option, event);
     };
 
-    handleMouseMove = (event) => {
+    handleMouseMove = event => {
         if (this.props.isFocused) return;
         this.props.onFocus(this.props.option, event);
     };

@@ -6,8 +6,8 @@ exports[`should render TextField 1`] = `
   error={false}
   width={1}
 >
-  <SUILabel
-    help_text="Let's shit and run at your house, dude?"
+  <Label
+    help_text="help text"
     layoutOpts={
       Object {
         "width": 1,
@@ -15,7 +15,7 @@ exports[`should render TextField 1`] = `
     }
     name="text_field_name"
     type="TextField"
-    verbose_name="What wanna do tonight?"
+    verbose_name="verbose name"
   />
   <FormTextArea
     as={[Function]}
@@ -25,8 +25,11 @@ exports[`should render TextField 1`] = `
   <span
     className="help-text"
   >
-    Let's shit and run at your house, dude?
+    help text
   </span>
-  <MessageList />
+  <ErrorsList
+    color="red"
+    header="Errors"
+  />
 </FormField>
 `;

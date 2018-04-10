@@ -1,4 +1,4 @@
-import TextField from 'formogen/components/semantic-ui-fields/TextField';
+import TextField from './TextField';
 
 
 it('should render TextField', () => {
@@ -6,8 +6,8 @@ it('should render TextField', () => {
         <TextField
             type='TextField'
             name='text_field_name'
-            verbose_name='What wanna do tonight?'
-            help_text="Let's shit and run at your house, dude?"
+            verbose_name='verbose name'
+            help_text='help text'
             layoutOpts={ { width: 1 } }
         />
     );

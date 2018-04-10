@@ -6,23 +6,23 @@ exports[`should render GenericField 1`] = `
   error={false}
   width={1}
 >
-  <SUILabel
-    help_text="Don't utter a single word"
+  <Label
+    help_text="GenericField: help_text"
     layoutOpts={
       Object {
         "width": 1,
       }
     }
-    name="something_cute"
+    name="GenericField: name"
     type="GenericField"
-    verbose_name="Die die die my darling"
+    verbose_name="GenericField: verbose_name"
   />
   <pre>
     {
     "type": "GenericField",
-    "name": "something_cute",
-    "verbose_name": "Die die die my darling",
-    "help_text": "Don't utter a single word",
+    "name": "GenericField: name",
+    "verbose_name": "GenericField: verbose_name",
+    "help_text": "GenericField: help_text",
     "layoutOpts": {
         "width": 1
     }
@@ -31,8 +31,11 @@ exports[`should render GenericField 1`] = `
   <span
     className="help-text"
   >
-    Don't utter a single word
+    GenericField: help_text
   </span>
-  <MessageList />
+  <ErrorsList
+    color="red"
+    header="Errors"
+  />
 </FormField>
 `;

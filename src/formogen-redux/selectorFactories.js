@@ -15,20 +15,23 @@ prefix.apply(loglevel, { template: '[%t] %l (%n)' });
 const logger = loglevel.getLogger('selectorFactories');
 
 
-// ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★ PLAIN (used by factory's instances) ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★
+/*
+ *
+ * PLAIN (used by factory's instances)
+ *
+ */
 
 const concreteFormId = (state, props) => props.formId || 'default';
-
-const submitMiddlewares = (state, props) => props.submitMiddlewares;
+const concreteForm = (state, props) => state.formogen[props.formId || 'default'];
 
 const skipFetchingObject = (state, props) => !!props.skipFetchingObject;
 
-const concreteForm = (state, props) => state.formogen[props.formId || 'default'];
+const submitMiddlewares = (state, props) => props.submitMiddlewares;
 
-// =============== STATES ===============
+// STATES
 const isFormDataReady = (state, props) => {
     const form = concreteForm(state, props);
-    return form && form.isMetaDataReady;
+    return form && form.isFormDataReady;
 };
 
 const isMetaDataReady = (state, props) => {
@@ -48,7 +51,7 @@ const isFormDataDirty = (state, props) => {
     return false;
 };
 
-// =============== URLs ===============
+// URLs
 const objectCreateUrl = (state, props) => props.objectCreateUrl;
 
 const objectUpdateUrl = (state, props) => {
@@ -59,13 +62,13 @@ const objectUpdateUrl = (state, props) => {
             _.get(form, 'receivedFormData.urls.view', null);
 };
 
-// =============== ERRORS ===============
+// ERRORS
 const errors = (state, props) => {
     const form = concreteForm(state, props);
     return form && form.errors;
 };
 
-// =============== METADATA ===============
+// METADATA
 // initial meta data (from own props)
 const initialMetaData = (state, props) => props.initialMetaData;
 
@@ -75,7 +78,7 @@ const receivedMetaData = (state, props) => {
     return form && form.receivedMetaData;
 };
 
-// =============== FORMDATA ===============
+// FORMDATA
 // should contain form data (from own props)
 const initialFormData = (state, props) => props.initialFormData;
 
@@ -96,7 +99,11 @@ const formFilesUploadProgress = (state, props) => {
 };
 
 
-// ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★ FACTORIES ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★
+/*
+ *
+ * FACTORIES
+ *
+ */
 
 export function makeFormId() {
     return createSelector(
@@ -131,7 +138,7 @@ export function makeFormFilesUploadProgress() {
     );
 }
 
-// =============== STATES ===============
+// STATES
 export function makeIsLoading() {
     return createSelector(
         [isMetaDataReady, isFormDataReady, objectUpdateUrl],
@@ -179,8 +186,10 @@ export function makeShouldUploadFiles() {
             const fileFields = _.filter(fields, { type: 'FileField' });
             const fileFieldNames = _.map(fileFields, 'name');
 
-            const dirtyFileData = _.pickBy(dirtyFormData, (val, name) => !!(fileFieldNames.indexOf(name) + 1) && !_.isEmpty(val));
-            const hasFilesToUpload = !_(dirtyFileData).values().map('files').flatten().isEmpty();
+            const dirtyFileData =
+                _.pickBy(dirtyFormData, (val, name) => !!(fileFieldNames.indexOf(name) + 1) && !_.isEmpty(val));
+            const hasFilesToUpload =
+                !_(dirtyFileData).values().map('files').flatten().isEmpty();
 
             // there's nothing to send
             if (!hasFilesToUpload)
@@ -200,34 +209,33 @@ export function makeShouldUploadFiles() {
     );
 }
 
-// =============== FINAL DATA (TOTAL DATA) ===============
-// final title (ready for use)
+// FINAL DATA (TOTAL DATA)
+// final title (ready to use)
 export function makeTitle() {
     return createSelector(
         [initialMetaData, receivedMetaData],
-        (initialMetaData, receivedMetaData) => {
+        (initial, received) => {
             logger.debug('title');
-
-            if (!(initialMetaData && receivedMetaData)) return;
-            return _.get(initialMetaData, 'title', null) || receivedMetaData.title;
+            return _.get(initial, 'title', undefined) ||
+                   _.get(received, 'title', undefined);
         }
     );
 }
 
-// final description (ready for use)
+// final description (ready to use)
 export function makeDescription() {
     return createSelector(
         [initialMetaData, receivedMetaData],
-        (initialMetaData, receivedMetaData) => {
+        (initial, received) => {
             logger.debug('description');
 
-            if (!(initialMetaData && receivedMetaData)) return;
-            return _.get(initialMetaData, 'description', null) || receivedMetaData.description;
+            return _.get(initial, 'description', undefined) ||
+                   _.get(received, 'description', undefined);
         }
     );
 }
 
-// final fields (ready for use)
+// final fields (ready to use)
 export function makeFields() {
     return createSelector(
         [initialMetaData, receivedMetaData],
@@ -239,7 +247,7 @@ export function makeFields() {
     );
 }
 
-// =============== FORMDATA ===============
+// FORMDATA
 // it contains initialFormData && receivedFormData + should be updated with defaults (WITHOUT USER INPUT)
 export function makePristineFormData() {
     return createSelector(
@@ -320,7 +328,7 @@ export function makeActualFormData() {
     );
 }
 
-// =============== SUBMIT MIDDLEWARES ===============
+// SUBMIT MIDDLEWARES
 export function makeSubmitMiddlewares() {
     return createSelector(
         submitMiddlewares,
@@ -350,7 +358,7 @@ export function makeSubmitMiddlewares() {
     );
 }
 
-// =============== SUBMIT DATA ===============
+// SUBMIT DATA
 // method of XML Http Request when FormogenForm is submitted
 export function makeSubmitMethod() {
     return createSelector(
@@ -375,7 +383,7 @@ export function makeSubmitUrl() {
     );
 }
 
-// =============== ERRORS ===============
+// ERRORS
 // contains ONLY validation errors
 export function makeFieldErrorsMap() {
     return createSelector(
@@ -411,7 +419,11 @@ export function makeNonFieldErrorsMap() {
 }
 
 
-// ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★ EXPORT ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★
+/*
+ *
+ * EXPORT
+ *
+ */
 
 export default {
     makeFormId,

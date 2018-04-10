@@ -2,6 +2,6 @@
 
 exports[`should render Label 1`] = `
 <label>
-  She always begins solemnly
+  Label: verbose_name
 </label>
 `;

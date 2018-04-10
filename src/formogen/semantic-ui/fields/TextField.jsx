@@ -11,20 +11,27 @@ import ErrorsList from '../common/ErrorsList';
 
 TextField.propTypes = {
     type: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
-    value: PropTypes.string,
-    max_length: PropTypes.number,
-    help_text: PropTypes.string.isRequired,
-    placeholder: PropTypes.string,
-    errors: errorsType,
 
-    required: PropTypes.bool,
-    editable: PropTypes.bool,
-
-    helpTextOnHover: PropTypes.bool,
     layoutOpts: layoutOptsType,
 
+    name: PropTypes.string.isRequired,
+    verbose_name: PropTypes.string.isRequired,
+    help_text: PropTypes.string.isRequired,
+    errors: errorsType,
+
+    max_length: PropTypes.number,
+
+    editable: PropTypes.bool,
+    required: PropTypes.bool,
+
+    value: PropTypes.string,
+
+    placeholder: PropTypes.string,
+
+    helpTextOnHover: PropTypes.bool,
+
     updateProps: PropTypes.func,
+
     onChange: PropTypes.func,
 };
 export default function TextField(props) {

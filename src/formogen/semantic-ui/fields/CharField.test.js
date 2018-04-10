@@ -1,13 +1,13 @@
-import CharField from 'formogen/components/semantic-ui-fields/CharField';
+import CharField from './CharField';
 
 
 it('should render CharField', () => {
     const wrapper = shallow(
         <CharField
             type='CharField'
-            name='char_field_name'
-            verbose_name="I've corkscrewed her twice for the last night!"
-            help_text='Really?'
+            name='CharField: name'
+            verbose_name='CharField: verbose_name'
+            help_text='CharField: help_text'
             layoutOpts={ { width: 1 } }
         />
     );

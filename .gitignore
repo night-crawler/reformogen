@@ -71,8 +71,5 @@ target/
 /media/payee/
 /media/
 
-# Generated
-gen_admin.py
-celerybeat-schedule*
 db.sqlite3
 package-lock.json

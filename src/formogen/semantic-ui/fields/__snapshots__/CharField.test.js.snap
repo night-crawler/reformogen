@@ -6,28 +6,31 @@ exports[`should render CharField 1`] = `
   error={false}
   width={1}
 >
-  <SUILabel
-    help_text="Really?"
+  <Label
+    help_text="CharField: help_text"
     layoutOpts={
       Object {
         "width": 1,
       }
     }
-    name="char_field_name"
+    name="CharField: name"
     type="CharField"
-    verbose_name="I've corkscrewed her twice for the last night!"
+    verbose_name="CharField: verbose_name"
   />
   <FormInput
     as={[Function]}
     control={[Function]}
-    name="char_field_name"
+    name="CharField: name"
     type="text"
   />
   <span
     className="help-text"
   >
-    Really?
+    CharField: help_text
   </span>
-  <MessageList />
+  <ErrorsList
+    color="red"
+    header="Errors"
+  />
 </FormField>
 `;

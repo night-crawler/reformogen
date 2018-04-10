@@ -6,30 +6,33 @@ exports[`should render IntegerField 1`] = `
   error={false}
   width={1}
 >
-  <SUILabel
-    help_text="You pop instanlty?! Huh?"
+  <Label
+    help_text="IntegerField: help_text"
     layoutOpts={
       Object {
         "width": 1,
       }
     }
-    name="integer_field_name"
+    name="IntegerField: name"
     type="IntegerField"
-    verbose_name="Check out that fantastically horny slut!"
+    verbose_name="IntegerField: verbose_name"
   />
   <FormInput
     as={[Function]}
     control={[Function]}
     max={2147483647}
     min={-2147483648}
-    name="integer_field_name"
+    name="IntegerField: name"
     type="number"
   />
   <span
     className="help-text"
   >
-    You pop instanlty?! Huh?
+    IntegerField: help_text
   </span>
-  <MessageList />
+  <ErrorsList
+    color="red"
+    header="Errors"
+  />
 </FormField>
 `;
