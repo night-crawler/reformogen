@@ -1,22 +1,19 @@
-import './formogen/components/semantic-ui/styles';
-import 'moment/locale/ru';
+import React, { Component } from 'react';
 
 import loglevel from 'loglevel';
 import prefix from 'loglevel-plugin-prefix';
 
-import { Segment } from 'semantic-ui-react';
-import React, { Component } from 'react';
+import 'moment/locale/ru';
 
-import Formogen from './formogen-react-redux';
+import { Button, Form, Grid, Segment } from 'semantic-ui-react';
 
-import { Button, Form, Grid } from 'semantic-ui-react';
-import 'semantic-ui-css/semantic.css';
+import Formogen from './formogen-redux';
+
 import preparedMetaData from './form.json';
 
+import 'semantic-ui-css/semantic.css';
 import './App.css';
 
-
-// TODO: it should be in formogen module
 window.loglevel = loglevel;
 prefix.apply(loglevel, { template: '[%t] %l (%n)' });
 
@@ -146,13 +143,13 @@ class App extends Component {
                                 /* author form */
                                 metaDataUrl={ 'http://localhost:8000/api/v1/sample/authors/describe/' }
                                 objectCreateUrl={ 'http://localhost:8000/api/v1/sample/authors/' }
-                                objectUrl={ 'http://localhost:8000/api/v1/sample/authors/23/' }
+                                objectUrl={ 'http://localhost:8000/api/v1/sample/authors/1/' }
 
                                 /* misc */
                                 sendFileQueueLength={ 3 }
 
                                 /* modal opts */
-                                // showAsModal={ true }
+                                showAsModal={ true }
                                 // modalComponent={ null }
                                 // modalTriggerComponent={ <Button>Rise up evil!</Button> }
                                 // modalProps={ { dimmer: 'blurring' } }

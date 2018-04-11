@@ -1,0 +1,41 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should render GenericField 1`] = `
+<FormField
+  disabled={true}
+  error={false}
+  width={1}
+>
+  <Label
+    help_text="GenericField: help_text"
+    layoutOpts={
+      Object {
+        "width": 1,
+      }
+    }
+    name="GenericField: name"
+    type="GenericField"
+    verbose_name="GenericField: verbose_name"
+  />
+  <pre>
+    {
+    "type": "GenericField",
+    "name": "GenericField: name",
+    "verbose_name": "GenericField: verbose_name",
+    "help_text": "GenericField: help_text",
+    "layoutOpts": {
+        "width": 1
+    }
+}
+  </pre>
+  <span
+    className="help-text"
+  >
+    GenericField: help_text
+  </span>
+  <ErrorsList
+    color="red"
+    header="Errors"
+  />
+</FormField>
+`;

@@ -1,0 +1,35 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should render TextField 1`] = `
+<FormField
+  disabled={true}
+  error={false}
+  width={1}
+>
+  <Label
+    help_text="help text"
+    layoutOpts={
+      Object {
+        "width": 1,
+      }
+    }
+    name="text_field_name"
+    type="TextField"
+    verbose_name="verbose name"
+  />
+  <FormTextArea
+    as={[Function]}
+    control={[Function]}
+    name="text_field_name"
+  />
+  <span
+    className="help-text"
+  >
+    help text
+  </span>
+  <ErrorsList
+    color="red"
+    header="Errors"
+  />
+</FormField>
+`;

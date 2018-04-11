@@ -1,0 +1,38 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should render IntegerField 1`] = `
+<FormField
+  disabled={true}
+  error={false}
+  width={1}
+>
+  <Label
+    help_text="IntegerField: help_text"
+    layoutOpts={
+      Object {
+        "width": 1,
+      }
+    }
+    name="IntegerField: name"
+    type="IntegerField"
+    verbose_name="IntegerField: verbose_name"
+  />
+  <FormInput
+    as={[Function]}
+    control={[Function]}
+    max={2147483647}
+    min={-2147483648}
+    name="IntegerField: name"
+    type="number"
+  />
+  <span
+    className="help-text"
+  >
+    IntegerField: help_text
+  </span>
+  <ErrorsList
+    color="red"
+    header="Errors"
+  />
+</FormField>
+`;
