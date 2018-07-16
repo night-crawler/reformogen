@@ -2,17 +2,20 @@ import re
 
 from django.conf import settings
 from django.contrib.postgres.fields import ArrayField
+from django.core.exceptions import ValidationError
 from django.core.files.storage import FileSystemStorage
 from django.db import models
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
-from easy_thumbnails.fields import ThumbnailerImageField
-from model_utils.fields import AutoCreatedField, AutoLastModifiedField
-from django.core.exceptions import ValidationError
+
 from rest_framework.reverse import reverse
 
-from sample import states
-from sample import abstract
+# Third Party
+from easy_thumbnails.fields import ThumbnailerImageField
+from model_utils.fields import AutoCreatedField, AutoLastModifiedField
+
+# First Party
+from sample import abstract, states
 
 media_storage = FileSystemStorage(location=settings.MEDIA_ROOT, base_url=settings.MEDIA_URL)
 

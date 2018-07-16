@@ -1,13 +1,14 @@
 from django.db import models
-from rest_framework.decorators import list_route, detail_route
-from rest_framework.exceptions import ValidationError, NotAcceptable
+
+from rest_framework import viewsets
+from rest_framework.decorators import detail_route, list_route
+from rest_framework.exceptions import NotAcceptable, ValidationError
 from rest_framework.request import Request
 from rest_framework.response import Response
-from rest_framework import viewsets
 
+from sample import models as s_models
 from sample.api import metadata
 from sample.api import serializers as s_serializers
-from sample import models as s_models
 
 
 class MultiSerializerViewSetMixin:

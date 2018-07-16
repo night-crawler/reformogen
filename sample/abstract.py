@@ -1,8 +1,11 @@
 import typing as t
 
 from django.utils.translation import ugettext_lazy as _
-from model_utils import Choices
+
 from rest_framework.exceptions import ValidationError
+
+# Third Party
+from model_utils import Choices
 
 
 def choice_identifier(choices: Choices, db_val) -> str:

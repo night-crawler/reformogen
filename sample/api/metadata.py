@@ -1,8 +1,10 @@
 from django.utils.text import format_lazy
 from django.utils.translation import ugettext_lazy as _
 
-from drf_metadata.meta import MetaData
 from rest_framework.reverse import reverse_lazy
+
+# Third Party
+from drf_metadata.meta import MetaData
 
 from sample import models as wf_models
 

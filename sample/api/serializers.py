@@ -1,8 +1,9 @@
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
-from sample import models as s_models
+# First Party
 from sample import abstract
+from sample import models as s_models
 
 
 class CRUDUrlsSerializerMixin(serializers.ModelSerializer):
