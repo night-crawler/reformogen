@@ -84,4 +84,4 @@
 // https://stackoverflow.com/questions/42906358/having-multiple-instance-of-same-reusable-redux-react-components-on-the-same-pag/42939732
 
 export { default } from './containers';
-export const __version__ = '0.1.1';
+export const __version__ = '0.1.2';
