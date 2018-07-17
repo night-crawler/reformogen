@@ -283,4 +283,4 @@ export default class FormogenFormComponent extends React.Component {
     }
 }
 
-export const __version__ = '0.1.0';
+export const __version__ = '0.1.1';
