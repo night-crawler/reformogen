@@ -83,7 +83,10 @@ export default class FormogenFormComponent extends React.Component {
 
         /* components */
         fieldComponentMap: PropTypes.object,
+
         formComponent: PropTypes.element,
+        submitComponent: PropTypes.element,
+
         modalFormComponent: PropTypes.element,
         modalFormTriggerComponent: PropTypes.element,
     };
@@ -112,7 +115,9 @@ export default class FormogenFormComponent extends React.Component {
 
         /* components */
         fieldComponentMap: defaultFieldComponentMap,
+
         formComponent: semanticUICommon.Form,
+
         modalFormComponent: semanticUICommon.ModalForm,
     };
 
@@ -247,7 +252,10 @@ export default class FormogenFormComponent extends React.Component {
 
         const {
             formComponent: FormComponent,
+
             modalFormComponent: ModalFormComponent,
+            submitComponent: SubmitComponent,
+
             modalFormTriggerComponent: ModalFormTriggerComponent,
         } = this.props;
 
@@ -277,6 +285,8 @@ export default class FormogenFormComponent extends React.Component {
 
                 formLayout={ this.buildLayout() }
                 nonFieldErrorsMap={ this.props.nonFieldErrorsMap }
+
+                submitComponent={ SubmitComponent }
                 onSubmit={ this.props.onSubmit }
             />
         );

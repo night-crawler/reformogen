@@ -18,16 +18,16 @@ FormComponent.propTypes = {
     nonFieldErrorsMap: PropTypes.object,
     formLayout: PropTypes.array.isRequired,
 
+    submitComponent: PropTypes.element,
     onSubmit: PropTypes.func,
-    showSubmit: PropTypes.bool,
 };
 FormComponent.defaultProps = {
     title: 'Formogen Form',
     showTitle: true,
-
-    showSubmit: true,
+    submitComponent: Button,
 };
 function FormComponent(props) {
+    const { submitComponent: SubmitComponent } = props;
     return (
         <Form loading={ props.loading }>
             {
@@ -54,17 +54,14 @@ function FormComponent(props) {
                     )
                 }
             </div>
-            {
-                props.showSubmit &&
-                <Button
-                    type='submit'
-                    content={ 'Submit' }
-                    fluid={ true }
+            <SubmitComponent
+                type='submit'
+                content={ 'Submit' }
+                fluid={ true }
 
-                    onClick={ props.onSubmit }
-                    onKeyPress={ props.onSubmit }
-                />
-            }
+                onClick={ props.onSubmit }
+                onKeyPress={ props.onSubmit }
+            />
         </Form>
     );
 }
