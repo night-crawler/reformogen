@@ -163,7 +163,7 @@ export const otherNetworkError = (error, formId) => ({
 export const sendFormData = (url, method = 'POST', formData, formId) => {
     return dispatch => {
         if (_.isEmpty(formData))
-            return dispatch(formDataSendSkip(formId));
+            return Promise.resolve(dispatch(formDataSendSkip(formId)));
 
         dispatch(formDataSendStart(formData, formId));
 
@@ -197,7 +197,7 @@ export const formFilesProcessSkip = formId => ({
 export const processFormFiles = (formFiles, urls, sendFileQueueLength = 1, formId) => {
     return dispatch => {
         if (_.isEmpty(formFiles))
-            return dispatch(formFilesProcessSkip(formId));
+            return Promise.resolve(dispatch(formFilesProcessSkip(formId)));
 
         dispatch(formFilesProcessStart(formId));
 

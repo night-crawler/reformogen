@@ -40,12 +40,28 @@ export default class FormogenComponent extends Component {
         isLoading: PropTypes.bool,
 
         showAsModal: PropTypes.bool,
-        modalComponent: PropTypes.element,
-        modalTriggerComponent: PropTypes.element,
+        modalComponent: PropTypes.oneOfType([
+            PropTypes.func,
+            PropTypes.element,
+            PropTypes.instanceOf(React.Component)
+        ]),
+        modalTriggerComponent: PropTypes.oneOfType([
+            PropTypes.func,
+            PropTypes.element,
+            PropTypes.instanceOf(React.Component)
+        ]),
         modalProps: PropTypes.object,
 
-        formComponent: PropTypes.element,
-        submitComponent: PropTypes.element,
+        formComponent: PropTypes.oneOfType([
+            PropTypes.func,
+            PropTypes.element,
+            PropTypes.instanceOf(React.Component)
+        ]),
+        submitComponent: PropTypes.oneOfType([
+            PropTypes.func,
+            PropTypes.element,
+            PropTypes.instanceOf(React.Component)
+        ]),
     };
     static defaultProps = {
         fields: [],

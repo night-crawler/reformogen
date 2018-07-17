@@ -18,7 +18,11 @@ FormComponent.propTypes = {
     nonFieldErrorsMap: PropTypes.object,
     formLayout: PropTypes.array.isRequired,
 
-    submitComponent: PropTypes.element,
+    submitComponent: PropTypes.oneOfType([
+        PropTypes.func,
+        PropTypes.element,
+        PropTypes.instanceOf(React.Component)
+    ]),
     onSubmit: PropTypes.func,
 };
 FormComponent.defaultProps = {
@@ -56,11 +60,10 @@ function FormComponent(props) {
             </div>
             <SubmitComponent
                 type='submit'
-                content={ 'Submit' }
+                content='Submit'
                 fluid={ true }
 
                 onClick={ props.onSubmit }
-                onKeyPress={ props.onSubmit }
             />
         </Form>
     );

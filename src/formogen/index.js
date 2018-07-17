@@ -84,11 +84,27 @@ export default class FormogenFormComponent extends React.Component {
         /* components */
         fieldComponentMap: PropTypes.object,
 
-        formComponent: PropTypes.element,
-        submitComponent: PropTypes.element,
+        formComponent: PropTypes.oneOfType([
+            PropTypes.func,
+            PropTypes.element,
+            PropTypes.instanceOf(React.Component)
+        ]),
+        submitComponent: PropTypes.oneOfType([
+            PropTypes.func,
+            PropTypes.element,
+            PropTypes.instanceOf(React.Component)
+        ]),
 
-        modalFormComponent: PropTypes.element,
-        modalFormTriggerComponent: PropTypes.element,
+        modalFormComponent: PropTypes.oneOfType([
+            PropTypes.func,
+            PropTypes.element,
+            PropTypes.instanceOf(React.Component)
+        ]),
+        modalFormTriggerComponent: PropTypes.oneOfType([
+            PropTypes.func,
+            PropTypes.element,
+            PropTypes.instanceOf(React.Component)
+        ]),
     };
     static defaultProps = {
         /* misc */
