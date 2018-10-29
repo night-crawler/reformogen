@@ -86,8 +86,8 @@ WSGI_APPLICATION = 'reformogen.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'HOST': 'localhost',
-        'PORT': '',
+        'HOST': '127.0.0.1',
+        'PORT': 5433,
         'NAME': 'reformogen',
         'USER': 'reformogen',
         'PASSWORD': 'reformogen',

@@ -1,7 +1,6 @@
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
-# First Party
 from sample import abstract
 from sample import models as s_models
 
