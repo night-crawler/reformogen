@@ -23,28 +23,12 @@ BooleanField.propTypes = {
   helpTextOnHover: PropTypes.bool,
   layoutOpts: layoutOptsType,
 
-  updateProps: PropTypes.func,
   onChange: PropTypes.func,
 };
-export default function BooleanField(props) {
+export function BooleanField(props) {
   const handleChange = (e, newValue) => {
     props.onChange(e, { name: props.name, value: newValue.checked });
   };
-
-  const { widget = '' } = props;
-
-  let _props = {
-    name: props.name,
-    checked: !!props.value || false,
-    placeholder: props.placeholder,
-    onChange: handleChange,
-    toggle: widget.toLowerCase() === 'toggle' || undefined,
-    slider: widget.toLowerCase() === 'slider' || undefined,
-  };
-
-  if (_.isFunction(props.updateProps)) {
-    _props = props.updateProps(_props, props);
-  }
 
   return (
     <Form.Field
@@ -54,11 +38,17 @@ export default function BooleanField(props) {
       error={ !_.isEmpty(props.errors) }
     >
       <Label { ...props } />
-      <Checkbox { ..._props } />
-      {
-        !props.helpTextOnHover
-          ? <span className='help-text'>{ props.help_text }</span>
-          : ''
+      <Checkbox 
+        name={ props.name }
+        checked={ !!props.value || false }
+        placeholder={ props.placeholder }
+        onChange={ handleChange }
+        toggle={ props.widget.toLowerCase() === 'toggle' || undefined }
+        slider={ props.widget.toLowerCase() === 'slider' || undefined }
+      />
+      { !props.helpTextOnHover
+        ? <span className='help-text'>{ props.help_text }</span>
+        : ''
       }
       <ErrorsList messages={ props.errors } />
     </Form.Field>

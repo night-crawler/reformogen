@@ -29,22 +29,8 @@ CharField.propTypes = {
   updateProps: PropTypes.func,
   onChange: PropTypes.func,
 };
-export default function CharField(props) {
+export function CharField(props) {
   const isPassword = props.password || props.widget === 'password';
-
-  let _props = {
-    name: props.name,
-    value: props.value,
-    placeholder: props.placeholder,
-    onChange: props.onChange,
-    type: isPassword ? 'password' : 'text',
-    maxLength: props.max_length,
-  };
-
-  if (_.isFunction(props.updateProps)) {
-    _props = props.updateProps(_props, props);
-  }
-
   return (
     <Form.Field
       required={ props.required }
@@ -53,11 +39,17 @@ export default function CharField(props) {
       error={ !_.isEmpty(props.errors) }
     >
       <Label { ...props } />
-      <Form.Input { ..._props } />
-      {
-        !props.helpTextOnHover
-          ? <span className='help-text'>{ props.help_text }</span>
-          : ''
+      <Form.Input 
+        name={ props.name }
+        value={ props.value }
+        placeholder={ props.placeholder }
+        onChange={ props.onChange }
+        type={ isPassword ? 'password' : 'text' }
+        maxLength={ props.max_length }
+      />
+      { !props.helpTextOnHover
+        ? <span className='help-text'>{ props.help_text }</span>
+        : ''
       }
       <ErrorsList messages={ props.errors } />
     </Form.Field>

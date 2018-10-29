@@ -1,30 +1,28 @@
-import 'react-times/css/material/default.css';
 import React from 'react';
-import { text, boolean, number } from '@storybook/addon-knobs';
+import { text, boolean, number, select } from '@storybook/addon-knobs';
 import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 
-import { TimeField } from '~/formogen/semantic-ui/fields/TimeField';
+import { BooleanField } from '~/formogen/semantic-ui/fields/BooleanField';
 
 import { FormDecorator } from './FormDecorator';
 
 
-const stories = storiesOf('Fields|TimeField', module).addDecorator(FormDecorator);
+const stories = storiesOf('Fields|BooleanField', module).addDecorator(FormDecorator);
 
 
 stories.add('default', () => {
   return (
-    <TimeField 
-      type='TimeField'
+    <BooleanField 
+      type='BooleanField'
       placeholder={ text('placeholder', 'some placeholder') }
       editable={ boolean('editable', true) }
       help_text={ text('help_text', 'some help text') }
-      name={ text('name', 'sampleTime') }
+      name={ text('name', 'booleanField') }
       verbose_name={ text('verbose_name', 'verbose name of the field') }
       layoutOpts={ { width: number('layoutOpts.width', 4, { range: true, min: 1, max: 16 }) } }
       onChange={ action('onChange') }
-      value={ text('value', '00:22:33') }
+      widget={ select('widget', { toggle: 'toggle', slider: 'slider', nope: '' }, '') }
     />
   );
 });
-

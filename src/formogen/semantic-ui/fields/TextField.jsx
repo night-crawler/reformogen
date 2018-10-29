@@ -32,7 +32,7 @@ TextField.propTypes = {
 
   onChange: PropTypes.func,
 };
-export default function TextField(props) {
+export function TextField(props) {
   let _props = {
     name: props.name,
     value: props.value,

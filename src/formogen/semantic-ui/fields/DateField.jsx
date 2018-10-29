@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import _ from 'lodash';
+import { isEmpty } from 'lodash';
 import moment from 'moment';
 import { Form } from 'semantic-ui-react';
 import DatePicker from 'react-datepicker';
@@ -26,49 +26,55 @@ DateField.propTypes = {
   layoutOpts: layoutOptsType,
   locale: PropTypes.string,
 
-  updateProps: PropTypes.func,
+  showTimeSelect: PropTypes.bool,
+  todayButton: PropTypes.string,
+  dateFormat: PropTypes.string,
+  showYearDropdown: PropTypes.bool,
+  showMonthDropdown: PropTypes.bool,
+  dropdownMode: PropTypes.string,
+
   onChange: PropTypes.func,
 };
-export default function DateField(props) {
+DateField.defaultProps = {
+  showTimeSelect: false,
+  todayButton: 'Now',
+  dateFormat: 'YYYY.MM.DD',
+  showYearDropdown: true,
+  showMonthDropdown: true,
+  dropdownMode: 'select',
+};
+export function DateField(props) {
   const handleChange = (momentTimeObject, e) => {
-    // proxy event with SUI-React compliant style
     props.onChange(e, {
       name: props.name,
       value: momentTimeObject ? momentTimeObject.toISOString() : null
     });
   };
 
-  let _props = {
-    name: props.name,
-    selected: props.value ? moment(props.value) : null,  // null == no selected value
-    onChange: handleChange,
-    showTimeSelect: false,
-    locale: props.locale,
-    placeholderText: props.placeholder,
-    todayButton: 'Now',
-    dateFormat: 'YYYY.MM.DD',
-    showYearDropdown: true,
-    showMonthDropdown: true,
-    dropdownMode: 'select',
-  };
-
-  if (_.isFunction(props.updateProps)) {
-    _props = props.updateProps(_props, props);
-  }
-
   return (
     <Form.Field
       required={ props.required }
       disabled={ !props.editable }
       width={ props.layoutOpts.width }
-      error={ !_.isEmpty(props.errors) }
+      error={ !isEmpty(props.errors) }
     >
       <Label { ...props } />
-      <DatePicker { ..._props } />
-      {
-        !props.helpTextOnHover
-          ? <span className='help-text'>{ props.help_text }</span>
-          : ''
+      <DatePicker 
+        name={ props.name }
+        selected={ props.value ? moment(props.value) : null }
+        onChange={ handleChange }
+        showTimeSelect={ props.showTimeSelect }
+        locale={ props.locale }
+        placeholderText={ props.placeholder }
+        todayButton={ props.todayButton }
+        dateFormat={ props.dateFormat }
+        showYearDropdown={ props.showYearDropdown }
+        showMonthDropdown={ props.showMonthDropdown }
+        dropdownMode={ props.dropdownMode }
+      />
+      { !props.helpTextOnHover
+        ? <span className='help-text'>{ props.help_text }</span>
+        : ''
       }
       <ErrorsList messages={ props.errors } />
     </Form.Field>

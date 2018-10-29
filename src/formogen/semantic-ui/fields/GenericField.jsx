@@ -1,6 +1,5 @@
 import React from 'react';
 import _ from 'lodash';
-import loglevel from 'loglevel';
 import { Form } from 'semantic-ui-react';
 
 import propTypes from '../../fieldPropTypes';
@@ -15,10 +14,9 @@ import ErrorsList from '../common/ErrorsList';
  * @constructor
  */
 GenericField.propTypes = propTypes;
-export default function GenericField(props) {
-  loglevel
-    .getLogger('Formogen/components/semantic-ui-fields/GenericField.jsx')
-    .warn(`Using a placeholder GenericFieldComponent to render field "${ props.name }" of type "${ props.type }"`);
+export function GenericField(props) {
+  // eslint-disable-next-line
+  console.warn(`Using a placeholder GenericFieldComponent to render field "${ props.name }" of type "${ props.type }"`);
 
   let _props = Object.assign({}, props);
   if (_.isFunction(props.updateProps)) {
@@ -36,10 +34,9 @@ export default function GenericField(props) {
       <pre>
         { JSON.stringify(_props, null, 4) }
       </pre>
-      {
-        !props.helpTextOnHover
-          ? <span className='help-text'>{ props.help_text }</span>
-          : ''
+      { !props.helpTextOnHover
+        ? <span className='help-text'>{ props.help_text }</span>
+        : ''
       }
       <ErrorsList messages={ props.errors } />
     </Form.Field>
