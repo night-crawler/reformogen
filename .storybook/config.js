@@ -2,7 +2,7 @@ import { withConsole } from '@storybook/addon-console';
 import { withOptions } from '@storybook/addon-options';
 import { addDecorator, configure } from '@storybook/react';
 import { withInfo } from '@storybook/addon-info';
-
+import { withKnobs } from '@storybook/addon-knobs';
 import 'semantic-ui-css/semantic.min.css';
 
 addDecorator(
@@ -31,6 +31,8 @@ addDecorator(
 );
 
 addDecorator((storyFn, context) => withConsole()(storyFn)(context));
+
+addDecorator(withKnobs);
 
 // automatically import all files ending in *.stories.js
 const req = require.context('../stories', true, /.stories.js$/);

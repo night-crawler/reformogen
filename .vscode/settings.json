@@ -12,4 +12,10 @@
         "editor.tabSize": 2
     },
     "editor.detectIndentation": false,
+    "cSpell.words": [
+        "Truncator",
+        "datepicker",
+        "formogen",
+        "nowrap"
+    ],
 }
