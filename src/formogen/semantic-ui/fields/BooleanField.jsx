@@ -5,7 +5,7 @@ import { Form, Checkbox } from 'semantic-ui-react';
 
 import { errorsType, layoutOptsType } from '../../fieldPropTypes';
 import Label from '../common/Label';
-import ErrorsList from '../common/ErrorsList';
+import { ErrorsList } from '../common/ErrorsList';
 
 
 BooleanField.propTypes = {

@@ -7,7 +7,7 @@ import Select from 'react-select';
 import { extractIdentity } from '../../../formogen-redux/utils';  // TODO: this is not THIS place for it
 import { errorsType, layoutOptsType } from '../../fieldPropTypes';
 import Label from '../common/Label';
-import ErrorsList from '../common/ErrorsList';
+import { ErrorsList } from '../common/ErrorsList';
 
 
 makeOptions.propTypes = PropTypes.arrayOf(PropTypes.shape({

@@ -6,7 +6,7 @@ import Select from 'react-select';
 
 import { errorsType, layoutOptsType } from '../../fieldPropTypes';
 import Label from '../common/Label';
-import ErrorsList from '../common/ErrorsList';
+import { ErrorsList } from '../common/ErrorsList';
 
 
 const makeReactSelectOptions = (choices) => {

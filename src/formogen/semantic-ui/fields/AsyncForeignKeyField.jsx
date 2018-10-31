@@ -5,7 +5,7 @@ import Select from 'react-select';
 
 import propTypes from '../../fieldPropTypes';
 import Label from '../common/Label';
-import ErrorsList from '../common/ErrorsList';
+import { ErrorsList } from '../common/ErrorsList';
 
 
 AsyncForeignKeyField.propTypes = propTypes;

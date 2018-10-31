@@ -7,7 +7,7 @@ import TimePicker from 'react-times';
 
 import { errorsType, layoutOptsType } from '../../fieldPropTypes';
 import Label from '../common/Label';
-import ErrorsList from '../common/ErrorsList';
+import { ErrorsList } from '../common/ErrorsList';
 
 
 export class TimeField extends React.Component {

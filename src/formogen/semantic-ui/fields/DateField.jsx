@@ -7,7 +7,7 @@ import DatePicker from 'react-datepicker';
 
 import { errorsType, layoutOptsType } from '../../fieldPropTypes';
 import Label from '../common/Label';
-import ErrorsList from '../common/ErrorsList';
+import { ErrorsList } from '../common/ErrorsList';
 
 
 DateField.propTypes = {

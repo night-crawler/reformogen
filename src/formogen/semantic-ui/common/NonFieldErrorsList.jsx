@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import _ from 'lodash';
 import { Grid } from 'semantic-ui-react';
 
-import ErrorsList from './ErrorsList';
+import { ErrorsList } from './ErrorsList';
 
 
 NonFieldErrorsListComponent.displayName = 'NonFieldErrorsList';

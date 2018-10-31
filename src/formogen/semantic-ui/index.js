@@ -18,7 +18,7 @@ import Label from './common/Label';
 import CaptionTruncator from './common/CaptionTruncator';
 import Form from './common/Form';
 import ModalForm from './common/ModalForm';
-import ErrorsList from './common/ErrorsList';
+import { ErrorsList } from './common/ErrorsList';
 import NonFieldErrorsList from './common/NonFieldErrorsList';
 
 import 'react-datepicker/dist/react-datepicker.css';

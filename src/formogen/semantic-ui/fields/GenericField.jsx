@@ -4,7 +4,7 @@ import { Form } from 'semantic-ui-react';
 
 import propTypes from '../../fieldPropTypes';
 import Label from '../common/Label';
-import ErrorsList from '../common/ErrorsList';
+import { ErrorsList } from '../common/ErrorsList';
 
 
 /**
