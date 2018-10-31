@@ -6,7 +6,7 @@ import { action } from '@storybook/addon-actions';
 import { TextField } from '~/formogen/semantic-ui/fields/TextField';
 
 import { FormDecorator } from './FormDecorator';
-
+import { errorArray } from './ErrorMessages.sample';
 
 const stories = storiesOf('Fields|TextField', module).addDecorator(FormDecorator);
 
@@ -23,6 +23,7 @@ stories.add('default', () => {
       layoutOpts={ { width: number('layoutOpts.width', 4, { range: true, min: 1, max: 16 }) } }
       onChange={ action('onChange') }
       value={ text('value', 'some text') }
+      errors={ errorArray }
     />
   );
 });

@@ -7,6 +7,7 @@ import { action } from '@storybook/addon-actions';
 import { DateField } from '~/formogen/semantic-ui/fields/DateField';
 
 import { FormDecorator } from './FormDecorator';
+import { errorArray } from './ErrorMessages.sample';
 
 const stories = storiesOf('Fields|DateField', module).addDecorator(FormDecorator);
 
@@ -23,6 +24,7 @@ stories.add('default', () => {
       layoutOpts={ { width: number('layoutOpts.width', 4, { range: true, min: 1, max: 16 }) } }
       onChange={ action('onChange') }
       value={ text('value', '2018-10-09T21:00:00.000Z') }
+      errors={ errorArray }
     />
   );
 });

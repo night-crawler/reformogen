@@ -6,6 +6,7 @@ import { action } from '@storybook/addon-actions';
 import { CharField } from '~/formogen/semantic-ui/fields/CharField';
 
 import { FormDecorator } from './FormDecorator';
+import { errorArray } from './ErrorMessages.sample';
 
 
 const stories = storiesOf('Fields|CharField', module).addDecorator(FormDecorator);
@@ -22,6 +23,7 @@ stories.add('default', () => {
       verbose_name={ text('verbose_name', 'verbose name of the field') }
       layoutOpts={ { width: number('layoutOpts.width', 4, { range: true, min: 1, max: 16 }) } }
       onChange={ action('onChange') }
+      errors={ errorArray }
     />
   );
 });

@@ -1,7 +1,5 @@
 import React from 'react';
-import { text, boolean, number, select } from '@storybook/addon-knobs';
 import { storiesOf } from '@storybook/react';
-import { action } from '@storybook/addon-actions';
 
 import { ErrorsList } from '~/formogen/semantic-ui/common/ErrorsList';
 
