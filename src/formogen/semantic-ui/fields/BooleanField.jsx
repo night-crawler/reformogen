@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import _ from 'lodash';
+import { isEmpty } from 'lodash';
 import { Form, Checkbox } from 'semantic-ui-react';
 
 import { errorsType, layoutOptsType } from '../../fieldPropTypes';
@@ -25,6 +25,9 @@ BooleanField.propTypes = {
 
   onChange: PropTypes.func,
 };
+BooleanField.defaultProps = {
+  widget: '',
+};
 export function BooleanField(props) {
   const handleChange = (e, newValue) => {
     props.onChange(e, { name: props.name, value: newValue.checked });
@@ -35,7 +38,7 @@ export function BooleanField(props) {
       required={ props.required }
       disabled={ !props.editable }
       width={ props.layoutOpts.width }
-      error={ !_.isEmpty(props.errors) }
+      error={ !isEmpty(props.errors) }
     >
       <FieldLabel { ...props } />
       <Checkbox 
