@@ -10,22 +10,6 @@ import { FieldLabel } from '../common/FieldLabel';
 import { ErrorsList } from '../common/ErrorsList';
 
 
-/**
- * Component should receive a value in ISO format
- * @param {object} props
- * @param {string} props.name - internal field name
- * @param {string} props.verbose_name
- * @param {string} props.placeholder
- * @param {string} props.help_text -
- * @param {bool} props.blank - determines if we can leave field unfilled
- * @param {bool} props.null - determines if we can store NULL values
- * @param {bool} props.editable - can we edit the field value?
- * @param {string} props.type - Django ORM field type
- * @param {bool} props.required
- * @param {string} props.value - well ISO-formatted value to pass moment()
- * @returns {XML}
- * @constructor
- */
 DateTimeField.propTypes = {
   type: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
@@ -42,38 +26,29 @@ DateTimeField.propTypes = {
   layoutOpts: layoutOptsType,
   locale: PropTypes.string,
 
-  updateProps: PropTypes.func,
+  
+  timeFormat: PropTypes.string,
+  timeIntervals: PropTypes.number,
+  todayButton: PropTypes.string,
+  dateFormat: PropTypes.string,
+  dropdownMode: PropTypes.string,
+
   onChange: PropTypes.func,
+};
+DateTimeField.defaultProps = {
+  timeFormat: 'HH:mm',
+  timeIntervals: 30,
+  todayButton: 'Now',
+  dateFormat: 'YYYY.MM.DD HH:mm',
+  dropdownMode: 'select',
 };
 export function DateTimeField(props) {
   const handleChange = (momentTimeObject, e) => {
-    // proxy event with SUI-React compliant style
     props.onChange(e, {
       name: props.name,
       value: momentTimeObject ? momentTimeObject.toISOString() : null
     });
   };
-
-  let _props = {
-    name: props.name,
-    selected: props.value ? moment(props.value) : null,  // null == no selected value
-    onChange: handleChange,
-    showTimeSelect: true,
-    timeFormat: 'HH:mm',
-    timeIntervals: 60,
-    locale: props.locale,
-    placeholderText: props.placeholder,
-    todayButton: 'Now',
-    // todo: get from momemt
-    dateFormat: 'YYYY.MM.DD HH:mm',
-    showYearDropdown: true,
-    showMonthDropdown: true,
-    dropdownMode: 'select',
-  };
-
-  if (_.isFunction(props.updateProps)) {
-    _props = props.updateProps(_props, props);
-  }
 
   return (
     <Form.Field
@@ -83,11 +58,27 @@ export function DateTimeField(props) {
       error={ !_.isEmpty(props.errors) }
     >
       <FieldLabel { ...props } />
-      <DatePicker { ..._props } />
-      {
-        !props.helpTextOnHover
-          ? <span className='help-text'>{ props.help_text }</span>
-          : ''
+      <DatePicker 
+        name={ props.name }
+        selected={ props.value ? moment(props.value) : null }  // null == no selected value
+        onChange={ handleChange }
+        showTimeSelect={ true }
+        
+        locale={ props.locale }
+        placeholderText={ props.placeholder }
+        timeFormat={ props.timeFormat }
+        timeIntervals={ props.timeIntervals }
+        todayButton={ props.todayButton }
+        // TODO: get from moment
+        dateFormat={ props.dateFormat }
+        dropdownMode={ props.dropdownMode }
+        
+        showYearDropdown={ true }
+        showMonthDropdown={ true }
+      />
+      { !props.helpTextOnHover
+        ? <span className='help-text'>{ props.help_text }</span>
+        : ''
       }
       <ErrorsList messages={ props.errors } />
     </Form.Field>
