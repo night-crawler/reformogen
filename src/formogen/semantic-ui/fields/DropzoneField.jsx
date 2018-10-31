@@ -8,8 +8,8 @@ import Dropzone from 'react-dropzone';
 import { errorsType } from '../../fieldPropTypes';
 import { fileTypeImageMapping, UNKNOWN_FILE_TYPE } from '../../fileTypeImageMapping';
 import { splitExt, bytesToSize } from '../../utils';
-import { ErrorsList } from '../common/ErrorsList';
-import CaptionTruncator from '../common/CaptionTruncator';
+import { ErrorsList } from '../ErrorsList';
+import { CaptionTruncator } from '../CaptionTruncator';
 
 const fileShape = PropTypes.shape({
   lastModified: PropTypes.number,

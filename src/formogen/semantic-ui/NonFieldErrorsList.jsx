@@ -1,19 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import _ from 'lodash';
+import { toPairs } from 'lodash';
 import { Grid } from 'semantic-ui-react';
 
 import { ErrorsList } from './ErrorsList';
 
 
-NonFieldErrorsListComponent.displayName = 'NonFieldErrorsList';
-NonFieldErrorsListComponent.propTypes = {
+NonFieldErrorsList.displayName = 'NonFieldErrorsList';
+NonFieldErrorsList.propTypes = {
   errors: PropTypes.object,
 };
-function NonFieldErrorsListComponent({ errors }) {
+export function NonFieldErrorsList({ errors }) {
   return (
     <Grid className='non-field-errors layout' columns={ 16 }>
-      { _(errors).toPairs().value().map(([ header, errors ], i) =>
+      { toPairs(errors).map(([ header, errors ], i) =>
         <Grid.Row key={ i }>
           <div className='sixteen wide column'>
             <ErrorsList header={ header } messages={ errors } />
@@ -23,5 +23,3 @@ function NonFieldErrorsListComponent({ errors }) {
     </Grid>
   );
 }
-
-export default NonFieldErrorsListComponent;

@@ -211,7 +211,7 @@ export default class FormogenFormComponent extends React.Component {
       // render all fields in layout section
       const renderedFields = fields.map((fieldObj, j) => {
         /* fieldObj may be a string representing field name or object with first key as a field name,
-                * if we need to provide more options */
+         * if we need to provide more options */
         /* layoutFieldOpts take a default width from layout section */
         let fieldName, layoutFieldOpts = { width };
         if (_.isString(fieldObj)) {

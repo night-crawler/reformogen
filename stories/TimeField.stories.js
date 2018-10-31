@@ -6,10 +6,10 @@ import { action } from '@storybook/addon-actions';
 
 import { TimeField } from '~/formogen/semantic-ui/fields/TimeField';
 
-import { FormDecorator } from './FormDecorator';
+import { ContainerSegmentFormDecorator } from './storyDecorators';
 import { errorArray } from './ErrorMessages.sample';
 
-const stories = storiesOf('Fields|TimeField', module).addDecorator(FormDecorator);
+const stories = storiesOf('Fields|TimeField', module).addDecorator(ContainerSegmentFormDecorator);
 
 
 stories.add('default', () => 

@@ -6,8 +6,8 @@ import { Form } from 'semantic-ui-react';
 import TimePicker from 'react-times';
 
 import { errorsType, layoutOptsType } from '../../fieldPropTypes';
-import { FieldLabel } from '../common/FieldLabel';
-import { ErrorsList } from '../common/ErrorsList';
+import { FieldLabel } from '../FieldLabel';
+import { ErrorsList } from '../ErrorsList';
 
 
 export class TimeField extends React.Component {

@@ -4,8 +4,8 @@ import _ from 'lodash';
 import { Form, Checkbox } from 'semantic-ui-react';
 
 import { errorsType, layoutOptsType } from '../../fieldPropTypes';
-import { FieldLabel } from '../common/FieldLabel';
-import { ErrorsList } from '../common/ErrorsList';
+import { FieldLabel } from '../FieldLabel';
+import { ErrorsList } from '../ErrorsList';
 
 
 BooleanField.propTypes = {

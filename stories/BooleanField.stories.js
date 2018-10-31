@@ -5,10 +5,10 @@ import { action } from '@storybook/addon-actions';
 
 import { BooleanField } from '~/formogen/semantic-ui/fields/BooleanField';
 
-import { FormDecorator } from './FormDecorator';
+import { ContainerSegmentFormDecorator } from './storyDecorators';
 import { errorArray } from './ErrorMessages.sample';
 
-const stories = storiesOf('Fields|BooleanField', module).addDecorator(FormDecorator);
+const stories = storiesOf('Fields|BooleanField', module).addDecorator(ContainerSegmentFormDecorator);
 
 
 stories.add('default', () => {

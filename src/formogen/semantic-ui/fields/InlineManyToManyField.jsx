@@ -5,8 +5,8 @@ import Select from 'react-select';
 import { map, isEmpty } from 'lodash';
 
 import { errorsType, layoutOptsType } from '../../fieldPropTypes';
-import { FieldLabel } from '../common/FieldLabel';
-import { ErrorsList } from '../common/ErrorsList';
+import { FieldLabel } from '../FieldLabel';
+import { ErrorsList } from '../ErrorsList';
 
 
 InlineManyToManyField.propTypes = {

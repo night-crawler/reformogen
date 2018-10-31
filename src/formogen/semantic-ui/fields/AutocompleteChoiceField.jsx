@@ -5,8 +5,8 @@ import { Form } from 'semantic-ui-react';
 import Select from 'react-select';
 
 import { errorsType, layoutOptsType } from '../../fieldPropTypes';
-import { FieldLabel } from '../common/FieldLabel';
-import { ErrorsList } from '../common/ErrorsList';
+import { FieldLabel } from '../FieldLabel';
+import { ErrorsList } from '../ErrorsList';
 
 /**
  * Converts structures like [ [ 1, 'Choice' ] ] -> [ { value: 1, label: 'Choice' } ]

@@ -6,8 +6,8 @@ import { Form } from 'semantic-ui-react';
 import DatePicker from 'react-datepicker';
 
 import { errorsType, layoutOptsType } from '../../fieldPropTypes';
-import { FieldLabel } from '../common/FieldLabel';
-import { ErrorsList } from '../common/ErrorsList';
+import { FieldLabel } from '../FieldLabel';
+import { ErrorsList } from '../ErrorsList';
 
 
 DateTimeField.propTypes = {

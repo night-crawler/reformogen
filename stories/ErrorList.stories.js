@@ -1,12 +1,12 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 
-import { ErrorsList } from '~/formogen/semantic-ui/common/ErrorsList';
+import { ErrorsList } from '~/formogen/semantic-ui/ErrorsList';
 
-import { FormDecorator } from './FormDecorator';
+import { ContainerSegmentFormDecorator } from './storyDecorators';
 
 
-const stories = storiesOf('Fields|ErrorsList', module).addDecorator(FormDecorator);
+const stories = storiesOf('Fields|ErrorsList', module).addDecorator(ContainerSegmentFormDecorator);
 
 
 stories.add('default', () => {

@@ -7,7 +7,7 @@ CaptionTruncatorComponent.propTypes = {
   caption: PropTypes.string,
   width: PropTypes.number,
 };
-function CaptionTruncatorComponent({ caption, width = 0 }) {
+export function CaptionTruncatorComponent({ caption, width = 0 }) {
   const inlineStyles = {
     display: 'inline-block',
     maxWidth: width,
@@ -19,5 +19,3 @@ function CaptionTruncatorComponent({ caption, width = 0 }) {
 
   return <span style={ inlineStyles }>{ caption }</span>;
 }
-
-export default CaptionTruncatorComponent;

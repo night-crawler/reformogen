@@ -4,8 +4,8 @@ import { Form } from 'semantic-ui-react';
 import Select from 'react-select';
 
 import propTypes from '../../fieldPropTypes';
-import { FieldLabel } from '../common/FieldLabel';
-import { ErrorsList } from '../common/ErrorsList';
+import { FieldLabel } from '../FieldLabel';
+import { ErrorsList } from '../ErrorsList';
 
 
 AsyncManyToManyField.propTypes = propTypes;

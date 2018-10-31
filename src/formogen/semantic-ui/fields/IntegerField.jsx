@@ -4,8 +4,8 @@ import { Form } from 'semantic-ui-react';
 import { isEmpty } from 'lodash';
 
 import { errorsType, layoutOptsType } from '../../fieldPropTypes';
-import { FieldLabel } from '../common/FieldLabel';
-import { ErrorsList } from '../common/ErrorsList';
+import { FieldLabel } from '../FieldLabel';
+import { ErrorsList } from '../ErrorsList';
 
 
 IntegerField.propTypes = {
