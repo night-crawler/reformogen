@@ -5,7 +5,7 @@ import Select from 'react-select';
 import { isEmpty } from 'lodash';
 
 import { errorsType, layoutOptsType } from '../../fieldPropTypes';
-import Label from '../common/Label';
+import { FieldLabel } from '../common/FieldLabel';
 import { ErrorsList } from '../common/ErrorsList';
 
 import { extractIdentity } from './utils';
@@ -56,7 +56,7 @@ export function InlineForeignKeyField(props) {
       width={ props.layoutOpts.width }
       error={ !isEmpty(props.errors) }
     >
-      <Label { ...props } />
+      <FieldLabel { ...props } />
       <Select
         clearable={ !props.required }
         closeOnSelect={ true }

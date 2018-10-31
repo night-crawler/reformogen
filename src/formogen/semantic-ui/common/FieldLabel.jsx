@@ -1,22 +1,24 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import _ from 'lodash';
 import { Popup } from 'semantic-ui-react';
+import { upperFirst } from 'lodash';
 
-
-LabelComponent.displayName = 'Label';
-LabelComponent.propTypes = {
+FieldLabel.displayName = 'FieldLabel';
+FieldLabel.propTypes = {
   upperFirstLabel: PropTypes.bool,
   verbose_name: PropTypes.string.isRequired,
   help_text: PropTypes.string,
   /** show help text on hover label (?) sign, or put in the bottom */
   helpTextOnHover: PropTypes.bool,
 };
-function LabelComponent(props) {
-  const labelText = props.upperFirstLabel ? _.upperFirst(props.verbose_name) : props.verbose_name;
-  if (!props.help_text || !props.helpTextOnHover) {
+export function FieldLabel(props) {
+  const labelText = props.upperFirstLabel 
+    ? upperFirst(props.verbose_name) 
+    : props.verbose_name;
+
+  if (!props.help_text || !props.helpTextOnHover)
     return <label>{ labelText }</label>;
-  }
+
   /* replaced trigger's <Icon name="help" /> with <i> to prevent react warning:
      * Warning: Stateless function components cannot be given refs. Attempts to access this ref will fail.
   */
@@ -32,5 +34,3 @@ function LabelComponent(props) {
     </label>
   );
 }
-
-export default LabelComponent;

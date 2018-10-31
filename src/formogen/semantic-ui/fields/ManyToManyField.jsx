@@ -6,7 +6,7 @@ import Select from 'react-select';
 
 import { extractIdentity } from '../../../formogen-redux/utils';  // TODO: this is not THIS place for it
 import { errorsType, layoutOptsType } from '../../fieldPropTypes';
-import Label from '../common/Label';
+import { FieldLabel } from '../common/FieldLabel';
 import { ErrorsList } from '../common/ErrorsList';
 
 
@@ -73,7 +73,7 @@ export default function InlineManyToManyField(props) {
       width={ props.layoutOpts.width }
       error={ !_.isEmpty(props.errors) }
     >
-      <Label { ...props } />
+      <FieldLabel { ...props } />
       <Select { ..._props } />
 
       { !props.helpTextOnHover ? <span className='help-text'>{ props.help_text }</span> : '' }

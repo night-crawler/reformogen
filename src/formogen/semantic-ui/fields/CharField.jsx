@@ -4,7 +4,7 @@ import _ from 'lodash';
 import { Form } from 'semantic-ui-react';
 
 import { errorsType, layoutOptsType } from '../../fieldPropTypes';
-import Label from '../common/Label';
+import { FieldLabel } from '../common/FieldLabel';
 import { ErrorsList } from '../common/ErrorsList';
 
 
@@ -38,7 +38,7 @@ export function CharField(props) {
       width={ props.layoutOpts.width }
       error={ !_.isEmpty(props.errors) }
     >
-      <Label { ...props } />
+      <FieldLabel { ...props } />
       <Form.Input 
         name={ props.name }
         value={ props.value }

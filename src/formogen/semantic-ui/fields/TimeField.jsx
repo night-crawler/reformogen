@@ -6,7 +6,7 @@ import { Form } from 'semantic-ui-react';
 import TimePicker from 'react-times';
 
 import { errorsType, layoutOptsType } from '../../fieldPropTypes';
-import Label from '../common/Label';
+import { FieldLabel } from '../common/FieldLabel';
 import { ErrorsList } from '../common/ErrorsList';
 
 
@@ -51,7 +51,7 @@ export class TimeField extends React.Component {
         width={ this.props.layoutOpts.width }
         error={ !_.isEmpty(this.props.errors) }
       >
-        <Label { ...this.props } />
+        <FieldLabel { ...this.props } />
         <TimePicker 
           autoMode={ true }
           timeMode='24'

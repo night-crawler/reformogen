@@ -4,7 +4,7 @@ import { Form } from 'semantic-ui-react';
 import Select from 'react-select';
 
 import propTypes from '../../fieldPropTypes';
-import Label from '../common/Label';
+import { FieldLabel } from '../common/FieldLabel';
 import { ErrorsList } from '../common/ErrorsList';
 
 
@@ -19,7 +19,7 @@ export default function AsyncManyToManyField(props) {
       width={ props.layoutOpts.width }
       error={ !_.isEmpty(props.errors) }
     >
-      <Label { ...fieldProps } />
+      <FieldLabel { ...fieldProps } />
       <Select { ...props.selectProps } />
       { !props.helpTextOnHover
         ? <span className='help-text'>{ props.help_text }</span>

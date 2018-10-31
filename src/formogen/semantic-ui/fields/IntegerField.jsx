@@ -4,7 +4,7 @@ import { Form } from 'semantic-ui-react';
 import { isEmpty } from 'lodash';
 
 import { errorsType, layoutOptsType } from '../../fieldPropTypes';
-import Label from '../common/Label';
+import { FieldLabel } from '../common/FieldLabel';
 import { ErrorsList } from '../common/ErrorsList';
 
 
@@ -80,7 +80,7 @@ export function IntegerField(props) {
       width={ props.layoutOpts.width }
       error={ !isEmpty(props.errors) }
     >
-      <Label { ...props } />
+      <FieldLabel { ...props } />
       <Form.Input 
         name={ props.name }
         value={ props.value }

@@ -4,7 +4,7 @@ import _ from 'lodash';
 import { Form, Checkbox } from 'semantic-ui-react';
 
 import { errorsType, layoutOptsType } from '../../fieldPropTypes';
-import Label from '../common/Label';
+import { FieldLabel } from '../common/FieldLabel';
 import { ErrorsList } from '../common/ErrorsList';
 
 
@@ -37,7 +37,7 @@ export function BooleanField(props) {
       width={ props.layoutOpts.width }
       error={ !_.isEmpty(props.errors) }
     >
-      <Label { ...props } />
+      <FieldLabel { ...props } />
       <Checkbox 
         name={ props.name }
         checked={ !!props.value || false }

@@ -14,7 +14,7 @@ import DateField from './fields/DateField';
 import TimeField from './fields/TimeField';
 import DropzoneField from './fields/DropzoneField';
 // common import
-import Label from './common/Label';
+import { FieldLabel } from './common/FieldLabel';
 import CaptionTruncator from './common/CaptionTruncator';
 import Form from './common/Form';
 import ModalForm from './common/ModalForm';
@@ -50,7 +50,7 @@ export const fields = {
 };
 
 export const common = {
-  Label,
+  FieldLabel,
   CaptionTruncator,
 
   Form,

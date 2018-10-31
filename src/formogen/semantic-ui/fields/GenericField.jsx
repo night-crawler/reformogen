@@ -3,7 +3,7 @@ import _ from 'lodash';
 import { Form } from 'semantic-ui-react';
 
 import propTypes from '../../fieldPropTypes';
-import Label from '../common/Label';
+import { FieldLabel } from '../common/FieldLabel';
 import { ErrorsList } from '../common/ErrorsList';
 
 
@@ -30,7 +30,7 @@ export function GenericField(props) {
       width={ props.layoutOpts.width }
       error={ !_.isEmpty(props.errors) }
     >
-      <Label { ...props } />
+      <FieldLabel { ...props } />
       <pre>
         { JSON.stringify(_props, null, 4) }
       </pre>

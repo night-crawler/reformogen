@@ -5,7 +5,7 @@ import { Form } from 'semantic-ui-react';
 import Select from 'react-select';
 
 import { errorsType, layoutOptsType } from '../../fieldPropTypes';
-import Label from '../common/Label';
+import { FieldLabel } from '../common/FieldLabel';
 import { ErrorsList } from '../common/ErrorsList';
 
 /**
@@ -52,7 +52,7 @@ export function AutocompleteChoiceField(props) {
       width={ props.layoutOpts.width }
       error={ !_.isEmpty(props.errors) }
     >
-      <Label { ...props } />
+      <FieldLabel { ...props } />
       <Select 
         clearable={ !props.required }
         name={ props.name }

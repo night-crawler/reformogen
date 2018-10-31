@@ -6,7 +6,7 @@ import { Form } from 'semantic-ui-react';
 import DatePicker from 'react-datepicker';
 
 import { errorsType, layoutOptsType } from '../../fieldPropTypes';
-import Label from '../common/Label';
+import { FieldLabel } from '../common/FieldLabel';
 import { ErrorsList } from '../common/ErrorsList';
 
 
@@ -58,7 +58,7 @@ export function DateField(props) {
       width={ props.layoutOpts.width }
       error={ !isEmpty(props.errors) }
     >
-      <Label { ...props } />
+      <FieldLabel { ...props } />
       <DatePicker 
         name={ props.name }
         selected={ props.value ? moment(props.value) : null }

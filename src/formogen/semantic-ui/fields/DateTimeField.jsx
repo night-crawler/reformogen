@@ -6,7 +6,7 @@ import { Form } from 'semantic-ui-react';
 import DatePicker from 'react-datepicker';
 
 import { errorsType, layoutOptsType } from '../../fieldPropTypes';
-import Label from '../common/Label';
+import { FieldLabel } from '../common/FieldLabel';
 import { ErrorsList } from '../common/ErrorsList';
 
 
@@ -45,7 +45,7 @@ DateTimeField.propTypes = {
   updateProps: PropTypes.func,
   onChange: PropTypes.func,
 };
-export default function DateTimeField(props) {
+export function DateTimeField(props) {
   const handleChange = (momentTimeObject, e) => {
     // proxy event with SUI-React compliant style
     props.onChange(e, {
@@ -82,7 +82,7 @@ export default function DateTimeField(props) {
       width={ props.layoutOpts.width }
       error={ !_.isEmpty(props.errors) }
     >
-      <Label { ...props } />
+      <FieldLabel { ...props } />
       <DatePicker { ..._props } />
       {
         !props.helpTextOnHover
