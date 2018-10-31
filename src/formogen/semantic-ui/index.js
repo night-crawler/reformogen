@@ -1,7 +1,7 @@
 // fields import
 import AsyncForeignKeyField from './fields/AsyncForeignKeyField';
 import AsyncManyToManyField from './fields/AsyncManyToManyField';
-import ManyToManyField from './fields/ManyToManyField';
+import ManyToManyField from './fields/InlineManyToManyField';
 import ForeignKeyField from './fields/InlineForeignKeyField';
 import AutocompleteChoiceField from './fields/AutocompleteChoiceField';
 import GenericField from './fields/GenericField';

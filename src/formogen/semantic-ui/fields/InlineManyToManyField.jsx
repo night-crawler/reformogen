@@ -2,19 +2,17 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Form } from 'semantic-ui-react';
 import Select from 'react-select';
-import { isEmpty } from 'lodash';
+import { map, isEmpty } from 'lodash';
 
 import { errorsType, layoutOptsType } from '../../fieldPropTypes';
 import { FieldLabel } from '../common/FieldLabel';
 import { ErrorsList } from '../common/ErrorsList';
 
-import { extractIdentity, remapIdNameToLabelValue } from './utils';
 
-
-InlineForeignKeyField.propTypes = {
+InlineManyToManyField.propTypes = {
   type: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
-  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.object]),
+  value: PropTypes.arrayOf(PropTypes.any),
   data: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.number.isRequired,
     name: PropTypes.string.isRequired,
@@ -30,24 +28,20 @@ InlineForeignKeyField.propTypes = {
   helpTextOnHover: PropTypes.bool,
   layoutOpts: layoutOptsType,
 
-  isRtl: PropTypes.bool,
-
   getOptionLabel: PropTypes.func,
   getOptionValue: PropTypes.func,
+  closeOnSelect: PropTypes.bool,
 
   onChange: PropTypes.func,
 };
-InlineForeignKeyField.defaultProps = {
-  data: [],
-  isRtl: false,
+InlineManyToManyField.defaultProps = {
   getOptionLabel: ({ name }) => name,
   getOptionValue: ({ id }) => id,
+  closeOnSelect: true,
 };
-export function InlineForeignKeyField(props) {
-  const handleChange = ({ id }) => props.onChange(null, { 
-    name: props.name, 
-    value: id || null
-  });
+export function InlineManyToManyField(props) {
+  const handleChange = val =>
+    props.onChange(null, { name: props.name, value: map(val, 'id') });
 
   return (
     <Form.Field
@@ -57,28 +51,23 @@ export function InlineForeignKeyField(props) {
       error={ !isEmpty(props.errors) }
     >
       <FieldLabel { ...props } />
-      <Select
-        isClearable={ !props.required }
-        closeOnSelect={ true }
-        disabled={ !props.editable }
-        isMulti={ false }
+      <Select 
+        isClearable={ props.editable }
+        closeOnSelect={ props.closeOnSelect }
+        isDisabled={ !props.editable }
+        isMulti={ true }
         onChange={ handleChange }
         options={ props.data }
         placeholder={ props.placeholder }
-        simpleValue={ true }
-        
-        value={ props.data.filter(({ id }) => props.value === id ) }
-
-        inputProps={ { type: 'react-type' } }
-        removeSelected={ true }
-        isRtl={ props.isRtl }
+        value={ props.data.filter(({ id }) => props.value.includes(id) ) }
 
         getOptionLabel={ props.getOptionLabel }
         getOptionValue={ props.getOptionValue }
       />
-      { !props.helpTextOnHover
-        ? <span className='help-text'>{ props.help_text }</span>
-        : ''
+
+      { !props.helpTextOnHover 
+        ? <span className='help-text'>{ props.help_text }</span> 
+        : '' 
       }
       <ErrorsList messages={ props.errors } />
     </Form.Field>

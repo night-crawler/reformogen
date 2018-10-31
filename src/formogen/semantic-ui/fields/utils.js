@@ -1,5 +1,9 @@
 import { isPlainObject, isArray, isEmpty, isNumber, isString, map } from 'lodash';
 
+export const remapIdNameToLabelValue = fieldData => fieldData.map(
+  ({ id, name }) => ({ label: name, value: id })
+);
+
 export function extractIdentity(value) {
   if (!value)
     return null;
