@@ -8,15 +8,12 @@ import { errorsType, layoutOptsType } from '../../fieldPropTypes';
 import Label from '../common/Label';
 import { ErrorsList } from '../common/ErrorsList';
 
-
-const makeReactSelectOptions = (choices) => {
-  return choices.map(([key, val]) => {
-    return {
-      value: key,
-      label: val,
-    };
-  });
-};
+/**
+ * Converts structures like [ [ 1, 'Choice' ] ] -> [ { value: 1, label: 'Choice' } ]
+ * @param {Array} choices 
+ */
+const makeReactSelectOptions = choices => choices.map(
+  ([ value, label ]) => ({ value, label }));
 
 
 AutocompleteChoiceField.propTypes = {
@@ -35,30 +32,18 @@ AutocompleteChoiceField.propTypes = {
   helpTextOnHover: PropTypes.bool,
   layoutOpts: layoutOptsType,
 
-  updateProps: PropTypes.func,
   onChange: PropTypes.func,
 };
-export default function AutocompleteChoiceField(props) {
-  const handleChange = (newVal) => {
+AutocompleteChoiceField.defaultProps = {
+  choices: [],
+};
+export function AutocompleteChoiceField(props) {
+  const handleChange = newVal => {
     props.onChange(
       null,
       { name: props.name, value: newVal ? newVal.value : null }
     );
   };
-
-  let _props = {
-    clearable: !props.required,
-    name: props.name,
-    value: props.value,
-    placeholder: props.placeholder,
-    options: makeReactSelectOptions(props.choices),
-    onChange: handleChange,
-    inputProps: { type: 'react-type' },  // fixing breaking semantic markup
-  };
-
-  if (_.isFunction(props.updateProps)) {
-    _props = props.updateProps(_props, props);
-  }
 
   return (
     <Form.Field
@@ -68,11 +53,18 @@ export default function AutocompleteChoiceField(props) {
       error={ !_.isEmpty(props.errors) }
     >
       <Label { ...props } />
-      <Select { ..._props } />
-      {
-        !props.helpTextOnHover
-          ? <span className='help-text'>{ props.help_text }</span>
-          : ''
+      <Select 
+        clearable={ !props.required }
+        name={ props.name }
+        value={ props.value }
+        placeholder={ props.placeholder }
+        options={ makeReactSelectOptions(props.choices) }
+        onChange={ handleChange }
+        inputProps={ { type: 'react-type' } }
+      />
+      { !props.helpTextOnHover 
+        ? <span className='help-text'>{ props.help_text }</span>
+        : ''
       }
       <ErrorsList messages={ props.errors } />
     </Form.Field>
