@@ -13,6 +13,10 @@ import { BooleanField } from '~/formogen/semantic-ui/fields/BooleanField';
 
 import { DateTimeField } from '~/formogen/semantic-ui/fields/DateTimeField';
 
+import { DateField } from '~/formogen/semantic-ui/fields/DateField';
+
+import { TimeField } from '~/formogen/semantic-ui/fields/TimeField';
+
 import { GenericField } from '~/formogen/semantic-ui/fields/GenericField';
 
 import { InlineForeignKeyField } from '~/formogen/semantic-ui/fields/InlineForeignKeyField';
@@ -28,17 +32,68 @@ const formLayout = [
   { 
     header: 'Generic stuff', 
     fields: [
-      <CharField key='1' name='charField' verbose_name='CharField' editable={ true } type='CharField' layoutOpts={ { width: 4 } } />,
-      <IntegerField key='2' name='integerField' verbose_name='IntegerField' editable={ true } type='IntegerField' layoutOpts={ { width: 4 } } />,
-      <BooleanField key='3' name='bool-1' verbose_name='BooleanField' editable={ true } type='BooleanField' layoutOpts={ { width: 4 } } />,
-      <BooleanField key='4' name='bool-2' help_text='with toggle' widget='toggle' verbose_name='BooleanField' editable={ true } type='BooleanField' layoutOpts={ { width: 4 } } />,
-      <GenericField key='4' name='generic-1'  widget='toggle' verbose_name='BooleanField' editable={ true } type='BooleanField' layoutOpts={ { width: 4 } } />,
+      <CharField 
+        key='1' name='charField' 
+        verbose_name='CharField' 
+        editable={ true } 
+        type='CharField' 
+        layoutOpts={ { width: 4 } } 
+      />,
+      <IntegerField 
+        key='2' 
+        name='integerField' 
+        verbose_name='IntegerField' 
+        editable={ true } 
+        type='IntegerField' 
+        layoutOpts={ { width: 4 } } 
+      />,
+      <BooleanField 
+        key='3' 
+        name='bool-2' 
+        help_text='with toggle' 
+        widget='toggle' 
+        verbose_name='BooleanField' 
+        editable={ true } 
+        type='BooleanField' layoutOpts={ { width: 4 } } 
+      />,
+      <GenericField 
+        key='4' 
+        name='generic-1'  
+        widget='toggle' 
+        verbose_name='BooleanField' 
+        editable={ true } 
+        type='BooleanField' 
+        layoutOpts={ { width: 4 } } 
+      />,
     ]
   },
   {
     header: 'Date & time stuff', 
     fields: [
-      <DateTimeField key='1' name='DateTimeField' verbose_name='DateTimeField' editable={ true } type='DateTimeField' layoutOpts={ { width: 4 } } />,
+      <DateTimeField 
+        key='1' 
+        name='DateTimeField' 
+        verbose_name='DateTimeField' 
+        editable={ true } 
+        type='DateTimeField' 
+        layoutOpts={ { width: 4 } } 
+      />,
+      <DateField 
+        key='2' 
+        name='DateField' 
+        verbose_name='DateField' 
+        editable={ true } 
+        type='DateField' 
+        layoutOpts={ { width: 4 } } 
+      />,
+      <TimeField 
+        key='3' 
+        name='TimeField' 
+        verbose_name='TimeField' 
+        editable={ true } 
+        type='TimeField' 
+        layoutOpts={ { width: 4 } } 
+      />,
     ]
   }
 ];

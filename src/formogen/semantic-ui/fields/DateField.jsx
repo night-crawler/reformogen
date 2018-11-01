@@ -1,3 +1,5 @@
+import './ReactDatepicker.fix.css';
+
 import React from 'react';
 import PropTypes from 'prop-types';
 import { isEmpty } from 'lodash';
@@ -60,6 +62,7 @@ export function DateField(props) {
     >
       <FieldLabel { ...props } />
       <DatePicker 
+        style={ { width: '100%' } }
         name={ props.name }
         selected={ props.value ? moment(props.value) : null }
         onChange={ handleChange }
