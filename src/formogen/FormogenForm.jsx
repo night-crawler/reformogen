@@ -27,9 +27,9 @@ const defaultFieldComponentMap = {
   GenericField: suiFields.GenericField,
 };
 
-export class FormogenFormComponent extends Component {
+export class FormogenForm extends Component {
   static propTypes = {
-    formId: PropTypes.string.isRequired,
+    getFormId: PropTypes.func,
 
     loading: PropTypes.bool,
     locale: PropTypes.string,
@@ -37,9 +37,22 @@ export class FormogenFormComponent extends Component {
     upperFirstLabels: PropTypes.bool,
     helpTextOnHover: PropTypes.bool,
 
-    onFieldChange: PropTypes.func,
-    onSubmit: PropTypes.func,
-    onNetworkError: PropTypes.func,
+    /** a mapping of FieldType to FieldComponent: { BooleanField: <BooleanFieldClass> }  */
+    componentMap: PropTypes.object,
+
+    /** form description */
+    metaData: PropTypes.arrayOf(PropTypes.object).isRequired,
+
+    /* formdata */
+    formData: PropTypes.object,
+
+    actions: PropTypes.shape({
+      bootstrap: PropTypes.func,
+    }),
+  };
+  static defaultProps = {
+    componentMap: defaultFieldComponentMap,
+    getFormId: props => {}
   };
 
   render() {
@@ -48,5 +61,9 @@ export class FormogenFormComponent extends Component {
         
       </div>
     );
+  }
+
+  componentDidMount = () => {
+    this.props.actions.bootstrap();
   }
 }

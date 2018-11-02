@@ -1,10 +1,10 @@
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 
-import { FormogenFormComponent } from './FormogenFormComponent';
-import { 
-  
-} from './selectors';
+import { FormogenForm as FormogenFormComponent } from '../formogen/FormogenForm';
+
+import { } from './selectors';
+import { bootstrap } from './actions';
 
 
 function mapDispatchToProps(dispatch) {
@@ -20,6 +20,10 @@ function mergeProps(stateProps, dispatchProps, ownProps) {
     ...ownProps,
     ...stateProps,
     ...dispatchProps,
+
+    actions: {
+      bootstrap: () => dispatch(bootstrap())
+    },
 
     dispatch: undefined,
   };

@@ -2,7 +2,6 @@ import React from 'react';
 import { Form, Segment, Container } from 'semantic-ui-react';
 import createHistory from 'history/createBrowserHistory';
 import { Provider } from 'react-redux';
-import { ConnectedRouter } from 'react-router-redux';
 
 import initialState from '~/initialState';
 
@@ -29,7 +28,5 @@ export const withContainerSegment = storyFn =>
 
 export const withStore = storyFn => 
   <Provider store={ store }>
-    <ConnectedRouter history={ history }>
-      { storyFn() }
-    </ConnectedRouter>
+    { storyFn() }
   </Provider>;
