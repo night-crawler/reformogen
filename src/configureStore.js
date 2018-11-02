@@ -34,7 +34,5 @@ export default function configureStore(initialState = {}, history) {
     composeEnhancers(...enhancers)
   );
 
-  store.injectedReducers = {};
-
   return store;
 }

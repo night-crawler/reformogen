@@ -5,11 +5,11 @@ import { action } from '@storybook/addon-actions';
 
 import { IntegerField } from '~/formogen/semantic-ui/fields/IntegerField';
 
-import { ContainerSegmentFormDecorator } from './storyDecorators';
+import { withContainerSegmentForm } from './storyDecorators';
 import { errorArray } from './sampleData';
 
 
-const stories = storiesOf('Fields|IntegerField', module).addDecorator(ContainerSegmentFormDecorator);
+const stories = storiesOf('Fields|IntegerField', module).addDecorator(withContainerSegmentForm);
 
 
 stories.add('default', () => {

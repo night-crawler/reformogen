@@ -3,10 +3,10 @@ import { storiesOf } from '@storybook/react';
 
 import { ErrorsList } from '~/formogen/semantic-ui/ErrorsList';
 
-import { ContainerSegmentFormDecorator } from './storyDecorators';
+import { withContainerSegmentForm } from './storyDecorators';
 
 
-const stories = storiesOf('Fields|ErrorsList', module).addDecorator(ContainerSegmentFormDecorator);
+const stories = storiesOf('Fields|ErrorsList', module).addDecorator(withContainerSegmentForm);
 
 
 stories.add('default', () => {

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import _ from 'lodash';
 import { Button, Checkbox, Form, Icon, Image, List, Segment } from 'semantic-ui-react';
+import { isEmpty, get, upperFirst, without, isArray, keyBy } from 'lodash';
 import Measure from 'react-measure';
 import Dropzone from 'react-dropzone';
 
@@ -60,14 +60,14 @@ FilesPreview.propTypes = {
   formFilesUploadProgress: PropTypes.object
 };
 function FilesPreview({ files, onClear, getFileIcon, onRemoveFile, formFilesUploadProgress }) {
-  if (_.isEmpty(files))
+  if (isEmpty(files))
     return null;
 
   return (
     <Segment attached={ true }>
       <List divided={ true } relaxed={ true } className='files-previews'>
         { files.map((file, i) => {
-          const progress = _.get(formFilesUploadProgress, file.name, {});
+          const progress = get(formFilesUploadProgress, file.name, {});
           return <FileItem
             key={ i }
             file={ file }
@@ -94,7 +94,7 @@ CurrentFilesPreview.propTypes = {
   onRemove: PropTypes.func,
 };
 function CurrentFilesPreview({ currentFiles, removable = true, onRemove }) {
-  const files = _.isArray(currentFiles) ? currentFiles : [currentFiles];
+  const files = isArray(currentFiles) ? currentFiles : [currentFiles];
 
   const listItems = files.map((value, i) => (
     <List.Item key={ i }>
@@ -233,7 +233,7 @@ export default class DropzoneField extends React.Component {
       const keyBuilder = (item) => `${ item.lastModified }:${ item.size }:${ item.name }`;
       const mergedFiles = _(oldFiles)
         .keyBy(keyBuilder)
-        .merge(_.keyBy(newFiles, keyBuilder))
+        .merge(keyBy(newFiles, keyBuilder))
         .values()
         .value();
 
@@ -257,7 +257,7 @@ export default class DropzoneField extends React.Component {
       );
     };
     handleRemoveFile = (fileObject) => {
-      const files = _.without(this.state.files, fileObject);
+      const files = without(this.state.files, fileObject);
       this.setState({ files });
 
       return this.props.onChange(
@@ -270,7 +270,7 @@ export default class DropzoneField extends React.Component {
     };
 
     render() {
-      const labelText = this.props.upperFirstLabel ? _.upperFirst(this.props.verbose_name) : this.props.verbose_name;
+      const labelText = this.props.upperFirstLabel ? upperFirst(this.props.verbose_name) : this.props.verbose_name;
 
       let _props = {
         multiple: this.props.multiple,
@@ -278,24 +278,20 @@ export default class DropzoneField extends React.Component {
         accept: this.props.accept,
       };
 
-      if (_.isFunction(this.props.updateProps)) {
-        _props = this.props.updateProps(_props, this.props);
-      }
-
-      const showCurrentFilesPreview = this.props.value && _.isEmpty(this.state.files);
+      const showCurrentFilesPreview = this.props.value && isEmpty(this.state.files);
 
       return (
         <Form.Field
           required={ this.props.required }
           disabled={ !this.props.editable }
           width={ this.props.layoutOpts.width }
-          error={ !_.isEmpty(this.props.errors) }
+          error={ !isEmpty(this.props.errors) }
         >
           <Dropzone className='ui center aligned dropzone segment attached top'  { ..._props }>
             <strong>{ labelText } { this.props.required && <span className='ui red'>*</span> }</strong>
             { this.props.help_text && <div className='help-text'>{ this.props.help_text }</div> }
             <div>
-              { !_.isEmpty(this.state.files) || 'Drop files here' }
+              { !isEmpty(this.state.files) || 'Drop files here' }
             </div>
           </Dropzone>
 

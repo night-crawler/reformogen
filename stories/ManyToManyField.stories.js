@@ -5,10 +5,10 @@ import { action } from '@storybook/addon-actions';
 
 import { InlineManyToManyField } from '~/formogen/semantic-ui/fields/InlineManyToManyField';
 
-import { ContainerSegmentFormDecorator } from './storyDecorators';
+import { withContainerSegmentForm } from './storyDecorators';
 import { errorArray, inlineFieldData } from './sampleData';
 
-const stories = storiesOf('Fields|ManyToManyField', module).addDecorator(ContainerSegmentFormDecorator);
+const stories = storiesOf('Fields|ManyToManyField', module).addDecorator(withContainerSegmentForm);
 
 
 class InlineManyToManyFieldWrapper extends React.Component {

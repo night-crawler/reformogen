@@ -3,7 +3,7 @@ import { text, boolean, number, select } from '@storybook/addon-knobs';
 import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 
-import { ContainerSegmentDecorator } from './storyDecorators';
+import { withContainerSegment } from './storyDecorators';
 
 import { CharField } from '~/formogen/semantic-ui/fields/CharField';
 
@@ -32,7 +32,7 @@ import { FormComponent } from '~/formogen/semantic-ui/FormComponent';
 import { inlineFieldData, choiceFieldChoices } from './sampleData';
 
 
-const stories = storiesOf('Form|FormComponent', module).addDecorator(ContainerSegmentDecorator);
+const stories = storiesOf('Form|FormComponent', module).addDecorator(withContainerSegment);
 
 const formLayout = [
   { 

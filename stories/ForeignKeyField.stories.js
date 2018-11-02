@@ -5,10 +5,10 @@ import { action } from '@storybook/addon-actions';
 
 import { InlineForeignKeyField } from '~/formogen/semantic-ui/fields/InlineForeignKeyField';
 
-import { ContainerSegmentFormDecorator } from './storyDecorators';
+import { withContainerSegmentForm } from './storyDecorators';
 import { errorArray, inlineFieldData } from './sampleData';
 
-const stories = storiesOf('Fields|ForeignKeyField', module).addDecorator(ContainerSegmentFormDecorator);
+const stories = storiesOf('Fields|ForeignKeyField', module).addDecorator(withContainerSegmentForm);
 
 
 class InlineForeignKeyFieldWrapper extends React.Component {

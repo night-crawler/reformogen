@@ -5,10 +5,10 @@ import { action } from '@storybook/addon-actions';
 
 import { AutocompleteChoiceField } from '~/formogen/semantic-ui/fields/AutocompleteChoiceField';
 
-import { ContainerSegmentFormDecorator } from './storyDecorators';
+import { withContainerSegmentForm } from './storyDecorators';
 import { errorArray, choiceFieldChoices } from './sampleData';
 
-const stories = storiesOf('Fields|AutocompleteChoiceField', module).addDecorator(ContainerSegmentFormDecorator);
+const stories = storiesOf('Fields|AutocompleteChoiceField', module).addDecorator(withContainerSegmentForm);
 
 
 stories.add('default', () => {

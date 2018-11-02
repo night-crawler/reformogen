@@ -5,10 +5,10 @@ import { action } from '@storybook/addon-actions';
 
 import { GenericField } from '~/formogen/semantic-ui/fields/GenericField';
 
-import { ContainerSegmentFormDecorator } from './storyDecorators';
+import { withContainerSegmentForm } from './storyDecorators';
 import { errorArray } from './sampleData';
 
-const stories = storiesOf('Fields|GenericField', module).addDecorator(ContainerSegmentFormDecorator);
+const stories = storiesOf('Fields|GenericField', module).addDecorator(withContainerSegmentForm);
 
 
 stories.add('default', () => {

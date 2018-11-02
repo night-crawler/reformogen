@@ -16,6 +16,7 @@
         "Dropdown",
         "Truncator",
         "datepicker",
+        "formdata",
         "formogen",
         "nowrap"
     ],
