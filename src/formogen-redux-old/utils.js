@@ -1,6 +1,5 @@
 import _ from 'lodash';
 import Cookies from 'js-cookie';
-import * as URI from 'urijs';
 
 
 export const DEFAULT_HEADERS = {
