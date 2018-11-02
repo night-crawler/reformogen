@@ -33,17 +33,6 @@ TextField.propTypes = {
   onChange: PropTypes.func,
 };
 export function TextField(props) {
-  let _props = {
-    name: props.name,
-    value: props.value,
-    onChange: props.onChange,
-    placeholder: props.placeholder,
-  };
-
-  if (_.isFunction(props.updateProps)) {
-    _props = props.updateProps(_props, props);
-  }
-
   return (
     <Form.Field
       required={ props.required }
@@ -52,7 +41,12 @@ export function TextField(props) {
       error={ !_.isEmpty(props.errors) }
     >
       <FieldLabel { ...props } />
-      <Form.TextArea { ..._props } />
+      <Form.TextArea 
+        name={ props.name }
+        value={ props.value }
+        onChange={ props.onChange }
+        placeholder={ props.placeholder }
+      />
       { !props.helpTextOnHover
         ? <span className='help-text'>{ props.help_text }</span>
         : ''

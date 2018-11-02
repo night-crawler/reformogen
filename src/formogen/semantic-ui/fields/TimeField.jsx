@@ -9,7 +9,6 @@ import { errorsType, layoutOptsType } from '../../fieldPropTypes';
 import { FieldLabel } from '../FieldLabel';
 import { ErrorsList } from '../ErrorsList';
 
-
 export class TimeField extends React.Component {
   static propTypes = {
     type: PropTypes.string.isRequired,
@@ -41,8 +40,6 @@ export class TimeField extends React.Component {
       meridiem: props.meridiem || null,
     };
   }
-
-  
   render() {
     return (
       <Form.Field
