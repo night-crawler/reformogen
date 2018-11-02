@@ -22,7 +22,7 @@ AutocompleteChoiceField.propTypes = {
   value: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   choices: PropTypes.arrayOf(PropTypes.array),
   max_length: PropTypes.number,
-  help_text: PropTypes.string.isRequired,
+  help_text: PropTypes.string,
   placeholder: PropTypes.string,
   errors: errorsType,
 

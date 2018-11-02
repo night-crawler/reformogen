@@ -18,7 +18,7 @@ InlineManyToManyField.propTypes = {
     name: PropTypes.string.isRequired,
   })),
   max_length: PropTypes.number,
-  help_text: PropTypes.string.isRequired,
+  help_text: PropTypes.string,
   placeholder: PropTypes.string,
   errors: errorsType,
 
@@ -38,6 +38,8 @@ InlineManyToManyField.defaultProps = {
   getOptionLabel: ({ name }) => name,
   getOptionValue: ({ id }) => id,
   closeOnSelect: true,
+  data: [],
+  value: [],
 };
 export function InlineManyToManyField(props) {
   const handleChange = val =>

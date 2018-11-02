@@ -6,7 +6,7 @@ import { action } from '@storybook/addon-actions';
 import { IntegerField } from '~/formogen/semantic-ui/fields/IntegerField';
 
 import { ContainerSegmentFormDecorator } from './storyDecorators';
-import { errorArray } from './ErrorMessages.sample';
+import { errorArray } from './sampleData';
 
 
 const stories = storiesOf('Fields|IntegerField', module).addDecorator(ContainerSegmentFormDecorator);

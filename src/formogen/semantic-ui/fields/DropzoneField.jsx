@@ -162,7 +162,7 @@ export default class DropzoneField extends React.Component {
       type: PropTypes.string.isRequired,
       name: PropTypes.string.isRequired,
       verbose_name: PropTypes.string.isRequired,
-      help_text: PropTypes.string.isRequired,
+      help_text: PropTypes.string,
       upperFirstLabel: PropTypes.bool,
       required: PropTypes.bool,
       editable: PropTypes.bool,

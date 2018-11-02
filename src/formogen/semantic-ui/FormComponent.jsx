@@ -5,6 +5,15 @@ import { isEmpty } from 'lodash';
 
 import { NonFieldErrorsList } from './NonFieldErrorsList';
 
+function DefaultSubmitComponent(props) {
+  const { style, ...rest } = props;
+  const patchedStyle = {
+    marginTop: '20px',
+    ...style,
+  };
+  return <Button style={ patchedStyle } { ...rest } />;
+}
+
 
 FormComponent.displayName = 'FormComponent';
 FormComponent.propTypes = {
@@ -24,9 +33,10 @@ FormComponent.propTypes = {
   onSubmit: PropTypes.func,
 };
 FormComponent.defaultProps = {
+  loading: false,
   title: 'Formogen Form',
   isTitleVisible: true,
-  submitComponent: Button,
+  submitComponent: DefaultSubmitComponent,
 };
 export function FormComponent(props) {
   const { submitComponent: SubmitComponent } = props;

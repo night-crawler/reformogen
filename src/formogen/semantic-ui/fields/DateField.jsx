@@ -17,7 +17,7 @@ DateField.propTypes = {
   name: PropTypes.string.isRequired,
   value: PropTypes.string,
   max_length: PropTypes.number,
-  help_text: PropTypes.string.isRequired,
+  help_text: PropTypes.string,
   placeholder: PropTypes.string,
   errors: errorsType,
 

@@ -6,7 +6,7 @@ import { action } from '@storybook/addon-actions';
 import { TextField } from '~/formogen/semantic-ui/fields/TextField';
 
 import { ContainerSegmentFormDecorator } from './storyDecorators';
-import { errorArray } from './ErrorMessages.sample';
+import { errorArray } from './sampleData';
 
 const stories = storiesOf('Fields|TextField', module).addDecorator(ContainerSegmentFormDecorator);
 

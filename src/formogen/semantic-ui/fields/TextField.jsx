@@ -14,7 +14,7 @@ TextField.propTypes = {
 
   name: PropTypes.string.isRequired,
   verbose_name: PropTypes.string.isRequired,
-  help_text: PropTypes.string.isRequired,
+  help_text: PropTypes.string,
   errors: errorsType,
 
   max_length: PropTypes.number,

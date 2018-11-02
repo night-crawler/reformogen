@@ -12,7 +12,7 @@ BooleanField.propTypes = {
   type: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   value: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
-  help_text: PropTypes.string.isRequired,
+  help_text: PropTypes.string,
   placeholder: PropTypes.string,
   widget: PropTypes.string,
   errors: errorsType,

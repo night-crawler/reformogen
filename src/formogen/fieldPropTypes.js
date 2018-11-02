@@ -16,7 +16,7 @@ const defaultFieldPropTypes = {
 
   name: PropTypes.string.isRequired,
   verbose_name: PropTypes.string.isRequired,
-  help_text: PropTypes.string.isRequired,
+  help_text: PropTypes.string,
   errors: PropTypes.array,
 
   max_length: PropTypes.number, /* for CharField && TextField */

@@ -8,8 +8,6 @@ import { errorsType, layoutOptsType } from '../../fieldPropTypes';
 import { FieldLabel } from '../FieldLabel';
 import { ErrorsList } from '../ErrorsList';
 
-import { extractIdentity, remapIdNameToLabelValue } from './utils';
-
 
 InlineForeignKeyField.propTypes = {
   type: PropTypes.string.isRequired,
@@ -20,7 +18,7 @@ InlineForeignKeyField.propTypes = {
     name: PropTypes.string.isRequired,
   })),
   max_length: PropTypes.number,
-  help_text: PropTypes.string.isRequired,
+  help_text: PropTypes.string,
   placeholder: PropTypes.string,
   errors: errorsType,
 

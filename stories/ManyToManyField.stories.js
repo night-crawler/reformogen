@@ -6,19 +6,14 @@ import { action } from '@storybook/addon-actions';
 import { InlineManyToManyField } from '~/formogen/semantic-ui/fields/InlineManyToManyField';
 
 import { ContainerSegmentFormDecorator } from './storyDecorators';
-import { errorArray } from './ErrorMessages.sample';
+import { errorArray, inlineFieldData } from './sampleData';
 
 const stories = storiesOf('Fields|ManyToManyField', module).addDecorator(ContainerSegmentFormDecorator);
 
 
 class InlineManyToManyFieldWrapper extends React.Component {
   state = {
-    data: [
-      { id: 1, name: 'sample1' },
-      { id: 2, name: 'sample2' },
-      { id: 3, name: 'sample3' },
-      { id: 4, name: 'sample4' },
-    ],
+    data: inlineFieldData,
     value: [ 1 ],
   };
 

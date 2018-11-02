@@ -4,7 +4,7 @@ import { storiesOf } from '@storybook/react';
 import { NonFieldErrorsList } from '~/formogen/semantic-ui/NonFieldErrorsList';
 
 import { ContainerSegmentFormDecorator } from './storyDecorators';
-import { errorArray } from './ErrorMessages.sample';
+import { errorArray } from './sampleData';
 
 
 const stories = storiesOf('Fields|NonFieldErrorsList', module).addDecorator(ContainerSegmentFormDecorator);

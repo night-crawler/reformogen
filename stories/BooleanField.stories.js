@@ -6,7 +6,7 @@ import { action } from '@storybook/addon-actions';
 import { BooleanField } from '~/formogen/semantic-ui/fields/BooleanField';
 
 import { ContainerSegmentFormDecorator } from './storyDecorators';
-import { errorArray } from './ErrorMessages.sample';
+import { errorArray } from './sampleData';
 
 const stories = storiesOf('Fields|BooleanField', module).addDecorator(ContainerSegmentFormDecorator);
 

@@ -6,15 +6,9 @@ import { action } from '@storybook/addon-actions';
 import { AutocompleteChoiceField } from '~/formogen/semantic-ui/fields/AutocompleteChoiceField';
 
 import { ContainerSegmentFormDecorator } from './storyDecorators';
-import { errorArray } from './ErrorMessages.sample';
+import { errorArray, choiceFieldChoices } from './sampleData';
 
 const stories = storiesOf('Fields|AutocompleteChoiceField', module).addDecorator(ContainerSegmentFormDecorator);
-
-const sampleChoices = [
-  [ 0, 'dead' ],
-  [ 255, 'alive' ],
-  [ 30, 'dried' ]
-];
 
 
 stories.add('default', () => {
@@ -28,7 +22,7 @@ stories.add('default', () => {
       verbose_name={ text('verbose_name', 'verbose name of the field') }
       layoutOpts={ { width: number('layoutOpts.width', 4, { range: true, min: 1, max: 16 }) } }
       onChange={ action('onChange') }
-      choices={ sampleChoices }
+      choices={ choiceFieldChoices }
       errors={ errorArray }
     />
   );

@@ -16,7 +16,7 @@ export class TimeField extends React.Component {
     name: PropTypes.string.isRequired,
     value: PropTypes.string,
     max_length: PropTypes.number,
-    help_text: PropTypes.string.isRequired,
+    help_text: PropTypes.string,
     errors: errorsType,
   
     required: PropTypes.bool,

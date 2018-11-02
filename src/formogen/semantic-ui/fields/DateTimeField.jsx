@@ -15,7 +15,7 @@ DateTimeField.propTypes = {
   name: PropTypes.string.isRequired,
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(Date)]),
   max_length: PropTypes.number,
-  help_text: PropTypes.string.isRequired,
+  help_text: PropTypes.string,
   placeholder: PropTypes.string,
   errors: errorsType,
 

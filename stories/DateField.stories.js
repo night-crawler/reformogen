@@ -7,7 +7,7 @@ import { action } from '@storybook/addon-actions';
 import { DateField } from '~/formogen/semantic-ui/fields/DateField';
 
 import { ContainerSegmentFormDecorator } from './storyDecorators';
-import { errorArray } from './ErrorMessages.sample';
+import { errorArray } from './sampleData';
 
 const stories = storiesOf('Fields|DateField', module).addDecorator(ContainerSegmentFormDecorator);
 

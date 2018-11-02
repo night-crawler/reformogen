@@ -15,7 +15,7 @@ IntegerField.propTypes = {
   min_value: PropTypes.number,
   max_value: PropTypes.number,
   decimal_places: PropTypes.number,
-  help_text: PropTypes.string.isRequired,
+  help_text: PropTypes.string,
   placeholder: PropTypes.string,
   errors: errorsType,
 
