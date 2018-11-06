@@ -8,3 +8,6 @@ export const PROJECT_NAME = 'formogen';
 const PREFIX = `@${PROJECT_NAME}`;
 
 export const BOOTSTRAP = `${PREFIX}/BOOTSTRAP`;
+
+export const STORE_FORM_DATA = `${PREFIX}/STORE_FORM_DATA`;
+export const STORE_FORM_METADATA = `${PREFIX}/STORE_FORM_METADATA`;

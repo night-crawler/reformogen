@@ -110,6 +110,10 @@ export class FormogenForm extends Component {
   }
 
   componentDidMount = () => {
-    this.props.actions.bootstrap();
+    this.props.actions.bootstrap({
+      formId: this.props.getFormId(this.props),
+      describeUrl: this.props.describeUrl,
+      createUrl: this.props.createUrl,
+    });
   }
 }

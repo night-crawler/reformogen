@@ -10,6 +10,8 @@ import configureStore from '~/configureStore';
 const history = createHistory();
 const store = configureStore(initialState, history);
 
+export const dispatch = store.dispatch;
+
 export const withContainerSegmentForm = storyFn =>
   <Container fluid={ true }>
     <Segment basic={ true } color='red'>
