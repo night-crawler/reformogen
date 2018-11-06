@@ -15,11 +15,10 @@ const stories = storiesOf('Formogen|FormogenForm', module)
 stories.add('all metaData', () => {
   return (
     <FormogenForm 
+      formId='bla'
       metaData={ fullPossibleMetadata }  
       getFieldComponent={ sui.getFieldComponentForType }
       getFormComponent={ () => sui.FormComponent }
-
-      describeUrl='bla'
 
       actions={ {
         bootstrap: () => {}

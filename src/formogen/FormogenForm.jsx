@@ -6,7 +6,7 @@ import { unfoldWildcardFieldsets } from './utils';
 
 export class FormogenForm extends Component {
   static propTypes = {
-    getFormId: PropTypes.func,
+    formId: PropTypes.string.isRequired,
 
     loading: PropTypes.bool,
     locale: PropTypes.string,
@@ -40,7 +40,7 @@ export class FormogenForm extends Component {
   };
   static defaultProps = {
     errorsFieldMap: {},
-    getFormId: props => props.describeUrl,
+    formId: 'formogen-form-1',
 
     fieldsets: [
       {
@@ -58,7 +58,6 @@ export class FormogenForm extends Component {
 
   render() {
     const FormComponent = this.props.getFormComponent();
-    const formId = this.props.getFormId(this.props);
 
     return (
       <FormComponent 
@@ -67,7 +66,7 @@ export class FormogenForm extends Component {
         title={ this.props.title }
         isTitleVisible={ this.props.isTitleVisible }
         submitComponent={ this.props.submitComponent }
-        key={ `FormComponent-${formId}` }  
+        key={ `FormComponent-${this.props.formId}` }  
         formLayout={ this.renderFieldsets() }
       />
     );
@@ -92,10 +91,9 @@ export class FormogenForm extends Component {
   }
 
   renderField(FieldComponent, opts, displayOptions) {
-    const formId = this.props.getFormId(this.props);
     const mergedOpts = {
-      key: `Form:${formId}-${opts.type}-${opts.name}`,
-      formId: formId,
+      key: `Form:${this.props.formId}-${opts.type}-${opts.name}`,
+      formId: this.props.formId,
       locale: this.props.locale,
       upperFirstLabel: this.props.upperFirstLabels,
       helpTextOnHover: this.props.helpTextOnHover,
@@ -110,10 +108,6 @@ export class FormogenForm extends Component {
   }
 
   componentDidMount = () => {
-    this.props.actions.bootstrap({
-      formId: this.props.getFormId(this.props),
-      describeUrl: this.props.describeUrl,
-      createUrl: this.props.createUrl,
-    });
+    this.props.actions.bootstrap();
   }
 }

@@ -4,18 +4,18 @@ import {
 } from './constants';
 
 export function formogenReducer(state = {}, action) {
-  const { type , payload } = action;
+  const { type, payload } = action;
   switch (type) {
     case STORE_FORM_DATA:
       return {
         ...state,
-        [payload.formId]: payload.formData,
+        [`formData:${payload.formId}`]: payload.formData,
       };
 
     case STORE_FORM_METADATA:
       return {
         ...state,
-        [payload.formId]: payload.formMetaData,
+        [`formMetaData:${payload.formId}`]: payload.formMetaData,
       };
 
     default:

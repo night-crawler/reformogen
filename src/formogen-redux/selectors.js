@@ -1,7 +1,9 @@
 import { createSelector } from 'reselect';
 
 
-export const formogen = state => state.formogen;
+export const formogen = state => {
+  return state.formogen;
+};
 export const props = (state, props) => props;
 
 export const formId = createSelector(
@@ -9,11 +11,14 @@ export const formId = createSelector(
 );
 
 export const formData = createSelector(
-  [formogen, props], 
-  formogen => ''
+  [ formogen, formId ], 
+  (formogen, formId) => formogen[`formData:${formId}`]
 );
 
 
-export const formMetaData = createSelector(
-  formogen, formogen => ''
+export const metaData = createSelector(
+  [ formogen, formId ], 
+  (formogen, formId) => {
+    return formogen[`formMetaData:${formId}`];
+  }
 );

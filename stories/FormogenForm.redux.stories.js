@@ -23,7 +23,18 @@ const metaData = {
   'description': 'bla',
   'fields': [
     {
-      'name': 'f_char_field',
+      'name': 'field1',
+      'verbose_name': 'char field',
+      'help_text': 'charfield',
+      'blank': false,
+      'null': false,
+      'editable': true,
+      'max_length': 255,
+      'type': 'CharField',
+      'required': true
+    },
+    {
+      'name': 'field2',
       'verbose_name': 'char field',
       'help_text': 'charfield',
       'blank': false,
@@ -42,12 +53,9 @@ dispatch(storeFormMetaData('bla', metaData));
 stories.add('default', () => {
   return (
     <FormogenForm 
-      describeUrl='bla'
+      formId='bla'
       getFormComponent={ () => FormComponent }
       getFieldComponent={ getFieldComponentForType }
-      actions={ {
-        bootstrap: action('actions.bootstrap')
-      } }
     />
   );
 });
