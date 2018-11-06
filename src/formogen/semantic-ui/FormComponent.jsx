@@ -23,7 +23,7 @@ FormComponent.propTypes = {
   isTitleVisible: PropTypes.bool,
 
   nonFieldErrorsMap: PropTypes.object,
-  formLayout: PropTypes.array.isRequired,
+  formLayout: PropTypes.array,
 
   submitComponent: PropTypes.oneOfType([
     PropTypes.func,
@@ -34,15 +34,16 @@ FormComponent.propTypes = {
 };
 FormComponent.defaultProps = {
   loading: false,
-  title: 'Formogen Form',
+  title: '',
   isTitleVisible: true,
   submitComponent: DefaultSubmitComponent,
+  formLayout: [],
 };
 export function FormComponent(props) {
   const { submitComponent: SubmitComponent } = props;
   return (
     <SUIForm loading={ props.loading }>
-      { props.isTitleVisible
+      { props.isTitleVisible && props.title
         ? <Header as='h2' dividing={ true }>{ props.title }</Header>
         : null
       }

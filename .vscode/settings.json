@@ -16,8 +16,12 @@
         "Dropdown",
         "Truncator",
         "datepicker",
+        "fieldsets",
+        "fname",
         "formdata",
         "formogen",
-        "nowrap"
+        "fparts",
+        "nowrap",
+        "wildcarded"
     ],
 }

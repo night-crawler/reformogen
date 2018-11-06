@@ -8,7 +8,7 @@ import { FormogenForm } from '~/formogen/FormogenForm';
 import { withContainerSegment } from './storyDecorators';
 
 
-const stories = storiesOf('Form|FormogenForm', module)
+const stories = storiesOf('redux|FormogenForm', module)
   .addDecorator(withContainerSegment);
 
 stories.add('default', () => {

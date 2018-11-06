@@ -32,7 +32,7 @@ import { FormComponent } from '~/formogen/semantic-ui/FormComponent';
 import { inlineFieldData, choiceFieldChoices } from './sampleData';
 
 
-const stories = storiesOf('Form|FormComponent', module).addDecorator(withContainerSegment);
+const stories = storiesOf('Formogen|FormComponent', module).addDecorator(withContainerSegment);
 
 const formLayout = [
   { 
