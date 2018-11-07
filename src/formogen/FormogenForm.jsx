@@ -21,15 +21,13 @@ export class FormogenForm extends Component {
       fields: PropTypes.arrayOf(PropTypes.object),
     }),
 
+    isTitleVisible: PropTypes.bool,
+
     fieldsets: PropTypes.arrayOf(PropTypes.shape({
       header: PropTypes.string,
       fields: PropTypes.arrayOf(PropTypes.string),
       getDisplayOptions: PropTypes.func,
     })),
-
-    /* formdata */
-    formData: PropTypes.object,
-    errorsFieldMap: PropTypes.object,
 
     actions: PropTypes.shape({
       bootstrap: PropTypes.func,
@@ -41,7 +39,7 @@ export class FormogenForm extends Component {
   static defaultProps = {
     errorsFieldMap: {},
     formId: 'formogen-form-1',
-
+    isTitleVisible: true,
     fieldsets: [
       {
         header: null,
@@ -63,7 +61,7 @@ export class FormogenForm extends Component {
       <FormComponent 
         formId={ this.formId } 
         loading={ this.props.loading } 
-        title={ this.props.title }
+        title={ this.props.metaData.title }
         isTitleVisible={ this.props.isTitleVisible }
         submitComponent={ this.props.submitComponent }
         key={ `FormComponent-${this.props.formId}` }  

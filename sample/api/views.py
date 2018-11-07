@@ -1,7 +1,7 @@
 from django.db import models
 
 from rest_framework import viewsets
-from rest_framework.decorators import detail_route, list_route
+from rest_framework.decorators import detail_route, list_route, action
 from rest_framework.exceptions import NotAcceptable, ValidationError
 from rest_framework.request import Request
 from rest_framework.response import Response
@@ -47,13 +47,13 @@ class DescribeMixin:
         model_class = serializer_class.Meta.model
         return getattr(metadata, '%sMetadata' % model_class.__name__)
 
-    @list_route()
+    @action(['GET'], detail=False)
     def describe(self, request: Request) -> Response:
         metadata_class = self.__get_metadata_class()
         md = metadata_class().determine_metadata(request, self)
         return Response(md)
 
-    @detail_route()
+    @action(['GET'], detail=True)
     def describe_object(self, request, pk):
         metadata_class = self.__get_metadata_class()
         return Response(metadata_class().determine_metadata(request, self, self.get_object()))
@@ -93,12 +93,12 @@ class AuthorPhotoViewSet(viewsets.ModelViewSet, DescribeMixin):
             return queryset.filter(photo__icontains=search)
         return queryset
 
-    @list_route()
+    @action(['GET'], detail=False)
     def describe_without_author(self, request: Request) -> Response:
         md = metadata.AuthorPhotoWithoutAuthorMetadata().determine_metadata(request, self)
         return Response(md)
 
-    @detail_route(['POST'])
+    @action(['POST'], detail=True)
     def photo_upload(self, request: Request, pk=None):
         uploaded_file = None
         for filename in request.FILES.keys():
@@ -114,7 +114,7 @@ class AuthorPhotoViewSet(viewsets.ModelViewSet, DescribeMixin):
 
         return Response({'detail': 'photo was uploaded successfully'})
 
-    @detail_route(['POST'])
+    @action(['POST'], detail=True)
     def photo_delete(self, request: Request, pk=None):
         obj = self.get_object()
         obj.photo.delete()
@@ -143,7 +143,7 @@ class AllModelFieldsViewSet(viewsets.ModelViewSet, DescribeMixin):
     def get_queryset(self) -> models.QuerySet:
         return s_models.AllModelFields.objects.all()
 
-    @list_route(['POST'])
+    @action(['POST'], detail=False)
     def accept_file(self, request: Request):
         print(request.FILES)
         return Response({'lol': 1})

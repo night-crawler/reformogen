@@ -1,13 +1,12 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
-import { action } from '@storybook/addon-actions';
+import { Grid, GridColumn } from 'semantic-ui-react';
 
 import { FormogenForm } from '~/formogen-redux/FormogenForm';
 
 import { FormComponent } from '~/formogen/semantic-ui/FormComponent';
 
 import { withContainerSegment, withStore, dispatch } from './storyDecorators';
-// import { fullPossibleMetadata } from './sampleData';
 
 import { getFieldComponentForType } from '~/formogen-redux/semantic-ui';
 
@@ -25,7 +24,6 @@ const metaData = {
     {
       'name': 'field1',
       'verbose_name': 'char field',
-      'help_text': 'charfield',
       'blank': false,
       'null': false,
       'editable': true,
@@ -36,7 +34,6 @@ const metaData = {
     {
       'name': 'field2',
       'verbose_name': 'char field',
-      'help_text': 'charfield',
       'blank': false,
       'null': false,
       'editable': true,
@@ -47,15 +44,27 @@ const metaData = {
   ]
 };
 
-dispatch(storeFormMetaData('bla', metaData));
+dispatch(storeFormMetaData('form-1', metaData));
+dispatch(storeFormMetaData('form-2', metaData));
 
 
-stories.add('default', () => {
-  return (
-    <FormogenForm 
-      formId='bla'
-      getFormComponent={ () => FormComponent }
-      getFieldComponent={ getFieldComponentForType }
-    />
-  );
-});
+stories.add('2 redux forms on page', () => 
+  <Grid columns='2'>
+    <GridColumn>
+      <FormogenForm 
+        isTitleVisible={ true }
+        formId='form-1'
+        getFormComponent={ () => FormComponent }
+        getFieldComponent={ getFieldComponentForType }
+      />
+    </GridColumn>
+    <GridColumn>
+      <FormogenForm 
+        isTitleVisible={ true }
+        formId='form-2'
+        getFormComponent={ () => FormComponent }
+        getFieldComponent={ getFieldComponentForType }
+      />
+    </GridColumn>
+  </Grid>
+);

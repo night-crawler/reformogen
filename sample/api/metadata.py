@@ -52,7 +52,7 @@ class AuthorPhotoMetadata(MetaData):
         'photo': {
             'multiple': True,
             # ensure upload_url is lazy (premature import case)
-            'upload_url': format_lazy('{}{}', 'http://localhost:8000', reverse_lazy('all-accept-file')),
+            'upload_url': format_lazy('{}{}', 'http://localhost:8000', reverse_lazy('all-model-fieldss-accept-file')),
             'delete_url': True,
         }
     }
@@ -65,7 +65,7 @@ class AuthorPhotoWithoutAuthorMetadata(MetaData):
     update_fields = {
         'photo': {
             # ensure upload_url is lazy (premature import case)
-            'upload_url': format_lazy('{}{}', 'http://localhost:8000', reverse_lazy('all-accept-file'))
+            'upload_url': format_lazy('{}{}', 'http://localhost:8000', reverse_lazy('all-model-fieldss-accept-file'))
         }
     }
 
@@ -76,11 +76,11 @@ class AllModelFieldsMetadata(MetaData):
     update_fields = {
         'f_file': {
             # ensure upload_url is lazy (premature import case)
-            'upload_url': format_lazy('{}{}', 'http://localhost:8000', reverse_lazy('all-accept-file'))
+            'upload_url': format_lazy('{}{}', 'http://localhost:8000', reverse_lazy('all-model-fieldss-accept-file'))
         },
         'f_photo': {
             # ensure upload_url is lazy (premature import case)
-            'upload_url': format_lazy('{}{}', 'http://localhost:8000', reverse_lazy('all-accept-file'))
+            'upload_url': format_lazy('{}{}', 'http://localhost:8000', reverse_lazy('all-model-fieldss-accept-file'))
         }
     }
 
