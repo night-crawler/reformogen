@@ -10,7 +10,7 @@ import {
   BOOTSTRAP
 } from './constants';
 
-import { singleApiCall } from '~/utils/saga';
+import { singleApiCall } from '~/formogen-redux/sagaHelpers';
 
 
 export const fetchFeature = singleApiCall({

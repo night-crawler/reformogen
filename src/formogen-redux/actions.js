@@ -6,8 +6,9 @@ import {
 } from './constants';
 
 
-export const bootstrap = () => ({
+export const bootstrap = payload => ({
   type: BOOTSTRAP,
+  payload,
 });
 
 

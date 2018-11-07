@@ -19,7 +19,7 @@ export function singleApiCall({
     // * we provide come additional request context to make easier to manipulate with data in reducers
     // TODO: use some callback here instead of this code later
     const extendedMeta = {
-      ...meta,  // user might want to pass something too
+      ...meta,  // user might wanted to pass something too
       request: payload,  // add payload options in case we may need them
     };
 

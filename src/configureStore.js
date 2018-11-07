@@ -1,16 +1,21 @@
 import { routerMiddleware } from 'react-router-redux';
 import { applyMiddleware, compose, createStore } from 'redux';
-import { apiMiddleware } from 'redux-api-middleware';
+// import { apiMiddleware } from 'redux-api-middleware';
 // import createLogger from 'redux-logger';
-import thunkMiddleware from 'redux-thunk';
+// import thunkMiddleware from 'redux-thunk';
+import createSagaMiddleware from 'redux-saga';
+
+import rootSaga from '~/rootSaga';
 
 import { createRootReducer } from './reducers';
 
+const sagaMiddleware = createSagaMiddleware();
 
 export default function configureStore(initialState = {}, history) {
   const middlewares = [
-    apiMiddleware,
-    thunkMiddleware,
+    sagaMiddleware,
+    // apiMiddleware,
+    // thunkMiddleware,
     // createLogger,
     routerMiddleware(history),
   ];
@@ -33,6 +38,13 @@ export default function configureStore(initialState = {}, history) {
     initialState,
     composeEnhancers(...enhancers)
   );
+
+  store.runSaga = sagaMiddleware.run;
+  store.injectedReducers = {}; // Reducer registry
+  store.injectedSagas = {}; // Saga registry
+
+  store.runSaga(rootSaga);
+
 
   return store;
 }
