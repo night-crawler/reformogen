@@ -1,7 +1,10 @@
 
 import { delay } from 'redux-saga';
+import request from 'superagent';
 
-import { takeLatest, all } from 'redux-saga/effects';
+import { takeLatest, all, put } from 'redux-saga/effects';
+
+import { storeFormMetaData } from '~/formogen-redux/actions';
 
 import { 
   BOOTSTRAP,
@@ -18,7 +21,10 @@ import { singleApiCall } from './sagaHelpers';
 // });
 
 export function* bootstrap({ type, payload }) {
-  console.log(type, payload);
+  const response = yield request.get(payload.describeUrl);
+  
+  yield put(storeFormMetaData(payload.formId, response.body));
+  // console.log(type, payload);
   yield delay(100);
 }
 
