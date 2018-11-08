@@ -25,6 +25,8 @@ export const suiFieldComponentMap = {
   AutocompleteChoiceField: connectField(fields.AutocompleteChoiceField),
   InlineForeignKeyField: connectField(fields.InlineForeignKeyField),
   InlineManyToManyField: connectField(fields.InlineManyToManyField),
+  
+  AsyncManyToManyField: connectField(fields.AsyncManyToManyField),
 };
 
 export function getFieldComponentForType({ type, choices, data }) {
@@ -37,6 +39,9 @@ export function getFieldComponentForType({ type, choices, data }) {
 
   if (type === 'ManyToManyField' && !isString(data))
     return suiFieldComponentMap.InlineManyToManyField;
+
+  if (type === 'ManyToManyField' && isString(data))
+    return suiFieldComponentMap.AsyncManyToManyField;
 
   if(!suiFieldComponentMap[type])
     return suiFieldComponentMap.GenericField;

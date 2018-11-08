@@ -4,7 +4,7 @@ import { createStructuredSelector } from 'reselect';
 import { FormogenForm as FormogenFormComponent } from '../formogen/FormogenForm';
 
 import { metaData } from './selectors';
-import { bootstrap } from './actions';
+import { bootstrap, fetchFieldOptions } from './actions';
 
 
 function mapDispatchToProps(dispatch) {
@@ -26,7 +26,8 @@ function mergeProps(stateProps, dispatchProps, ownProps) {
         describeUrl: ownProps.describeUrl,
         createUrl: ownProps.createUrl,
         objectUrl: ownProps.objectUrl,
-      }))
+      })),
+      loadOptions: payload => dispatch(fetchFieldOptions(payload)),
     },
 
     dispatch: undefined,

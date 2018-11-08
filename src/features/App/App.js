@@ -18,7 +18,7 @@ export class App extends Component {
               formId='bla'
               getFormComponent={ () => FormComponent }
               getFieldComponent={ getFieldComponentForType }
-              describeUrl='http://localhost:8000/api/v1/sample/all/describe/'
+              describeUrl='http://localhost:8000/api/v1/sample/authors/describe/'
             />
           </Segment>
         </Grid.Column>

@@ -31,6 +31,7 @@ export class FormogenForm extends Component {
 
     actions: PropTypes.shape({
       bootstrap: PropTypes.func,
+      loadOptions: PropTypes.func,
     }),
 
     getFieldComponent: PropTypes.func.isRequired,
@@ -40,6 +41,7 @@ export class FormogenForm extends Component {
     errorsFieldMap: {},
     formId: 'formogen-form-1',
     isTitleVisible: true,
+    upperFirstLabels: true,
     fieldsets: [
       {
         header: null,
@@ -95,10 +97,13 @@ export class FormogenForm extends Component {
       locale: this.props.locale,
       upperFirstLabel: this.props.upperFirstLabels,
       helpTextOnHover: this.props.helpTextOnHover,
-
+      
       // TODO: get rid of `layout` name
       layoutOpts: displayOptions,
       errors: this.props.errorsFieldMap[opts.name],
+
+      loadOptions: this.props.actions.loadOptions,
+
       ...opts,
     };
 

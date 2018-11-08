@@ -1,26 +1,88 @@
+import PropTypes from 'prop-types';
 import React from 'react';
-import _ from 'lodash';
+import { isEmpty, map } from 'lodash';
 import { Form } from 'semantic-ui-react';
-import Select from 'react-select';
+import AsyncSelect from 'react-select/lib/Async';
 
 import propTypes from '../../fieldPropTypes';
 import { FieldLabel } from '../FieldLabel';
 import { ErrorsList } from '../ErrorsList';
 
 
-AsyncManyToManyField.propTypes = propTypes;
-export default function AsyncManyToManyField(props) {
-  const fieldProps = _.pickBy(props, (value, key) => key !== 'selectProps');
+AsyncManyToManyField.propTypes = {
+  ...propTypes,
+  getOptionLabel: PropTypes.func,
+  getOptionValue: PropTypes.func,
+};
+AsyncManyToManyField.defaultProps = {
+  loadOptions: payload => // eslint-disable-next-line
+    console.info(`AsyncManyToManyField.loadOptions(${JSON.stringify(payload)})`),
+  loadMoreOptions: payload => // eslint-disable-next-line
+    console.info(`AsyncManyToManyField.loadMoreOptions(${JSON.stringify(payload)})`),
+
+  getOptionLabel: ({ name }) => name,
+  getOptionValue: ({ id }) => id,
+};
+export function AsyncManyToManyField(props) {
+  const handleChange = val => {
+    props.onChange(null, { 
+      name: props.name, 
+      value: map(val, props.getOptionValue),
+    });
+  };
+    
+  let storedCallback = () => {};
+  let storedInputText = '';
 
   return (
+    
+
     <Form.Field
       required={ props.required }
       disabled={ !props.editable }
       width={ props.layoutOpts.width }
-      error={ !_.isEmpty(props.errors) }
+      error={ !isEmpty(props.errors) }
     >
-      <FieldLabel { ...fieldProps } />
-      <Select { ...props.selectProps } />
+      <FieldLabel { ...props } />
+      <AsyncSelect
+        inputId={ `AsyncManyToManyField-${props.formId}-${props.name}` }
+        placeholder={ props.placeholder }
+        isClearable={ props.editable }
+        isDisabled={ !props.editable }
+        isLoading={ props.isLoading }
+        isRtl={ props.isRtl }
+        isMulti={ true }
+        cacheOptions={ true }
+        defaultOptions={ true }
+        loadOptions={ (inputText, callback) => {
+          storedCallback = callback;
+          storedInputText = inputText;
+          return props.loadOptions({ 
+            formId: props.formId,  
+            inputText: inputText, 
+            fieldName: props.name,
+            url: props.data,
+            callback: callback,
+            page: 1,
+          });
+        } }
+
+        onMenuScrollToBottom={ () => props.loadOptions({
+          formId: props.formId,  
+          inputText: storedInputText, 
+          fieldName: props.name,
+          url: props.data,
+          callback: storedCallback,
+          page: 2
+        }) }
+
+        value={ props.value }
+
+        getOptionLabel={ props.getOptionLabel }
+        getOptionValue={ props.getOptionValue }
+
+        onChange={ handleChange } 
+      />
       { !props.helpTextOnHover
         ? <span className='help-text'>{ props.help_text }</span>
         : ''

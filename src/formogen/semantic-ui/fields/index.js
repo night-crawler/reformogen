@@ -1,7 +1,3 @@
-// export { AsyncForeignKeyField } from './AsyncForeignKeyField.jsx';
-// export { AsyncManyToManyField } from './AsyncManyToManyField.jsx';
-// export { DropzoneField } from './DropzoneField.jsx';
-
 export { AutocompleteChoiceField } from './AutocompleteChoiceField.jsx';
 export { BooleanField } from './BooleanField.jsx';
 export { CharField } from './CharField.jsx';
@@ -13,3 +9,5 @@ export { InlineManyToManyField } from './InlineManyToManyField.jsx';
 export { IntegerField } from './IntegerField.jsx';
 export { TextField } from './TextField.jsx';
 export { TimeField } from './TimeField.jsx';
+
+export { AsyncManyToManyField } from './AsyncManyToManyField';

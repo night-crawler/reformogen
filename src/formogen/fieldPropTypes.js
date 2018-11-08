@@ -10,6 +10,7 @@ export const errorsType = PropTypes.arrayOf(PropTypes.string.isRequired);
 
 const defaultFieldPropTypes = {
   /* common */
+  formId: PropTypes.string,
   type: PropTypes.string.isRequired,
 
   layoutOpts: layoutOptsType,
@@ -53,11 +54,7 @@ const defaultFieldPropTypes = {
   /* pass optional locale to child, it can be useful in some cases */
   locale: PropTypes.string,
 
-  /* method to provide additional/redefine some opts in child component */
-  updateProps: PropTypes.func,
-
   onChange: PropTypes.func,
-  onNetworkError: PropTypes.func
 };
 
 export default defaultFieldPropTypes;
