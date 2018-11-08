@@ -1,5 +1,7 @@
 import '@babel/polyfill';
 import 'semantic-ui-css/semantic.min.css';
+import 'react-datepicker/dist/react-datepicker.css';
+import 'react-times/css/material/default.css';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
