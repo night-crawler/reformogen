@@ -1,7 +1,6 @@
 import { 
-  STORE_FORM_DATA,
-  STORE_FORM_METADATA,
-  STORE_FIELD_DATA,
+  STORE_FORM_DATA, STORE_FORM_METADATA, STORE_FIELD_DATA,
+  FETCH_FORM_METADATA_SUCCESS,
 } from './constants';
 
 export function prefixObjectFields(formId, obj) {
@@ -13,24 +12,31 @@ export function prefixObjectFields(formId, obj) {
 }
 
 export function formogenReducer(state = {}, action) {
-  const { type, payload } = action;
+  const { type, payload, meta: { formId }={} } = action;
+
   switch (type) {
     case STORE_FORM_DATA:
       return {
         ...state,
-        ...prefixObjectFields(payload.formId, payload.data)
+        ...prefixObjectFields(formId, payload)
       };
 
     case STORE_FORM_METADATA:
       return {
         ...state,
-        [ `Form:${payload.formId}:metaData` ]: payload.metaData,
+        [ `Form:${formId}:metaData` ]: payload,
       };
 
     case STORE_FIELD_DATA:
       return {
         ...state,
-        [ `Form:${payload.formId}:field:${payload.name}` ]: payload.value,
+        [ `Form:${formId}:field:${payload.name}` ]: payload.value,
+      };
+
+    case FETCH_FORM_METADATA_SUCCESS:
+      return {
+        ...state,
+        [ `Form:${formId}:metaData` ]: payload,
       };
 
     default:

@@ -2,15 +2,29 @@
  * Follow this format:
  * export const YOUR_ACTION_CONSTANT = '@yourproject/YourContainer/YOUR_ACTION_CONSTANT';
  */
-export const IS_PRODUCTION = process.env.NODE_ENV === 'production';
-export const RETRY_TIMEOUT = process.env.REACT_APP__RETRY_TIMEOUT || 500;
-export const RETRY_COUNT = process.env.REACT_APP__RETRY_COUNT || 5;
-
 export const PROJECT_NAME = 'formogen';
-
 const PREFIX = `@${PROJECT_NAME}`;
 
+export const IS_PRODUCTION = process.env.NODE_ENV === 'production';
+
+export const AGENT_RETRY_TIMEOUT = process.env.REACT_APP__AGENT_RETRY_TIMEOUT || 500;
+export const AGENT_RETRY_COUNT = process.env.REACT_APP__AGENT_RETRY_COUNT || 5;
+export const AGENT_RETRY_STATUS_CODES = [ undefined, 524, 504, 502, 408 ];
+export const AGENT_TIMEOUT = { response: 10000, deadline: 20000 };
+export const AGENT_NUM_REDIRECTS = 0;
+export const AGENT_EXECUTE_REQUEST_ATTEMPT_FAILED = `${PREFIX}/AGENT_EXECUTE_REQUEST_ATTEMPT_FAILED`;
+
+
+export const SAGA_RETRY_TIMEOUT = process.env.REACT_APP__SAGA_RETRY_TIMEOUT || 1000;
+export const SAGA_RETRY_COUNT = process.env.REACT_APP__SAGA_RETRY_COUNT || 5;
+
+// ======
+
 export const BOOTSTRAP = `${PREFIX}/BOOTSTRAP`;
+export const BOOTSTRAP_SUCCESS = `${PREFIX}/BOOTSTRAP_SUCCESS`;
+export const BOOTSTRAP_ERROR = `${PREFIX}/BOOTSTRAP_ERROR`;
+
+export const FATAL_ERROR = `${PREFIX}/FATAL_ERROR`;
 
 export const STORE_FORM_DATA = `${PREFIX}/STORE_FORM_DATA`;
 export const STORE_FORM_METADATA = `${PREFIX}/STORE_FORM_METADATA`;

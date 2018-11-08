@@ -1,7 +1,7 @@
 import { routerMiddleware } from 'react-router-redux';
 import { applyMiddleware, compose, createStore } from 'redux';
 // import { apiMiddleware } from 'redux-api-middleware';
-// import createLogger from 'redux-logger';
+import createLogger from 'redux-logger';
 // import thunkMiddleware from 'redux-thunk';
 import createSagaMiddleware from 'redux-saga';
 
@@ -16,7 +16,7 @@ export default function configureStore(initialState = {}, history) {
     sagaMiddleware,
     // apiMiddleware,
     // thunkMiddleware,
-    // createLogger,
+    createLogger,
     routerMiddleware(history),
   ];
 
