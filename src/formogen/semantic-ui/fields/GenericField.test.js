@@ -1,4 +1,4 @@
-import GenericField from './GenericField';
+import { GenericField } from './GenericField';
 
 
 it('should render GenericField', () => {

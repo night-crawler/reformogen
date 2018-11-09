@@ -3,6 +3,10 @@ const ERROR_ON_PRODUCTION = process.env.NODE_ENV === 'production' ? 2 : 1;
 module.exports = {
   'globals': {
     'process': true,
+    'React': true,
+    'mount': true,
+    'shallow': true,
+    'render': true,
   },
   'env': {
     'browser': true,

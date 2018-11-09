@@ -24,7 +24,7 @@ ShallowWrapper {
       "children": Array [
         "uuid",
         " - ",
-        "test",
+        "\\"test\\"",
         <Checkbox
           label="EN > RU"
           toggle={true}
@@ -38,7 +38,7 @@ ShallowWrapper {
     "rendered": Array [
       "uuid",
       " - ",
-      "test",
+      "\\"test\\"",
       Object {
         "instance": null,
         "key": undefined,
@@ -65,7 +65,7 @@ ShallowWrapper {
         "children": Array [
           "uuid",
           " - ",
-          "test",
+          "\\"test\\"",
           <Checkbox
             label="EN > RU"
             toggle={true}
@@ -79,7 +79,7 @@ ShallowWrapper {
       "rendered": Array [
         "uuid",
         " - ",
-        "test",
+        "\\"test\\"",
         Object {
           "instance": null,
           "key": undefined,

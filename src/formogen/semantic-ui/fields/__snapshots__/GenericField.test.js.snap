@@ -1,12 +1,9 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`should render GenericField 1`] = `
-<FormField
-  disabled={true}
-  error={false}
-  width={1}
->
-  <Label
+ShallowWrapper {
+  Symbol(enzyme.__root__): [Circular],
+  Symbol(enzyme.__unrendered__): <GenericField
     help_text="GenericField: help_text"
     layoutOpts={
       Object {
@@ -16,9 +13,34 @@ exports[`should render GenericField 1`] = `
     name="GenericField: name"
     type="GenericField"
     verbose_name="GenericField: verbose_name"
-  />
-  <pre>
-    {
+  />,
+  Symbol(enzyme.__renderer__): Object {
+    "batchedUpdates": [Function],
+    "getNode": [Function],
+    "render": [Function],
+    "simulateError": [Function],
+    "simulateEvent": [Function],
+    "unmount": [Function],
+  },
+  Symbol(enzyme.__node__): Object {
+    "instance": null,
+    "key": undefined,
+    "nodeType": "function",
+    "props": Object {
+      "children": Array [
+        <FieldLabel
+          help_text="GenericField: help_text"
+          layoutOpts={
+            Object {
+              "width": 1,
+            }
+          }
+          name="GenericField: name"
+          type="GenericField"
+          verbose_name="GenericField: verbose_name"
+        />,
+        <pre>
+          {
     "type": "GenericField",
     "name": "GenericField: name",
     "verbose_name": "GenericField: verbose_name",
@@ -27,15 +49,231 @@ exports[`should render GenericField 1`] = `
         "width": 1
     }
 }
-  </pre>
-  <span
-    className="help-text"
-  >
-    GenericField: help_text
-  </span>
-  <ErrorsList
-    color="red"
-    header="Errors"
-  />
-</FormField>
+        </pre>,
+        <span
+          className="help-text"
+        >
+          GenericField: help_text
+        </span>,
+        <ErrorsList
+          color="red"
+          header="Errors"
+        />,
+      ],
+      "disabled": true,
+      "error": false,
+      "required": undefined,
+      "width": 1,
+    },
+    "ref": null,
+    "rendered": Array [
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "function",
+        "props": Object {
+          "help_text": "GenericField: help_text",
+          "layoutOpts": Object {
+            "width": 1,
+          },
+          "name": "GenericField: name",
+          "type": "GenericField",
+          "verbose_name": "GenericField: verbose_name",
+        },
+        "ref": null,
+        "rendered": null,
+        "type": [Function],
+      },
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "host",
+        "props": Object {
+          "children": "{
+    \\"type\\": \\"GenericField\\",
+    \\"name\\": \\"GenericField: name\\",
+    \\"verbose_name\\": \\"GenericField: verbose_name\\",
+    \\"help_text\\": \\"GenericField: help_text\\",
+    \\"layoutOpts\\": {
+        \\"width\\": 1
+    }
+}",
+        },
+        "ref": null,
+        "rendered": "{
+    \\"type\\": \\"GenericField\\",
+    \\"name\\": \\"GenericField: name\\",
+    \\"verbose_name\\": \\"GenericField: verbose_name\\",
+    \\"help_text\\": \\"GenericField: help_text\\",
+    \\"layoutOpts\\": {
+        \\"width\\": 1
+    }
+}",
+        "type": "pre",
+      },
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "host",
+        "props": Object {
+          "children": "GenericField: help_text",
+          "className": "help-text",
+        },
+        "ref": null,
+        "rendered": "GenericField: help_text",
+        "type": "span",
+      },
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "function",
+        "props": Object {
+          "color": "red",
+          "header": "Errors",
+          "messages": undefined,
+        },
+        "ref": null,
+        "rendered": null,
+        "type": [Function],
+      },
+    ],
+    "type": [Function],
+  },
+  Symbol(enzyme.__nodes__): Array [
+    Object {
+      "instance": null,
+      "key": undefined,
+      "nodeType": "function",
+      "props": Object {
+        "children": Array [
+          <FieldLabel
+            help_text="GenericField: help_text"
+            layoutOpts={
+              Object {
+                "width": 1,
+              }
+            }
+            name="GenericField: name"
+            type="GenericField"
+            verbose_name="GenericField: verbose_name"
+          />,
+          <pre>
+            {
+    "type": "GenericField",
+    "name": "GenericField: name",
+    "verbose_name": "GenericField: verbose_name",
+    "help_text": "GenericField: help_text",
+    "layoutOpts": {
+        "width": 1
+    }
+}
+          </pre>,
+          <span
+            className="help-text"
+          >
+            GenericField: help_text
+          </span>,
+          <ErrorsList
+            color="red"
+            header="Errors"
+          />,
+        ],
+        "disabled": true,
+        "error": false,
+        "required": undefined,
+        "width": 1,
+      },
+      "ref": null,
+      "rendered": Array [
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "function",
+          "props": Object {
+            "help_text": "GenericField: help_text",
+            "layoutOpts": Object {
+              "width": 1,
+            },
+            "name": "GenericField: name",
+            "type": "GenericField",
+            "verbose_name": "GenericField: verbose_name",
+          },
+          "ref": null,
+          "rendered": null,
+          "type": [Function],
+        },
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "host",
+          "props": Object {
+            "children": "{
+    \\"type\\": \\"GenericField\\",
+    \\"name\\": \\"GenericField: name\\",
+    \\"verbose_name\\": \\"GenericField: verbose_name\\",
+    \\"help_text\\": \\"GenericField: help_text\\",
+    \\"layoutOpts\\": {
+        \\"width\\": 1
+    }
+}",
+          },
+          "ref": null,
+          "rendered": "{
+    \\"type\\": \\"GenericField\\",
+    \\"name\\": \\"GenericField: name\\",
+    \\"verbose_name\\": \\"GenericField: verbose_name\\",
+    \\"help_text\\": \\"GenericField: help_text\\",
+    \\"layoutOpts\\": {
+        \\"width\\": 1
+    }
+}",
+          "type": "pre",
+        },
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "host",
+          "props": Object {
+            "children": "GenericField: help_text",
+            "className": "help-text",
+          },
+          "ref": null,
+          "rendered": "GenericField: help_text",
+          "type": "span",
+        },
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "function",
+          "props": Object {
+            "color": "red",
+            "header": "Errors",
+            "messages": undefined,
+          },
+          "ref": null,
+          "rendered": null,
+          "type": [Function],
+        },
+      ],
+      "type": [Function],
+    },
+  ],
+  Symbol(enzyme.__options__): Object {
+    "adapter": ReactSixteenAdapter {
+      "options": Object {
+        "enableComponentDidUpdateOnSetState": true,
+        "lifecycles": Object {
+          "componentDidUpdate": Object {
+            "onSetState": true,
+          },
+          "getDerivedStateFromProps": true,
+          "getSnapshotBeforeUpdate": true,
+          "setState": Object {
+            "skipsComponentDidUpdateOnNullish": true,
+          },
+        },
+      },
+    },
+  },
+}
 `;

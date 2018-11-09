@@ -1,4 +1,4 @@
-import CharField from './CharField';
+import { CharField } from './CharField';
 
 
 it('should render CharField', () => {

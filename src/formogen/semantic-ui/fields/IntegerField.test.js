@@ -1,4 +1,4 @@
-import IntegerField from './IntegerField';
+import { IntegerField } from './IntegerField';
 
 
 it('should render IntegerField', () => {

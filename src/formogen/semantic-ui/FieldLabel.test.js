@@ -1,9 +1,9 @@
-import Label from 'formogen/semantic-ui/common/Label';
+import { FieldLabel } from './FieldLabel';
 
 
 it('should render Label', () => {
   const wrapper = shallow(
-    <Label
+    <FieldLabel
       type='Label'
       name='Label: name'
       verbose_name='Label: verbose_name'
