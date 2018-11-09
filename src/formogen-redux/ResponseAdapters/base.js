@@ -1,21 +1,26 @@
-import { isString } from 'lodash';
-
-class Registry {
-  patternToAdapterMapping = {};
-  register(urlPattern, adapter) {
-    isString(urlPattern) || throw new Error(`urlPattern must be a string, ${typeof urlPattern} was given`);
-    urlPattern || throw new Error('urlPattern must be a non-empty string');
-
-    this.patternToAdapterMapping[urlPattern] = adapter;
-  }
-
-}
-
-export const responseAdapterRegistry = new Registry();
+import { isArray } from 'lodash';
 
 export class BaseResponseAdapter {
   constructor(responseObject) {
     this.responseObject = responseObject;
+  }
+
+  static getQueryObject(url, defaults = {}) {
+    const queryObject = {};
+    const parsed = new URLSearchParams(new URL(url).search);
+  
+    for (const [ param, value ] of parsed) {
+      const existingValue = queryObject[ param ];
+  
+      if (existingValue === undefined) {
+        queryObject[ param ] = value;
+      } else {
+        isArray(existingValue)
+          ? queryObject[ param ].push(value)
+          : queryObject[ param ] = [ queryObject[ param ], value ];
+      }
+    }
+    return { ...defaults, ...queryObject };
   }
 
   get totalItems() { throw new Error('Not implemented'); }
@@ -40,6 +45,3 @@ export class BaseResponseAdapter {
 }
 
 
-export class DRFResponseAdapter extends BaseResponseAdapter {
-  
-}

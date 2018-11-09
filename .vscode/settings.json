@@ -12,6 +12,8 @@
         "editor.tabSize": 2
     },
     "editor.detectIndentation": false,
+    "eslint.enable": true,
+    "javascript.validate.enable": false,
     "cSpell.words": [
         "Dropdown",
         "Truncator",
