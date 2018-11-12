@@ -1,23 +1,27 @@
 import { DjangoRestFrameworkResponseAdapter } from './DjangoRestFramework';
 
 const adapter = new DjangoRestFrameworkResponseAdapter({
-  'page_size': 10,
-  'num_pages': 3,
-  'count': 23,
-  'next': 'http://localhost:8000/api/v1/sample/authors/?page=2',
-  'previous': null,
-  'results': [1, 2, 3],
+  total_items: 23,
+  next_page_url: 'http://127.0.0.1:8000/api/v1/sample/authors/?page=2',
+  previous_page_url: null,
+  has_previous_page: false,
+  has_next_page: true,
+  previous_page_number: null,
+  next_page_number: 2,
+  current_page_number: 1,
+  total_pages: 3,
+  list: [1, 2, 3],
 });
 
 describe('DjangoRestFrameworkResponseAdapter', () => {
   it('totalItems()', () => {
-    expect(adapter.totalItems).toBeTruthy(23);
+    expect(adapter.totalItems).toEqual(23);
   });
   it('totalPages()', () => {
     expect(adapter.totalPages).toEqual(3);
   });
   it('nextPageUrl()', () => {
-    expect(adapter.nextPageUrl).toEqual('http://localhost:8000/api/v1/sample/authors/?page=2');
+    expect(adapter.nextPageUrl).toEqual('http://127.0.0.1:8000/api/v1/sample/authors/?page=2');
   });
   it('previousPageUrl()', () => {
     expect(adapter.previousPageUrl).toEqual(null);
@@ -41,7 +45,7 @@ describe('DjangoRestFrameworkResponseAdapter', () => {
     expect(adapter.list).toEqual([ 1, 2, 3 ]);
   });
   it('perPageQueryParam()', () => {
-    expect(adapter.perPageQueryParam).toEqual('page_size');
+    expect(adapter.perPageQueryParam).toEqual('per_page');
   });
   it('pageQueryParam()', () => {
     expect(adapter.pageQueryParam).toEqual('page');

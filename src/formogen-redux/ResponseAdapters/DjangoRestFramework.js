@@ -2,38 +2,22 @@ import { BaseResponseAdapter } from './base';
 
 
 export class DjangoRestFrameworkResponseAdapter extends BaseResponseAdapter {
-  get totalItems() { return this.responseObject.count; }
-  get totalPages() { return this.responseObject.num_pages; }
+  get totalItems() { return this.responseObject.total_items; }
+  get totalPages() { return this.responseObject.total_pages; }
 
-  get nextPageUrl() {  return this.responseObject.next; }
-  get previousPageUrl() { return this.responseObject.previous; }
+  get nextPageUrl() {  return this.responseObject.next_page_url; }
+  get previousPageUrl() { return this.responseObject.previous_page_url; }
 
-  get hasNextPage() { return !!this.responseObject.next; }
-  get hasPreviousPage() { return !!this.responseObject.previous; }
+  get hasNextPage() { return this.responseObject.has_next_page; }
+  get hasPreviousPage() { return this.responseObject.has_previous_page; }
   
-  get previousPageNumber() { 
-    if (!this.hasPreviousPage)
-      return null;
-
-    return BaseResponseAdapter.getQueryObject(
-      this.responseObject.previous
-    )[this.pageQueryParam];
-  }
-  get nextPageNumber() { 
-    if (!this.hasNextPage)
-      return null;
-
-    return BaseResponseAdapter.getQueryObject(
-      this.responseObject.next
-    )[this.pageQueryParam];
-  }
-  get currentPageNumber() { 
-    throw new Error('Not implemented'); 
-  }
+  get nextPageNumber() { return this.responseObject.next_page_number; }
+  get previousPageNumber() { return this.responseObject.previous_page_number; }
+  get currentPageNumber() { return this.responseObject.current_page_number; }
   
-  get list() { return this.responseObject.results; }
+  get list() { return this.responseObject.list; }
 
-  get perPageQueryParam() { return 'page_size'; }
+  get perPageQueryParam() { return 'per_page'; }
   get pageQueryParam() { return 'page'; }
   get maxPageSize() { return this.responseObject.max_page_size || 300; }
   get defaultPageSize() { return this.responseObject.page_size || 10; }

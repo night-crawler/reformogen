@@ -164,7 +164,7 @@ CSRF_TRUSTED_ORIGINS = (
 # DJANGO REST FRAMEWORK
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [],
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'DEFAULT_PAGINATION_CLASS': 'sample.pagination.TunedPagination',
     'DEFAULT_RENDERER_CLASSES': ('rest_framework.renderers.JSONRenderer',),
     'URL_FORMAT_OVERRIDE': None,
     'PAGE_SIZE': 10,
