@@ -21,4 +21,5 @@ export class DjangoRestFrameworkResponseAdapter extends BaseResponseAdapter {
   get pageQueryParam() { return 'page'; }
   get maxPageSize() { return this.responseObject.max_page_size || 300; }
   get defaultPageSize() { return this.responseObject.page_size || 10; }
+  get searchQueryParam() { return 'q'; }
 }

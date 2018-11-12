@@ -33,3 +33,10 @@ export const fieldValue = createSelector(
   (formogen, formId, fieldName) => // '' is the default value
     formogen[`Form:${formId}:field:${fieldName}`] || ''
 );
+
+
+export const fieldOptionsNextPageNumber = createSelector(
+  [ formogen, formId, fieldName ],
+  (formogen, formId, fieldName) => // '' is the default value
+    formogen[`Form:${formId}:field:${fieldName}:nextPageNumber`]
+);

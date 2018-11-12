@@ -42,6 +42,7 @@ export class BaseResponseAdapter {
   get pageQueryParam() { throw new Error('Not implemented'); }
   get maxPageSize() { throw new Error('Not implemented'); }
   get defaultPageSize() { throw new Error('Not implemented'); }
+  get searchQueryParam() { throw new Error('Not implemented'); }
 }
 
 

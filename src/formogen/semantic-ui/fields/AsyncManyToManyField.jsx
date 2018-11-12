@@ -63,7 +63,6 @@ export function AsyncManyToManyField(props) {
             fieldName: props.name,
             url: props.data,
             callback: callback,
-            page: 1,
           });
         } }
 
@@ -73,7 +72,6 @@ export function AsyncManyToManyField(props) {
           fieldName: props.name,
           url: props.data,
           callback: storedCallback,
-          page: 2
         }) }
 
         value={ props.value }

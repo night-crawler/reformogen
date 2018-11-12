@@ -4,7 +4,7 @@ import {
   STORE_FORM_METADATA,
   STORE_FIELD_DATA,
   AGENT_EXECUTE_REQUEST_ATTEMPT_FAILED,
-  FETCH_FIELD_OPTIONS
+  FETCH_NEXT_FIELD_OPTIONS
 } from './constants';
 
 
@@ -42,8 +42,8 @@ export const failedAgentRequestAttempt = payload => ({
 });
 
 
-export const fetchFieldOptions = ({ formId, ...payload }) => ({
-  type: FETCH_FIELD_OPTIONS, 
+export const fetchNextFieldOptions = ({ formId, ...payload }) => ({
+  type: FETCH_NEXT_FIELD_OPTIONS, 
   payload,
   meta: { formId }
 });

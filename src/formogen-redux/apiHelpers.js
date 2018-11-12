@@ -25,7 +25,7 @@ export function* processError(errorType, exception, meta) {
 
 export function singleApiCall({ 
   method, 
-  processResponse = response => response.body, 
+  processResponse = ({ response }) => response.body, 
   onError = processError,
   types: [ REQUEST_TYPE, SUCCESS_TYPE, ERROR_TYPE ],
 }) {
@@ -39,7 +39,7 @@ export function singleApiCall({
 
     try {
       const response = yield method({ ...payload });
-      const processedResponse = processResponse(response, type, payload);
+      const processedResponse = processResponse({ response, type, payload, meta: extendedMeta });
       
       yield put({ 
         type: SUCCESS_TYPE, 

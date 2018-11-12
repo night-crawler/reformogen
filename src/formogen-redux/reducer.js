@@ -2,7 +2,7 @@ import {
   STORE_FORM_DATA, STORE_FORM_METADATA, STORE_FIELD_DATA,
   FETCH_FORM_METADATA_SUCCESS,
 
-  FETCH_FIELD_OPTIONS_SUCCESS,
+  FETCH_NEXT_FIELD_OPTIONS_SUCCESS,
 } from './constants';
 
 export function prefixObjectFields(formId, obj) {
@@ -41,14 +41,15 @@ export function formogenReducer(state = {}, action) {
         [ `Form:${formId}:metaData` ]: payload,
       };
 
-    case FETCH_FIELD_OPTIONS_SUCCESS:
+    case FETCH_NEXT_FIELD_OPTIONS_SUCCESS:
       return {
         ...state,
         [ `Form:${formId}:field:${fieldName}:options` ]: [
           ...(state[ `Form:${formId}:field:${fieldName}:options` ] || []),
-          ...payload.results
+          ...payload.list
         ],
-        [ `Form:${formId}:field:${fieldName}:lastPage` ]: restMeta.page + 1,
+        [ `Form:${formId}:field:${fieldName}:nextPageNumber` ]: payload.nextPageNumber,
+        [ `Form:${formId}:field:${fieldName}:currentPageNumber` ]: payload.currentPageNumber,
       };
 
     default:
