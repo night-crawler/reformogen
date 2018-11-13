@@ -29,10 +29,10 @@ export const storeFormMetaData = (formId, metaData) => ({
 });
 
 
-export const storeFieldData = (formId, name, value) => ({
+export const storeFieldData = (formId, fieldName, value) => ({
   type: STORE_FIELD_DATA,
-  payload: { name, value },
-  meta: { formId },
+  payload: value,
+  meta: { formId, fieldName },
 });
 
 
@@ -42,8 +42,8 @@ export const failedAgentRequestAttempt = payload => ({
 });
 
 
-export const fetchNextFieldOptions = ({ formId, ...payload }) => ({
+export const fetchNextFieldOptions = ({ formId, fieldName, ...payload }) => ({
   type: FETCH_NEXT_FIELD_OPTIONS, 
   payload,
-  meta: { formId }
+  meta: { formId, fieldName }
 });

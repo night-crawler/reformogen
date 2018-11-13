@@ -1,6 +1,7 @@
 import { 
   STORE_FORM_DATA, STORE_FORM_METADATA, STORE_FIELD_DATA,
   FETCH_FORM_METADATA_SUCCESS,
+  FETCH_FORM_DATA_SUCCESS,
 
   FETCH_NEXT_FIELD_OPTIONS_SUCCESS,
 } from './constants';
@@ -8,7 +9,7 @@ import {
 export function prefixObjectFields(formId, obj) {
   const prefixedObj = {};
   for (const [ fieldName, value ] of Object.entries(obj)) {
-    prefixedObj[`Form:${formId}:field:${fieldName}`] = value;
+    prefixedObj[`Form:${formId}:field:${fieldName}:stored`] = value;
   }
   return prefixedObj;
 }
@@ -17,6 +18,12 @@ export function formogenReducer(state = {}, action) {
   const { type, payload, meta: { formId, fieldName, ...restMeta }={} } = action;
 
   switch (type) {
+    case FETCH_FORM_DATA_SUCCESS:
+      return {
+        ...state,
+        ...prefixObjectFields(formId, payload)
+      };
+
     case STORE_FORM_DATA:
       return {
         ...state,
@@ -32,7 +39,7 @@ export function formogenReducer(state = {}, action) {
     case STORE_FIELD_DATA:
       return {
         ...state,
-        [ `Form:${formId}:field:${payload.name}` ]: payload.value,
+        [ `Form:${formId}:field:${fieldName}:dirty` ]: payload,
       };
 
     case FETCH_FORM_METADATA_SUCCESS:

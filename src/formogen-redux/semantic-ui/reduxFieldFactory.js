@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 
-import { formId, fieldValue } from '~/formogen-redux/selectors';
+import { formId, finalFieldValue, initialFieldValue } from '~/formogen-redux/selectors';
 
 import { storeFieldData } from '~/formogen-redux/actions';
 
@@ -24,7 +24,8 @@ export function connectField(FieldComponent) {
   return connect(
     createStructuredSelector({
       formId,
-      value: fieldValue
+      initialValue: initialFieldValue,
+      value: finalFieldValue,
     }),
     dispatch => ({ dispatch }),
     mergeProps,

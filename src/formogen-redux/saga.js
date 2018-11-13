@@ -8,6 +8,8 @@ import {
   BOOTSTRAP, BOOTSTRAP_SUCCESS, BOOTSTRAP_ERROR,
 
   FETCH_FORM_METADATA, FETCH_FORM_METADATA_SUCCESS, FETCH_FORM_METADATA_ERROR,
+  FETCH_FORM_DATA, FETCH_FORM_DATA_SUCCESS, FETCH_FORM_DATA_ERROR,
+
   FETCH_NEXT_FIELD_OPTIONS, FETCH_NEXT_FIELD_OPTIONS_SUCCESS, FETCH_NEXT_FIELD_OPTIONS_ERROR,
 } from './constants';
 import { formogen as formogenSelector } from './selectors';
@@ -17,6 +19,11 @@ export const fetchFormMetadata = singleApiCall({
   types: [ FETCH_FORM_METADATA, FETCH_FORM_METADATA_SUCCESS, FETCH_FORM_METADATA_ERROR ],
 });
 
+
+export const fetchFormData = singleApiCall({
+  method: requestOpts => executeRequest(requestOpts),
+  types: [ FETCH_FORM_DATA, FETCH_FORM_DATA_SUCCESS, FETCH_FORM_DATA_ERROR, ],
+});
 
 export const searchDataFieldOptions = singleApiCall({
   processResponse: ({ response, payload: { url } }) => {
@@ -36,12 +43,24 @@ export const searchDataFieldOptions = singleApiCall({
 
 
 export function* bootstrap({ payload, meta }) {
-  const { error: fetchFormMetadataError } = yield fetchFormMetadata({
-    payload: { url: payload.describeUrl, locale: payload.locale },
-    meta: { formId: meta.formId }
-  });
+  const gathered = [
+    fetchFormMetadata({
+      payload: { url: payload.describeUrl, locale: payload.locale },
+      meta: { formId: meta.formId }
+    })
+  ];
 
-  if (fetchFormMetadataError !== undefined)
+  payload.objectUrl && gathered.push(fetchFormData({
+    payload: { url: payload.objectUrl, locale: payload.locale },
+    meta: { formId: meta.formId }
+  }));
+
+  const [ 
+    { error: fetchFormMetadataError }, 
+    { error: fetchFormDataError } = {}
+  ] = yield all(gathered);
+
+  if (!(fetchFormMetadataError === fetchFormDataError === undefined))
     return yield processError(
       BOOTSTRAP_ERROR, 
       fetchFormMetadataError,
@@ -85,8 +104,8 @@ export function* fetchNextFieldOptions({ payload, meta }) {
 
 export function* formogenSagas() {
   yield all([
-    takeLatest(FETCH_FORM_METADATA, fetchFormMetadata),
-    takeLatest(BOOTSTRAP, bootstrap),
+    takeEvery(FETCH_FORM_METADATA, fetchFormMetadata),
+    takeEvery(BOOTSTRAP, bootstrap),
     takeEvery(FETCH_NEXT_FIELD_OPTIONS, fetchNextFieldOptions),
   ]);
 }
