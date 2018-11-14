@@ -4,7 +4,8 @@ import {
   STORE_FORM_METADATA,
   STORE_FIELD_DATA,
   AGENT_EXECUTE_REQUEST_ATTEMPT_FAILED,
-  FETCH_NEXT_FIELD_OPTIONS
+  FETCH_NEXT_FIELD_OPTIONS,
+  STORE_FIELD_OPTIONS,
 } from './constants';
 
 
@@ -46,4 +47,11 @@ export const fetchNextFieldOptions = ({ formId, fieldName, ...payload }) => ({
   type: FETCH_NEXT_FIELD_OPTIONS, 
   payload,
   meta: { formId, fieldName }
+});
+
+
+export const storeFieldOptions = ({ formId, fieldName, inputText = '', value }) => ({
+  type: STORE_FIELD_OPTIONS,
+  payload: value,
+  meta: { formId, fieldName, inputText }
 });

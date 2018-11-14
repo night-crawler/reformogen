@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect';
-import { zip, map, fromPairs } from 'lodash';
+import { isString, zip, map, fromPairs } from 'lodash';
 
 
 export const formogen = state => {
@@ -18,13 +18,23 @@ export const fieldName = createSelector(
 
 export const metaData = createSelector(
   [ formogen, formId ], 
-  (formogen, formId) => formogen[`Form:${formId}:metaData`]
+  (formogen, formId) => formogen[ `Form:${formId}:metaData` ]
+);
+
+export const metaDataFields = createSelector(
+  metaData, metaData => metaData.fields
+);
+
+export const metaDataM2MFields = createSelector(
+  metaDataFields, metaDataFields => metaDataFields.filter(value => 
+    isString(value.data) && value.type === 'ManyToManyField'
+  )
 );
 
 export const metaDataDefaultsMap = createSelector(
-  metaData, metaData => zip(
-    map(metaData?.fields || [], 'name'),
-    map(metaData?.fields || [], 'default')
+  metaData, metaDataFields => zip(
+    map(metaDataFields || [], 'name'),
+    map(metaDataFields || [], 'default')
   ) |> fromPairs
 );
 
@@ -36,7 +46,7 @@ export const formData = createSelector(
 
 export const defaultFieldValue = createSelector(
   [ fieldName, metaDataDefaultsMap ],
-  (fieldName) => metaDataDefaultsMap[fieldName]
+  (fieldName, metaDataDefaultsMap) => metaDataDefaultsMap[fieldName]
 );
 export const storedFieldValue = createSelector(
   [ formogen, formId, fieldName ],

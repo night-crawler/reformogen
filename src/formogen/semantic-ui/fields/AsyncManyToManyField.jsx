@@ -24,19 +24,16 @@ AsyncManyToManyField.defaultProps = {
   getOptionValue: ({ id }) => id,
 };
 export function AsyncManyToManyField(props) {
-  const handleChange = val => {
-    props.onChange(null, { 
-      name: props.name, 
-      value: map(val, props.getOptionValue),
-    });
-  };
+  const handleChange = value => props.onChange(null, { 
+    name: props.name, 
+    value: value
+  });
     
   let storedCallback = () => {};
   let storedInputText = '';
 
+  console.log(`i render this AsyncManyToManyField: ${props.formId} ${props.name}`);
   return (
-    
-
     <Form.Field
       required={ props.required }
       disabled={ !props.editable }
@@ -52,12 +49,12 @@ export function AsyncManyToManyField(props) {
         isLoading={ props.isLoading }
         isRtl={ props.isRtl }
         isMulti={ true }
-        cacheOptions={ true }
+        cacheOptions={ false }
         defaultOptions={ true }
         loadOptions={ (inputText, callback) => {
           storedCallback = callback;
           storedInputText = inputText;
-          return props.loadOptions({ 
+          props.loadOptions({ 
             formId: props.formId,  
             inputText: inputText, 
             fieldName: props.name,
@@ -66,13 +63,26 @@ export function AsyncManyToManyField(props) {
           });
         } }
 
-        onMenuScrollToBottom={ () => props.loadOptions({
-          formId: props.formId,  
-          inputText: storedInputText, 
-          fieldName: props.name,
-          url: props.data,
-          callback: storedCallback,
-        }) }
+        onMenuOpen={ () => {
+          props.loadOptions({
+            formId: props.formId,  
+            inputText: storedInputText, 
+            fieldName: props.name,
+            url: props.data,
+            callback: storedCallback,
+          });
+        }
+        }
+
+        onMenuScrollToBottom={ () => {
+          props.loadOptions({
+            formId: props.formId,  
+            inputText: storedInputText, 
+            fieldName: props.name,
+            url: props.data,
+            callback: storedCallback,
+          });
+        } }
 
         value={ props.value }
 

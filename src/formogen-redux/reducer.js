@@ -1,5 +1,5 @@
 import { 
-  STORE_FORM_DATA, STORE_FORM_METADATA, STORE_FIELD_DATA,
+  STORE_FORM_DATA, STORE_FORM_METADATA, STORE_FIELD_DATA, STORE_FIELD_OPTIONS,
   FETCH_FORM_METADATA_SUCCESS,
   FETCH_FORM_DATA_SUCCESS,
 
@@ -14,8 +14,19 @@ export function prefixObjectFields(formId, obj) {
   return prefixedObj;
 }
 
+export function mergeOptions(prevOptions=[], nextOptions=[]) {
+  const options = [ ...prevOptions ];
+  nextOptions.forEach(nextOpt => 
+    !options.find(existing => existing.id === nextOpt.id)?.id &&
+    options.push(nextOpt)
+  );
+  return options;
+}
+
 export function formogenReducer(state = {}, action) {
-  const { type, payload, meta: { formId, fieldName, ...restMeta }={} } = action;
+  const { type, payload, meta: { formId, fieldName, inputText, ...restMeta }={} } = action;
+
+  const relatedFieldSearchKeyPrefix = `Form:${formId}:field:${fieldName}:q:${inputText}`;
 
   switch (type) {
     case FETCH_FORM_DATA_SUCCESS:
@@ -48,15 +59,21 @@ export function formogenReducer(state = {}, action) {
         [ `Form:${formId}:metaData` ]: payload,
       };
 
+    case STORE_FIELD_OPTIONS:
+      return {
+        ...state,
+        [ `${relatedFieldSearchKeyPrefix}:options` ]: payload,
+      };
+
     case FETCH_NEXT_FIELD_OPTIONS_SUCCESS:
       return {
         ...state,
-        [ `Form:${formId}:field:${fieldName}:options` ]: [
-          ...(state[ `Form:${formId}:field:${fieldName}:options` ] || []),
-          ...payload.list
-        ],
-        [ `Form:${formId}:field:${fieldName}:nextPageNumber` ]: payload.nextPageNumber,
-        [ `Form:${formId}:field:${fieldName}:currentPageNumber` ]: payload.currentPageNumber,
+        [ `${relatedFieldSearchKeyPrefix}:options` ]: mergeOptions(
+          state[ `${relatedFieldSearchKeyPrefix}:options` ],
+          payload.list
+        ),
+        [ `${relatedFieldSearchKeyPrefix}:nextPageNumber` ]: payload.nextPageNumber,
+        [ `${relatedFieldSearchKeyPrefix}:currentPageNumber` ]: payload.currentPageNumber,
       };
 
     default:

@@ -1,56 +1,31 @@
+import { map, isEmpty } from 'lodash';
 
-// import { delay } from 'redux-saga';
-import { takeLatest, all, put, takeEvery, select } from 'redux-saga/effects';
+import { all, put, takeEvery, select } from 'redux-saga/effects';
 
-import { responseAdapterRegistry } from './ResponseAdapters';
-import { executeRequest, singleApiCall, processError } from './apiHelpers';
 import { 
   BOOTSTRAP, BOOTSTRAP_SUCCESS, BOOTSTRAP_ERROR,
-
-  FETCH_FORM_METADATA, FETCH_FORM_METADATA_SUCCESS, FETCH_FORM_METADATA_ERROR,
-  FETCH_FORM_DATA, FETCH_FORM_DATA_SUCCESS, FETCH_FORM_DATA_ERROR,
-
-  FETCH_NEXT_FIELD_OPTIONS, FETCH_NEXT_FIELD_OPTIONS_SUCCESS, FETCH_NEXT_FIELD_OPTIONS_ERROR,
+  FETCH_FORM_METADATA,
+  FETCH_NEXT_FIELD_OPTIONS,
 } from './constants';
-import { formogen as formogenSelector } from './selectors';
-
-export const fetchFormMetadata = singleApiCall({
-  method: requestOpts => executeRequest(requestOpts),
-  types: [ FETCH_FORM_METADATA, FETCH_FORM_METADATA_SUCCESS, FETCH_FORM_METADATA_ERROR ],
-});
-
-
-export const fetchFormData = singleApiCall({
-  method: requestOpts => executeRequest(requestOpts),
-  types: [ FETCH_FORM_DATA, FETCH_FORM_DATA_SUCCESS, FETCH_FORM_DATA_ERROR, ],
-});
-
-export const searchDataFieldOptions = singleApiCall({
-  processResponse: ({ response, payload: { url } }) => {
-    const Adapter = responseAdapterRegistry.resolveAdapter(url);
-    return new Adapter(response.body);
-  },
-  method: ({ url, page, inputText }) => executeRequest({ 
-    url, 
-    query: { page, q: inputText } 
-  }),
-  types: [ 
-    FETCH_NEXT_FIELD_OPTIONS, 
-    FETCH_NEXT_FIELD_OPTIONS_SUCCESS, 
-    FETCH_NEXT_FIELD_OPTIONS_ERROR, 
-  ],
-});
+import { 
+  formogen as formogenSelector,
+  metaDataM2MFields as metaDataM2MFieldsSelector,
+  storedFieldValue as storedFieldValueSelector,
+} from './selectors';
+import * as api from './api';
+import { processError } from './apiHelpers';
+import { storeFieldOptions } from './actions';
 
 
 export function* bootstrap({ payload, meta }) {
   const gathered = [
-    fetchFormMetadata({
+    api.fetchFormMetadata({
       payload: { url: payload.describeUrl, locale: payload.locale },
       meta: { formId: meta.formId }
     })
   ];
 
-  payload.objectUrl && gathered.push(fetchFormData({
+  payload.objectUrl && gathered.push(api.fetchFormData({
     payload: { url: payload.objectUrl, locale: payload.locale },
     meta: { formId: meta.formId }
   }));
@@ -60,30 +35,42 @@ export function* bootstrap({ payload, meta }) {
     { error: fetchFormDataError } = {}
   ] = yield all(gathered);
 
-  if (!(fetchFormMetadataError === fetchFormDataError === undefined))
+  if (fetchFormMetadataError !== undefined || fetchFormDataError !== undefined) 
     return yield processError(
       BOOTSTRAP_ERROR, 
       fetchFormMetadataError,
       { arguments: arguments }
     );
 
+  yield initializeRelatedFieldOptions(meta.formId);
+
   yield put({ type: BOOTSTRAP_SUCCESS });
   return true;
 }
 
+export function* initializeRelatedFieldOptions(formId) {
+  const m2mFields = yield select(metaDataM2MFieldsSelector, { formId });
+  for (const fieldName of map(m2mFields, 'name')) {
+    const value = yield select(storedFieldValueSelector, { formId, name: fieldName });
+    if (isEmpty(value))
+      continue;
+    
+    yield put(storeFieldOptions({ formId, inputText: '', fieldName, value }));
+  }
+}
+
 export function* fetchNextFieldOptions({ payload, meta }) {
-  let formogen = yield select(formogenSelector);
-  const nextPageNumber = formogen[`Form:${meta.formId}:field:${meta.fieldName}:nextPageNumber`];
-  const currentPageNumber = formogen[`Form:${meta.formId}:field:${meta.fieldName}:currentPageNumber`];
+  const keyPrefix = `Form:${meta.formId}:field:${meta.fieldName}:q:${payload.inputText}`;
+  const formogen = yield select(formogenSelector);
 
-  let requestPageNumber = meta.page || nextPageNumber;
-  if (!currentPageNumber) 
-    requestPageNumber = 1;
+  const nextPageNumber = formogen[`${keyPrefix}:nextPageNumber`];
+  const currentPageNumber = formogen[`${keyPrefix}:currentPageNumber`];
 
-  if (!requestPageNumber)
+  let requestPageNumber = meta.page * 1 || nextPageNumber * 1 || (currentPageNumber * 1 + 1) || 1;
+  if (nextPageNumber === null || !requestPageNumber || isNaN(requestPageNumber))
     return;
 
-  yield searchDataFieldOptions({
+  yield api.searchDataFieldOptions({
     payload: { 
       inputText: payload.inputText, 
       url: payload.url, 
@@ -92,19 +79,19 @@ export function* fetchNextFieldOptions({ payload, meta }) {
     meta: { 
       formId: meta.formId, 
       fieldName: meta.fieldName, 
+      inputText: payload.inputText,
     }
   });
 
-  formogen = yield select(formogenSelector);
-  const options = formogen[`Form:${meta.formId}:field:${meta.fieldName}:options`];
-
+  const updatedFormogen = yield select(formogenSelector);
+  const options = updatedFormogen[`${keyPrefix}:options`];
+  console.log('calling callback with ', options);
   payload.callback(options);
 }
 
 
 export function* formogenSagas() {
   yield all([
-    takeEvery(FETCH_FORM_METADATA, fetchFormMetadata),
     takeEvery(BOOTSTRAP, bootstrap),
     takeEvery(FETCH_NEXT_FIELD_OPTIONS, fetchNextFieldOptions),
   ]);
