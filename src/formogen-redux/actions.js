@@ -6,6 +6,7 @@ import {
   AGENT_EXECUTE_REQUEST_ATTEMPT_FAILED,
   FETCH_NEXT_FIELD_OPTIONS,
   STORE_FIELD_OPTIONS,
+  STORE_FIELD_SEARCH_TEXT,
 } from './constants';
 
 
@@ -50,8 +51,15 @@ export const fetchNextFieldOptions = ({ formId, fieldName, ...payload }) => ({
 });
 
 
-export const storeFieldOptions = ({ formId, fieldName, inputText = '', value }) => ({
+export const storeFieldOptions = ({ formId, fieldName, searchText = '', value }) => ({
   type: STORE_FIELD_OPTIONS,
   payload: value,
-  meta: { formId, fieldName, inputText }
+  meta: { formId, fieldName, searchText }
+});
+
+
+export const changeFieldSearchText = ({ formId, fieldName, searchText = '' }) => ({
+  type: STORE_FIELD_SEARCH_TEXT,
+  payload: searchText,
+  meta: { formId, fieldName, searchText }
 });

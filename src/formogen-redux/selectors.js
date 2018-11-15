@@ -69,12 +69,7 @@ export const initialFieldValue = createSelector(
 );
 export const finalFieldValue = createSelector(
   [ dirtyFieldValue, storedFieldValue, defaultFieldValue ],
-  (dirtyFieldValue, storedFieldValue, defaultFieldValue) => {
-    const value = dirtyFieldValue || storedFieldValue || defaultFieldValue;
-    if (value === undefined)
-      return '';
-    return value;
-  }
+  (...args) => [ ...args, '' ].filter(val => val !== undefined)[0]
 );
 
 
@@ -83,3 +78,21 @@ export const fieldOptionsNextPageNumber = createSelector(
   (formogen, formId, fieldName) => // '' is the default value
     formogen[`Form:${formId}:field:${fieldName}:nextPageNumber`]
 );
+
+
+export const asyncFieldInputSearch = createSelector(
+  [ formogen, formId, fieldName ],
+  (formogen, formId, fieldName) => // '' is the default value
+    formogen[ `Form:${formId}:field:${fieldName}:q` ]
+);
+
+export const asyncFieldOptions = createSelector(
+  [ formogen, formId, fieldName, asyncFieldInputSearch ],
+  (formogen, formId, fieldName, fieldInputSearch) => // '' is the default value
+    formogen[ `Form:${formId}:field:${fieldName}:q:${fieldInputSearch}:options` ]
+);
+
+/**
+ * 
+ * Form:${formId}:field:${fieldName}:q:${fieldInputSearch}
+ */

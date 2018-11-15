@@ -25,9 +25,9 @@ export const searchDataFieldOptions = singleApiCall({
     const Adapter = responseAdapterRegistry.resolveAdapter(url);
     return new Adapter(response.body);
   },
-  method: ({ url, page, inputText }) => executeRequest({ 
+  method: ({ url, page, searchText }) => executeRequest({ 
     url, 
-    query: { page, q: inputText } 
+    query: { page, q: searchText } 
   }),
   types: [ 
     FETCH_NEXT_FIELD_OPTIONS, 

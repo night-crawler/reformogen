@@ -12,7 +12,7 @@ export class App extends Component {
   render() {
     return (
       <Grid columns='2'>
-        <Grid.Column>
+        {/* <Grid.Column>
           <Segment color='red'>
             <FormogenForm
               formId='bla-1'
@@ -21,7 +21,7 @@ export class App extends Component {
               describeUrl='http://localhost:8000/api/v1/sample/authors/describe/'
             />
           </Segment>
-        </Grid.Column>
+        </Grid.Column> */}
 
         <Grid.Column>
           <Segment color='red'>

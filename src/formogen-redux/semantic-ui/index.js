@@ -3,6 +3,7 @@ import { isString } from 'lodash';
 import { fields } from '~/formogen/semantic-ui';
 
 import { connectField } from './reduxFieldFactory';
+import { AsyncManyToManyField } from './AsyncManyToManyField';
 
 export const suiFieldComponentMap = {
   GenericField: connectField(fields.GenericField),
@@ -26,7 +27,7 @@ export const suiFieldComponentMap = {
   InlineForeignKeyField: connectField(fields.InlineForeignKeyField),
   InlineManyToManyField: connectField(fields.InlineManyToManyField),
   
-  AsyncManyToManyField: connectField(fields.AsyncManyToManyField),
+  AsyncManyToManyField: AsyncManyToManyField,
 };
 
 export function getFieldComponentForType({ type, choices, data }) {

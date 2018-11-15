@@ -1,101 +1,157 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { isEmpty, map } from 'lodash';
+import { isEmpty } from 'lodash';
 import { Form } from 'semantic-ui-react';
-import AsyncSelect from 'react-select/lib/Async';
+import { SelectBase } from 'react-select';
 
 import propTypes from '../../fieldPropTypes';
 import { FieldLabel } from '../FieldLabel';
 import { ErrorsList } from '../ErrorsList';
 
 
-AsyncManyToManyField.propTypes = {
-  ...propTypes,
-  getOptionLabel: PropTypes.func,
-  getOptionValue: PropTypes.func,
-};
-AsyncManyToManyField.defaultProps = {
-  loadOptions: payload => // eslint-disable-next-line
-    console.info(`AsyncManyToManyField.loadOptions(${JSON.stringify(payload)})`),
-  loadMoreOptions: payload => // eslint-disable-next-line
-    console.info(`AsyncManyToManyField.loadMoreOptions(${JSON.stringify(payload)})`),
+export class AsyncManyToManyField extends React.Component {
+  static propTypes = {
+    ...propTypes,
+    getOptionLabel: PropTypes.func,
+    getOptionValue: PropTypes.func,
+  };
 
-  getOptionLabel: ({ name }) => name,
-  getOptionValue: ({ id }) => id,
-};
-export function AsyncManyToManyField(props) {
-  const handleChange = value => props.onChange(null, { 
-    name: props.name, 
+  static defaultProps = {
+    loadOptions: payload => // eslint-disable-next-line
+      console.info(`AsyncManyToManyField.loadOptions(${JSON.stringify(payload)})`),
+  
+    getOptionLabel: ({ name }) => name,
+    getOptionValue: ({ id }) => id,
+  };
+
+  constructor(props) {
+    super(props);
+
+    this.storedCallback = () => {};
+    this.storedInputText = '';
+    this.state = {
+      openCounter: 0,
+      menuIsOpen: false,
+      isLoading: false,
+      search: '',
+    };
+  }
+
+  handleChange = value => this.props.onChange(null, { 
+    name: this.props.name, 
     value: value
   });
-    
-  let storedCallback = () => {};
-  let storedInputText = '';
 
-  console.log(`i render this AsyncManyToManyField: ${props.formId} ${props.name}`);
-  return (
-    <Form.Field
-      required={ props.required }
-      disabled={ !props.editable }
-      width={ props.layoutOpts.width }
-      error={ !isEmpty(props.errors) }
-    >
-      <FieldLabel { ...props } />
-      <AsyncSelect
-        inputId={ `AsyncManyToManyField-${props.formId}-${props.name}` }
-        placeholder={ props.placeholder }
-        isClearable={ props.editable }
-        isDisabled={ !props.editable }
-        isLoading={ props.isLoading }
-        isRtl={ props.isRtl }
-        isMulti={ true }
-        cacheOptions={ false }
-        defaultOptions={ true }
-        loadOptions={ (inputText, callback) => {
-          storedCallback = callback;
-          storedInputText = inputText;
-          props.loadOptions({ 
-            formId: props.formId,  
-            inputText: inputText, 
-            fieldName: props.name,
-            url: props.data,
-            callback: callback,
-          });
-        } }
+  render() {
+    return (
+      <Form.Field
+        required={ this.props.required }
+        disabled={ !this.props.editable }
+        width={ this.props.layoutOpts.width }
+        error={ !isEmpty(this.props.errors) }
+      >
+        <FieldLabel { ...this.props } />
+        <SelectBase
+          ref={ self => this.select = self }
 
-        onMenuOpen={ () => {
-          props.loadOptions({
-            formId: props.formId,  
-            inputText: storedInputText, 
-            fieldName: props.name,
-            url: props.data,
-            callback: storedCallback,
-          });
+          menuIsOpen={ this.state.menuIsOpen }
+
+          inputId={ `AsyncManyToManyField-${this.props.formId}-${this.props.name}` }
+
+          inputValue={ this.state.search }
+
+
+          placeholder={ this.props.placeholder }
+          isClearable={ this.props.editable }
+          isDisabled={ !this.props.editable }
+          isLoading={ this.state.isLoading }
+          isRtl={ this.props.isRtl }
+          isMulti={ true }
+          hideSelectedOptions={ false }
+
+          value={ this.props.value }
+  
+          getOptionLabel={ this.props.getOptionLabel }
+          getOptionValue={ this.props.getOptionValue }
+  
+          options={ this.props.options }
+
+          onChange={ this.handleChange } 
+          onMenuClose={ this.handleMenuClose }
+          onMenuOpen={ this.handleMenuOpen }
+          onInputChange={ this.handleInputChange }
+          onMenuScrollToBottom={ this.handleMenuScrollToBottom }
+
+        />
+        { !this.props.helpTextOnHover
+          ? <span className='help-text'>{ this.props.help_text }</span>
+          : ''
         }
-        }
+        <ErrorsList messages={ this.props.errors } />
+      </Form.Field>
+    );
+  }
 
-        onMenuScrollToBottom={ () => {
-          props.loadOptions({
-            formId: props.formId,  
-            inputText: storedInputText, 
-            fieldName: props.name,
-            url: props.data,
-            callback: storedCallback,
-          });
-        } }
-
-        value={ props.value }
-
-        getOptionLabel={ props.getOptionLabel }
-        getOptionValue={ props.getOptionValue }
-
-        onChange={ handleChange } 
-      />
-      { !props.helpTextOnHover
-        ? <span className='help-text'>{ props.help_text }</span>
-        : ''
+  handleMenuClose = () => {
+    // eslint-disable-next-line
+    this.setState({
+      search: '',
+      menuIsOpen: false,
+      isLoading: false,
+    });
+  }
+  handleMenuOpen = async () => {
+    // eslint-disable-next-line
+    await this.setState(
+      { menuIsOpen: true, openCounter: this.state.openCounter + 1 },
+      async () => {
+        // ! some magic with constants
+        // When users triggers handleMenuOpen they always have the inputText cleared, so it's ok
+        // to call the new search with '' query.
+        // When user opens the menu we must trigger loadOptions once only to fix this strange react-select
+        // behaviour when it just does not trigger handleMenuScrollToBottom on the first page.
+        // Any further pagination logic must be covered in handleMenuScrollToBottom separately.
+        if (this.state.openCounter === 1)
+          await this.loadOptions();
       }
-      <ErrorsList messages={ props.errors } />
-    </Form.Field>
-  );
+    );
+  }
+  handleInputChange = async search => {
+    if (search === this.state.search)
+      return;
+    // eslint-disable-next-line
+    await this.setState(
+      { search },
+      async () => await this.loadOptions()
+    );
+  }
+  handleMenuScrollToBottom = async () => {
+    await this.loadOptions();
+  }
+  async loadOptions() {
+    const { loadOptions } = this.props;
+
+    if (this.state.isLoading) 
+      return;
+    
+    // eslint-disable-next-line
+    await this.setState({ isLoading: true });
+
+    await loadOptions({ 
+      formId: this.props.formId,  
+      searchText: this.state.search, 
+      fieldName: this.props.name,
+      url: this.props.data,
+      callback: async () => { 
+        // eslint-disable-next-line
+        await this.setState({ isLoading: false });
+      },
+    });
+  }
+
+  componentDidMount = async () => {
+    // we need this bullshit here because react-select does not trigger 
+    // onMenuScrollToBottom for the FIRST time it's being rendered
+    await this.loadOptions();
+  }
 }

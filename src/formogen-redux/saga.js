@@ -4,7 +4,6 @@ import { all, put, takeEvery, select } from 'redux-saga/effects';
 
 import { 
   BOOTSTRAP, BOOTSTRAP_SUCCESS, BOOTSTRAP_ERROR,
-  FETCH_FORM_METADATA,
   FETCH_NEXT_FIELD_OPTIONS,
 } from './constants';
 import { 
@@ -14,7 +13,7 @@ import {
 } from './selectors';
 import * as api from './api';
 import { processError } from './apiHelpers';
-import { storeFieldOptions } from './actions';
+import { storeFieldOptions, changeFieldSearchText } from './actions';
 
 
 export function* bootstrap({ payload, meta }) {
@@ -55,38 +54,43 @@ export function* initializeRelatedFieldOptions(formId) {
     if (isEmpty(value))
       continue;
     
-    yield put(storeFieldOptions({ formId, inputText: '', fieldName, value }));
+    yield put(storeFieldOptions({ formId, searchText: '', fieldName, value }));
   }
 }
 
 export function* fetchNextFieldOptions({ payload, meta }) {
-  const keyPrefix = `Form:${meta.formId}:field:${meta.fieldName}:q:${payload.inputText}`;
+  const keyPrefix = `Form:${meta.formId}:field:${meta.fieldName}:q:${payload.searchText}`;
   const formogen = yield select(formogenSelector);
 
   const nextPageNumber = formogen[`${keyPrefix}:nextPageNumber`];
   const currentPageNumber = formogen[`${keyPrefix}:currentPageNumber`];
 
   let requestPageNumber = meta.page * 1 || nextPageNumber * 1 || (currentPageNumber * 1 + 1) || 1;
-  if (nextPageNumber === null || !requestPageNumber || isNaN(requestPageNumber))
+  if (nextPageNumber === null || !requestPageNumber || isNaN(requestPageNumber)) {
+    // even if we have nothing to do, we must change current searchText
+    yield put(changeFieldSearchText({ 
+      formId: meta.formId, 
+      fieldName: meta.fieldName,
+      searchText: payload.searchText,
+    }));
+    payload.callback();
     return;
+  }
 
   yield api.searchDataFieldOptions({
     payload: { 
-      inputText: payload.inputText, 
+      searchText: payload.searchText, 
       url: payload.url, 
       page: requestPageNumber,
     },
     meta: { 
       formId: meta.formId, 
       fieldName: meta.fieldName, 
-      inputText: payload.inputText,
+      searchText: payload.searchText,
     }
   });
 
-  const updatedFormogen = yield select(formogenSelector);
-  const options = updatedFormogen[`${keyPrefix}:options`];
-  console.log('calling callback with ', options);
-  payload.callback(options);
+  payload.callback();
 }
 
 

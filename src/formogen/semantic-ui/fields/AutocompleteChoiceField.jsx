@@ -8,13 +8,6 @@ import { errorsType, layoutOptsType } from '../../fieldPropTypes';
 import { FieldLabel } from '../FieldLabel';
 import { ErrorsList } from '../ErrorsList';
 
-/**
- * Converts structures like [ [ 1, 'Choice' ] ] -> [ { value: 1, label: 'Choice' } ]
- * @param {Array} choices 
- */
-const makeReactSelectOptions = choices => choices.map(
-  ([ value, label ]) => ({ value, label }));
-
 
 AutocompleteChoiceField.propTypes = {
   type: PropTypes.string.isRequired,
@@ -39,7 +32,7 @@ AutocompleteChoiceField.propTypes = {
 };
 AutocompleteChoiceField.defaultProps = {
   choices: [],
-  getOptionLabel: ([ id, name ]) => name,
+  getOptionLabel: ([ , name ]) => name,
   getOptionValue: ([ id ]) => id,
 };
 export function AutocompleteChoiceField(props) {
@@ -60,7 +53,7 @@ export function AutocompleteChoiceField(props) {
         isMulti={ false }
         clearable={ !props.required }
         name={ props.name }
-        value={ props.choices.filter(([ id, name ]) => props.value === id ) }
+        value={ props.choices.filter(([ id ]) => props.value === id ) }
         placeholder={ props.placeholder }
         options={ props.choices }
         onChange={ handleChange }

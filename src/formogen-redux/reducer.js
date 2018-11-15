@@ -3,7 +3,7 @@ import {
   FETCH_FORM_METADATA_SUCCESS,
   FETCH_FORM_DATA_SUCCESS,
 
-  FETCH_NEXT_FIELD_OPTIONS_SUCCESS,
+  FETCH_NEXT_FIELD_OPTIONS_SUCCESS, STORE_FIELD_SEARCH_TEXT,
 } from './constants';
 
 export function prefixObjectFields(formId, obj) {
@@ -24,9 +24,9 @@ export function mergeOptions(prevOptions=[], nextOptions=[]) {
 }
 
 export function formogenReducer(state = {}, action) {
-  const { type, payload, meta: { formId, fieldName, inputText, ...restMeta }={} } = action;
+  const { type, payload, meta: { formId, fieldName, searchText }={} } = action;
 
-  const relatedFieldSearchKeyPrefix = `Form:${formId}:field:${fieldName}:q:${inputText}`;
+  const relatedFieldSearchKeyPrefix = `Form:${formId}:field:${fieldName}:q:${searchText}`;
 
   switch (type) {
     case FETCH_FORM_DATA_SUCCESS:
@@ -65,6 +65,12 @@ export function formogenReducer(state = {}, action) {
         [ `${relatedFieldSearchKeyPrefix}:options` ]: payload,
       };
 
+    case STORE_FIELD_SEARCH_TEXT:
+      return {
+        ...state,
+        [ `Form:${formId}:field:${fieldName}:q` ]: searchText,
+      };
+    
     case FETCH_NEXT_FIELD_OPTIONS_SUCCESS:
       return {
         ...state,
@@ -74,6 +80,7 @@ export function formogenReducer(state = {}, action) {
         ),
         [ `${relatedFieldSearchKeyPrefix}:nextPageNumber` ]: payload.nextPageNumber,
         [ `${relatedFieldSearchKeyPrefix}:currentPageNumber` ]: payload.currentPageNumber,
+        [ `Form:${formId}:field:${fieldName}:q` ]: searchText,
       };
 
     default:
