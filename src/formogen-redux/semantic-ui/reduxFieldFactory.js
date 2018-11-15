@@ -6,7 +6,7 @@ import { formId, finalFieldValue, initialFieldValue } from '~/formogen-redux/sel
 import { storeFieldData } from '~/formogen-redux/actions';
 
 
-export function connectField(FieldComponent) {
+export function connectField(FieldComponent, selectors={}) {
   function mergeProps(stateProps, dispatchProps, ownProps) {
     const { dispatch } = dispatchProps;
     const { formId } = ownProps;
@@ -26,6 +26,7 @@ export function connectField(FieldComponent) {
       formId,
       initialValue: initialFieldValue,
       value: finalFieldValue,
+      ...selectors,
     }),
     dispatch => ({ dispatch }),
     mergeProps,

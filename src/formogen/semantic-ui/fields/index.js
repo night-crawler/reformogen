@@ -11,3 +11,4 @@ export { TextField } from './TextField.jsx';
 export { TimeField } from './TimeField.jsx';
 
 export { AsyncManyToManyField } from './AsyncManyToManyField';
+export { AsyncForeignKeyField } from './AsyncForeignKeyField';

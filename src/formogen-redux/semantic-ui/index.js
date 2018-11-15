@@ -2,8 +2,11 @@ import { isString } from 'lodash';
 
 import { fields } from '~/formogen/semantic-ui';
 
+import { asyncFieldOptions } from '../selectors';
+
 import { connectField } from './reduxFieldFactory';
-import { AsyncManyToManyField } from './AsyncManyToManyField';
+
+
 
 export const suiFieldComponentMap = {
   GenericField: connectField(fields.GenericField),
@@ -27,7 +30,8 @@ export const suiFieldComponentMap = {
   InlineForeignKeyField: connectField(fields.InlineForeignKeyField),
   InlineManyToManyField: connectField(fields.InlineManyToManyField),
   
-  AsyncManyToManyField: AsyncManyToManyField,
+  AsyncManyToManyField: connectField(fields.AsyncManyToManyField, { options: asyncFieldOptions }),
+  AsyncForeignKeyField: connectField(fields.AsyncForeignKeyField, { options: asyncFieldOptions }),
 };
 
 export function getFieldComponentForType({ type, choices, data }) {
@@ -37,6 +41,9 @@ export function getFieldComponentForType({ type, choices, data }) {
   // opts.data can be a string or a list; string treats as a url to DataSet
   if (type === 'ForeignKey' && !isString(data))
     return suiFieldComponentMap.InlineForeignKeyField;
+
+  if (type === 'ForeignKey' && isString(data))
+    return suiFieldComponentMap.AsyncForeignKeyField;
 
   if (type === 'ManyToManyField' && !isString(data))
     return suiFieldComponentMap.InlineManyToManyField;
