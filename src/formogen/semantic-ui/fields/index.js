@@ -12,3 +12,5 @@ export { TimeField } from './TimeField.jsx';
 
 export { AsyncManyToManyField } from './AsyncManyToManyField';
 export { AsyncForeignKeyField } from './AsyncForeignKeyField';
+
+export { DropzoneField } from './DropzoneField';

@@ -23,7 +23,7 @@ export class App extends Component {
           </Segment>
         </Grid.Column> */}
 
-        <Grid.Column>
+        {/* <Grid.Column>
           <Segment color='red'>
             <FormogenForm
               formId='bla-2'
@@ -31,6 +31,18 @@ export class App extends Component {
               getFieldComponent={ getFieldComponentForType }
               describeUrl='http://localhost:8000/api/v1/sample/authors/1/describe_object/'
               objectUrl='http://localhost:8000/api/v1/sample/authors/1/'
+            />
+          </Segment>
+        </Grid.Column> */}
+
+        <Grid.Column>
+          <Segment color='red'>
+            <FormogenForm
+              formId='form-3'
+              getFormComponent={ () => FormComponent }
+              getFieldComponent={ getFieldComponentForType }
+              describeUrl='http://localhost:8000/api/v1/sample/books/1/describe_object/'
+              objectUrl='http://localhost:8000/api/v1/sample/books/1/'
             />
           </Segment>
         </Grid.Column>

@@ -32,11 +32,16 @@ export const suiFieldComponentMap = {
   
   AsyncManyToManyField: connectField(fields.AsyncManyToManyField, { options: asyncFieldOptions }),
   AsyncForeignKeyField: connectField(fields.AsyncForeignKeyField, { options: asyncFieldOptions }),
+
+  DropzoneField: connectField(fields.DropzoneField),
 };
 
 export function getFieldComponentForType({ type, choices, data }) {
   if (choices)
     return suiFieldComponentMap['AutocompleteChoiceField']; 
+
+  if (type === 'FileField') 
+    return suiFieldComponentMap.DropzoneField;
 
   // opts.data can be a string or a list; string treats as a url to DataSet
   if (type === 'ForeignKey' && !isString(data))

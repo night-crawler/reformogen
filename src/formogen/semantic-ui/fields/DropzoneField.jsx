@@ -11,153 +11,9 @@ import { splitExt, bytesToSize } from '../../utils';
 import { ErrorsList } from '../ErrorsList';
 import { CaptionTruncator } from '../CaptionTruncator';
 
-const fileShape = PropTypes.shape({
-  lastModified: PropTypes.number,
-  lastModifiedDate: PropTypes.object,
-  preview: PropTypes.string,
-  size: PropTypes.number,
-  type: PropTypes.string,
-});
 
 
-ListContentWithProgress.propTypes = {
-  percent: PropTypes.number,
-  color: PropTypes.string,
-  styles: PropTypes.object,
-  children: PropTypes.any,
-};
-function ListContentWithProgress({ percent = 50, color = 'LimeGreen', styles = {}, children = {} }) {
-  const defaultStyles = {
-    background: `linear-gradient(90deg, #fff, ${color} ${percent}%, #fff ${percent}%, #fff 100%)`,
-    backgroundRepeat: 'no-repeat',
-    border: '1px solid #999',
-    borderRadius: 4,  // don't touch this it's a magic number!
-    height: '37px',
-  };
-  return (
-    <List.Content className='list-content-with-progress' style={ { ...defaultStyles, styles } }>
-      { children }
-    </List.Content>
-  );
-}
-
-
-/**
- * {
- *     formFilesUploadProgress: {
- *         <fieldName>: {
- *              <fileName>: {percent: 100, status: 'ok|fail'}
- *         }
- *     }
- * }
- */
-
-FilesPreview.propTypes = {
-  files: PropTypes.arrayOf(fileShape).isRequired,
-  onClear: PropTypes.func.isRequired,
-  onRemoveFile: PropTypes.func.isRequired,
-  getFileIcon: PropTypes.func.isRequired,
-  formFilesUploadProgress: PropTypes.object
-};
-function FilesPreview({ files, onClear, getFileIcon, onRemoveFile, formFilesUploadProgress }) {
-  if (isEmpty(files))
-    return null;
-
-  return (
-    <Segment attached={ true }>
-      <List divided={ true } relaxed={ true } className='files-previews'>
-        { files.map((file, i) => {
-          const progress = get(formFilesUploadProgress, file.name, {});
-          return <FileItem
-            key={ i }
-            file={ file }
-            getFileIcon={ getFileIcon }
-            onRemove={ onRemoveFile }
-            progress={ progress }
-          />;
-        }) }
-      </List>
-      <Button size='mini' fluid={ true } icon={ true } onClick={ onClear }>
-        <Icon name='remove' />
-      </Button>
-    </Segment>
-  );
-}
-
-
-CurrentFilesPreview.propTypes = {
-  currentFiles: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.arrayOf(PropTypes.string),
-  ]),
-  removable: PropTypes.bool,
-  onRemove: PropTypes.func,
-};
-function CurrentFilesPreview({ currentFiles, removable = true, onRemove }) {
-  const files = isArray(currentFiles) ? currentFiles : [currentFiles];
-
-  const listItems = files.map((value, i) => (
-    <List.Item key={ i }>
-      <a href={ value } target='_blank' rel='noopener noreferrer'>
-        { typeof value === 'string' ? value.split('/').slice(-1) : 'File' }
-      </a>
-    </List.Item>
-  ));
-
-  return (
-    <Segment attached={ true }>
-      <List>
-        <List.Header>Currently:</List.Header>
-        <List.Item>
-          <List.Content floated='right'>
-            { removable && <Checkbox label='clear' floated='right' onChange={ onRemove } /> }
-          </List.Content>
-          <List bulleted={ true }>{ listItems }</List>
-        </List.Item>
-      </List>
-    </Segment>
-  );
-}
-
-
-FileItem.propTypes = {
-  file: fileShape.isRequired,
-  getFileIcon: PropTypes.func.isRequired,
-  onRemove: PropTypes.func.isRequired,
-  progress: PropTypes.object.isRequired,
-};
-function FileItem({ file, getFileIcon, onRemove, progress }) {
-  const [fileName, fileExt] = splitExt(file.name);
-  const { status: uploadStatus, percent = 0 } = progress;
-  const color = uploadStatus === 'fail' ? '#db2828' : 'LimeGreen';
-
-  return (
-    <List.Item>
-      <Measure bounds={ true }>
-        {
-          ({ measureRef, contentRect }) =>
-            <div ref={ measureRef }>
-              <ListContentWithProgress percent={ percent } color={ color }>
-                <Image verticalAlign='middle' size='mini' src={ getFileIcon(file) } floated='left' />
-                <div className='file-representation' title={ `[${bytesToSize(file.size)}] ${file.name}` }>
-                  <strong>{ `[${bytesToSize(file.size)}]` }&nbsp;</strong>
-                  <CaptionTruncator caption={ fileName } width={ (contentRect.bounds.width || 200) - 200 } />
-                  <span>.{ fileExt }</span>
-                </div>
-                <Button icon={ true } size='mini' attached='right' floated='right'
-                  onClick={ () => onRemove(file) }>
-                  <Icon name='remove' />
-                </Button>
-              </ListContentWithProgress>
-            </div>
-        }
-      </Measure>
-    </List.Item>
-  );
-}
-
-
-export default class DropzoneField extends React.Component {
+export class DropzoneField extends React.Component {
     static propTypes = {
       type: PropTypes.string.isRequired,
       name: PropTypes.string.isRequired,
@@ -215,7 +71,7 @@ export default class DropzoneField extends React.Component {
         }
       );
     };
-    handleDrop = (newFiles) => {
+    handleDrop = newFiles => {
       const { files: oldFiles } = this.state;
 
       if (!this.props.multiple) {
@@ -231,20 +87,9 @@ export default class DropzoneField extends React.Component {
 
       // build key by this triple to ensure we're adding different newFiles
       const keyBuilder = (item) => `${ item.lastModified }:${ item.size }:${ item.name }`;
-      const mergedFiles = _(oldFiles)
-        .keyBy(keyBuilder)
-        .merge(keyBy(newFiles, keyBuilder))
-        .values()
-        .value();
 
-      this.setState({ files: mergedFiles });
-      return this.props.onChange(
-        null,
-        {
-          name: this.props.name,
-          value: { files: mergedFiles, url: this.props.upload_url, action: 'upload' }
-        }
-      );
+      
+      
     };
     handleClearFiles = () => {
       this.setState({ files: [] });
@@ -270,15 +115,9 @@ export default class DropzoneField extends React.Component {
     };
 
     render() {
-      const labelText = this.props.upperFirstLabel ? upperFirst(this.props.verbose_name) : this.props.verbose_name;
-
-      let _props = {
-        multiple: this.props.multiple,
-        onDrop: this.handleDrop,
-        accept: this.props.accept,
-      };
-
-      const showCurrentFilesPreview = this.props.value && isEmpty(this.state.files);
+      const labelText = this.props.upperFirstLabel 
+        ? upperFirst(this.props.verbose_name) 
+        : this.props.verbose_name;
 
       return (
         <Form.Field
@@ -287,7 +126,12 @@ export default class DropzoneField extends React.Component {
           width={ this.props.layoutOpts.width }
           error={ !isEmpty(this.props.errors) }
         >
-          <Dropzone className='ui center aligned dropzone segment attached top'  { ..._props }>
+          <Dropzone 
+            className='ui center aligned dropzone segment attached top'  
+            multiple={ this.props.multiple }
+            onDrop={ this.handleDrop }
+            accept={ this.props.accept }
+          >
             <strong>{ labelText } { this.props.required && <span className='ui red'>*</span> }</strong>
             { this.props.help_text && <div className='help-text'>{ this.props.help_text }</div> }
             <div>
@@ -295,7 +139,7 @@ export default class DropzoneField extends React.Component {
             </div>
           </Dropzone>
 
-          <FilesPreview
+          {/* <FilesPreview
             files={ this.state.files }
             onClear={ this.handleClearFiles }
             getFileIcon={ this.props.getFileIcon }
@@ -310,7 +154,7 @@ export default class DropzoneField extends React.Component {
               removable={ !!this.props.delete_url }
               onRemove={ this.handleRemoveCurrentFiles }
             />
-          }
+          } */}
 
           <ErrorsList messages={ this.props.errors } />
         </Form.Field>

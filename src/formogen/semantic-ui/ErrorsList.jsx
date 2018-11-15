@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import _ from 'lodash';
+import { isEmpty } from 'lodash';
 import { Message } from 'semantic-ui-react';
 
 
@@ -15,7 +15,7 @@ ErrorsList.defaultProps = {
   color: 'red',
 };
 export function ErrorsList(props) {
-  if (_.isEmpty(props.messages))
+  if (isEmpty(props.messages))
     return null;
 
   return (
