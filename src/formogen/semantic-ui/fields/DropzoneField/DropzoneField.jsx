@@ -1,16 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Checkbox, Form, Icon, Image, List, Segment } from 'semantic-ui-react';
-import { isEmpty, get, upperFirst, without, isArray, keyBy } from 'lodash';
-import Measure from 'react-measure';
+import { Form } from 'semantic-ui-react';
+import { isEmpty, upperFirst, keyBy, sortBy, reverse } from 'lodash';
 import Dropzone from 'react-dropzone';
 
-import { errorsType } from '../../fieldPropTypes';
-import { fileTypeImageMapping, UNKNOWN_FILE_TYPE } from '../../fileTypeImageMapping';
-import { splitExt, bytesToSize } from '../../utils';
-import { ErrorsList } from '../ErrorsList';
-import { CaptionTruncator } from '../CaptionTruncator';
+import { errorsType } from '../../../fieldPropTypes';
+import { fileTypeImageMapping, UNKNOWN_FILE_TYPE } from '../../../fileTypeImageMapping';
+import { ErrorsList } from '../../ErrorsList';
 
+import { DirtyFilesPreview } from './DirtyFilesPreview';
+import { FilesOnServerPreview } from './FilesOnServerPreview';
 
 
 export class DropzoneField extends React.Component {
@@ -36,15 +35,22 @@ export class DropzoneField extends React.Component {
 
       layoutOpts: PropTypes.object,
       formFilesUploadProgress: PropTypes.object,
+      
+      /** value is a current dirty value, previous is not here */
+      value: PropTypes.array,
+      initialValue: PropTypes.string,
 
-      value: PropTypes.string,
+      dropText: PropTypes.string,
     };
     static defaultProps = {
+      initialValue: '',
+      dropText: 'Drop files here',
       getFileIcon: (fileObject) => {
         let ext = fileObject.name.split('.').pop().toLowerCase();
         return fileTypeImageMapping[ext] || UNKNOWN_FILE_TYPE;
       },
       multiple: false,
+      value: [],
     };
 
     constructor(props) {
@@ -72,47 +78,42 @@ export class DropzoneField extends React.Component {
       );
     };
     handleDrop = newFiles => {
-      const { files: oldFiles } = this.state;
-
-      if (!this.props.multiple) {
-        this.setState({ files: newFiles });
-        return this.props.onChange(
-          null,
-          {
-            name: this.props.name,
-            value: { files: newFiles, url: this.props.upload_url, action: 'upload' }
-          }
-        );
-      }
+      if (!this.props.multiple)
+        return this.props.onChange(null, {
+          name: this.props.name,
+          value: newFiles
+        });
 
       // build key by this triple to ensure we're adding different newFiles
-      const keyBuilder = (item) => `${ item.lastModified }:${ item.size }:${ item.name }`;
-
+      const keyBuilder = item => `${ item.lastModified }:${ item.size }:${ item.name }`;
+      const newUniqueFiles = {
+        ...keyBy(this.props.value, keyBuilder),
+        ...keyBy(newFiles, keyBuilder) 
+      } |> Object.values 
+        |> (values => sortBy(values, ['size']))
+        |> reverse;
       
-      
+      return this.props.onChange(null, {
+        name: this.props.name,
+        value: newUniqueFiles
+      });
     };
-    handleClearFiles = () => {
-      this.setState({ files: [] });
-      this.props.onChange(
-        null,
-        {
-          name: this.props.name,
-          value: { files: [], url: this.props.upload_url, action: 'upload' }
-        }
-      );
-    };
-    handleRemoveFile = (fileObject) => {
-      const files = without(this.state.files, fileObject);
-      this.setState({ files });
+    handleClearFiles = () =>
+      this.props.onChange(null, {
+        name: this.props.name,
+        value: []
+      });
 
-      return this.props.onChange(
-        null,
-        {
-          name: this.props.name,
-          value: { files, url: this.props.upload_url, action: 'upload' }
-        }
-      );
-    };
+    handleRemoveFile = (fileObject, i) =>
+      this.props.onChange(null, {
+        name: this.props.name,
+        value: this.props.value.filter((file, _i) => _i !== i)
+      });
+
+    handleRemoveFileFromServer = fileUrl => {
+      // eslint-disable-next-line
+      console.log(fileUrl);
+    }
 
     render() {
       const labelText = this.props.upperFirstLabel 
@@ -131,31 +132,27 @@ export class DropzoneField extends React.Component {
             multiple={ this.props.multiple }
             onDrop={ this.handleDrop }
             accept={ this.props.accept }
+            acceptClassName='green'
+            rejectClassName='red'
           >
             <strong>{ labelText } { this.props.required && <span className='ui red'>*</span> }</strong>
             { this.props.help_text && <div className='help-text'>{ this.props.help_text }</div> }
             <div>
-              { !isEmpty(this.state.files) || 'Drop files here' }
+              { !isEmpty(this.state.files) || this.props.dropText }
             </div>
           </Dropzone>
 
-          {/* <FilesPreview
-            files={ this.state.files }
+          <DirtyFilesPreview
+            files={ this.props.value }
             onClear={ this.handleClearFiles }
-            getFileIcon={ this.props.getFileIcon }
-            onRemoveFile={ this.handleRemoveFile }
-            formFilesUploadProgress={ this.props.formFilesUploadProgress }
+            onDeleteFile={ this.handleRemoveFile }
           />
 
-          {
-            showCurrentFilesPreview &&
-            <CurrentFilesPreview
-              currentFiles={ this.props.value }
-              removable={ !!this.props.delete_url }
-              onRemove={ this.handleRemoveCurrentFiles }
-            />
-          } */}
-
+          <FilesOnServerPreview
+            files={ this.props.initialValue }
+            onDeleteFile={ this.handleRemoveFileFromServer }
+            isRemovable={ !!this.props.delete_url }
+          />
           <ErrorsList messages={ this.props.errors } />
         </Form.Field>
       );

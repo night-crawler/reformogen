@@ -2,12 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 
-CaptionTruncatorComponent.displayName = 'CaptionTruncator';
-CaptionTruncatorComponent.propTypes = {
-  caption: PropTypes.string,
-  width: PropTypes.number,
+CaptionTruncator.displayName = 'CaptionTruncator';
+CaptionTruncator.propTypes = {
+  caption: PropTypes.any,
+  width: PropTypes.any,
 };
-export function CaptionTruncatorComponent({ caption, width = 0 }) {
+export function CaptionTruncator({ caption, width = 0 }) {
   const inlineStyles = {
     display: 'inline-block',
     maxWidth: width,

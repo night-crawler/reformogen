@@ -2,7 +2,7 @@ import { isString } from 'lodash';
 
 import { fields } from '~/formogen/semantic-ui';
 
-import { asyncFieldOptions } from '../selectors';
+import { asyncFieldOptions, dirtyFieldValue } from '../selectors';
 
 import { connectField } from './reduxFieldFactory';
 
@@ -33,7 +33,7 @@ export const suiFieldComponentMap = {
   AsyncManyToManyField: connectField(fields.AsyncManyToManyField, { options: asyncFieldOptions }),
   AsyncForeignKeyField: connectField(fields.AsyncForeignKeyField, { options: asyncFieldOptions }),
 
-  DropzoneField: connectField(fields.DropzoneField),
+  DropzoneField: connectField(fields.DropzoneField, { value: dirtyFieldValue }),
 };
 
 export function getFieldComponentForType({ type, choices, data }) {
