@@ -38,11 +38,14 @@ FormComponent.defaultProps = {
   isTitleVisible: true,
   submitComponent: DefaultSubmitComponent,
   fieldsets: [],
+
+  onSubmit: (...args) => // eslint-disable-next-line
+    console.warn('FormComponent.onSubmit', args)
 };
 export function FormComponent(props) {
   const { submitComponent: SubmitComponent } = props;
   return (
-    <SUIForm loading={ props.loading }>
+    <SUIForm loading={ props.loading } onSubmit={ () => props.onSubmit() }>
       { props.isTitleVisible && props.title
         ? <Header as='h2' dividing={ true }>{ props.title }</Header>
         : null
@@ -67,7 +70,7 @@ export function FormComponent(props) {
         content='Submit'
         fluid={ true }
 
-        onClick={ props.onSubmit }
+        onSubmit={ props.onSubmit }
       />
     </SUIForm>
   );

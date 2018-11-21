@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { List, Segment, Button, Icon } from 'semantic-ui-react';
+import { List, Segment, Button } from 'semantic-ui-react';
 
 import { fileType } from './propTypes';
 import { DirtyFileItem } from './DirtyFileItem';

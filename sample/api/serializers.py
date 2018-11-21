@@ -6,10 +6,10 @@ from sample import models as s_models
 
 
 class CRUDUrlsSerializerMixin(serializers.ModelSerializer):
-    urls = serializers.SerializerMethodField()
+    __urls__ = serializers.SerializerMethodField()
 
     @staticmethod
-    def get_urls(obj):
+    def get___urls__(obj):
         return obj.urls
 
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { List, Image, Button, Icon } from 'semantic-ui-react';
+import { List, Image, Button } from 'semantic-ui-react';
 
 import { splitExt, bytesToSize } from '../../../utils';
 import { fileTypeImageMapping, UNKNOWN_FILE_TYPE } from '../../../fileTypeImageMapping';

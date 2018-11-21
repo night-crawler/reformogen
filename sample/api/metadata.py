@@ -11,6 +11,13 @@ from sample import models as wf_models
 class BookMetadata(MetaData):
     model = wf_models.Book
 
+    update_fields = {
+      'preview_sample': {
+        'multiple': True,
+        'upload_url': format_lazy('{}{}', 'http://localhost:8000', reverse_lazy('all-model-fieldss-accept-file')),
+      }
+    }
+
     def get_title(self, request, view, obj: wf_models.Book):
         if obj:
             return _('Edit Book "{0}"').format(obj.printable_name)

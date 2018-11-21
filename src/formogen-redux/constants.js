@@ -24,6 +24,14 @@ export const BOOTSTRAP = `${PREFIX}/BOOTSTRAP`;
 export const BOOTSTRAP_SUCCESS = `${PREFIX}/BOOTSTRAP_SUCCESS`;
 export const BOOTSTRAP_ERROR = `${PREFIX}/BOOTSTRAP_ERROR`;
 
+// ======
+
+export const SUBMIT = `${PREFIX}/SUBMIT`;
+export const SUBMIT_SUCCESS = `${PREFIX}/SUBMIT_SUCCESS`;
+export const SUBMIT_ERROR = `${PREFIX}/SUBMIT_ERROR`;
+
+// ======
+
 export const FATAL_ERROR = `${PREFIX}/FATAL_ERROR`;
 
 export const STORE_FORM_DATA = `${PREFIX}/STORE_FORM_DATA`;

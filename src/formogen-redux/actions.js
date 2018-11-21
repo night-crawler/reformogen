@@ -1,5 +1,6 @@
 import { 
   BOOTSTRAP,
+  SUBMIT,
   STORE_FORM_DATA,
   STORE_FORM_METADATA,
   STORE_FIELD_DATA,
@@ -14,6 +15,12 @@ export const bootstrap = ({ formId, ...payload }) => ({
   type: BOOTSTRAP,
   payload,
   meta: { formId }
+});
+
+
+export const submit = formId => ({
+  type: SUBMIT,
+  meta: { formId },
 });
 
 

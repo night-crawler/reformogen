@@ -5,11 +5,15 @@ import { all, put, takeEvery, select } from 'redux-saga/effects';
 import { 
   BOOTSTRAP, BOOTSTRAP_SUCCESS, BOOTSTRAP_ERROR,
   FETCH_NEXT_FIELD_OPTIONS,
+  SUBMIT,
 } from './constants';
 import { 
   formogen as formogenSelector,
   metaDataM2MFields as metaDataM2MFieldsSelector,
   storedFieldValue as storedFieldValueSelector,
+  finalFormData as finalFormDataSelector,
+  dirtyFormFiles as dirtyFormFilesSelector,
+  fieldFileUploadUrl as fieldFileUploadUrlSelector,
 } from './selectors';
 import * as api from './api';
 import { processError } from './apiHelpers';
@@ -94,9 +98,20 @@ export function* fetchNextFieldOptions({ payload, meta }) {
 }
 
 
+export function* submit({ meta }) {
+  const [ formData, formFiles ] = [
+    yield select(finalFormDataSelector, { formId: meta.formId }),
+    yield select(dirtyFormFilesSelector, { formId: meta.formId }),
+  ];
+  console.log('qwe`', formData, formFiles);
+
+}
+
+
 export function* formogenSagas() {
   yield all([
     takeEvery(BOOTSTRAP, bootstrap),
     takeEvery(FETCH_NEXT_FIELD_OPTIONS, fetchNextFieldOptions),
+    takeEvery(SUBMIT, submit),
   ]);
 }

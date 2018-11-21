@@ -32,6 +32,7 @@ export class FormogenForm extends Component {
     actions: PropTypes.shape({
       bootstrap: PropTypes.func,
       loadOptions: PropTypes.func,
+      submit: PropTypes.func,
     }),
 
     getFieldComponent: PropTypes.func.isRequired,
@@ -68,6 +69,7 @@ export class FormogenForm extends Component {
         submitComponent={ this.props.submitComponent }
         key={ `FormComponent-${this.props.formId}` }  
         fieldsets={ this.renderFieldsets() }
+        onSubmit={ this.handleSubmit }
       />
     );
   }
@@ -109,7 +111,6 @@ export class FormogenForm extends Component {
     return <FieldComponent { ...mergedOpts } />;
   }
 
-  componentDidMount = () => {
-    this.props.actions.bootstrap();
-  }
+  componentDidMount = () => this.props.actions.bootstrap()
+  handleSubmit = () => this.props.actions.submit();
 }
