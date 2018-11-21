@@ -11,10 +11,11 @@ ShallowWrapper {
         color="red"
       >
         <Connect(FormogenForm)
-          describeUrl="http://localhost:8000/api/v1/sample/authors/describe/"
-          formId="bla"
+          describeUrl="http://localhost:8000/api/v1/sample/books/1/describe_object/"
+          formId="form-3"
           getFieldComponent={[Function]}
           getFormComponent={[Function]}
+          objectUrl="http://localhost:8000/api/v1/sample/books/1/"
         />
       </Segment>
     </GridColumn>
@@ -37,10 +38,11 @@ ShallowWrapper {
           color="red"
         >
           <Connect(FormogenForm)
-            describeUrl="http://localhost:8000/api/v1/sample/authors/describe/"
-            formId="bla"
+            describeUrl="http://localhost:8000/api/v1/sample/books/1/describe_object/"
+            formId="form-3"
             getFieldComponent={[Function]}
             getFormComponent={[Function]}
+            objectUrl="http://localhost:8000/api/v1/sample/books/1/"
           />
         </Segment>
       </GridColumn>,
@@ -56,10 +58,11 @@ ShallowWrapper {
           color="red"
         >
           <Connect(FormogenForm)
-            describeUrl="http://localhost:8000/api/v1/sample/authors/describe/"
-            formId="bla"
+            describeUrl="http://localhost:8000/api/v1/sample/books/1/describe_object/"
+            formId="form-3"
             getFieldComponent={[Function]}
             getFormComponent={[Function]}
+            objectUrl="http://localhost:8000/api/v1/sample/books/1/"
           />
         </Segment>,
       },
@@ -70,10 +73,11 @@ ShallowWrapper {
         "nodeType": "function",
         "props": Object {
           "children": <Connect(FormogenForm)
-            describeUrl="http://localhost:8000/api/v1/sample/authors/describe/"
-            formId="bla"
+            describeUrl="http://localhost:8000/api/v1/sample/books/1/describe_object/"
+            formId="form-3"
             getFieldComponent={[Function]}
             getFormComponent={[Function]}
+            objectUrl="http://localhost:8000/api/v1/sample/books/1/"
           />,
           "color": "red",
         },
@@ -83,10 +87,11 @@ ShallowWrapper {
           "key": undefined,
           "nodeType": "class",
           "props": Object {
-            "describeUrl": "http://localhost:8000/api/v1/sample/authors/describe/",
-            "formId": "bla",
+            "describeUrl": "http://localhost:8000/api/v1/sample/books/1/describe_object/",
+            "formId": "form-3",
             "getFieldComponent": [Function],
             "getFormComponent": [Function],
+            "objectUrl": "http://localhost:8000/api/v1/sample/books/1/",
           },
           "ref": null,
           "rendered": null,
@@ -109,10 +114,11 @@ ShallowWrapper {
             color="red"
           >
             <Connect(FormogenForm)
-              describeUrl="http://localhost:8000/api/v1/sample/authors/describe/"
-              formId="bla"
+              describeUrl="http://localhost:8000/api/v1/sample/books/1/describe_object/"
+              formId="form-3"
               getFieldComponent={[Function]}
               getFormComponent={[Function]}
+              objectUrl="http://localhost:8000/api/v1/sample/books/1/"
             />
           </Segment>
         </GridColumn>,
@@ -128,10 +134,11 @@ ShallowWrapper {
             color="red"
           >
             <Connect(FormogenForm)
-              describeUrl="http://localhost:8000/api/v1/sample/authors/describe/"
-              formId="bla"
+              describeUrl="http://localhost:8000/api/v1/sample/books/1/describe_object/"
+              formId="form-3"
               getFieldComponent={[Function]}
               getFormComponent={[Function]}
+              objectUrl="http://localhost:8000/api/v1/sample/books/1/"
             />
           </Segment>,
         },
@@ -142,10 +149,11 @@ ShallowWrapper {
           "nodeType": "function",
           "props": Object {
             "children": <Connect(FormogenForm)
-              describeUrl="http://localhost:8000/api/v1/sample/authors/describe/"
-              formId="bla"
+              describeUrl="http://localhost:8000/api/v1/sample/books/1/describe_object/"
+              formId="form-3"
               getFieldComponent={[Function]}
               getFormComponent={[Function]}
+              objectUrl="http://localhost:8000/api/v1/sample/books/1/"
             />,
             "color": "red",
           },
@@ -155,10 +163,11 @@ ShallowWrapper {
             "key": undefined,
             "nodeType": "class",
             "props": Object {
-              "describeUrl": "http://localhost:8000/api/v1/sample/authors/describe/",
-              "formId": "bla",
+              "describeUrl": "http://localhost:8000/api/v1/sample/books/1/describe_object/",
+              "formId": "form-3",
               "getFieldComponent": [Function],
               "getFormComponent": [Function],
+              "objectUrl": "http://localhost:8000/api/v1/sample/books/1/",
             },
             "ref": null,
             "rendered": null,

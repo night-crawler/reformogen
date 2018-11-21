@@ -1,7 +1,7 @@
 import { IntegerField } from './IntegerField';
 
 
-it('should render IntegerField', () => {
+it('<IntegerField />', () => {
   const wrapper = shallow(
     <IntegerField
       type='IntegerField'

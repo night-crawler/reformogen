@@ -1,7 +1,7 @@
 import { TextField } from './TextField';
 
 
-it('should render TextField', () => {
+it('<TextField />', () => {
   const wrapper = shallow(
     <TextField
       type='TextField'

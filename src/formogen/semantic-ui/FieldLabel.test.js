@@ -1,7 +1,7 @@
 import { FieldLabel } from './FieldLabel';
 
 
-it('should render Label', () => {
+it('<FieldLabel />', () => {
   const wrapper = shallow(
     <FieldLabel
       type='Label'

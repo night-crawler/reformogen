@@ -1,7 +1,7 @@
 import { CharField } from './CharField';
 
 
-it('should render CharField', () => {
+it('<CharField />', () => {
   const wrapper = shallow(
     <CharField
       type='CharField'

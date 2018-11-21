@@ -1,18 +1,23 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<IntegerField /> 1`] = `
+exports[`<InlineManyToManyField /> 1`] = `
 ShallowWrapper {
   Symbol(enzyme.__root__): [Circular],
-  Symbol(enzyme.__unrendered__): <IntegerField
-    help_text="IntegerField: help_text"
+  Symbol(enzyme.__unrendered__): <InlineManyToManyField
+    closeOnSelect={true}
+    data={Array []}
+    getOptionLabel={[Function]}
+    getOptionValue={[Function]}
+    help_text="InlineManyToManyField: help_text"
     layoutOpts={
       Object {
         "width": 1,
       }
     }
-    name="IntegerField: name"
-    type="IntegerField"
-    verbose_name="IntegerField: verbose_name"
+    name="InlineManyToManyField: name"
+    type="InlineManyToManyField"
+    value={Array []}
+    verbose_name="InlineManyToManyField: verbose_name"
   />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
@@ -29,28 +34,38 @@ ShallowWrapper {
     "props": Object {
       "children": Array [
         <FieldLabel
-          help_text="IntegerField: help_text"
+          closeOnSelect={true}
+          data={Array []}
+          getOptionLabel={[Function]}
+          getOptionValue={[Function]}
+          help_text="InlineManyToManyField: help_text"
           layoutOpts={
             Object {
               "width": 1,
             }
           }
-          name="IntegerField: name"
-          type="IntegerField"
-          verbose_name="IntegerField: verbose_name"
+          name="InlineManyToManyField: name"
+          type="InlineManyToManyField"
+          value={Array []}
+          verbose_name="InlineManyToManyField: verbose_name"
         />,
-        <FormInput
-          as={[Function]}
-          control={[Function]}
-          max={2147483647}
-          min={-2147483648}
-          name="IntegerField: name"
-          type="number"
+        <StateManager
+          closeOnSelect={true}
+          defaultInputValue=""
+          defaultMenuIsOpen={false}
+          defaultValue={null}
+          getOptionLabel={[Function]}
+          getOptionValue={[Function]}
+          isDisabled={true}
+          isMulti={true}
+          onChange={[Function]}
+          options={Array []}
+          value={Array []}
         />,
         <span
           className="help-text"
         >
-          IntegerField: help_text
+          InlineManyToManyField: help_text
         </span>,
         <ErrorsList
           color="red"
@@ -69,13 +84,18 @@ ShallowWrapper {
         "key": undefined,
         "nodeType": "function",
         "props": Object {
-          "help_text": "IntegerField: help_text",
+          "closeOnSelect": true,
+          "data": Array [],
+          "getOptionLabel": [Function],
+          "getOptionValue": [Function],
+          "help_text": "InlineManyToManyField: help_text",
           "layoutOpts": Object {
             "width": 1,
           },
-          "name": "IntegerField: name",
-          "type": "IntegerField",
-          "verbose_name": "IntegerField: verbose_name",
+          "name": "InlineManyToManyField: name",
+          "type": "InlineManyToManyField",
+          "value": Array [],
+          "verbose_name": "InlineManyToManyField: verbose_name",
         },
         "ref": null,
         "rendered": null,
@@ -84,17 +104,21 @@ ShallowWrapper {
       Object {
         "instance": null,
         "key": undefined,
-        "nodeType": "function",
+        "nodeType": "class",
         "props": Object {
-          "as": [Function],
-          "control": [Function],
-          "max": 2147483647,
-          "min": -2147483648,
-          "name": "IntegerField: name",
-          "onChange": undefined,
+          "closeOnSelect": true,
+          "defaultInputValue": "",
+          "defaultMenuIsOpen": false,
+          "defaultValue": null,
+          "getOptionLabel": [Function],
+          "getOptionValue": [Function],
+          "isClearable": undefined,
+          "isDisabled": true,
+          "isMulti": true,
+          "onChange": [Function],
+          "options": Array [],
           "placeholder": undefined,
-          "type": "number",
-          "value": undefined,
+          "value": Array [],
         },
         "ref": null,
         "rendered": null,
@@ -105,11 +129,11 @@ ShallowWrapper {
         "key": undefined,
         "nodeType": "host",
         "props": Object {
-          "children": "IntegerField: help_text",
+          "children": "InlineManyToManyField: help_text",
           "className": "help-text",
         },
         "ref": null,
-        "rendered": "IntegerField: help_text",
+        "rendered": "InlineManyToManyField: help_text",
         "type": "span",
       },
       Object {
@@ -136,28 +160,38 @@ ShallowWrapper {
       "props": Object {
         "children": Array [
           <FieldLabel
-            help_text="IntegerField: help_text"
+            closeOnSelect={true}
+            data={Array []}
+            getOptionLabel={[Function]}
+            getOptionValue={[Function]}
+            help_text="InlineManyToManyField: help_text"
             layoutOpts={
               Object {
                 "width": 1,
               }
             }
-            name="IntegerField: name"
-            type="IntegerField"
-            verbose_name="IntegerField: verbose_name"
+            name="InlineManyToManyField: name"
+            type="InlineManyToManyField"
+            value={Array []}
+            verbose_name="InlineManyToManyField: verbose_name"
           />,
-          <FormInput
-            as={[Function]}
-            control={[Function]}
-            max={2147483647}
-            min={-2147483648}
-            name="IntegerField: name"
-            type="number"
+          <StateManager
+            closeOnSelect={true}
+            defaultInputValue=""
+            defaultMenuIsOpen={false}
+            defaultValue={null}
+            getOptionLabel={[Function]}
+            getOptionValue={[Function]}
+            isDisabled={true}
+            isMulti={true}
+            onChange={[Function]}
+            options={Array []}
+            value={Array []}
           />,
           <span
             className="help-text"
           >
-            IntegerField: help_text
+            InlineManyToManyField: help_text
           </span>,
           <ErrorsList
             color="red"
@@ -176,13 +210,18 @@ ShallowWrapper {
           "key": undefined,
           "nodeType": "function",
           "props": Object {
-            "help_text": "IntegerField: help_text",
+            "closeOnSelect": true,
+            "data": Array [],
+            "getOptionLabel": [Function],
+            "getOptionValue": [Function],
+            "help_text": "InlineManyToManyField: help_text",
             "layoutOpts": Object {
               "width": 1,
             },
-            "name": "IntegerField: name",
-            "type": "IntegerField",
-            "verbose_name": "IntegerField: verbose_name",
+            "name": "InlineManyToManyField: name",
+            "type": "InlineManyToManyField",
+            "value": Array [],
+            "verbose_name": "InlineManyToManyField: verbose_name",
           },
           "ref": null,
           "rendered": null,
@@ -191,17 +230,21 @@ ShallowWrapper {
         Object {
           "instance": null,
           "key": undefined,
-          "nodeType": "function",
+          "nodeType": "class",
           "props": Object {
-            "as": [Function],
-            "control": [Function],
-            "max": 2147483647,
-            "min": -2147483648,
-            "name": "IntegerField: name",
-            "onChange": undefined,
+            "closeOnSelect": true,
+            "defaultInputValue": "",
+            "defaultMenuIsOpen": false,
+            "defaultValue": null,
+            "getOptionLabel": [Function],
+            "getOptionValue": [Function],
+            "isClearable": undefined,
+            "isDisabled": true,
+            "isMulti": true,
+            "onChange": [Function],
+            "options": Array [],
             "placeholder": undefined,
-            "type": "number",
-            "value": undefined,
+            "value": Array [],
           },
           "ref": null,
           "rendered": null,
@@ -212,11 +255,11 @@ ShallowWrapper {
           "key": undefined,
           "nodeType": "host",
           "props": Object {
-            "children": "IntegerField: help_text",
+            "children": "InlineManyToManyField: help_text",
             "className": "help-text",
           },
           "ref": null,
-          "rendered": "IntegerField: help_text",
+          "rendered": "InlineManyToManyField: help_text",
           "type": "span",
         },
         Object {

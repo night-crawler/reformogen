@@ -1,7 +1,7 @@
 import { GenericField } from './GenericField';
 
 
-it('should render GenericField', () => {
+it('<GenericField />', () => {
   const wrapper = shallow(
     <GenericField
       type='GenericField'

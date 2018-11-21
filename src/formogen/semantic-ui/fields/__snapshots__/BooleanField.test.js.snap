@@ -1,18 +1,19 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<IntegerField /> 1`] = `
+exports[`<BooleanField /> 1`] = `
 ShallowWrapper {
   Symbol(enzyme.__root__): [Circular],
-  Symbol(enzyme.__unrendered__): <IntegerField
-    help_text="IntegerField: help_text"
+  Symbol(enzyme.__unrendered__): <BooleanField
+    help_text="BooleanField: help_text"
     layoutOpts={
       Object {
         "width": 1,
       }
     }
-    name="IntegerField: name"
-    type="IntegerField"
-    verbose_name="IntegerField: verbose_name"
+    name="BooleanField: name"
+    type="BooleanField"
+    verbose_name="BooleanField: verbose_name"
+    widget=""
   />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
@@ -29,28 +30,27 @@ ShallowWrapper {
     "props": Object {
       "children": Array [
         <FieldLabel
-          help_text="IntegerField: help_text"
+          help_text="BooleanField: help_text"
           layoutOpts={
             Object {
               "width": 1,
             }
           }
-          name="IntegerField: name"
-          type="IntegerField"
-          verbose_name="IntegerField: verbose_name"
+          name="BooleanField: name"
+          type="BooleanField"
+          verbose_name="BooleanField: verbose_name"
+          widget=""
         />,
-        <FormInput
-          as={[Function]}
-          control={[Function]}
-          max={2147483647}
-          min={-2147483648}
-          name="IntegerField: name"
-          type="number"
+        <Checkbox
+          checked={false}
+          name="BooleanField: name"
+          onChange={[Function]}
+          type="checkbox"
         />,
         <span
           className="help-text"
         >
-          IntegerField: help_text
+          BooleanField: help_text
         </span>,
         <ErrorsList
           color="red"
@@ -69,13 +69,14 @@ ShallowWrapper {
         "key": undefined,
         "nodeType": "function",
         "props": Object {
-          "help_text": "IntegerField: help_text",
+          "help_text": "BooleanField: help_text",
           "layoutOpts": Object {
             "width": 1,
           },
-          "name": "IntegerField: name",
-          "type": "IntegerField",
-          "verbose_name": "IntegerField: verbose_name",
+          "name": "BooleanField: name",
+          "type": "BooleanField",
+          "verbose_name": "BooleanField: verbose_name",
+          "widget": "",
         },
         "ref": null,
         "rendered": null,
@@ -84,17 +85,15 @@ ShallowWrapper {
       Object {
         "instance": null,
         "key": undefined,
-        "nodeType": "function",
+        "nodeType": "class",
         "props": Object {
-          "as": [Function],
-          "control": [Function],
-          "max": 2147483647,
-          "min": -2147483648,
-          "name": "IntegerField: name",
-          "onChange": undefined,
+          "checked": false,
+          "name": "BooleanField: name",
+          "onChange": [Function],
           "placeholder": undefined,
-          "type": "number",
-          "value": undefined,
+          "slider": undefined,
+          "toggle": undefined,
+          "type": "checkbox",
         },
         "ref": null,
         "rendered": null,
@@ -105,11 +104,11 @@ ShallowWrapper {
         "key": undefined,
         "nodeType": "host",
         "props": Object {
-          "children": "IntegerField: help_text",
+          "children": "BooleanField: help_text",
           "className": "help-text",
         },
         "ref": null,
-        "rendered": "IntegerField: help_text",
+        "rendered": "BooleanField: help_text",
         "type": "span",
       },
       Object {
@@ -136,28 +135,27 @@ ShallowWrapper {
       "props": Object {
         "children": Array [
           <FieldLabel
-            help_text="IntegerField: help_text"
+            help_text="BooleanField: help_text"
             layoutOpts={
               Object {
                 "width": 1,
               }
             }
-            name="IntegerField: name"
-            type="IntegerField"
-            verbose_name="IntegerField: verbose_name"
+            name="BooleanField: name"
+            type="BooleanField"
+            verbose_name="BooleanField: verbose_name"
+            widget=""
           />,
-          <FormInput
-            as={[Function]}
-            control={[Function]}
-            max={2147483647}
-            min={-2147483648}
-            name="IntegerField: name"
-            type="number"
+          <Checkbox
+            checked={false}
+            name="BooleanField: name"
+            onChange={[Function]}
+            type="checkbox"
           />,
           <span
             className="help-text"
           >
-            IntegerField: help_text
+            BooleanField: help_text
           </span>,
           <ErrorsList
             color="red"
@@ -176,13 +174,14 @@ ShallowWrapper {
           "key": undefined,
           "nodeType": "function",
           "props": Object {
-            "help_text": "IntegerField: help_text",
+            "help_text": "BooleanField: help_text",
             "layoutOpts": Object {
               "width": 1,
             },
-            "name": "IntegerField: name",
-            "type": "IntegerField",
-            "verbose_name": "IntegerField: verbose_name",
+            "name": "BooleanField: name",
+            "type": "BooleanField",
+            "verbose_name": "BooleanField: verbose_name",
+            "widget": "",
           },
           "ref": null,
           "rendered": null,
@@ -191,17 +190,15 @@ ShallowWrapper {
         Object {
           "instance": null,
           "key": undefined,
-          "nodeType": "function",
+          "nodeType": "class",
           "props": Object {
-            "as": [Function],
-            "control": [Function],
-            "max": 2147483647,
-            "min": -2147483648,
-            "name": "IntegerField: name",
-            "onChange": undefined,
+            "checked": false,
+            "name": "BooleanField: name",
+            "onChange": [Function],
             "placeholder": undefined,
-            "type": "number",
-            "value": undefined,
+            "slider": undefined,
+            "toggle": undefined,
+            "type": "checkbox",
           },
           "ref": null,
           "rendered": null,
@@ -212,11 +209,11 @@ ShallowWrapper {
           "key": undefined,
           "nodeType": "host",
           "props": Object {
-            "children": "IntegerField: help_text",
+            "children": "BooleanField: help_text",
             "className": "help-text",
           },
           "ref": null,
-          "rendered": "IntegerField: help_text",
+          "rendered": "BooleanField: help_text",
           "type": "span",
         },
         Object {
