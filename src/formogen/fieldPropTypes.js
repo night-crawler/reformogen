@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 
 
-export const layoutOptsType = PropTypes.shape({
+export const displayOptionsType = PropTypes.shape({
   width: PropTypes.number.isRequired,
 }).isRequired;
 
@@ -13,7 +13,7 @@ const defaultFieldPropTypes = {
   formId: PropTypes.string,
   type: PropTypes.string.isRequired,
 
-  layoutOpts: layoutOptsType,
+  displayOptions: displayOptionsType,
 
   name: PropTypes.string.isRequired,
   verbose_name: PropTypes.string.isRequired,

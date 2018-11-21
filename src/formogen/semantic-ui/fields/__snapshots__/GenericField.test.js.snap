@@ -4,12 +4,12 @@ exports[`<GenericField /> 1`] = `
 ShallowWrapper {
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <GenericField
-    help_text="GenericField: help_text"
-    layoutOpts={
+    displayOptions={
       Object {
         "width": 1,
       }
     }
+    help_text="GenericField: help_text"
     name="GenericField: name"
     type="GenericField"
     verbose_name="GenericField: verbose_name"
@@ -29,12 +29,12 @@ ShallowWrapper {
     "props": Object {
       "children": Array [
         <FieldLabel
-          help_text="GenericField: help_text"
-          layoutOpts={
+          displayOptions={
             Object {
               "width": 1,
             }
           }
+          help_text="GenericField: help_text"
           name="GenericField: name"
           type="GenericField"
           verbose_name="GenericField: verbose_name"
@@ -45,7 +45,7 @@ ShallowWrapper {
     "name": "GenericField: name",
     "verbose_name": "GenericField: verbose_name",
     "help_text": "GenericField: help_text",
-    "layoutOpts": {
+    "displayOptions": {
         "width": 1
     }
 }
@@ -72,10 +72,10 @@ ShallowWrapper {
         "key": undefined,
         "nodeType": "function",
         "props": Object {
-          "help_text": "GenericField: help_text",
-          "layoutOpts": Object {
+          "displayOptions": Object {
             "width": 1,
           },
+          "help_text": "GenericField: help_text",
           "name": "GenericField: name",
           "type": "GenericField",
           "verbose_name": "GenericField: verbose_name",
@@ -94,7 +94,7 @@ ShallowWrapper {
     \\"name\\": \\"GenericField: name\\",
     \\"verbose_name\\": \\"GenericField: verbose_name\\",
     \\"help_text\\": \\"GenericField: help_text\\",
-    \\"layoutOpts\\": {
+    \\"displayOptions\\": {
         \\"width\\": 1
     }
 }",
@@ -105,7 +105,7 @@ ShallowWrapper {
     \\"name\\": \\"GenericField: name\\",
     \\"verbose_name\\": \\"GenericField: verbose_name\\",
     \\"help_text\\": \\"GenericField: help_text\\",
-    \\"layoutOpts\\": {
+    \\"displayOptions\\": {
         \\"width\\": 1
     }
 }",
@@ -147,12 +147,12 @@ ShallowWrapper {
       "props": Object {
         "children": Array [
           <FieldLabel
-            help_text="GenericField: help_text"
-            layoutOpts={
+            displayOptions={
               Object {
                 "width": 1,
               }
             }
+            help_text="GenericField: help_text"
             name="GenericField: name"
             type="GenericField"
             verbose_name="GenericField: verbose_name"
@@ -163,7 +163,7 @@ ShallowWrapper {
     "name": "GenericField: name",
     "verbose_name": "GenericField: verbose_name",
     "help_text": "GenericField: help_text",
-    "layoutOpts": {
+    "displayOptions": {
         "width": 1
     }
 }
@@ -190,10 +190,10 @@ ShallowWrapper {
           "key": undefined,
           "nodeType": "function",
           "props": Object {
-            "help_text": "GenericField: help_text",
-            "layoutOpts": Object {
+            "displayOptions": Object {
               "width": 1,
             },
+            "help_text": "GenericField: help_text",
             "name": "GenericField: name",
             "type": "GenericField",
             "verbose_name": "GenericField: verbose_name",
@@ -212,7 +212,7 @@ ShallowWrapper {
     \\"name\\": \\"GenericField: name\\",
     \\"verbose_name\\": \\"GenericField: verbose_name\\",
     \\"help_text\\": \\"GenericField: help_text\\",
-    \\"layoutOpts\\": {
+    \\"displayOptions\\": {
         \\"width\\": 1
     }
 }",
@@ -223,7 +223,7 @@ ShallowWrapper {
     \\"name\\": \\"GenericField: name\\",
     \\"verbose_name\\": \\"GenericField: verbose_name\\",
     \\"help_text\\": \\"GenericField: help_text\\",
-    \\"layoutOpts\\": {
+    \\"displayOptions\\": {
         \\"width\\": 1
     }
 }",

@@ -34,25 +34,25 @@ import { inlineFieldData, choiceFieldChoices } from './sampleData';
 
 const stories = storiesOf('Formogen|FormComponent', module).addDecorator(withContainerSegment);
 
-const formLayout = [
+const fieldsets = [
   { 
     header: 'Generic stuff', 
     fields: [
       <CharField 
         key='1' type='CharField' name='CharField' verbose_name='CharField' editable={ true } 
-        layoutOpts={ { width: 4 } } 
+        displayOptions={ { width: 4 } } 
       />,
       <IntegerField 
         key='2' type='IntegerField' name='IntegerField' verbose_name='IntegerField' editable={ true } 
-        layoutOpts={ { width: 4 } } 
+        displayOptions={ { width: 4 } } 
       />,
       <BooleanField 
         key='3' type='BooleanField' name='bool-2' verbose_name='BooleanField' help_text='with toggle' editable={ true } 
-        layoutOpts={ { width: 4 } } widget='toggle' 
+        displayOptions={ { width: 4 } } widget='toggle' 
       />,
       <TextField
         key='4' type='TextField' name='TextField' verbose_name='TextField' help_text='TextField' editable={ true } 
-        layoutOpts={ { width: 4 } } 
+        displayOptions={ { width: 4 } } 
       />
     ]
   },
@@ -61,15 +61,15 @@ const formLayout = [
     fields: [
       <DateTimeField 
         key='1' type='DateTimeField' name='DateTimeField' verbose_name='DateTimeField' help_text='DateTimeField' editable={ true } 
-        layoutOpts={ { width: 4 } } 
+        displayOptions={ { width: 4 } } 
       />,
       <DateField 
         key='2' type='DateField' name='DateField' verbose_name='DateField' help_text='DateField' editable={ true } 
-        layoutOpts={ { width: 4 } } 
+        displayOptions={ { width: 4 } } 
       />,
       <TimeField 
         key='3' type='TimeField' name='TimeField' verbose_name='TimeField' help_text='TimeField' editable={ true } 
-        layoutOpts={ { width: 4 } } 
+        displayOptions={ { width: 4 } } 
       />,
     ]
   },
@@ -80,19 +80,19 @@ const formLayout = [
         key='1' type='InlineForeignKeyField' name='InlineForeignKeyField' verbose_name='InlineForeignKeyField' 
         help_text='InlineForeignKeyField' editable={ true }
         data={ inlineFieldData }
-        layoutOpts={ { width: 4 } } 
+        displayOptions={ { width: 4 } } 
       />,
       <InlineManyToManyField 
         key='2' type='InlineManyToManyField' name='InlineManyToManyField' verbose_name='InlineManyToManyField' 
         help_text='InlineManyToManyField' editable={ true }
         data={ inlineFieldData }
-        layoutOpts={ { width: 4 } } 
+        displayOptions={ { width: 4 } } 
       />,
       <AutocompleteChoiceField 
         key='3' type='AutocompleteChoiceField' name='AutocompleteChoiceField' verbose_name='AutocompleteChoiceField' 
         help_text='AutocompleteChoiceField' editable={ true }
         choices={ choiceFieldChoices }
-        layoutOpts={ { width: 4 } } 
+        displayOptions={ { width: 4 } } 
       />,
     ],
   },
@@ -102,7 +102,7 @@ const formLayout = [
 stories.add('default', () => {
   return (
     <FormComponent 
-      formLayout={ formLayout }
+      fieldsets={ fieldsets }
       loading={ boolean('loading', false) }
     />
   );

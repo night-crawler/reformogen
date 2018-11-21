@@ -8,7 +8,7 @@ it('<TimeField />', () => {
       name='TimeField: name'
       verbose_name='TimeField: verbose_name'
       help_text='TimeField: help_text'
-      layoutOpts={ { width: 1 } }
+      displayOptions={ { width: 1 } }
     />
   );
   expect(wrapper).toMatchSnapshot();

@@ -8,7 +8,7 @@ it('<DateField />', () => {
       name='DateField: name'
       verbose_name='DateField: verbose_name'
       help_text='DateField: help_text'
-      layoutOpts={ { width: 1 } }
+      displayOptions={ { width: 1 } }
     />
   );
   expect(wrapper).toMatchSnapshot();

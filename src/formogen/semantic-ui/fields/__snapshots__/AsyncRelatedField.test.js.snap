@@ -4,15 +4,15 @@ exports[`<AsyncRelatedField /> 1`] = `
 ShallowWrapper {
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <AsyncRelatedField
-    getOptionLabel={[Function]}
-    getOptionValue={[Function]}
-    help_text="AsyncRelatedField: help_text"
-    isMulti={false}
-    layoutOpts={
+    displayOptions={
       Object {
         "width": 1,
       }
     }
+    getOptionLabel={[Function]}
+    getOptionValue={[Function]}
+    help_text="AsyncRelatedField: help_text"
+    isMulti={false}
     loadOptions={[Function]}
     name="AsyncRelatedField: name"
     type="AsyncRelatedField"
@@ -33,15 +33,15 @@ ShallowWrapper {
     "props": Object {
       "children": Array [
         <FieldLabel
-          getOptionLabel={[Function]}
-          getOptionValue={[Function]}
-          help_text="AsyncRelatedField: help_text"
-          isMulti={false}
-          layoutOpts={
+          displayOptions={
             Object {
               "width": 1,
             }
           }
+          getOptionLabel={[Function]}
+          getOptionValue={[Function]}
+          help_text="AsyncRelatedField: help_text"
+          isMulti={false}
           loadOptions={[Function]}
           name="AsyncRelatedField: name"
           type="AsyncRelatedField"
@@ -116,13 +116,13 @@ ShallowWrapper {
         "key": undefined,
         "nodeType": "function",
         "props": Object {
+          "displayOptions": Object {
+            "width": 1,
+          },
           "getOptionLabel": [Function],
           "getOptionValue": [Function],
           "help_text": "AsyncRelatedField: help_text",
           "isMulti": false,
-          "layoutOpts": Object {
-            "width": 1,
-          },
           "loadOptions": [Function],
           "name": "AsyncRelatedField: name",
           "type": "AsyncRelatedField",
@@ -224,15 +224,15 @@ ShallowWrapper {
       "props": Object {
         "children": Array [
           <FieldLabel
-            getOptionLabel={[Function]}
-            getOptionValue={[Function]}
-            help_text="AsyncRelatedField: help_text"
-            isMulti={false}
-            layoutOpts={
+            displayOptions={
               Object {
                 "width": 1,
               }
             }
+            getOptionLabel={[Function]}
+            getOptionValue={[Function]}
+            help_text="AsyncRelatedField: help_text"
+            isMulti={false}
             loadOptions={[Function]}
             name="AsyncRelatedField: name"
             type="AsyncRelatedField"
@@ -307,13 +307,13 @@ ShallowWrapper {
           "key": undefined,
           "nodeType": "function",
           "props": Object {
+            "displayOptions": Object {
+              "width": 1,
+            },
             "getOptionLabel": [Function],
             "getOptionValue": [Function],
             "help_text": "AsyncRelatedField: help_text",
             "isMulti": false,
-            "layoutOpts": Object {
-              "width": 1,
-            },
             "loadOptions": [Function],
             "name": "AsyncRelatedField: name",
             "type": "AsyncRelatedField",

@@ -4,7 +4,7 @@ exports[`<FormComponent /> 1`] = `
 ShallowWrapper {
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <FormComponent
-    formLayout={Array []}
+    fieldsets={Array []}
     isTitleVisible={true}
     loading={true}
     submitComponent={[Function]}

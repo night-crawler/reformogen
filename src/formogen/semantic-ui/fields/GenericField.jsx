@@ -27,7 +27,7 @@ export function GenericField(props) {
     <Form.Field
       required={ props.required }
       disabled={ !props.editable }
-      width={ props.layoutOpts.width }
+      width={ props.displayOptions.width }
       error={ !_.isEmpty(props.errors) }
     >
       <FieldLabel { ...props } />

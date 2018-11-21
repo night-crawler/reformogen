@@ -4,12 +4,12 @@ exports[`<BooleanField /> 1`] = `
 ShallowWrapper {
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <BooleanField
-    help_text="BooleanField: help_text"
-    layoutOpts={
+    displayOptions={
       Object {
         "width": 1,
       }
     }
+    help_text="BooleanField: help_text"
     name="BooleanField: name"
     type="BooleanField"
     verbose_name="BooleanField: verbose_name"
@@ -30,12 +30,12 @@ ShallowWrapper {
     "props": Object {
       "children": Array [
         <FieldLabel
-          help_text="BooleanField: help_text"
-          layoutOpts={
+          displayOptions={
             Object {
               "width": 1,
             }
           }
+          help_text="BooleanField: help_text"
           name="BooleanField: name"
           type="BooleanField"
           verbose_name="BooleanField: verbose_name"
@@ -69,10 +69,10 @@ ShallowWrapper {
         "key": undefined,
         "nodeType": "function",
         "props": Object {
-          "help_text": "BooleanField: help_text",
-          "layoutOpts": Object {
+          "displayOptions": Object {
             "width": 1,
           },
+          "help_text": "BooleanField: help_text",
           "name": "BooleanField: name",
           "type": "BooleanField",
           "verbose_name": "BooleanField: verbose_name",
@@ -135,12 +135,12 @@ ShallowWrapper {
       "props": Object {
         "children": Array [
           <FieldLabel
-            help_text="BooleanField: help_text"
-            layoutOpts={
+            displayOptions={
               Object {
                 "width": 1,
               }
             }
+            help_text="BooleanField: help_text"
             name="BooleanField: name"
             type="BooleanField"
             verbose_name="BooleanField: verbose_name"
@@ -174,10 +174,10 @@ ShallowWrapper {
           "key": undefined,
           "nodeType": "function",
           "props": Object {
-            "help_text": "BooleanField: help_text",
-            "layoutOpts": Object {
+            "displayOptions": Object {
               "width": 1,
             },
+            "help_text": "BooleanField: help_text",
             "name": "BooleanField: name",
             "type": "BooleanField",
             "verbose_name": "BooleanField: verbose_name",

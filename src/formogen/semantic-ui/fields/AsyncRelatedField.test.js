@@ -8,7 +8,7 @@ it('<AsyncRelatedField />', () => {
       name='AsyncRelatedField: name'
       verbose_name='AsyncRelatedField: verbose_name'
       help_text='AsyncRelatedField: help_text'
-      layoutOpts={ { width: 1 } }
+      displayOptions={ { width: 1 } }
     />
   );
   expect(wrapper).toMatchSnapshot();

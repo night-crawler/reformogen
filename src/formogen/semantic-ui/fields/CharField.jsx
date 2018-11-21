@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import _ from 'lodash';
 import { Form } from 'semantic-ui-react';
 
-import { errorsType, layoutOptsType } from '../../fieldPropTypes';
+import { errorsType, displayOptionsType } from '../../fieldPropTypes';
 import { FieldLabel } from '../FieldLabel';
 import { ErrorsList } from '../ErrorsList';
 
@@ -24,7 +24,7 @@ CharField.propTypes = {
   editable: PropTypes.bool,
 
   helpTextOnHover: PropTypes.bool,
-  layoutOpts: layoutOptsType,
+  displayOptions: displayOptionsType,
 
   updateProps: PropTypes.func,
   onChange: PropTypes.func,
@@ -35,7 +35,7 @@ export function CharField(props) {
     <Form.Field
       required={ props.required }
       disabled={ !props.editable }
-      width={ props.layoutOpts.width }
+      width={ props.displayOptions.width }
       error={ !_.isEmpty(props.errors) }
     >
       <FieldLabel { ...props } />

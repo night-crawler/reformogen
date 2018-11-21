@@ -8,7 +8,7 @@ it('<FieldLabel />', () => {
       name='Label: name'
       verbose_name='Label: verbose_name'
       help_text='Label: help_text'
-      layoutOpts={ { width: 1 } }
+      displayOptions={ { width: 1 } }
     />
   );
   expect(wrapper).toMatchSnapshot();

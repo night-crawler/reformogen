@@ -67,7 +67,7 @@ export class FormogenForm extends Component {
         isTitleVisible={ this.props.isTitleVisible }
         submitComponent={ this.props.submitComponent }
         key={ `FormComponent-${this.props.formId}` }  
-        formLayout={ this.renderFieldsets() }
+        fieldsets={ this.renderFieldsets() }
       />
     );
   }
@@ -98,8 +98,7 @@ export class FormogenForm extends Component {
       upperFirstLabel: this.props.upperFirstLabels,
       helpTextOnHover: this.props.helpTextOnHover,
       
-      // TODO: get rid of `layout` name
-      layoutOpts: displayOptions,
+      displayOptions: displayOptions,
       errors: this.props.errorsFieldMap[opts.name],
 
       loadOptions: this.props.actions.loadOptions,

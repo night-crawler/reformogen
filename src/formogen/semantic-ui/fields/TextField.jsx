@@ -3,14 +3,14 @@ import PropTypes from 'prop-types';
 import _ from 'lodash';
 import { Form } from 'semantic-ui-react';
 
-import { errorsType, layoutOptsType } from '../../fieldPropTypes';
+import { errorsType, displayOptionsType } from '../../fieldPropTypes';
 import { FieldLabel } from '../FieldLabel';
 import { ErrorsList } from '../ErrorsList';
 
 TextField.propTypes = {
   type: PropTypes.string.isRequired,
 
-  layoutOpts: layoutOptsType,
+  displayOptions: displayOptionsType,
 
   name: PropTypes.string.isRequired,
   verbose_name: PropTypes.string.isRequired,
@@ -37,7 +37,7 @@ export function TextField(props) {
     <Form.Field
       required={ props.required }
       disabled={ !props.editable }
-      width={ props.layoutOpts.width }
+      width={ props.displayOptions.width }
       error={ !_.isEmpty(props.errors) }
     >
       <FieldLabel { ...props } />

@@ -8,7 +8,7 @@ it('<AsyncManyToManyField />', () => {
       name='AsyncManyToManyField: name'
       verbose_name='AsyncManyToManyField: verbose_name'
       help_text='AsyncManyToManyField: help_text'
-      layoutOpts={ { width: 1 } }
+      displayOptions={ { width: 1 } }
     />
   );
   expect(wrapper).toMatchSnapshot();

@@ -5,13 +5,13 @@ ShallowWrapper {
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <DateTimeField
     dateFormat="YYYY.MM.DD HH:mm"
-    dropdownMode="select"
-    help_text="DateTimeField: help_text"
-    layoutOpts={
+    displayOptions={
       Object {
         "width": 1,
       }
     }
+    dropdownMode="select"
+    help_text="DateTimeField: help_text"
     name="DateTimeField: name"
     timeFormat="HH:mm"
     timeIntervals={30}
@@ -35,13 +35,13 @@ ShallowWrapper {
       "children": Array [
         <FieldLabel
           dateFormat="YYYY.MM.DD HH:mm"
-          dropdownMode="select"
-          help_text="DateTimeField: help_text"
-          layoutOpts={
+          displayOptions={
             Object {
               "width": 1,
             }
           }
+          dropdownMode="select"
+          help_text="DateTimeField: help_text"
           name="DateTimeField: name"
           timeFormat="HH:mm"
           timeIntervals={30}
@@ -105,11 +105,11 @@ ShallowWrapper {
         "nodeType": "function",
         "props": Object {
           "dateFormat": "YYYY.MM.DD HH:mm",
-          "dropdownMode": "select",
-          "help_text": "DateTimeField: help_text",
-          "layoutOpts": Object {
+          "displayOptions": Object {
             "width": 1,
           },
+          "dropdownMode": "select",
+          "help_text": "DateTimeField: help_text",
           "name": "DateTimeField: name",
           "timeFormat": "HH:mm",
           "timeIntervals": 30,
@@ -201,13 +201,13 @@ ShallowWrapper {
         "children": Array [
           <FieldLabel
             dateFormat="YYYY.MM.DD HH:mm"
-            dropdownMode="select"
-            help_text="DateTimeField: help_text"
-            layoutOpts={
+            displayOptions={
               Object {
                 "width": 1,
               }
             }
+            dropdownMode="select"
+            help_text="DateTimeField: help_text"
             name="DateTimeField: name"
             timeFormat="HH:mm"
             timeIntervals={30}
@@ -271,11 +271,11 @@ ShallowWrapper {
           "nodeType": "function",
           "props": Object {
             "dateFormat": "YYYY.MM.DD HH:mm",
-            "dropdownMode": "select",
-            "help_text": "DateTimeField: help_text",
-            "layoutOpts": Object {
+            "displayOptions": Object {
               "width": 1,
             },
+            "dropdownMode": "select",
+            "help_text": "DateTimeField: help_text",
             "name": "DateTimeField: name",
             "timeFormat": "HH:mm",
             "timeIntervals": 30,

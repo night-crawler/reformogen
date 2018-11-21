@@ -8,7 +8,7 @@ it('<CharField />', () => {
       name='CharField: name'
       verbose_name='CharField: verbose_name'
       help_text='CharField: help_text'
-      layoutOpts={ { width: 1 } }
+      displayOptions={ { width: 1 } }
     />
   );
   expect(wrapper).toMatchSnapshot();

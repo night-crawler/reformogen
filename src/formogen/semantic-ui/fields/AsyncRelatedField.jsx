@@ -52,7 +52,7 @@ export class AsyncRelatedField extends React.Component {
         className='AsyncRelatedField'
         required={ this.props.required }
         disabled={ !this.props.editable }
-        width={ this.props.layoutOpts.width }
+        width={ this.props.displayOptions.width }
         error={ !isEmpty(this.props.errors) }
       >
         <FieldLabel { ...this.props } />

@@ -26,7 +26,7 @@ class InlineForeignKeyFieldWrapper extends React.Component {
         help_text={ text('help_text', 'some help text') }
         name={ text('name', 'inlineForeignKeyField') }
         verbose_name={ text('verbose_name', 'verbose name of the field') }
-        layoutOpts={ { width: number('layoutOpts.width', 4, { range: true, min: 1, max: 16 }) } }
+        displayOptions={ { width: number('displayOptions.width', 4, { range: true, min: 1, max: 16 }) } }
         onChange={ this.handleChange }
         errors={ errorArray }
         data={ this.state.data }

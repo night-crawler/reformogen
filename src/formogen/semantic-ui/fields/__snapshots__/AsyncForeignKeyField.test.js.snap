@@ -4,12 +4,12 @@ exports[`<AsyncForeignKeyField /> 1`] = `
 ShallowWrapper {
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <AsyncForeignKeyField
-    help_text="AsyncForeignKeyField: help_text"
-    layoutOpts={
+    displayOptions={
       Object {
         "width": 1,
       }
     }
+    help_text="AsyncForeignKeyField: help_text"
     name="AsyncForeignKeyField: name"
     type="AsyncForeignKeyField"
     verbose_name="AsyncForeignKeyField: verbose_name"
@@ -27,13 +27,13 @@ ShallowWrapper {
     "key": undefined,
     "nodeType": "class",
     "props": Object {
+      "displayOptions": Object {
+        "width": 1,
+      },
       "getOptionLabel": [Function],
       "getOptionValue": [Function],
       "help_text": "AsyncForeignKeyField: help_text",
       "isMulti": false,
-      "layoutOpts": Object {
-        "width": 1,
-      },
       "loadOptions": [Function],
       "name": "AsyncForeignKeyField: name",
       "type": "AsyncForeignKeyField",
@@ -49,13 +49,13 @@ ShallowWrapper {
       "key": undefined,
       "nodeType": "class",
       "props": Object {
+        "displayOptions": Object {
+          "width": 1,
+        },
         "getOptionLabel": [Function],
         "getOptionValue": [Function],
         "help_text": "AsyncForeignKeyField: help_text",
         "isMulti": false,
-        "layoutOpts": Object {
-          "width": 1,
-        },
         "loadOptions": [Function],
         "name": "AsyncForeignKeyField: name",
         "type": "AsyncForeignKeyField",

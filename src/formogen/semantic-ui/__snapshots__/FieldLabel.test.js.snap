@@ -4,12 +4,12 @@ exports[`<FieldLabel /> 1`] = `
 ShallowWrapper {
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <FieldLabel
-    help_text="Label: help_text"
-    layoutOpts={
+    displayOptions={
       Object {
         "width": 1,
       }
     }
+    help_text="Label: help_text"
     name="Label: name"
     type="Label"
     verbose_name="Label: verbose_name"

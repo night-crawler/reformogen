@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { isEmpty } from 'lodash';
 import { Form, Checkbox } from 'semantic-ui-react';
 
-import { errorsType, layoutOptsType } from '../../fieldPropTypes';
+import { errorsType, displayOptionsType } from '../../fieldPropTypes';
 import { FieldLabel } from '../FieldLabel';
 import { ErrorsList } from '../ErrorsList';
 
@@ -21,7 +21,7 @@ BooleanField.propTypes = {
   editable: PropTypes.bool,
 
   helpTextOnHover: PropTypes.bool,
-  layoutOpts: layoutOptsType,
+  displayOptions: displayOptionsType,
 
   onChange: PropTypes.func,
 };
@@ -37,7 +37,7 @@ export function BooleanField(props) {
     <Form.Field
       required={ props.required }
       disabled={ !props.editable }
-      width={ props.layoutOpts.width }
+      width={ props.displayOptions.width }
       error={ !isEmpty(props.errors) }
     >
       <FieldLabel { ...props } />

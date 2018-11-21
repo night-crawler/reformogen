@@ -6,14 +6,14 @@ ShallowWrapper {
   Symbol(enzyme.__unrendered__): <InlineManyToManyField
     closeOnSelect={true}
     data={Array []}
-    getOptionLabel={[Function]}
-    getOptionValue={[Function]}
-    help_text="InlineManyToManyField: help_text"
-    layoutOpts={
+    displayOptions={
       Object {
         "width": 1,
       }
     }
+    getOptionLabel={[Function]}
+    getOptionValue={[Function]}
+    help_text="InlineManyToManyField: help_text"
     name="InlineManyToManyField: name"
     type="InlineManyToManyField"
     value={Array []}
@@ -36,14 +36,14 @@ ShallowWrapper {
         <FieldLabel
           closeOnSelect={true}
           data={Array []}
-          getOptionLabel={[Function]}
-          getOptionValue={[Function]}
-          help_text="InlineManyToManyField: help_text"
-          layoutOpts={
+          displayOptions={
             Object {
               "width": 1,
             }
           }
+          getOptionLabel={[Function]}
+          getOptionValue={[Function]}
+          help_text="InlineManyToManyField: help_text"
           name="InlineManyToManyField: name"
           type="InlineManyToManyField"
           value={Array []}
@@ -86,12 +86,12 @@ ShallowWrapper {
         "props": Object {
           "closeOnSelect": true,
           "data": Array [],
+          "displayOptions": Object {
+            "width": 1,
+          },
           "getOptionLabel": [Function],
           "getOptionValue": [Function],
           "help_text": "InlineManyToManyField: help_text",
-          "layoutOpts": Object {
-            "width": 1,
-          },
           "name": "InlineManyToManyField: name",
           "type": "InlineManyToManyField",
           "value": Array [],
@@ -162,14 +162,14 @@ ShallowWrapper {
           <FieldLabel
             closeOnSelect={true}
             data={Array []}
-            getOptionLabel={[Function]}
-            getOptionValue={[Function]}
-            help_text="InlineManyToManyField: help_text"
-            layoutOpts={
+            displayOptions={
               Object {
                 "width": 1,
               }
             }
+            getOptionLabel={[Function]}
+            getOptionValue={[Function]}
+            help_text="InlineManyToManyField: help_text"
             name="InlineManyToManyField: name"
             type="InlineManyToManyField"
             value={Array []}
@@ -212,12 +212,12 @@ ShallowWrapper {
           "props": Object {
             "closeOnSelect": true,
             "data": Array [],
+            "displayOptions": Object {
+              "width": 1,
+            },
             "getOptionLabel": [Function],
             "getOptionValue": [Function],
             "help_text": "InlineManyToManyField: help_text",
-            "layoutOpts": Object {
-              "width": 1,
-            },
             "name": "InlineManyToManyField: name",
             "type": "InlineManyToManyField",
             "value": Array [],

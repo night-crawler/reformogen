@@ -4,12 +4,12 @@ exports[`<CharField /> 1`] = `
 ShallowWrapper {
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <CharField
-    help_text="CharField: help_text"
-    layoutOpts={
+    displayOptions={
       Object {
         "width": 1,
       }
     }
+    help_text="CharField: help_text"
     name="CharField: name"
     type="CharField"
     verbose_name="CharField: verbose_name"
@@ -29,12 +29,12 @@ ShallowWrapper {
     "props": Object {
       "children": Array [
         <FieldLabel
-          help_text="CharField: help_text"
-          layoutOpts={
+          displayOptions={
             Object {
               "width": 1,
             }
           }
+          help_text="CharField: help_text"
           name="CharField: name"
           type="CharField"
           verbose_name="CharField: verbose_name"
@@ -67,10 +67,10 @@ ShallowWrapper {
         "key": undefined,
         "nodeType": "function",
         "props": Object {
-          "help_text": "CharField: help_text",
-          "layoutOpts": Object {
+          "displayOptions": Object {
             "width": 1,
           },
+          "help_text": "CharField: help_text",
           "name": "CharField: name",
           "type": "CharField",
           "verbose_name": "CharField: verbose_name",
@@ -133,12 +133,12 @@ ShallowWrapper {
       "props": Object {
         "children": Array [
           <FieldLabel
-            help_text="CharField: help_text"
-            layoutOpts={
+            displayOptions={
               Object {
                 "width": 1,
               }
             }
+            help_text="CharField: help_text"
             name="CharField: name"
             type="CharField"
             verbose_name="CharField: verbose_name"
@@ -171,10 +171,10 @@ ShallowWrapper {
           "key": undefined,
           "nodeType": "function",
           "props": Object {
-            "help_text": "CharField: help_text",
-            "layoutOpts": Object {
+            "displayOptions": Object {
               "width": 1,
             },
+            "help_text": "CharField: help_text",
             "name": "CharField: name",
             "type": "CharField",
             "verbose_name": "CharField: verbose_name",

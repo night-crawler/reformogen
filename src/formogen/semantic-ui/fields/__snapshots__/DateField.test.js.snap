@@ -5,13 +5,13 @@ ShallowWrapper {
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <DateField
     dateFormat="YYYY.MM.DD"
-    dropdownMode="select"
-    help_text="DateField: help_text"
-    layoutOpts={
+    displayOptions={
       Object {
         "width": 1,
       }
     }
+    dropdownMode="select"
+    help_text="DateField: help_text"
     name="DateField: name"
     showMonthDropdown={true}
     showTimeSelect={false}
@@ -36,13 +36,13 @@ ShallowWrapper {
       "children": Array [
         <FieldLabel
           dateFormat="YYYY.MM.DD"
-          dropdownMode="select"
-          help_text="DateField: help_text"
-          layoutOpts={
+          displayOptions={
             Object {
               "width": 1,
             }
           }
+          dropdownMode="select"
+          help_text="DateField: help_text"
           name="DateField: name"
           showMonthDropdown={true}
           showTimeSelect={false}
@@ -111,11 +111,11 @@ ShallowWrapper {
         "nodeType": "function",
         "props": Object {
           "dateFormat": "YYYY.MM.DD",
-          "dropdownMode": "select",
-          "help_text": "DateField: help_text",
-          "layoutOpts": Object {
+          "displayOptions": Object {
             "width": 1,
           },
+          "dropdownMode": "select",
+          "help_text": "DateField: help_text",
           "name": "DateField: name",
           "showMonthDropdown": true,
           "showTimeSelect": false,
@@ -210,13 +210,13 @@ ShallowWrapper {
         "children": Array [
           <FieldLabel
             dateFormat="YYYY.MM.DD"
-            dropdownMode="select"
-            help_text="DateField: help_text"
-            layoutOpts={
+            displayOptions={
               Object {
                 "width": 1,
               }
             }
+            dropdownMode="select"
+            help_text="DateField: help_text"
             name="DateField: name"
             showMonthDropdown={true}
             showTimeSelect={false}
@@ -285,11 +285,11 @@ ShallowWrapper {
           "nodeType": "function",
           "props": Object {
             "dateFormat": "YYYY.MM.DD",
-            "dropdownMode": "select",
-            "help_text": "DateField: help_text",
-            "layoutOpts": Object {
+            "displayOptions": Object {
               "width": 1,
             },
+            "dropdownMode": "select",
+            "help_text": "DateField: help_text",
             "name": "DateField: name",
             "showMonthDropdown": true,
             "showTimeSelect": false,

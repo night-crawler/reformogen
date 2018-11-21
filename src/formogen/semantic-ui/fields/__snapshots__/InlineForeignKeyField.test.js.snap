@@ -5,15 +5,15 @@ ShallowWrapper {
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <InlineForeignKeyField
     data={Array []}
-    getOptionLabel={[Function]}
-    getOptionValue={[Function]}
-    help_text="InlineForeignKeyField: help_text"
-    isRtl={false}
-    layoutOpts={
+    displayOptions={
       Object {
         "width": 1,
       }
     }
+    getOptionLabel={[Function]}
+    getOptionValue={[Function]}
+    help_text="InlineForeignKeyField: help_text"
+    isRtl={false}
     name="InlineForeignKeyField: name"
     type="InlineForeignKeyField"
     verbose_name="InlineForeignKeyField: verbose_name"
@@ -34,15 +34,15 @@ ShallowWrapper {
       "children": Array [
         <FieldLabel
           data={Array []}
-          getOptionLabel={[Function]}
-          getOptionValue={[Function]}
-          help_text="InlineForeignKeyField: help_text"
-          isRtl={false}
-          layoutOpts={
+          displayOptions={
             Object {
               "width": 1,
             }
           }
+          getOptionLabel={[Function]}
+          getOptionValue={[Function]}
+          help_text="InlineForeignKeyField: help_text"
+          isRtl={false}
           name="InlineForeignKeyField: name"
           type="InlineForeignKeyField"
           verbose_name="InlineForeignKeyField: verbose_name"
@@ -92,13 +92,13 @@ ShallowWrapper {
         "nodeType": "function",
         "props": Object {
           "data": Array [],
+          "displayOptions": Object {
+            "width": 1,
+          },
           "getOptionLabel": [Function],
           "getOptionValue": [Function],
           "help_text": "InlineForeignKeyField: help_text",
           "isRtl": false,
-          "layoutOpts": Object {
-            "width": 1,
-          },
           "name": "InlineForeignKeyField: name",
           "type": "InlineForeignKeyField",
           "verbose_name": "InlineForeignKeyField: verbose_name",
@@ -173,15 +173,15 @@ ShallowWrapper {
         "children": Array [
           <FieldLabel
             data={Array []}
-            getOptionLabel={[Function]}
-            getOptionValue={[Function]}
-            help_text="InlineForeignKeyField: help_text"
-            isRtl={false}
-            layoutOpts={
+            displayOptions={
               Object {
                 "width": 1,
               }
             }
+            getOptionLabel={[Function]}
+            getOptionValue={[Function]}
+            help_text="InlineForeignKeyField: help_text"
+            isRtl={false}
             name="InlineForeignKeyField: name"
             type="InlineForeignKeyField"
             verbose_name="InlineForeignKeyField: verbose_name"
@@ -231,13 +231,13 @@ ShallowWrapper {
           "nodeType": "function",
           "props": Object {
             "data": Array [],
+            "displayOptions": Object {
+              "width": 1,
+            },
             "getOptionLabel": [Function],
             "getOptionValue": [Function],
             "help_text": "InlineForeignKeyField: help_text",
             "isRtl": false,
-            "layoutOpts": Object {
-              "width": 1,
-            },
             "name": "InlineForeignKeyField: name",
             "type": "InlineForeignKeyField",
             "verbose_name": "InlineForeignKeyField: verbose_name",

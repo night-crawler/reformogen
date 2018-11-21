@@ -8,7 +8,7 @@ it('<InlineForeignKeyField />', () => {
       name='InlineForeignKeyField: name'
       verbose_name='InlineForeignKeyField: verbose_name'
       help_text='InlineForeignKeyField: help_text'
-      layoutOpts={ { width: 1 } }
+      displayOptions={ { width: 1 } }
     />
   );
   expect(wrapper).toMatchSnapshot();

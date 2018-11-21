@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Form } from 'semantic-ui-react';
 import { isEmpty } from 'lodash';
 
-import { errorsType, layoutOptsType } from '../../fieldPropTypes';
+import { errorsType, displayOptionsType } from '../../fieldPropTypes';
 import { FieldLabel } from '../FieldLabel';
 import { ErrorsList } from '../ErrorsList';
 
@@ -23,7 +23,7 @@ IntegerField.propTypes = {
   editable: PropTypes.bool,
 
   helpTextOnHover: PropTypes.bool,
-  layoutOpts: layoutOptsType,
+  displayOptions: displayOptionsType,
 
   onChange: PropTypes.func,
 };
@@ -77,7 +77,7 @@ export function IntegerField(props) {
     <Form.Field
       required={ props.required }
       disabled={ !props.editable }
-      width={ props.layoutOpts.width }
+      width={ props.displayOptions.width }
       error={ !isEmpty(props.errors) }
     >
       <FieldLabel { ...props } />

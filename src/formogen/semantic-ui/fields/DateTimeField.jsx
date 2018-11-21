@@ -5,7 +5,7 @@ import moment from 'moment';
 import { Form } from 'semantic-ui-react';
 import DatePicker from 'react-datepicker';
 
-import { errorsType, layoutOptsType } from '../../fieldPropTypes';
+import { errorsType, displayOptionsType } from '../../fieldPropTypes';
 import { FieldLabel } from '../FieldLabel';
 import { ErrorsList } from '../ErrorsList';
 
@@ -23,7 +23,7 @@ DateTimeField.propTypes = {
   editable: PropTypes.bool,
 
   helpTextOnHover: PropTypes.bool,
-  layoutOpts: layoutOptsType,
+  displayOptions: displayOptionsType,
   locale: PropTypes.string,
 
   
@@ -54,7 +54,7 @@ export function DateTimeField(props) {
     <Form.Field
       required={ props.required }
       disabled={ !props.editable }
-      width={ props.layoutOpts.width }
+      width={ props.displayOptions.width }
       error={ !_.isEmpty(props.errors) }
     >
       <FieldLabel { ...props } />

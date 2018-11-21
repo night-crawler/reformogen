@@ -5,7 +5,7 @@ import moment from 'moment';
 import { Form } from 'semantic-ui-react';
 import TimePicker from 'react-times';
 
-import { errorsType, layoutOptsType } from '../../fieldPropTypes';
+import { errorsType, displayOptionsType } from '../../fieldPropTypes';
 import { FieldLabel } from '../FieldLabel';
 import { ErrorsList } from '../ErrorsList';
 
@@ -22,7 +22,7 @@ export class TimeField extends React.Component {
     editable: PropTypes.bool,
   
     helpTextOnHover: PropTypes.bool,
-    layoutOpts: layoutOptsType,
+    displayOptions: displayOptionsType,
   
     updateProps: PropTypes.func,
     onChange: PropTypes.func,
@@ -45,7 +45,7 @@ export class TimeField extends React.Component {
       <Form.Field
         required={ this.props.required }
         disabled={ !this.props.editable }
-        width={ this.props.layoutOpts.width }
+        width={ this.props.displayOptions.width }
         error={ !_.isEmpty(this.props.errors) }
       >
         <FieldLabel { ...this.props } />

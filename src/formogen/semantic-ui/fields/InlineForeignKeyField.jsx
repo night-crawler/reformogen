@@ -4,7 +4,7 @@ import { Form } from 'semantic-ui-react';
 import Select from 'react-select';
 import { isEmpty } from 'lodash';
 
-import { errorsType, layoutOptsType } from '../../fieldPropTypes';
+import { errorsType, displayOptionsType } from '../../fieldPropTypes';
 import { FieldLabel } from '../FieldLabel';
 import { ErrorsList } from '../ErrorsList';
 
@@ -26,7 +26,7 @@ InlineForeignKeyField.propTypes = {
   editable: PropTypes.bool,
 
   helpTextOnHover: PropTypes.bool,
-  layoutOpts: layoutOptsType,
+  displayOptions: displayOptionsType,
 
   isRtl: PropTypes.bool,
 
@@ -51,7 +51,7 @@ export function InlineForeignKeyField(props) {
     <Form.Field
       required={ props.required }
       disabled={ !props.editable }
-      width={ props.layoutOpts.width }
+      width={ props.displayOptions.width }
       error={ !isEmpty(props.errors) }
     >
       <FieldLabel { ...props } />

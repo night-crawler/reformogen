@@ -7,7 +7,7 @@ it('<FormComponent />', () => {
       loading={ true }
       title={ 'sample' }
       isTitleVisible={ true }
-      formLayout={ [] }
+      fieldsets={ [] }
     />
   );
   expect(wrapper).toMatchSnapshot();

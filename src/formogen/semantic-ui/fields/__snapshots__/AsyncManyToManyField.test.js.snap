@@ -4,12 +4,12 @@ exports[`<AsyncManyToManyField /> 1`] = `
 ShallowWrapper {
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <AsyncManyToManyField
-    help_text="AsyncManyToManyField: help_text"
-    layoutOpts={
+    displayOptions={
       Object {
         "width": 1,
       }
     }
+    help_text="AsyncManyToManyField: help_text"
     name="AsyncManyToManyField: name"
     type="AsyncManyToManyField"
     verbose_name="AsyncManyToManyField: verbose_name"
@@ -27,13 +27,13 @@ ShallowWrapper {
     "key": undefined,
     "nodeType": "class",
     "props": Object {
+      "displayOptions": Object {
+        "width": 1,
+      },
       "getOptionLabel": [Function],
       "getOptionValue": [Function],
       "help_text": "AsyncManyToManyField: help_text",
       "isMulti": true,
-      "layoutOpts": Object {
-        "width": 1,
-      },
       "loadOptions": [Function],
       "name": "AsyncManyToManyField: name",
       "type": "AsyncManyToManyField",
@@ -49,13 +49,13 @@ ShallowWrapper {
       "key": undefined,
       "nodeType": "class",
       "props": Object {
+        "displayOptions": Object {
+          "width": 1,
+        },
         "getOptionLabel": [Function],
         "getOptionValue": [Function],
         "help_text": "AsyncManyToManyField: help_text",
         "isMulti": true,
-        "layoutOpts": Object {
-          "width": 1,
-        },
         "loadOptions": [Function],
         "name": "AsyncManyToManyField: name",
         "type": "AsyncManyToManyField",

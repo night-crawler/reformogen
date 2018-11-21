@@ -4,7 +4,7 @@ import { isEmpty } from 'lodash';
 import { Form } from 'semantic-ui-react';
 import Select from 'react-select';
 
-import { errorsType, layoutOptsType } from '../../fieldPropTypes';
+import { errorsType, displayOptionsType } from '../../fieldPropTypes';
 import { FieldLabel } from '../FieldLabel';
 import { ErrorsList } from '../ErrorsList';
 
@@ -23,7 +23,7 @@ AutocompleteChoiceField.propTypes = {
   editable: PropTypes.bool,
 
   helpTextOnHover: PropTypes.bool,
-  layoutOpts: layoutOptsType,
+  displayOptions: displayOptionsType,
 
   getOptionLabel: PropTypes.func,
   getOptionValue: PropTypes.func,
@@ -45,7 +45,7 @@ export function AutocompleteChoiceField(props) {
     <Form.Field
       required={ props.required }
       disabled={ !props.editable }
-      width={ props.layoutOpts.width }
+      width={ props.displayOptions.width }
       error={ !isEmpty(props.errors) }
     >
       <FieldLabel { ...props } />

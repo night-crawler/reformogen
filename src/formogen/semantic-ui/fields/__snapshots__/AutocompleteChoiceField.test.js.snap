@@ -12,14 +12,14 @@ ShallowWrapper {
         ],
       ]
     }
-    getOptionLabel={[Function]}
-    getOptionValue={[Function]}
-    help_text="AutocompleteChoiceField: help_text"
-    layoutOpts={
+    displayOptions={
       Object {
         "width": 1,
       }
     }
+    getOptionLabel={[Function]}
+    getOptionValue={[Function]}
+    help_text="AutocompleteChoiceField: help_text"
     name="AutocompleteChoiceField: name"
     type="AutocompleteChoiceField"
     value={1}
@@ -48,14 +48,14 @@ ShallowWrapper {
               ],
             ]
           }
-          getOptionLabel={[Function]}
-          getOptionValue={[Function]}
-          help_text="AutocompleteChoiceField: help_text"
-          layoutOpts={
+          displayOptions={
             Object {
               "width": 1,
             }
           }
+          getOptionLabel={[Function]}
+          getOptionValue={[Function]}
+          help_text="AutocompleteChoiceField: help_text"
           name="AutocompleteChoiceField: name"
           type="AutocompleteChoiceField"
           value={1}
@@ -116,12 +116,12 @@ ShallowWrapper {
               "sample",
             ],
           ],
+          "displayOptions": Object {
+            "width": 1,
+          },
           "getOptionLabel": [Function],
           "getOptionValue": [Function],
           "help_text": "AutocompleteChoiceField: help_text",
-          "layoutOpts": Object {
-            "width": 1,
-          },
           "name": "AutocompleteChoiceField: name",
           "type": "AutocompleteChoiceField",
           "value": 1,
@@ -207,14 +207,14 @@ ShallowWrapper {
                 ],
               ]
             }
-            getOptionLabel={[Function]}
-            getOptionValue={[Function]}
-            help_text="AutocompleteChoiceField: help_text"
-            layoutOpts={
+            displayOptions={
               Object {
                 "width": 1,
               }
             }
+            getOptionLabel={[Function]}
+            getOptionValue={[Function]}
+            help_text="AutocompleteChoiceField: help_text"
             name="AutocompleteChoiceField: name"
             type="AutocompleteChoiceField"
             value={1}
@@ -275,12 +275,12 @@ ShallowWrapper {
                 "sample",
               ],
             ],
+            "displayOptions": Object {
+              "width": 1,
+            },
             "getOptionLabel": [Function],
             "getOptionValue": [Function],
             "help_text": "AutocompleteChoiceField: help_text",
-            "layoutOpts": Object {
-              "width": 1,
-            },
             "name": "AutocompleteChoiceField: name",
             "type": "AutocompleteChoiceField",
             "value": 1,

@@ -23,7 +23,7 @@ FormComponent.propTypes = {
   isTitleVisible: PropTypes.bool,
 
   nonFieldErrorsMap: PropTypes.object,
-  formLayout: PropTypes.array,
+  fieldsets: PropTypes.array,
 
   submitComponent: PropTypes.oneOfType([
     PropTypes.func,
@@ -37,7 +37,7 @@ FormComponent.defaultProps = {
   title: '',
   isTitleVisible: true,
   submitComponent: DefaultSubmitComponent,
-  formLayout: [],
+  fieldsets: [],
 };
 export function FormComponent(props) {
   const { submitComponent: SubmitComponent } = props;
@@ -51,7 +51,7 @@ export function FormComponent(props) {
         { !isEmpty(props.nonFieldErrorsMap) &&
           <NonFieldErrorsList errors={ props.nonFieldErrorsMap } />
         }
-        { props.formLayout.map(({ header, fields }, i) =>
+        { props.fieldsets.map(({ header, fields }, i) =>
           <Grid key={ `layout:${i}` } columns={ 16 } className='layout'>
             { !!header &&
               <div className='sixteen wide column'>

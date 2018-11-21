@@ -4,12 +4,12 @@ exports[`<TextField /> 1`] = `
 ShallowWrapper {
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <TextField
-    help_text="help text"
-    layoutOpts={
+    displayOptions={
       Object {
         "width": 1,
       }
     }
+    help_text="help text"
     name="text_field_name"
     type="TextField"
     verbose_name="verbose name"
@@ -29,12 +29,12 @@ ShallowWrapper {
     "props": Object {
       "children": Array [
         <FieldLabel
-          help_text="help text"
-          layoutOpts={
+          displayOptions={
             Object {
               "width": 1,
             }
           }
+          help_text="help text"
           name="text_field_name"
           type="TextField"
           verbose_name="verbose name"
@@ -66,10 +66,10 @@ ShallowWrapper {
         "key": undefined,
         "nodeType": "function",
         "props": Object {
-          "help_text": "help text",
-          "layoutOpts": Object {
+          "displayOptions": Object {
             "width": 1,
           },
+          "help_text": "help text",
           "name": "text_field_name",
           "type": "TextField",
           "verbose_name": "verbose name",
@@ -130,12 +130,12 @@ ShallowWrapper {
       "props": Object {
         "children": Array [
           <FieldLabel
-            help_text="help text"
-            layoutOpts={
+            displayOptions={
               Object {
                 "width": 1,
               }
             }
+            help_text="help text"
             name="text_field_name"
             type="TextField"
             verbose_name="verbose name"
@@ -167,10 +167,10 @@ ShallowWrapper {
           "key": undefined,
           "nodeType": "function",
           "props": Object {
-            "help_text": "help text",
-            "layoutOpts": Object {
+            "displayOptions": Object {
               "width": 1,
             },
+            "help_text": "help text",
             "name": "text_field_name",
             "type": "TextField",
             "verbose_name": "verbose name",

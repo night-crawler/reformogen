@@ -33,7 +33,7 @@ export class DropzoneField extends React.Component {
       multiple: PropTypes.bool,
       accept: PropTypes.string,
 
-      layoutOpts: PropTypes.object,
+      displayOptions: PropTypes.object,
       formFilesUploadProgress: PropTypes.object,
       
       /** value is a current dirty value, previous is not here */
@@ -124,7 +124,7 @@ export class DropzoneField extends React.Component {
         <Form.Field
           required={ this.props.required }
           disabled={ !this.props.editable }
-          width={ this.props.layoutOpts.width }
+          width={ this.props.displayOptions.width }
           error={ !isEmpty(this.props.errors) }
         >
           <Dropzone 
