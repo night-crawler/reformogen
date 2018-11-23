@@ -32,7 +32,11 @@ export function FileOnServerItem(props) {
       <a href={ props.fileUrl }>{ fileName }</a>
       
       { props.isRemovable && <Button 
-        icon='remove' size='mini' attached='right' floated='right' 
+        as='a'
+        icon='remove' 
+        size='mini' 
+        attached='right' 
+        floated='right' 
         onClick={ props.onDelete }
       /> }
     </List.Item>

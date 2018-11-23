@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Form } from 'semantic-ui-react';
+import { Form, Segment } from 'semantic-ui-react';
 import { isEmpty, upperFirst, keyBy, sortBy, reverse } from 'lodash';
 import Dropzone from 'react-dropzone';
 
@@ -127,8 +127,11 @@ export class DropzoneField extends React.Component {
           width={ this.props.displayOptions.width }
           error={ !isEmpty(this.props.errors) }
         >
-          <Dropzone 
-            className='ui center aligned dropzone segment attached top'  
+          <Segment
+            as={ Dropzone } 
+            textAlign='center'
+            attached='top'
+            className='dropzone'  
             multiple={ this.props.multiple }
             onDrop={ this.handleDrop }
             accept={ this.props.accept }
@@ -140,7 +143,7 @@ export class DropzoneField extends React.Component {
             <div>
               { !isEmpty(this.state.files) || this.props.dropText }
             </div>
-          </Dropzone>
+          </Segment>
 
           <DirtyFilesPreview
             files={ this.props.value }

@@ -43,12 +43,19 @@ export const metaDataM2MFields = createSelector(
   )
 );
 
+export const metaDataFKFields = createSelector(
+  metaDataFields, metaDataFields => metaDataFields.filter(value => 
+    isString(value.data) && value.type === 'ForeignKey'
+  )
+);
+
 export const metaDataDefaultsMap = createSelector(
   metaDataFields, 
   metaDataFields => zip(
     map(metaDataFields || [], 'name'),
     map(metaDataFields || [], 'default')
-  ) |> fromPairs
+  ) |> (pairs => pairs.filter(([ , value ]) => value !== undefined))
+    |> fromPairs
 );
 
 export const metaDataFieldsByNameMap = createSelector(
@@ -94,7 +101,7 @@ export const finalFieldValue = createSelector(
 export const fieldOptionsNextPageNumber = createSelector(
   [ formogen, formId, fieldName ],
   (formogen, formId, fieldName) => // '' is the default value
-    formogen[`Form:${formId}:field:${fieldName}:nextPageNumber`]
+    formogen[ `Form:${formId}:field:${fieldName}:nextPageNumber` ]
 );
 
 
@@ -117,6 +124,10 @@ export const objectUrls = createSelector(
     formogen[ `Form:${formId}:field:__urls__:stored` ] ||
     formogen[ `Form:${formId}:field:urls:stored` ]
 );
+
+/**
+ * If we have an object, we prefer urls received from it, then urls from metadata.
+ */
 export const fieldFileUploadUrl = createSelector(
   [ fieldName, objectUrls, metaDataFieldsByNameMap ],
   (fieldName, objectUrls, metaDataFieldsByNameMap) => 
@@ -125,7 +136,8 @@ export const fieldFileUploadUrl = createSelector(
 );
 
 /**
- * * NOTICE: it is possible to save with PATCH changed fields if we have objectId
+ * NOTICE: it is possible to save only modified fields with PATCH (if we have an object fetched).
+ * Also, we exclude files from here, since they are uploaded separately.
  */
 export const finalFormData = createSelector(
   [ formogen, formId, metaDataNonFileFields ],
@@ -139,11 +151,13 @@ export const finalFormData = createSelector(
 export const dirtyFormFiles = createSelector(
   [ formogen, formId, metaDataFileFields ],
   (formogen, formId, metaDataFileFields) => 
-    metaDataFileFields.map(fieldMeta => ({
-      fieldMeta,
-      uploadUrl: fieldFileUploadUrl({ formogen }, { formId, name: fieldMeta.name }),
-      files: dirtyFieldValue({ formogen }, { formId, name: fieldMeta.name }) 
-    }))
+    metaDataFileFields
+      .map(fieldMeta => ({
+        fieldMeta,
+        uploadUrl: fieldFileUploadUrl({ formogen }, { formId, name: fieldMeta.name }),
+        files: dirtyFieldValue({ formogen }, { formId, name: fieldMeta.name }) 
+      }))
+      .filter(bundle => !!bundle.files?.length)
 );
 
 /**

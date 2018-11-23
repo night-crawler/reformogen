@@ -51,7 +51,14 @@ export function* bootstrap({ payload, meta }) {
   return true;
 }
 
+/**
+ * This function initially populates field's options with the data received
+ * from the server. So, if an M2M field has value: [ {object1}, {object2} ],
+ * those object will have been placed into the field's choices list.
+ * @param {String} formId 
+ */
 export function* initializeRelatedFieldOptions(formId) {
+  // TODO: we need to do the same for FK fields
   const m2mFields = yield select(metaDataM2MFieldsSelector, { formId });
   for (const fieldName of map(m2mFields, 'name')) {
     const value = yield select(storedFieldValueSelector, { formId, name: fieldName });

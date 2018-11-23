@@ -7,6 +7,7 @@ ShallowWrapper {
     fieldsets={Array []}
     isTitleVisible={true}
     loading={true}
+    onSubmit={[Function]}
     submitComponent={[Function]}
     title="sample"
   />,
@@ -37,10 +38,12 @@ ShallowWrapper {
         <DefaultSubmitComponent
           content="Submit"
           fluid={true}
+          onSubmit={[Function]}
           type="submit"
         />,
       ],
       "loading": true,
+      "onSubmit": [Function],
     },
     "ref": null,
     "rendered": Array [
@@ -81,7 +84,7 @@ ShallowWrapper {
         "props": Object {
           "content": "Submit",
           "fluid": true,
-          "onClick": undefined,
+          "onSubmit": [Function],
           "type": "submit",
         },
         "ref": null,
@@ -111,10 +114,12 @@ ShallowWrapper {
           <DefaultSubmitComponent
             content="Submit"
             fluid={true}
+            onSubmit={[Function]}
             type="submit"
           />,
         ],
         "loading": true,
+        "onSubmit": [Function],
       },
       "ref": null,
       "rendered": Array [
@@ -155,7 +160,7 @@ ShallowWrapper {
           "props": Object {
             "content": "Submit",
             "fluid": true,
-            "onClick": undefined,
+            "onSubmit": [Function],
             "type": "submit",
           },
           "ref": null,

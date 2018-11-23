@@ -18,8 +18,11 @@ DirtyFilesPreview.defaultProps = {
     console.warn('DirtyFilesPreview.onDeleteFile', file, i),
 };
 export function DirtyFilesPreview(props) {
+  if (!props.files?.length)
+    return null;
+
   return (
-    <Segment as={ List } attached='bottom' divided={ true } relaxed={ true }>
+    <Segment as={ List } attached='bottom' divided={ true } relaxed={ true } style={ { marginBottom: 0 } }>
       { props.files.map((file, i) => 
         <DirtyFileItem 
           key={ i } 
@@ -27,10 +30,15 @@ export function DirtyFilesPreview(props) {
           onDelete={ () => props.onDeleteFile(file, i) } 
         />
       ) }
-      <Button 
+
+      { props.files.length >= 2 && <Button 
+        // WARNING: using a regular button here (without as) makes this button 
+        // clicked each time before the submit action
+        as='a'
+        tabIndex='-1'
         size='mini' fluid={ true } icon='remove' 
         onClick={ props.onClear }
-      />
+      /> }
     </Segment>
   );
 }

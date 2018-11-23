@@ -39,6 +39,7 @@ export function DirtyFileItem(props) {
       </List.Content>
 
       <Button 
+        as='a'
         icon='remove' size='mini' attached='right' floated='right' 
         onClick={ props.onDelete }
       />
