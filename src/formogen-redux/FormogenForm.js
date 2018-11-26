@@ -11,20 +11,19 @@ const mapDispatchToProps = dispatch => ({ dispatch });
 
 function mergeProps(stateProps, dispatchProps, ownProps) {
   const { dispatch } = dispatchProps;
+
+  ownProps.describeUrl || throw new Error('You must provide non-falsy describeUrl!');
+  ownProps.objectUrl || ownProps.createUrl || throw new Error('You must provide objectUrl or createUrl!');
+
   return {
     ...ownProps,
     ...stateProps,
     ...dispatchProps,
 
     actions: {
-      bootstrap: () => dispatch(bootstrap({
-        formId: ownProps.formId,
-        describeUrl: ownProps.describeUrl,
-        createUrl: ownProps.createUrl,
-        objectUrl: ownProps.objectUrl,
-      })),
+      bootstrap: () => dispatch(bootstrap(ownProps)),
       loadOptions: payload => dispatch(fetchNextFieldOptions(payload)),
-      submit: () => dispatch(submit(ownProps.formId)),
+      submit: () => dispatch(submit(ownProps)),
     },
 
     dispatch: undefined,

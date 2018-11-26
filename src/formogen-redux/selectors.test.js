@@ -370,4 +370,33 @@ describe('selectors', () => {
       { formId: 'form-3' }
     )
   ).toHaveLength(1));
+  
+  it('should select PUT with formSaveHTTPMethod if there was an object id specified', () => expect(
+    selectors.formSaveHTTPMethod(
+      { formogen: { 'Form:FORMID:field:id:stored': 1 } },
+      { formId: 'FORMID' }
+    )
+  ).toEqual('put'));
+
+  it('should select POST with formSaveHTTPMethod if there was no object is specified', () => expect(
+    selectors.formSaveHTTPMethod(
+      { formogen: { 'Form:FORMID:field:id:stored': undefined } },
+      { formId: 'FORMID' }
+    )
+  ).toEqual('post'));
+
+  it('should select formSaveUrl if there was an object id specified', () => expect(
+    selectors.formSaveUrl(
+      { formogen: { 'Form:FORMID:field:id:stored': 1 } },
+      { formId: 'FORMID', objectUrl: 'http://sample-object-url.test' }
+    )
+  ).toEqual('http://sample-object-url.test'));
+
+  it('should select formSaveUrl if there was no object id specified', () => expect(
+    selectors.formSaveUrl(
+      { formogen: { 'Form:FORMID:field:id:stored': undefined } },
+      { formId: 'FORMID', createUrl: 'http://sample-object-create-url.test' }
+    )
+  ).toEqual('http://sample-object-create-url.test'));
+
 });

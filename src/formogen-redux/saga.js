@@ -13,7 +13,8 @@ import {
   storedFieldValue as storedFieldValueSelector,
   finalFormData as finalFormDataSelector,
   dirtyFormFiles as dirtyFormFilesSelector,
-  fieldFileUploadUrl as fieldFileUploadUrlSelector,
+  formSaveHTTPMethod  as formSaveHTTPMethodSelector,
+  formSaveUrl as formSaveUrlSelector,
 } from './selectors';
 import * as api from './api';
 import { processError } from './apiHelpers';
@@ -105,13 +106,35 @@ export function* fetchNextFieldOptions({ payload, meta }) {
 }
 
 
-export function* submit({ meta }) {
-  const [ formData, formFiles ] = [
-    yield select(finalFormDataSelector, { formId: meta.formId }),
-    yield select(dirtyFormFilesSelector, { formId: meta.formId }),
-  ];
-  console.log('qwe`', formData, formFiles);
+/**
+ * Action here contains the whole ownProps bundle ad a payload
+ * @param {object} param0 
+ */
+export function* submit({ payload, meta }) {
+  const [ formData, formFiles ] = yield all([
+    select(finalFormDataSelector, payload),
+    select(dirtyFormFilesSelector, payload),
+  ]);
 
+  const [ formSaveUrl, formSaveHTTPMethod ] = yield all([
+    select(formSaveUrlSelector, payload),
+    select(formSaveHTTPMethodSelector, payload)
+  ]);
+
+  const { result: formSaveResult, error: formSaveError = {} } = yield api.saveFormData({
+    payload: { 
+      url: formSaveUrl, 
+      locale: payload.locale, 
+      method: formSaveHTTPMethod 
+    },
+    meta: { formId: meta.formId }
+  });
+
+  console.log(formSaveError.response.body);
+}
+
+export function* saveFormData(url, method, data) {
+  
 }
 
 

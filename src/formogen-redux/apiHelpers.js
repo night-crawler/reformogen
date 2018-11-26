@@ -23,7 +23,7 @@ export function* processError(errorType, exception, meta) {
   });
 }
 
-export function singleApiCall({ 
+export function singleApiCallFactory({ 
   method, 
   processResponse = ({ response }) => response.body, 
   onError = processError,
@@ -83,7 +83,10 @@ export function* executeRequest({
   ...opts 
 }) {
   if (!Object.keys(opts).length === 0)  // eslint-disable-next-line
-    console.warn(`Received some extra arguments`, opts);
+    console.warn('Received some extra arguments', opts);
+
+  ['get', 'post', 'patch', 'put', 'options'].includes(method) || 
+    throw new Error(`Method ${method} is not supported!`);
 
   const errors = [];
   const runtimeHeaders = yield getHeaders();

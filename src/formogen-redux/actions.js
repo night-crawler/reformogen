@@ -11,6 +11,8 @@ import {
 } from './constants';
 
 
+/** Pass formId, fieldName, and other data addressing/routing attributes just like {meta} */
+
 export const bootstrap = ({ formId, ...payload }) => ({
   type: BOOTSTRAP,
   payload,
@@ -18,9 +20,14 @@ export const bootstrap = ({ formId, ...payload }) => ({
 });
 
 
-export const submit = formId => ({
+/**
+ * We pass all own props bundle here
+ * @param {ownProps} param0 
+ */
+export const submit = ({ formId, ...payload }) => ({
   type: SUBMIT,
-  meta: { formId },
+  payload: { formId, ...payload },  // for convenience only
+  meta: { formId }
 });
 
 

@@ -15,6 +15,15 @@ export const fieldName = createSelector(
   props, props => props.name
 );
 
+export const describeUrl = createSelector(
+  props, props => props.describeUrl
+);
+export const createUrl = createSelector(
+  props, props => props.createUrl
+);
+export const objectUrl = createSelector(
+  props, props => props.objectUrl
+);
 
 export const metaData = createSelector(
   [ formogen, formId ], 
@@ -97,6 +106,11 @@ export const finalFieldValue = createSelector(
   (...args) => [ ...args, '' ].filter(val => val !== undefined)[0]
 );
 
+export const objectId = createSelector(
+  [ formogen, formId ],
+  (formogen, formId) => 
+    formogen[`Form:${formId}:field:id:stored`] 
+);
 
 export const fieldOptionsNextPageNumber = createSelector(
   [ formogen, formId, fieldName ],
@@ -160,7 +174,13 @@ export const dirtyFormFiles = createSelector(
       .filter(bundle => !!bundle.files?.length)
 );
 
-/**
- * 
- * Form:${formId}:field:${fieldName}:q:${fieldInputSearch}
- */
+export const formSaveHTTPMethod = createSelector(
+  objectId,
+  objectId => objectId ? 'put' : 'post'
+);
+
+export const formSaveUrl = createSelector(
+  [ objectId, createUrl, objectUrl ],
+  (objectId, createUrl, objectUrl) => 
+    objectId ? objectUrl : createUrl
+);
