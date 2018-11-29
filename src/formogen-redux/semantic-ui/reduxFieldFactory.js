@@ -1,7 +1,12 @@
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 
-import { formId, finalFieldValue, initialFieldValue } from '~/formogen-redux/selectors';
+import { 
+  formId, 
+  finalFieldValue, 
+  initialFieldValue,
+  fieldErrors,
+} from '~/formogen-redux/selectors';
 
 import { storeFieldData } from '~/formogen-redux/actions';
 
@@ -26,6 +31,7 @@ export function connectField(FieldComponent, selectors={}) {
       formId,
       initialValue: initialFieldValue,
       value: finalFieldValue,
+      errors: fieldErrors,
       ...selectors,
     }),
     dispatch => ({ dispatch }),

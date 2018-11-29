@@ -18,7 +18,12 @@ import {
 } from './selectors';
 import * as api from './api';
 import { processError } from './apiHelpers';
-import { storeFieldOptions, changeFieldSearchText } from './actions';
+import { 
+  storeFieldOptions, 
+  changeFieldSearchText, 
+  storeFormErrors,
+  clearFormErrors,
+} from './actions';
 
 
 export function* bootstrap({ payload, meta }) {
@@ -125,12 +130,18 @@ export function* submit({ payload, meta }) {
     payload: { 
       url: formSaveUrl, 
       locale: payload.locale, 
-      method: formSaveHTTPMethod 
+      method: formSaveHTTPMethod,
+      // data: formData,
     },
     meta: { formId: meta.formId }
   });
 
-  console.log(formSaveError.response.body);
+  yield put(clearFormErrors(meta.formId));
+
+  if (formSaveError?.response?.badRequest === true) {
+    yield put(storeFormErrors(meta.formId, formSaveError.response.body));
+    console.log(formSaveError.response.body);
+  }
 }
 
 export function* saveFormData(url, method, data) {

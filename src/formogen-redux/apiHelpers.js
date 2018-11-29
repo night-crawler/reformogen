@@ -1,5 +1,6 @@
 import agent from 'superagent';
 import { delay } from 'redux-saga';
+import Cookies from 'js-cookie';
 
 import { call, put } from 'redux-saga/effects';
 
@@ -13,6 +14,22 @@ import {
 } from './constants';
 import { failedAgentRequestAttempt } from './actions';
 import { APIError } from './errors';
+
+
+export function isCsrfSafeMethod(method) {
+  // these HTTP methods do not require CSRF protection
+  return (/^(GET|HEAD|OPTIONS|TRACE)$/i.test(method));
+}
+
+
+export function getDefaultHeaders({ method }) {
+  const headers = {};
+
+  if (!isCsrfSafeMethod(method))
+    headers['X-CSRFToken'] = Cookies.get('csrftoken');
+
+  return headers;
+}
 
 
 export function* processError(errorType, exception, meta) {
@@ -68,7 +85,9 @@ export function* executeRequest({
   url,
   method = 'get',
   query={},
-  getHeaders = () => ({}),
+  getHeaders = getDefaultHeaders,
+  data,
+
   refineRequest = requestObject => requestObject,
   locale = undefined,
 
@@ -89,7 +108,7 @@ export function* executeRequest({
     throw new Error(`Method ${method} is not supported!`);
 
   const errors = [];
-  const runtimeHeaders = yield getHeaders();
+  const runtimeHeaders = yield getHeaders({ method, url });
 
   for (let retryAttempt=0; retryAttempt < retryCount; retryAttempt++) {
     try {
@@ -101,6 +120,7 @@ export function* executeRequest({
 
       if (!isProduction) request = request.withCredentials();
       if (locale !== undefined) request = request.set({ 'Accept-Language': locale });
+      if (data !== undefined) request = request.send(data);
       
       request = refineRequest(request);
 

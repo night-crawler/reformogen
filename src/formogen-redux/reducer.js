@@ -1,15 +1,24 @@
+import { pickBy } from 'lodash';
+
 import { 
-  STORE_FORM_DATA, STORE_FORM_METADATA, STORE_FIELD_DATA, STORE_FIELD_OPTIONS,
+  STORE_FORM_DATA, 
+  STORE_FORM_METADATA, 
+  STORE_FIELD_DATA, 
+  STORE_FIELD_OPTIONS,
+  STORE_FORM_ERRORS,
+  CLEAR_FORM_ERRORS,
+  
   FETCH_FORM_METADATA_SUCCESS,
   FETCH_FORM_DATA_SUCCESS,
 
   FETCH_NEXT_FIELD_OPTIONS_SUCCESS, STORE_FIELD_SEARCH_TEXT,
 } from './constants';
 
-export function prefixObjectFields(formId, obj) {
+
+export function prefixObjectFields(formId, obj, postfix='stored') {
   const prefixedObj = {};
   for (const [ fieldName, value ] of Object.entries(obj)) {
-    prefixedObj[`Form:${formId}:field:${fieldName}:stored`] = value;
+    prefixedObj[`Form:${formId}:field:${fieldName}:${postfix}`] = value;
   }
   return prefixedObj;
 }
@@ -32,13 +41,13 @@ export function formogenReducer(state = {}, action) {
     case FETCH_FORM_DATA_SUCCESS:
       return {
         ...state,
-        ...prefixObjectFields(formId, payload)
+        ...prefixObjectFields(formId, payload, 'stored')
       };
 
     case STORE_FORM_DATA:
       return {
         ...state,
-        ...prefixObjectFields(formId, payload)
+        ...prefixObjectFields(formId, payload, 'stored')
       };
 
     case STORE_FORM_METADATA:
@@ -69,6 +78,21 @@ export function formogenReducer(state = {}, action) {
       return {
         ...state,
         [ `Form:${formId}:field:${fieldName}:q` ]: searchText,
+      };
+
+    case CLEAR_FORM_ERRORS:
+      return pickBy(
+        state, 
+        (value, key) => !(
+          key.startsWith(`Form:${formId}:field:`) && 
+          key.endsWith(':errors')
+        )
+      );
+
+    case STORE_FORM_ERRORS:
+      return {
+        ...state,
+        ...prefixObjectFields(formId, payload, 'errors'),
       };
     
     case FETCH_NEXT_FIELD_OPTIONS_SUCCESS:

@@ -8,6 +8,8 @@ import {
   FETCH_NEXT_FIELD_OPTIONS,
   STORE_FIELD_OPTIONS,
   STORE_FIELD_SEARCH_TEXT,
+  STORE_FORM_ERRORS,
+  CLEAR_FORM_ERRORS,
 } from './constants';
 
 
@@ -44,6 +46,18 @@ export const storeFormMetaData = (formId, metaData) => ({
   meta: { formId },
 });
 
+
+export const clearFormErrors = formId => ({
+  type: CLEAR_FORM_ERRORS,
+  meta: { formId },
+});
+
+
+export const storeFormErrors = (formId, errors) => ({
+  type: STORE_FORM_ERRORS,
+  payload: errors,
+  meta: { formId },
+});
 
 export const storeFieldData = (formId, fieldName, value) => ({
   type: STORE_FIELD_DATA,

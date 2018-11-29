@@ -77,6 +77,11 @@ export const formData = createSelector(
   (formogen, formId) => formogen[`Form:${formId}:data`]
 );
 
+export const fieldErrors = createSelector(
+  [ formogen, formId, fieldName ],
+  (formogen, formId, fieldName) => 
+    formogen[`Form:${formId}:field:${fieldName}:errors`] 
+);
 
 export const defaultFieldValue = createSelector(
   [ fieldName, metaDataDefaultsMap ],

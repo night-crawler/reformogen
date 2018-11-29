@@ -17,6 +17,7 @@
     "cSpell.words": [
         "Dropdown",
         "Truncator",
+        "csrftoken",
         "datepicker",
         "fieldsets",
         "fname",
