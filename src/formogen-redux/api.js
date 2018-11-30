@@ -6,6 +6,8 @@ import {
 
   FETCH_NEXT_FIELD_OPTIONS, FETCH_NEXT_FIELD_OPTIONS_SUCCESS, FETCH_NEXT_FIELD_OPTIONS_ERROR,
   SAVE_FORM_DATA, SAVE_FORM_DATA_SUCCESS, SAVE_FORM_DATA_ERROR,
+
+  SAVE_FORM_FILE, SAVE_FORM_FILE_SUCCESS, SAVE_FORM_FILE_ERROR,
 } from './constants';
 
 
@@ -45,11 +47,33 @@ export const searchDataFieldOptions = singleApiCallFactory({
   ],
 });
 
+
 export const saveFormData = singleApiCallFactory({
   method: requestOpts => executeRequest(requestOpts),
   types: [ 
     SAVE_FORM_DATA, 
     SAVE_FORM_DATA_SUCCESS, 
     SAVE_FORM_DATA_ERROR,
+  ],
+});
+
+
+export const saveFormFile = singleApiCallFactory({
+  method: ({ url, fieldName, filename, file }) => executeRequest({
+    url,
+    method: 'post',
+    // ! we don't want to retry the file uploading in case of errors
+    // ! (mobile network users complains)
+    retryCount: 1,
+    refineRequest: requestObject => requestObject.attach(
+      fieldName,
+      file,
+      { filename }
+    )
+  }),
+  types: [ 
+    SAVE_FORM_FILE, 
+    SAVE_FORM_FILE_SUCCESS,
+    SAVE_FORM_FILE_ERROR
   ],
 });

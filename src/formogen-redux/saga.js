@@ -23,6 +23,9 @@ import {
   changeFieldSearchText, 
   storeFormErrors,
   clearFormErrors,
+  submitError,
+  submitSuccess,
+  storeFormData,
 } from './actions';
 
 
@@ -112,7 +115,9 @@ export function* fetchNextFieldOptions({ payload, meta }) {
 
 
 /**
- * Action here contains the whole ownProps bundle ad a payload
+ * 1. Saves form data without files. 
+ * 2. If there're some files, save them next, only if there were no errors during saving the form.
+ * First argument is an action that contains the whole ownProps bundle in the payload.
  * @param {object} param0 
  */
 export function* submit({ payload, meta }) {
@@ -121,31 +126,80 @@ export function* submit({ payload, meta }) {
     select(dirtyFormFilesSelector, payload),
   ]);
 
+  // saveUrl may vary; 
+  // saving method is usually POST or PUT
   const [ formSaveUrl, formSaveHTTPMethod ] = yield all([
     select(formSaveUrlSelector, payload),
     select(formSaveHTTPMethodSelector, payload)
   ]);
 
-  const { result: formSaveResult, error: formSaveError = {} } = yield api.saveFormData({
+  const { result: formSaveResult, error: formSaveError } = yield api.saveFormData({
     payload: { 
       url: formSaveUrl, 
       locale: payload.locale, 
       method: formSaveHTTPMethod,
-      // data: formData,
+      data: formData,
     },
     meta: { formId: meta.formId }
   });
 
+  // Clean up the old errors or get some user confused.
   yield put(clearFormErrors(meta.formId));
 
-  if (formSaveError?.response?.badRequest === true) {
-    yield put(storeFormErrors(meta.formId, formSaveError.response.body));
-    console.log(formSaveError.response.body);
+  // If we have an error, we handle only the 400 bad request
+  // other errors must be processed somewhere else
+  if (formSaveError !== undefined) {
+    if (formSaveError.response?.badRequest !== true) 
+      return yield put(submitError(meta.formId, formSaveError));
+
+    // now we can just store errors and leave this damned branch
+    return yield put(storeFormErrors(meta.formId, formSaveError.response.body));
   }
+
+  // We expect server side to return the saved object back to us with its id included.
+  // So, if we don't reload the form after success, it's better to synchronize
+  // redux state with the data received from the server.
+  yield put(storeFormData(meta.formId, formSaveResult));
+
+  // the next step is to save all files, if there're some
+  if (!formFiles.length)
+    return yield put(submitSuccess(meta.formId));
+
+  const { errors: uploadFormFilesErrors } = yield uploadFormFiles(meta.formId, formFiles);
+  if (uploadFormFilesErrors.length === 0)
+    return yield put(submitSuccess(meta.formId));
+
+  yield put(submitError(meta.formId, uploadFormFilesErrors));
 }
 
-export function* saveFormData(url, method, data) {
-  
+export function* uploadFormFiles(formId, formFiles) {
+  const tasks = formFiles.map(fileBundle => api.saveFormFile({
+    payload: fileBundle,
+    meta: { formId, fieldName: fileBundle.fieldName }
+  }));
+
+  // In this case it's better to save files one by one since 
+  // there are still too many users with slow internet connection.
+  // It's too easy to get request timeout here.
+  // TODO: split each file up to X chunks and make sure it's possible to push a single chunk through the request timeout window.
+  const errors = [];
+  const results = [];
+  for (const task of tasks) {
+    const { result: fileUploadResult, error: fileUploadError, meta } = yield task;
+    // We can either skip sending pending files, or keep going.
+    // At this moment we prefer keep going, but it's a
+    // TODO: add some option to override this behaviour
+
+    if (fileUploadError !== undefined) {
+      errors.push({ error: fileUploadError, meta });
+      continue;
+    }
+
+    results.push({ result: fileUploadResult, meta });
+  }
+
+  // just return something, actually we don't need all this stuff
+  return { errors, results };
 }
 
 

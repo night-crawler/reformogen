@@ -169,14 +169,20 @@ export const finalFormData = createSelector(
 
 export const dirtyFormFiles = createSelector(
   [ formogen, formId, metaDataFileFields ],
-  (formogen, formId, metaDataFileFields) => 
-    metaDataFileFields
-      .map(fieldMeta => ({
-        fieldMeta,
-        uploadUrl: fieldFileUploadUrl({ formogen }, { formId, name: fieldMeta.name }),
-        files: dirtyFieldValue({ formogen }, { formId, name: fieldMeta.name }) 
-      }))
-      .filter(bundle => !!bundle.files?.length)
+  (formogen, formId, metaDataFileFields) => {
+    const fileBundles = [];
+    metaDataFileFields.forEach(fileFieldMeta => {
+      const url = fieldFileUploadUrl({ formogen }, { formId, name: fileFieldMeta.name });
+      const files = dirtyFieldValue({ formogen }, { formId, name: fileFieldMeta.name }) || [];
+      files.forEach(file => fileBundles.push({
+        fieldName: fileFieldMeta.name,
+        filename: file.name,
+        file,
+        url,
+      }));
+    });
+    return fileBundles;
+  }
 );
 
 export const formSaveHTTPMethod = createSelector(

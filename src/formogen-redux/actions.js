@@ -1,6 +1,6 @@
 import { 
   BOOTSTRAP,
-  SUBMIT,
+  SUBMIT, SUBMIT_SUCCESS, SUBMIT_ERROR,
   STORE_FORM_DATA,
   STORE_FORM_METADATA,
   STORE_FIELD_DATA,
@@ -33,36 +33,48 @@ export const submit = ({ formId, ...payload }) => ({
 });
 
 
+
+export const submitError = (formId, error) => ({
+  type: SUBMIT_ERROR,
+  payload: error,
+  meta: { formId }
+});
+
+export const submitSuccess = formId => ({
+  type: SUBMIT_SUCCESS,
+  meta: { formId }
+});
+
 export const storeFormData = (formId, data) => ({
   type: STORE_FORM_DATA,
   payload: data,
-  meta: { formId },
+  meta: { formId }
 });
 
 
 export const storeFormMetaData = (formId, metaData) => ({
   type: STORE_FORM_METADATA,
   payload: metaData,
-  meta: { formId },
+  meta: { formId }
 });
 
 
 export const clearFormErrors = formId => ({
   type: CLEAR_FORM_ERRORS,
-  meta: { formId },
+  meta: { formId }
 });
 
 
 export const storeFormErrors = (formId, errors) => ({
   type: STORE_FORM_ERRORS,
   payload: errors,
-  meta: { formId },
+  meta: { formId }
 });
 
 export const storeFieldData = (formId, fieldName, value) => ({
   type: STORE_FIELD_DATA,
   payload: value,
-  meta: { formId, fieldName },
+  meta: { formId, fieldName }
 });
 
 
@@ -91,3 +103,4 @@ export const changeFieldSearchText = ({ formId, fieldName, searchText = '' }) =>
   payload: searchText,
   meta: { formId, fieldName, searchText }
 });
+
