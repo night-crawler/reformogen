@@ -7,15 +7,7 @@ import {
   FETCH_NEXT_FIELD_OPTIONS,
   SUBMIT,
 } from './constants';
-import { 
-  formogen as formogenSelector,
-  metaDataM2MFields as metaDataM2MFieldsSelector,
-  storedFieldValue as storedFieldValueSelector,
-  finalFormData as finalFormDataSelector,
-  dirtyFormFiles as dirtyFormFilesSelector,
-  formSaveHTTPMethod  as formSaveHTTPMethodSelector,
-  formSaveUrl as formSaveUrlSelector,
-} from './selectors';
+import * as selectors from './selectors';
 import * as api from './api';
 import { processError } from './apiHelpers';
 import { 
@@ -67,23 +59,38 @@ export function* bootstrap({ payload, meta }) {
  * @param {String} formId 
  */
 export function* initializeRelatedFieldOptions(formId) {
-  // TODO: we need to do the same for FK fields
-  const m2mFields = yield select(metaDataM2MFieldsSelector, { formId });
+  const m2mFields = yield select(selectors.metaDataM2MFields, { formId });
   for (const fieldName of map(m2mFields, 'name')) {
-    const value = yield select(storedFieldValueSelector, { formId, name: fieldName });
+    const value = yield select(selectors.storedFieldValue, { formId, name: fieldName });
     if (isEmpty(value))
       continue;
     
     yield put(storeFieldOptions({ formId, searchText: '', fieldName, value }));
   }
+
+  // TODO: Need some DRY here
+  const fkFields = yield select(selectors.metaDataFKFields, { formId });
+  for (const fieldName of map(fkFields, 'name')) {
+    const value = yield select(selectors.storedFieldValue, { formId, name: fieldName });
+    if (isEmpty(value))
+      continue;
+    
+    yield put(storeFieldOptions({ formId, searchText: '', fieldName, value: [ value ] }));
+  }
 }
 
 export function* fetchNextFieldOptions({ payload, meta }) {
-  const keyPrefix = `Form:${meta.formId}:field:${meta.fieldName}:q:${payload.searchText}`;
-  const formogen = yield select(formogenSelector);
+  // TODO: Remove this code after a while
+  // const keyPrefix = `Form:${meta.formId}:field:${meta.fieldName}:q:${payload.searchText}`;
+  // const formogen = yield select(selectors.formogen);
+  // const nextPageNumber = formogen[`${keyPrefix}:nextPageNumber`];
+  // const currentPageNumber = formogen[`${keyPrefix}:currentPageNumber`];
 
-  const nextPageNumber = formogen[`${keyPrefix}:nextPageNumber`];
-  const currentPageNumber = formogen[`${keyPrefix}:currentPageNumber`];
+  // Reducer stores payload.searchText in state too, so it's accessible from the selectors
+  const [ currentPageNumber, nextPageNumber ] = yield all([
+    select(selectors.fieldOptionsCurrentPageNumber, { formId: meta.formId, name: meta.fieldName }),
+    select(selectors.fieldOptionsNextPageNumber, { formId: meta.formId, name: meta.fieldName }),
+  ]);
 
   let requestPageNumber = meta.page * 1 || nextPageNumber * 1 || (currentPageNumber * 1 + 1) || 1;
   if (nextPageNumber === null || !requestPageNumber || isNaN(requestPageNumber)) {
@@ -122,15 +129,15 @@ export function* fetchNextFieldOptions({ payload, meta }) {
  */
 export function* submit({ payload, meta }) {
   const [ formData, formFiles ] = yield all([
-    select(finalFormDataSelector, payload),
-    select(dirtyFormFilesSelector, payload),
+    select(selectors.finalFormData, payload),
+    select(selectors.dirtyFormFiles, payload),
   ]);
 
   // saveUrl may vary; 
   // saving method is usually POST or PUT
   const [ formSaveUrl, formSaveHTTPMethod ] = yield all([
-    select(formSaveUrlSelector, payload),
-    select(formSaveHTTPMethodSelector, payload)
+    select(selectors.formSaveUrl, payload),
+    select(selectors.formSaveHTTPMethod, payload)
   ]);
 
   const { result: formSaveResult, error: formSaveError } = yield api.saveFormData({
@@ -156,10 +163,22 @@ export function* submit({ payload, meta }) {
     return yield put(storeFormErrors(meta.formId, formSaveError.response.body));
   }
 
-  // We expect server side to return the saved object back to us with its id included.
-  // So, if we don't reload the form after success, it's better to synchronize
-  // redux state with the data received from the server.
-  yield put(storeFormData(meta.formId, formSaveResult));
+  // It's expected the server returns a saved object back with its id included.
+  // So, if form hasn't been reloaded after success after all, it's better to synchronize
+  // redux state with the data received from the server (because it's possible that the 
+  // server computes the final object state based on some other fields).
+  // ! Anyway it's a weird behaviour that couldn't been taken into account in
+  // ! an explicit way, that's why store is patched with an id and __urls__ only.
+  // yield put(storeFormData(meta.formId, formSaveResult));
+  // It's just unwanted to deal with possibly corrupted serializer's data schemes,
+  // so it's easier to cull from the response only the stuff had brought up in conventions
+  // previously.
+  yield put(storeFormData(meta.formId, { 
+    // NOTE: using just `id` here is bad. Have to provide some identity getter.
+    id: formSaveResult.id,
+    // `__urls__` bundle is used against the ongoing saving attempts.
+    __urls__: formSaveResult.__urls__
+  }));
 
   // the next step is to save all files, if there're some
   if (!formFiles.length)

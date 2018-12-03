@@ -1,5 +1,6 @@
 import { 
   BOOTSTRAP,
+  CLEANUP,
   SUBMIT, SUBMIT_SUCCESS, SUBMIT_ERROR,
   STORE_FORM_DATA,
   STORE_FORM_METADATA,
@@ -17,6 +18,17 @@ import {
 
 export const bootstrap = ({ formId, ...payload }) => ({
   type: BOOTSTRAP,
+  payload,
+  meta: { formId }
+});
+
+
+/**
+ * This actions is used whenever the component does its unmount nasty deeds.
+ * @param {Object} param0 ownProps
+ */
+export const cleanup = ({ formId, ...payload }) => ({
+  type: CLEANUP,
   payload,
   meta: { formId }
 });

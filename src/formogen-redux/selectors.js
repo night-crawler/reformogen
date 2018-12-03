@@ -1,28 +1,51 @@
 import { createSelector } from 'reselect';
 import { isString, zip, map, fromPairs, keyBy } from 'lodash';
 
+import { coerceFieldValueToItsType } from './selectors.utils';
 
-export const formogen = state => {
-  return state.formogen;
-};
+
+export const formogen = state => state.formogen;
 export const props = (state, props) => props;
 
-export const formId = createSelector(
-  props, props => props.formId
+export const formId = createSelector(props, props => props.formId);
+export const fieldName = createSelector(props, props => props.name);
+
+/**
+ * ! CONVENTION: __urls__ service field must have shape of an object:
+ * { create, read, update, delete, describe, describe_object }
+ */
+export const objectUrls = createSelector(
+  [ formogen, formId ],
+  (formogen, formId) => 
+    formogen[ `Form:${formId}:field:__urls__:stored` ] ||
+    formogen[ `Form:${formId}:field:urls:stored` ]
 );
 
-export const fieldName = createSelector(
-  props, props => props.name
-);
-
+/**
+ * If we have an object loaded, we must use the object's urls first.
+ */
 export const describeUrl = createSelector(
-  props, props => props.describeUrl
+  [ props, objectUrls ], 
+  (props, objectUrls) => 
+    objectUrls?.describe_object || objectUrls?.describe || props.describeUrl
 );
+
+/**
+ * If we have an object loaded, we must use the object's urls first.
+ */
 export const createUrl = createSelector(
-  props, props => props.createUrl
+  [ props, objectUrls ], 
+  (props, objectUrls) => 
+    objectUrls?.create || props.createUrl
 );
+
+/**
+ * If we have an object loaded, we must use the object's urls first.
+ */
 export const objectUrl = createSelector(
-  props, props => props.objectUrl
+  [ props, objectUrls ], 
+  (props, objectUrls) => 
+    objectUrls?.read || props.objectUrl
 );
 
 export const metaData = createSelector(
@@ -31,7 +54,7 @@ export const metaData = createSelector(
 );
 
 export const metaDataFields = createSelector(
-  metaData, metaData => metaData.fields
+  metaData, metaData => metaData?.fields
 );
 
 export const metaDataNonFileFields = createSelector(
@@ -83,6 +106,43 @@ export const fieldErrors = createSelector(
     formogen[`Form:${formId}:field:${fieldName}:errors`] 
 );
 
+/**
+ * This map is a complete mess. At the moment non-field errors are saved at the root object level, so
+ * there's a problem with separating them from other fields.
+ * Obviously, all the non-field errors must be moved to a `__non_field_errors__` section.
+ */
+export const legacyNonFieldErrorsMap = createSelector(
+  [ formogen, formId, metaDataFields ],
+  (formogen, formId, metaDataFields) => {
+    const __nonFieldErrorsMap = {};
+    const fieldNames = map(metaDataFields || [], 'name');
+    for (const [ k, v ] of Object.entries(formogen)) {
+      if (!k.startsWith(`Form:${formId}:field`))
+        continue;
+
+      if (!k.endsWith(':errors'))
+        continue;
+      
+      let isRegularField = false;
+      for (const fieldName of fieldNames) {
+        if (k.startsWith(`Form:${formId}:field:${fieldName}`)) {
+          isRegularField = true;
+          break;
+        }
+      }
+
+      if (isRegularField)
+        continue;
+      
+      // Form:${formId}:field:<title>:errors
+      const parts = k.split(':');
+      const originalExceptionName = parts[parts.length - 2];
+      __nonFieldErrorsMap[ originalExceptionName ] = v;
+    }
+    return __nonFieldErrorsMap;
+  }
+);
+
 export const defaultFieldValue = createSelector(
   [ fieldName, metaDataDefaultsMap ],
   (fieldName, metaDataDefaultsMap) => metaDataDefaultsMap[fieldName]
@@ -117,31 +177,30 @@ export const objectId = createSelector(
     formogen[`Form:${formId}:field:id:stored`] 
 );
 
-export const fieldOptionsNextPageNumber = createSelector(
+export const asyncFieldInputSearch = createSelector(
   [ formogen, formId, fieldName ],
-  (formogen, formId, fieldName) => // '' is the default value
-    formogen[ `Form:${formId}:field:${fieldName}:nextPageNumber` ]
+  (formogen, formId, fieldName) => {
+    return formogen[ `Form:${formId}:field:${fieldName}:q` ];
+  }
+);
+
+export const fieldOptionsNextPageNumber = createSelector(
+  [ formogen, formId, fieldName, asyncFieldInputSearch ],
+  (formogen, formId, fieldName, asyncFieldInputSearch) => // '' is the default value
+    formogen[ `Form:${formId}:field:${fieldName}:q:${asyncFieldInputSearch}:nextPageNumber` ]
 );
 
 
-export const asyncFieldInputSearch = createSelector(
-  [ formogen, formId, fieldName ],
-  (formogen, formId, fieldName) => // '' is the default value
-    formogen[ `Form:${formId}:field:${fieldName}:q` ]
+export const fieldOptionsCurrentPageNumber = createSelector(
+  [ formogen, formId, fieldName, asyncFieldInputSearch ],
+  (formogen, formId, fieldName, asyncFieldInputSearch) => // '' is the default value
+    formogen[ `Form:${formId}:field:${fieldName}:q:${asyncFieldInputSearch}:currentPageNumber` ]
 );
 
 export const asyncFieldOptions = createSelector(
   [ formogen, formId, fieldName, asyncFieldInputSearch ],
-  (formogen, formId, fieldName, fieldInputSearch) => // '' is the default value
-    formogen[ `Form:${formId}:field:${fieldName}:q:${fieldInputSearch}:options` ]
-);
-
-
-export const objectUrls = createSelector(
-  [ formogen, formId ],
-  (formogen, formId) => 
-    formogen[ `Form:${formId}:field:__urls__:stored` ] ||
-    formogen[ `Form:${formId}:field:urls:stored` ]
+  (formogen, formId, fieldName, asyncFieldInputSearch) => // '' is the default value
+    formogen[ `Form:${formId}:field:${fieldName}:q:${asyncFieldInputSearch}:options` ]
 );
 
 /**
@@ -154,16 +213,25 @@ export const fieldFileUploadUrl = createSelector(
     metaDataFieldsByNameMap[fieldName]?.upload_url
 );
 
+
 /**
  * NOTICE: it is possible to save only modified fields with PATCH (if we have an object fetched).
- * Also, we exclude files from here, since they are uploaded separately.
+ * We exclude files from here since they are uploaded separately.
+ * We use this selector only to prepare all form data.
+ * There are some special cases:
+ *  1. We cast boolean to false || true
+ *  2. We transform FK field value from dict ``{ id: 1 }`` to ``1``
+ *  3. We transform M2M field value from ``[ { id: 1 }, ... ]`` to ``[ 1, ... ]``
  */
 export const finalFormData = createSelector(
   [ formogen, formId, metaDataNonFileFields ],
   (formogen, formId, metaDataNonFileFields) => 
-    metaDataNonFileFields.map(({ name }) => [ 
-      name, 
-      finalFieldValue({ formogen }, { formId, name }) 
+    metaDataNonFileFields.map(({ name, type }) => [
+      name,
+      coerceFieldValueToItsType(
+        type,
+        finalFieldValue({ formogen }, { formId, name })
+      )
     ]) |> fromPairs
 );
 

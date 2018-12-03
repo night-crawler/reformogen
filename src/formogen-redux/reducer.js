@@ -1,6 +1,8 @@
 import { pickBy } from 'lodash';
 
 import { 
+  CLEANUP,
+
   STORE_FORM_DATA, 
   STORE_FORM_METADATA, 
   STORE_FIELD_DATA, 
@@ -106,6 +108,12 @@ export function formogenReducer(state = {}, action) {
         [ `${relatedFieldSearchKeyPrefix}:currentPageNumber` ]: payload.currentPageNumber,
         [ `Form:${formId}:field:${fieldName}:q` ]: searchText,
       };
+
+    case CLEANUP:
+      return pickBy(
+        state, 
+        (value, key) => !key.startsWith(`Form:${formId}`)
+      );
 
     default:
       return state;

@@ -32,4 +32,5 @@
         "pptx",
         "wildcarded"
     ],
+    "python.pythonPath": "/home/user/.local/share/virtualenvs/reformogen-E0Pxdy-c/bin/python",
 }

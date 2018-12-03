@@ -14,6 +14,9 @@ export class FormogenForm extends Component {
     upperFirstLabels: PropTypes.bool,
     helpTextOnHover: PropTypes.bool,
 
+    // TODO: don't forget to clean up the mess within
+    nonFieldErrorsMap: PropTypes.object,
+
     /** form description */
     metaData: PropTypes.shape({
       title: PropTypes.string,
@@ -31,6 +34,7 @@ export class FormogenForm extends Component {
 
     actions: PropTypes.shape({
       bootstrap: PropTypes.func,
+      cleanup: PropTypes.func,
       loadOptions: PropTypes.func,
       submit: PropTypes.func,
     }),
@@ -69,6 +73,7 @@ export class FormogenForm extends Component {
         submitComponent={ this.props.submitComponent }
         key={ `FormComponent-${this.props.formId}` }  
         fieldsets={ this.renderFieldsets() }
+        nonFieldErrorsMap={ this.props.nonFieldErrorsMap }
         onSubmit={ this.handleSubmit }
       />
     );
@@ -112,5 +117,7 @@ export class FormogenForm extends Component {
   }
 
   componentDidMount = () => this.props.actions.bootstrap()
+  componentWillUnmount = () => this.props.actions.cleanup()
+  
   handleSubmit = () => this.props.actions.submit();
 }

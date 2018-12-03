@@ -26,6 +26,10 @@ export const BOOTSTRAP_ERROR = `${PREFIX}/BOOTSTRAP_ERROR`;
 
 // ======
 
+export const CLEANUP = `${PREFIX}/CLEANUP`;
+
+// ======
+
 export const SUBMIT = `${PREFIX}/SUBMIT`;
 export const SUBMIT_SUCCESS = `${PREFIX}/SUBMIT_SUCCESS`;
 export const SUBMIT_ERROR = `${PREFIX}/SUBMIT_ERROR`;

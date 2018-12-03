@@ -48,7 +48,7 @@ class AuthorMetadata(MetaData):
 
     def get_title(self, request, view, obj: wf_models.Author):
         if obj:
-            return _('Edit Author "{0}"').format(obj.printable_name())
+            return _('Edit Author "{0}"').format(obj.printable_name)
         return _('Create Author')
 
 
@@ -99,5 +99,5 @@ class AllModelFieldsMetadata(MetaData):
 
     def get_title(self, request, view, obj: wf_models.AllModelFields):
         if obj:
-            return _('Edit AllModelFields "{0}"').format(obj.printable_name())
+            return _('Edit AllModelFields "{0}"').format(obj.printable_name)
         return _('Create AllModelFields')

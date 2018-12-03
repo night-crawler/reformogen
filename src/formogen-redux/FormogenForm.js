@@ -3,8 +3,8 @@ import { createStructuredSelector } from 'reselect';
 
 import { FormogenForm as FormogenFormComponent } from '../formogen/FormogenForm';
 
-import { metaData } from './selectors';
-import { bootstrap, fetchNextFieldOptions, submit } from './actions';
+import { metaData, legacyNonFieldErrorsMap } from './selectors';
+import { bootstrap, fetchNextFieldOptions, submit, cleanup } from './actions';
 
 
 const mapDispatchToProps = dispatch => ({ dispatch });
@@ -22,6 +22,7 @@ function mergeProps(stateProps, dispatchProps, ownProps) {
 
     actions: {
       bootstrap: () => dispatch(bootstrap(ownProps)),
+      cleanup: () => dispatch(cleanup(ownProps)),
       loadOptions: payload => dispatch(fetchNextFieldOptions(payload)),
       submit: () => dispatch(submit(ownProps)),
     },
@@ -32,7 +33,8 @@ function mergeProps(stateProps, dispatchProps, ownProps) {
 
 export const FormogenForm = connect(
   createStructuredSelector({
-    metaData
+    metaData,
+    nonFieldErrorsMap: legacyNonFieldErrorsMap
   }),
   mapDispatchToProps,
   mergeProps,
