@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect';
-import { isString, zip, map, fromPairs, keyBy } from 'lodash';
+import { isString, zip, map, fromPairs, keyBy, pickBy } from 'lodash';
 
 import { coerceFieldValueToItsType } from './selectors.utils';
 
@@ -54,7 +54,11 @@ export const metaData = createSelector(
 );
 
 export const metaDataFields = createSelector(
-  metaData, metaData => metaData?.fields
+  metaData, metaData => metaData.fields
+);
+
+export const metaDataFieldNames = createSelector(
+  metaData, metaData => map(metaData.fields, 'name')
 );
 
 export const metaDataNonFileFields = createSelector(
@@ -103,44 +107,13 @@ export const formData = createSelector(
 export const fieldErrors = createSelector(
   [ formogen, formId, fieldName ],
   (formogen, formId, fieldName) => 
-    formogen[`Form:${formId}:field:${fieldName}:errors`] 
+    (formogen[`Form:${formId}:fieldErrors`] || {})[ fieldName ]
 );
 
-/**
- * This map is a complete mess. At the moment non-field errors are saved at the root object level, so
- * there's a problem with separating them from other fields.
- * Obviously, all the non-field errors must be moved to a `__non_field_errors__` section.
- */
 export const legacyNonFieldErrorsMap = createSelector(
-  [ formogen, formId, metaDataFields ],
-  (formogen, formId, metaDataFields) => {
-    const __nonFieldErrorsMap = {};
-    const fieldNames = map(metaDataFields || [], 'name');
-    for (const [ k, v ] of Object.entries(formogen)) {
-      if (!k.startsWith(`Form:${formId}:field`))
-        continue;
-
-      if (!k.endsWith(':errors'))
-        continue;
-      
-      let isRegularField = false;
-      for (const fieldName of fieldNames) {
-        if (k.startsWith(`Form:${formId}:field:${fieldName}`)) {
-          isRegularField = true;
-          break;
-        }
-      }
-
-      if (isRegularField)
-        continue;
-      
-      // Form:${formId}:field:<title>:errors
-      const parts = k.split(':');
-      const originalExceptionName = parts[parts.length - 2];
-      __nonFieldErrorsMap[ originalExceptionName ] = v;
-    }
-    return __nonFieldErrorsMap;
-  }
+  [ formogen, formId ],
+  (formogen, formId) => 
+    formogen[`Form:${formId}:nonFieldErrors`]
 );
 
 export const defaultFieldValue = createSelector(

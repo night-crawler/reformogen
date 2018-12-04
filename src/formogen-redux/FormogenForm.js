@@ -5,6 +5,7 @@ import { FormogenForm as FormogenFormComponent } from '../formogen/FormogenForm'
 
 import { metaData, legacyNonFieldErrorsMap } from './selectors';
 import { bootstrap, fetchNextFieldOptions, submit, cleanup } from './actions';
+import { DRFSubmitErrorResponseAdapter } from './SubmitErrorResponseAdapters';
 
 
 const mapDispatchToProps = dispatch => ({ dispatch });
@@ -24,7 +25,13 @@ function mergeProps(stateProps, dispatchProps, ownProps) {
       bootstrap: () => dispatch(bootstrap(ownProps)),
       cleanup: () => dispatch(cleanup(ownProps)),
       loadOptions: payload => dispatch(fetchNextFieldOptions(payload)),
-      submit: () => dispatch(submit(ownProps)),
+      submit: () => dispatch(submit({
+        ...ownProps,
+        processSubmitError: ownProps.processSubmitError || (
+          (responseObject, fields) => 
+            new DRFSubmitErrorResponseAdapter(responseObject, fields)
+        )})
+      ),
     },
 
     dispatch: undefined,

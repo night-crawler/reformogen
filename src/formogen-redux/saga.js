@@ -127,9 +127,10 @@ export function* fetchNextFieldOptions({ payload, meta }) {
  * @param {object} param0 
  */
 export function* submit({ payload, meta }) {
-  const [ formData, formFiles ] = yield all([
+  const [ formData, formFiles, fieldNames ] = yield all([
     select(selectors.finalFormData, payload),
     select(selectors.dirtyFormFiles, payload),
+    select(selectors.metaDataFieldNames, payload),
   ]);
 
   // saveUrl may vary; 
@@ -159,7 +160,10 @@ export function* submit({ payload, meta }) {
       return yield put(actions.submitError(meta.formId, formSaveError));
 
     // now we can just store errors and leave this damned branch
-    return yield put(actions.storeFormErrors(meta.formId, formSaveError.response.body));
+    return yield put(actions.storeFormErrors(
+      meta.formId, 
+      payload.processSubmitError(formSaveError.response.body, fieldNames)
+    ));
   }
 
   // It's expected the server returns a saved object back with its id included.

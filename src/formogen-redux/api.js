@@ -1,4 +1,4 @@
-import { responseAdapterRegistry } from './ResponseAdapters';
+import { responseAdapterRegistry } from './ListResponseAdapters';
 import { executeRequest, singleApiCallFactory } from './apiHelpers';
 import { 
   FETCH_FORM_METADATA, FETCH_FORM_METADATA_SUCCESS, FETCH_FORM_METADATA_ERROR,

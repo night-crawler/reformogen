@@ -58,8 +58,16 @@ export function formogenReducer(state = {}, action) {
     case STORE_FORM_ERRORS:
       return {
         ...state,
-        ...prefixObjectFields(formId, payload, 'errors'),
+        [ `Form:${formId}:fieldErrors` ]: payload.fieldErrors,
+        [ `Form:${formId}:nonFieldErrors` ]: payload.nonFieldErrors,
       };
+
+    case CLEAR_FORM_ERRORS:
+      return {
+        ...state,
+        [ `Form:${formId}:fieldErrors` ]: {},
+        [ `Form:${formId}:nonFieldErrors` ]: {},
+      };  
 
     case STORE_FORM_LOCALE:
       return {
@@ -98,15 +106,6 @@ export function formogenReducer(state = {}, action) {
       /* ----- */ 
       /* CLEAR */
       /* ----- */ 
-
-    case CLEAR_FORM_ERRORS:
-      return pickBy(
-        state, 
-        (value, key) => !(
-          key.startsWith(`Form:${formId}:field:`) && 
-          key.endsWith(':errors')
-        )
-      );
 
     case CLEANUP:
       return pickBy(

@@ -9,7 +9,7 @@ import rootSaga from '~/rootSaga';
 
 import { createRootReducer } from './reducers';
 
-import { responseAdapterRegistry, DjangoRestFrameworkResponseAdapter } from '~/formogen-redux/ResponseAdapters';
+import { responseAdapterRegistry, DjangoRestFrameworkResponseAdapter } from '~/formogen-redux/ListResponseAdapters';
 
 const sagaMiddleware = createSagaMiddleware();
 responseAdapterRegistry.register(/\/api\/v/, DjangoRestFrameworkResponseAdapter);
