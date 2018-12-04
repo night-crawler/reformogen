@@ -10,27 +10,26 @@ import {
 import * as selectors from './selectors';
 import * as api from './api';
 import { processError } from './apiHelpers';
-import { 
-  storeFieldOptions, 
-  changeFieldSearchText, 
-  storeFormErrors,
-  clearFormErrors,
-  submitError,
-  submitSuccess,
-  storeFormData,
-} from './actions';
+import * as actions from './actions';
 
 
 export function* bootstrap({ payload, meta }) {
+  const [ describeUrl, objectUrl ] = yield all([
+    select(selectors.describeUrl, payload),
+    select(selectors.objectUrl, payload),
+  ]);
+
+  yield put(actions.storeFormLocale(payload));
+
   const gathered = [
     api.fetchFormMetadata({
-      payload: { url: payload.describeUrl, locale: payload.locale },
+      payload: { url: describeUrl, locale: payload.locale },
       meta: { formId: meta.formId }
     })
   ];
 
-  payload.objectUrl && gathered.push(api.fetchFormData({
-    payload: { url: payload.objectUrl, locale: payload.locale },
+  objectUrl && gathered.push(api.fetchFormData({
+    payload: { url: objectUrl, locale: payload.locale },
     meta: { formId: meta.formId }
   }));
 
@@ -65,7 +64,7 @@ export function* initializeRelatedFieldOptions(formId) {
     if (isEmpty(value))
       continue;
     
-    yield put(storeFieldOptions({ formId, searchText: '', fieldName, value }));
+    yield put(actions.storeFieldOptions({ formId, searchText: '', fieldName, value }));
   }
 
   // TODO: Need some DRY here
@@ -75,7 +74,7 @@ export function* initializeRelatedFieldOptions(formId) {
     if (isEmpty(value))
       continue;
     
-    yield put(storeFieldOptions({ formId, searchText: '', fieldName, value: [ value ] }));
+    yield put(actions.storeFieldOptions({ formId, searchText: '', fieldName, value: [ value ] }));
   }
 }
 
@@ -95,7 +94,7 @@ export function* fetchNextFieldOptions({ payload, meta }) {
   let requestPageNumber = meta.page * 1 || nextPageNumber * 1 || (currentPageNumber * 1 + 1) || 1;
   if (nextPageNumber === null || !requestPageNumber || isNaN(requestPageNumber)) {
     // even if we have nothing to do, we must change current searchText
-    yield put(changeFieldSearchText({ 
+    yield put(actions.changeFieldSearchText({ 
       formId: meta.formId, 
       fieldName: meta.fieldName,
       searchText: payload.searchText,
@@ -151,16 +150,16 @@ export function* submit({ payload, meta }) {
   });
 
   // Clean up the old errors or get some user confused.
-  yield put(clearFormErrors(meta.formId));
+  yield put(actions.clearFormErrors(meta.formId));
 
   // If we have an error, we handle only the 400 bad request
   // other errors must be processed somewhere else
   if (formSaveError !== undefined) {
     if (formSaveError.response?.badRequest !== true) 
-      return yield put(submitError(meta.formId, formSaveError));
+      return yield put(actions.submitError(meta.formId, formSaveError));
 
     // now we can just store errors and leave this damned branch
-    return yield put(storeFormErrors(meta.formId, formSaveError.response.body));
+    return yield put(actions.storeFormErrors(meta.formId, formSaveError.response.body));
   }
 
   // It's expected the server returns a saved object back with its id included.
@@ -173,7 +172,7 @@ export function* submit({ payload, meta }) {
   // It's just unwanted to deal with possibly corrupted serializer's data schemes,
   // so it's easier to cull from the response only the stuff had brought up in conventions
   // previously.
-  yield put(storeFormData(meta.formId, { 
+  yield put(actions.storeFormData(meta.formId, { 
     // NOTE: using just `id` here is bad. Have to provide some identity getter.
     id: formSaveResult.id,
     // `__urls__` bundle is used against the ongoing saving attempts.
@@ -181,14 +180,20 @@ export function* submit({ payload, meta }) {
   }));
 
   // the next step is to save all files, if there're some
-  if (!formFiles.length)
-    return yield put(submitSuccess(meta.formId));
+  if (!formFiles.length) {
+    yield put(actions.submitSuccess(meta.formId));
+    yield put(actions.bootstrap(payload));
+    return;
+  }
 
   const { errors: uploadFormFilesErrors } = yield uploadFormFiles(meta.formId, formFiles);
-  if (uploadFormFilesErrors.length === 0)
-    return yield put(submitSuccess(meta.formId));
+  if (uploadFormFilesErrors.length === 0) {
+    yield put(actions.submitSuccess(meta.formId));
+    yield put(actions.bootstrap(payload));
+    return;
+  }
 
-  yield put(submitError(meta.formId, uploadFormFilesErrors));
+  yield put(actions.submitError(meta.formId, uploadFormFilesErrors));
 }
 
 export function* uploadFormFiles(formId, formFiles) {

@@ -11,15 +11,16 @@ import {
   STORE_FIELD_SEARCH_TEXT,
   STORE_FORM_ERRORS,
   CLEAR_FORM_ERRORS,
+  STORE_FORM_LOCALE,
 } from './constants';
 
 
 /** Pass formId, fieldName, and other data addressing/routing attributes just like {meta} */
 
-export const bootstrap = ({ formId, ...payload }) => ({
+export const bootstrap = payload => ({
   type: BOOTSTRAP,
   payload,
-  meta: { formId }
+  meta: { formId: payload.formId }
 });
 
 
@@ -116,3 +117,9 @@ export const changeFieldSearchText = ({ formId, fieldName, searchText = '' }) =>
   meta: { formId, fieldName, searchText }
 });
 
+
+export const storeFormLocale = ({ formId, locale }) => ({
+  type: STORE_FORM_LOCALE,
+  payload: locale,
+  meta: { formId }
+});

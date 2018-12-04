@@ -8,6 +8,7 @@ import {
   STORE_FIELD_DATA, 
   STORE_FIELD_OPTIONS,
   STORE_FORM_ERRORS,
+  STORE_FORM_LOCALE,
   CLEAR_FORM_ERRORS,
   
   FETCH_FORM_METADATA_SUCCESS,
@@ -40,12 +41,8 @@ export function formogenReducer(state = {}, action) {
   const relatedFieldSearchKeyPrefix = `Form:${formId}:field:${fieldName}:q:${searchText}`;
 
   switch (type) {
-    case FETCH_FORM_DATA_SUCCESS:
-      return {
-        ...state,
-        ...prefixObjectFields(formId, payload, 'stored')
-      };
-
+    /* ---------- */
+    /* STORE FORM */
     case STORE_FORM_DATA:
       return {
         ...state,
@@ -58,16 +55,73 @@ export function formogenReducer(state = {}, action) {
         [ `Form:${formId}:metaData` ]: payload,
       };
 
-    case STORE_FIELD_DATA:
+    case STORE_FORM_ERRORS:
       return {
         ...state,
-        [ `Form:${formId}:field:${fieldName}:dirty` ]: payload,
+        ...prefixObjectFields(formId, payload, 'errors'),
       };
+
+    case STORE_FORM_LOCALE:
+      return {
+        ...state,
+        [ `Form:${formId}:locale` ]: payload,
+      };
+
+      /* ---------- */
+      /* FORM FETCH */
+      /* ---------- */
 
     case FETCH_FORM_METADATA_SUCCESS:
       return {
         ...state,
         [ `Form:${formId}:metaData` ]: payload,
+      };
+
+    case FETCH_FORM_DATA_SUCCESS:
+      return {
+        ...state,
+        ...prefixObjectFields(formId, payload, 'stored')
+      };
+
+    case FETCH_NEXT_FIELD_OPTIONS_SUCCESS:
+      return {
+        ...state,
+        [ `${relatedFieldSearchKeyPrefix}:options` ]: mergeOptions(
+          state[ `${relatedFieldSearchKeyPrefix}:options` ],
+          payload.list
+        ),
+        [ `${relatedFieldSearchKeyPrefix}:nextPageNumber` ]: payload.nextPageNumber,
+        [ `${relatedFieldSearchKeyPrefix}:currentPageNumber` ]: payload.currentPageNumber,
+        [ `Form:${formId}:field:${fieldName}:q` ]: searchText,
+      };
+      
+      /* ----- */ 
+      /* CLEAR */
+      /* ----- */ 
+
+    case CLEAR_FORM_ERRORS:
+      return pickBy(
+        state, 
+        (value, key) => !(
+          key.startsWith(`Form:${formId}:field:`) && 
+          key.endsWith(':errors')
+        )
+      );
+
+    case CLEANUP:
+      return pickBy(
+        state, 
+        (value, key) => !key.startsWith(`Form:${formId}`)
+      );
+
+      /* ----------- */
+      /* STORE FIELD */
+      /* ----------- */
+
+    case STORE_FIELD_DATA:
+      return {
+        ...state,
+        [ `Form:${formId}:field:${fieldName}:dirty` ]: payload,
       };
 
     case STORE_FIELD_OPTIONS:
@@ -81,39 +135,6 @@ export function formogenReducer(state = {}, action) {
         ...state,
         [ `Form:${formId}:field:${fieldName}:q` ]: searchText,
       };
-
-    case CLEAR_FORM_ERRORS:
-      return pickBy(
-        state, 
-        (value, key) => !(
-          key.startsWith(`Form:${formId}:field:`) && 
-          key.endsWith(':errors')
-        )
-      );
-
-    case STORE_FORM_ERRORS:
-      return {
-        ...state,
-        ...prefixObjectFields(formId, payload, 'errors'),
-      };
-    
-    case FETCH_NEXT_FIELD_OPTIONS_SUCCESS:
-      return {
-        ...state,
-        [ `${relatedFieldSearchKeyPrefix}:options` ]: mergeOptions(
-          state[ `${relatedFieldSearchKeyPrefix}:options` ],
-          payload.list
-        ),
-        [ `${relatedFieldSearchKeyPrefix}:nextPageNumber` ]: payload.nextPageNumber,
-        [ `${relatedFieldSearchKeyPrefix}:currentPageNumber` ]: payload.currentPageNumber,
-        [ `Form:${formId}:field:${fieldName}:q` ]: searchText,
-      };
-
-    case CLEANUP:
-      return pickBy(
-        state, 
-        (value, key) => !key.startsWith(`Form:${formId}`)
-      );
 
     default:
       return state;

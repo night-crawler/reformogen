@@ -63,7 +63,7 @@ export class FormogenForm extends Component {
 
   render() {
     const FormComponent = this.props.getFormComponent();
-
+  
     return (
       <FormComponent 
         formId={ this.formId } 
