@@ -1,0 +1,357 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<DirtyFileItem /> 1`] = `
+ShallowWrapper {
+  Symbol(enzyme.__root__): [Circular],
+  Symbol(enzyme.__unrendered__): <DirtyFileItem
+    file={
+      Object {
+        "lastModified": 1,
+        "lastModifiedDate": Object {},
+        "name": "sample.png",
+        "size": 1000,
+        "type": "application/trash-x",
+      }
+    }
+    getPreviewImage={[Function]}
+    onDelete={[MockFunction]}
+  />,
+  Symbol(enzyme.__renderer__): Object {
+    "batchedUpdates": [Function],
+    "getNode": [Function],
+    "render": [Function],
+    "simulateError": [Function],
+    "simulateEvent": [Function],
+    "unmount": [Function],
+  },
+  Symbol(enzyme.__node__): Object {
+    "instance": null,
+    "key": undefined,
+    "nodeType": "class",
+    "props": Object {
+      "children": Array [
+        <Image
+          as="img"
+          size="mini"
+          src="test-file-stub"
+          ui={true}
+          verticalAlign="middle"
+        />,
+        <ListContent
+          style={
+            Object {
+              "width": "100%",
+            }
+          }
+        >
+          <strong>
+            [1000 Bytes]
+             
+          </strong>
+          <CaptionTruncator
+            caption="sample"
+            width="50%"
+          />
+          <span>
+            .
+            png
+          </span>
+        </ListContent>,
+        <Button
+          as="a"
+          attached="right"
+          floated="right"
+          icon="remove"
+          onClick={[MockFunction]}
+          role="button"
+          size="mini"
+        />,
+      ],
+    },
+    "ref": null,
+    "rendered": Array [
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "function",
+        "props": Object {
+          "as": "img",
+          "size": "mini",
+          "src": "test-file-stub",
+          "ui": true,
+          "verticalAlign": "middle",
+        },
+        "ref": null,
+        "rendered": null,
+        "type": [Function],
+      },
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "function",
+        "props": Object {
+          "children": Array [
+            <strong>
+              [1000 Bytes]
+               
+            </strong>,
+            <CaptionTruncator
+              caption="sample"
+              width="50%"
+            />,
+            <span>
+              .
+              png
+            </span>,
+          ],
+          "style": Object {
+            "width": "100%",
+          },
+        },
+        "ref": null,
+        "rendered": Array [
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "host",
+            "props": Object {
+              "children": Array [
+                "[1000 Bytes]",
+                " ",
+              ],
+            },
+            "ref": null,
+            "rendered": Array [
+              "[1000 Bytes]",
+              " ",
+            ],
+            "type": "strong",
+          },
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "function",
+            "props": Object {
+              "caption": "sample",
+              "width": "50%",
+            },
+            "ref": null,
+            "rendered": null,
+            "type": [Function],
+          },
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "host",
+            "props": Object {
+              "children": Array [
+                ".",
+                "png",
+              ],
+            },
+            "ref": null,
+            "rendered": Array [
+              ".",
+              "png",
+            ],
+            "type": "span",
+          },
+        ],
+        "type": [Function],
+      },
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "class",
+        "props": Object {
+          "as": "a",
+          "attached": "right",
+          "floated": "right",
+          "icon": "remove",
+          "onClick": [MockFunction],
+          "role": "button",
+          "size": "mini",
+        },
+        "ref": null,
+        "rendered": null,
+        "type": [Function],
+      },
+    ],
+    "type": [Function],
+  },
+  Symbol(enzyme.__nodes__): Array [
+    Object {
+      "instance": null,
+      "key": undefined,
+      "nodeType": "class",
+      "props": Object {
+        "children": Array [
+          <Image
+            as="img"
+            size="mini"
+            src="test-file-stub"
+            ui={true}
+            verticalAlign="middle"
+          />,
+          <ListContent
+            style={
+              Object {
+                "width": "100%",
+              }
+            }
+          >
+            <strong>
+              [1000 Bytes]
+               
+            </strong>
+            <CaptionTruncator
+              caption="sample"
+              width="50%"
+            />
+            <span>
+              .
+              png
+            </span>
+          </ListContent>,
+          <Button
+            as="a"
+            attached="right"
+            floated="right"
+            icon="remove"
+            onClick={[MockFunction]}
+            role="button"
+            size="mini"
+          />,
+        ],
+      },
+      "ref": null,
+      "rendered": Array [
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "function",
+          "props": Object {
+            "as": "img",
+            "size": "mini",
+            "src": "test-file-stub",
+            "ui": true,
+            "verticalAlign": "middle",
+          },
+          "ref": null,
+          "rendered": null,
+          "type": [Function],
+        },
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "function",
+          "props": Object {
+            "children": Array [
+              <strong>
+                [1000 Bytes]
+                 
+              </strong>,
+              <CaptionTruncator
+                caption="sample"
+                width="50%"
+              />,
+              <span>
+                .
+                png
+              </span>,
+            ],
+            "style": Object {
+              "width": "100%",
+            },
+          },
+          "ref": null,
+          "rendered": Array [
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "host",
+              "props": Object {
+                "children": Array [
+                  "[1000 Bytes]",
+                  " ",
+                ],
+              },
+              "ref": null,
+              "rendered": Array [
+                "[1000 Bytes]",
+                " ",
+              ],
+              "type": "strong",
+            },
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "function",
+              "props": Object {
+                "caption": "sample",
+                "width": "50%",
+              },
+              "ref": null,
+              "rendered": null,
+              "type": [Function],
+            },
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "host",
+              "props": Object {
+                "children": Array [
+                  ".",
+                  "png",
+                ],
+              },
+              "ref": null,
+              "rendered": Array [
+                ".",
+                "png",
+              ],
+              "type": "span",
+            },
+          ],
+          "type": [Function],
+        },
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "class",
+          "props": Object {
+            "as": "a",
+            "attached": "right",
+            "floated": "right",
+            "icon": "remove",
+            "onClick": [MockFunction],
+            "role": "button",
+            "size": "mini",
+          },
+          "ref": null,
+          "rendered": null,
+          "type": [Function],
+        },
+      ],
+      "type": [Function],
+    },
+  ],
+  Symbol(enzyme.__options__): Object {
+    "adapter": ReactSixteenAdapter {
+      "options": Object {
+        "enableComponentDidUpdateOnSetState": true,
+        "lifecycles": Object {
+          "componentDidUpdate": Object {
+            "onSetState": true,
+          },
+          "getDerivedStateFromProps": true,
+          "getSnapshotBeforeUpdate": true,
+          "setState": Object {
+            "skipsComponentDidUpdateOnNullish": true,
+          },
+        },
+      },
+    },
+  },
+}
+`;

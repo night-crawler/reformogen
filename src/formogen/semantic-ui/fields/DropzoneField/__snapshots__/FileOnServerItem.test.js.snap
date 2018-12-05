@@ -1,0 +1,196 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<FileOnServerItem /> 1`] = `
+ShallowWrapper {
+  Symbol(enzyme.__root__): [Circular],
+  Symbol(enzyme.__unrendered__): <FileOnServerItem
+    fileUrl="http://sample.tld/1/2/3"
+    getPreviewImage={[Function]}
+    isRemovable={true}
+    onDelete={[Function]}
+  />,
+  Symbol(enzyme.__renderer__): Object {
+    "batchedUpdates": [Function],
+    "getNode": [Function],
+    "render": [Function],
+    "simulateError": [Function],
+    "simulateEvent": [Function],
+    "unmount": [Function],
+  },
+  Symbol(enzyme.__node__): Object {
+    "instance": null,
+    "key": undefined,
+    "nodeType": "class",
+    "props": Object {
+      "children": Array [
+        <Image
+          as="img"
+          size="mini"
+          src="test-file-stub"
+          ui={true}
+          verticalAlign="middle"
+        />,
+        <a
+          href="http://sample.tld/1/2/3"
+        >
+          3
+        </a>,
+        <Button
+          as="a"
+          attached="right"
+          floated="right"
+          icon="remove"
+          onClick={[Function]}
+          role="button"
+          size="mini"
+        />,
+      ],
+    },
+    "ref": null,
+    "rendered": Array [
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "function",
+        "props": Object {
+          "as": "img",
+          "size": "mini",
+          "src": "test-file-stub",
+          "ui": true,
+          "verticalAlign": "middle",
+        },
+        "ref": null,
+        "rendered": null,
+        "type": [Function],
+      },
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "host",
+        "props": Object {
+          "children": "3",
+          "href": "http://sample.tld/1/2/3",
+        },
+        "ref": null,
+        "rendered": "3",
+        "type": "a",
+      },
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "class",
+        "props": Object {
+          "as": "a",
+          "attached": "right",
+          "floated": "right",
+          "icon": "remove",
+          "onClick": [Function],
+          "role": "button",
+          "size": "mini",
+        },
+        "ref": null,
+        "rendered": null,
+        "type": [Function],
+      },
+    ],
+    "type": [Function],
+  },
+  Symbol(enzyme.__nodes__): Array [
+    Object {
+      "instance": null,
+      "key": undefined,
+      "nodeType": "class",
+      "props": Object {
+        "children": Array [
+          <Image
+            as="img"
+            size="mini"
+            src="test-file-stub"
+            ui={true}
+            verticalAlign="middle"
+          />,
+          <a
+            href="http://sample.tld/1/2/3"
+          >
+            3
+          </a>,
+          <Button
+            as="a"
+            attached="right"
+            floated="right"
+            icon="remove"
+            onClick={[Function]}
+            role="button"
+            size="mini"
+          />,
+        ],
+      },
+      "ref": null,
+      "rendered": Array [
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "function",
+          "props": Object {
+            "as": "img",
+            "size": "mini",
+            "src": "test-file-stub",
+            "ui": true,
+            "verticalAlign": "middle",
+          },
+          "ref": null,
+          "rendered": null,
+          "type": [Function],
+        },
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "host",
+          "props": Object {
+            "children": "3",
+            "href": "http://sample.tld/1/2/3",
+          },
+          "ref": null,
+          "rendered": "3",
+          "type": "a",
+        },
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "class",
+          "props": Object {
+            "as": "a",
+            "attached": "right",
+            "floated": "right",
+            "icon": "remove",
+            "onClick": [Function],
+            "role": "button",
+            "size": "mini",
+          },
+          "ref": null,
+          "rendered": null,
+          "type": [Function],
+        },
+      ],
+      "type": [Function],
+    },
+  ],
+  Symbol(enzyme.__options__): Object {
+    "adapter": ReactSixteenAdapter {
+      "options": Object {
+        "enableComponentDidUpdateOnSetState": true,
+        "lifecycles": Object {
+          "componentDidUpdate": Object {
+            "onSetState": true,
+          },
+          "getDerivedStateFromProps": true,
+          "getSnapshotBeforeUpdate": true,
+          "setState": Object {
+            "skipsComponentDidUpdateOnNullish": true,
+          },
+        },
+      },
+    },
+  },
+}
+`;
