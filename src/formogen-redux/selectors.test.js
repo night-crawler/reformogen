@@ -150,7 +150,7 @@ const formogenState = {
 
   'Form:form-3:field:title:dirty': 'new title',
 
-  'Form:form-3:field:field_with_options:nextPageNumber': 666,
+  'Form:form-3:field:field_with_options:q:some search:nextPageNumber': 666,
   'Form:form-3:field:field_with_options:q': 'some search',
   'Form:form-3:field:field_with_options:q:some search:options': [ 'option1' ],
 };
@@ -356,8 +356,8 @@ describe('selectors', () => {
   ).toEqual({
     author: 1, 
     date_published: '2012-02-22', 
-    f_fk_rel: '', 
-    f_m2m_rel: '', 
+    f_fk_rel: undefined, 
+    f_m2m_rel: undefined, 
     score: '12.0000', 
     sequence: 1, 
     time_published: '11:11:00', 
