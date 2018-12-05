@@ -106,7 +106,7 @@ export class AsyncRelatedField extends React.Component {
       { menuIsOpen: true, openCounter: this.state.openCounter + 1 },
       async () => {
         // ! some magic with constants
-        // When users triggers handleMenuOpen they always have the inputText cleared, so it's ok
+        // When users trigger handleMenuOpen they always have the inputText cleared, so it's ok
         // to call the new search with '' query.
         // When user opens the menu we must trigger loadOptions once only to fix this strange react-select
         // behaviour when it just does not trigger handleMenuScrollToBottom on the first page.
