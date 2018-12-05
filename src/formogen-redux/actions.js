@@ -12,6 +12,7 @@ import {
   STORE_FORM_ERRORS,
   CLEAR_FORM_ERRORS,
   STORE_FORM_LOCALE,
+  BOOTSTRAP_SUCCESS,
 } from './constants';
 
 
@@ -23,6 +24,11 @@ export const bootstrap = payload => ({
   meta: { formId: payload.formId }
 });
 
+export const bootstrapSuccess = formId => ({
+  type: BOOTSTRAP_SUCCESS,
+  payload: formId,
+  meta: { formId }
+});
 
 /**
  * This actions is used whenever the component does its unmount nasty deeds.

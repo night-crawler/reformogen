@@ -18,6 +18,7 @@
         "Dropdown",
         "FORMID",
         "Truncator",
+        "cloneable",
         "csrftoken",
         "datepicker",
         "fieldsets",

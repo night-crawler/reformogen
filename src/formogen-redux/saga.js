@@ -3,7 +3,7 @@ import { map, isEmpty } from 'lodash';
 import { all, put, takeEvery, select } from 'redux-saga/effects';
 
 import { 
-  BOOTSTRAP, BOOTSTRAP_SUCCESS, BOOTSTRAP_ERROR,
+  BOOTSTRAP, BOOTSTRAP_ERROR,
   FETCH_NEXT_FIELD_OPTIONS,
   SUBMIT,
 } from './constants';
@@ -47,7 +47,7 @@ export function* bootstrap({ payload, meta }) {
 
   yield initializeRelatedFieldOptions(meta.formId);
 
-  yield put({ type: BOOTSTRAP_SUCCESS });
+  yield put(actions.bootstrapSuccess(meta.formId));
   return true;
 }
 
