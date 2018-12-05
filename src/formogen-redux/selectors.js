@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect';
-import { isString, zip, map, fromPairs, keyBy, pickBy } from 'lodash';
+import { isString, zip, map, fromPairs, keyBy } from 'lodash';
 
 import { coerceFieldValueToItsType } from './selectors.utils';
 

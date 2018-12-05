@@ -16,6 +16,7 @@
     "javascript.validate.enable": false,
     "cSpell.words": [
         "Dropdown",
+        "FORMID",
         "Truncator",
         "csrftoken",
         "datepicker",
@@ -30,6 +31,7 @@
         "nowrap",
         "powerpoint",
         "pptx",
+        "serializer's",
         "wildcarded"
     ],
     "python.pythonPath": "/home/user/.local/share/virtualenvs/reformogen-E0Pxdy-c/bin/python",
