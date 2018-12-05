@@ -30,7 +30,7 @@ export function coerceFieldValueToItsType(type, value) {
 
     if (!isArray(value)) {
       // eslint-disable-next-line
-      console.warn(`Got ${value} for type ${type}`);
+      console.warn(`Got '${value}' of type '${typeof value}' for the type '${type}'`);
       // ! just exit with the stuff it has already; we can't know for sure what it is,
       // ! perhaps it's better to raise an exception here
       return value;
