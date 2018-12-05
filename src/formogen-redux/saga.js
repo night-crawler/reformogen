@@ -94,7 +94,7 @@ export function* fetchNextFieldOptions({ payload, meta }) {
   let requestPageNumber = meta.page * 1 || nextPageNumber * 1 || (currentPageNumber * 1 + 1) || 1;
   if (nextPageNumber === null || !requestPageNumber || isNaN(requestPageNumber)) {
     // even if we have nothing to do, we must change current searchText
-    yield put(actions.changeFieldSearchText({ 
+    yield put(actions.storeFieldSearchText({ 
       formId: meta.formId, 
       fieldName: meta.fieldName,
       searchText: payload.searchText,

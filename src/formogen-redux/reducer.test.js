@@ -139,7 +139,7 @@ describe('reducer', () => {
 
   it(`should reduce ${STORE_FIELD_SEARCH_TEXT}`, () => expect(
     formogenReducer(
-      {}, actions.changeFieldSearchText({
+      {}, actions.storeFieldSearchText({
         formId: 'FORMID',  
         fieldName: 'field',
         searchText: 'search',

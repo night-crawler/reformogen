@@ -111,7 +111,7 @@ export const storeFieldOptions = ({ formId, fieldName, searchText = '', value })
 });
 
 
-export const changeFieldSearchText = ({ formId, fieldName, searchText = '' }) => ({
+export const storeFieldSearchText = ({ formId, fieldName, searchText = '' }) => ({
   type: STORE_FIELD_SEARCH_TEXT,
   payload: searchText,
   meta: { formId, fieldName, searchText }
