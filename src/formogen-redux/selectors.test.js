@@ -4,6 +4,8 @@ import * as selectors from './selectors';
 
 
 const formogenState = {
+  'Form:form-3:data': 'sample',
+
   'Form:form-3:field:id:stored': 1,
   'Form:form-3:field:__urls__:stored': {
     create: 'http://localhost:8000/api/v1/sample/books/',
@@ -281,9 +283,14 @@ describe('selectors', () => {
       state,
       { formId: 'form-3', name: 'title' }
     )
-  ).toEqual(
-    'книжка-то'
-  ));
+  ).toEqual('книжка-то'));
+
+  it('should select initialFieldValue [empty string]', () => expect(
+    selectors.initialFieldValue(
+      state,
+      { formId: 'form-3', name: 'sample-unique' }
+    )
+  ).toEqual(''));
 
   it('should select finalFieldValue', () => expect(
     selectors.finalFieldValue(
@@ -399,4 +406,63 @@ describe('selectors', () => {
     )
   ).toEqual('http://sample-object-create-url.test'));
 
+
+  it('should select describeUrl', () => expect(
+    selectors.describeUrl(
+      state,
+      { formId: 'form-3' }
+    )
+  ).toEqual(
+    'http://localhost:8000/api/v1/sample/books/1/describe_object/'
+  ));
+
+  it('should select metaDataFieldNames', () => expect(
+    selectors.metaDataFieldNames(
+      state,
+      { formId: 'form-3' }
+    )
+  ).toEqual([ 
+    'author',
+    'title',
+    'score',
+    'date_published',
+    'time_published',
+    'preview_sample',
+    'sequence',
+    'f_m2m_rel',
+    'f_fk_rel',
+  ]));
+
+  it('should select formData', () => expect(
+    selectors.formData(
+      state,
+      { formId: 'form-3' }
+    )
+  ).toEqual('sample'));
+
+  it('should select fieldErrors', () => expect(
+    selectors.fieldErrors(
+      { formogen: { 'Form:FORMID:fieldErrors': { FIELD: 1 } } },
+      { formId: 'FORMID', name: 'FIELD' },
+    )
+  ).toEqual(1));
+
+  it('should select legacyNonFieldErrorsMap', () => expect(
+    selectors.legacyNonFieldErrorsMap(
+      { formogen: { 'Form:FORMID:nonFieldErrors': 1 } },
+      { formId: 'FORMID' },
+    )
+  ).toEqual(1));
+
+  it('should select fieldOptionsCurrentPageNumber', () => expect(
+    selectors.fieldOptionsCurrentPageNumber(
+      { 
+        formogen: { 
+          'Form:FORMID:field:FIELD:q::currentPageNumber': 1,
+          'Form:FORMID:field:FIELD:q': '',
+        } 
+      },
+      { formId: 'FORMID', name: 'FIELD' },
+    )
+  ).toEqual(1));
 });
