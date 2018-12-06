@@ -1,4 +1,4 @@
-import agent from 'superagent';
+import superagent from 'superagent';
 import { delay } from 'redux-saga';
 import Cookies from 'js-cookie';
 
@@ -17,7 +17,6 @@ import { APIError } from './errors';
 
 
 export function isCsrfSafeMethod(method) {
-  // these HTTP methods do not require CSRF protection
   return (/^(GET|HEAD|OPTIONS|TRACE)$/i.test(method));
 }
 
@@ -82,6 +81,7 @@ export function singleApiCallFactory({
 }
 
 export function* executeRequest({ 
+  agent = superagent,
   url,
   method = 'get',
   query={},
@@ -101,7 +101,7 @@ export function* executeRequest({
   failedRequestActionCreator = failedAgentRequestAttempt,
   ...opts 
 }) {
-  if (!Object.keys(opts).length === 0)  // eslint-disable-next-line
+  if (Object.keys(opts).length !== 0)  // eslint-disable-next-line
     console.warn('Received some extra arguments', opts);
 
   ['get', 'post', 'patch', 'put', 'options'].includes(method) || 
