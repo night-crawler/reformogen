@@ -85,6 +85,7 @@ export function* fetchNextFieldOptions({ payload, meta }) {
   // const nextPageNumber = formogen[`${keyPrefix}:nextPageNumber`];
   // const currentPageNumber = formogen[`${keyPrefix}:currentPageNumber`];
 
+
   // Reducer stores payload.searchText in state too, so it's accessible from the selectors
   const [ currentPageNumber, nextPageNumber ] = yield all([
     select(selectors.fieldOptionsCurrentPageNumber, { formId: meta.formId, name: meta.fieldName }),
@@ -127,9 +128,8 @@ export function* fetchNextFieldOptions({ payload, meta }) {
  * @param {object} param0 
  */
 export function* submit({ payload, meta }) {
-  const [ formData, formFiles, fieldNames ] = yield all([
+  const [ formData, fieldNames ] = yield all([
     select(selectors.finalFormData, payload),
-    select(selectors.dirtyFormFiles, payload),
     select(selectors.metaDataFieldNames, payload),
   ]);
 
@@ -183,6 +183,7 @@ export function* submit({ payload, meta }) {
     __urls__: formSaveResult.__urls__
   }));
 
+  const formFiles = yield select(selectors.dirtyFormFiles, payload);
   // the next step is to save all files, if there're some
   if (!formFiles.length) {
     yield put(actions.submitSuccess(meta.formId));
