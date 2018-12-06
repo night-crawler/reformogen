@@ -1,4 +1,4 @@
-import { map, flatten, uniq, difference, without } from 'lodash';
+import { isEmpty, map, flatten, uniq, difference, without } from 'lodash';
 
 export function splitExt(fileName) {
   const fparts = fileName.split('.');
@@ -14,7 +14,7 @@ export function splitExt(fileName) {
 
 export function bytesToSize(bytes) {
   if (bytes === 0) 
-    return 'n/a';
+    return '-';
 
   const sizes = [ 'Bytes', 'KB', 'MB', 'GB', 'TB' ];
   // const i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)), 10);
@@ -47,8 +47,11 @@ export function unfoldWildcardFieldsets(metaDataFields=[], fieldsets=[]) {
   );
 
   // fieldsets with unfolded `*` fields
-  return fieldsets.map(({ header=null, fields=[], getDisplayOptions = () => ({ width: 16 }) }) => {
-    if (!fields.includes('*')) return { header, fields, getDisplayOptions };
+  return fieldsets.map(({ header=null, fields, getDisplayOptions = () => ({ width: 16 }) }) => {
+    fields || !isEmpty(fields) || throw new Error('You must specify non-empty `fields` in the fieldset!');
+    
+    if (!fields.includes('*')) 
+      return { header, fields, getDisplayOptions };
 
     const unfolded = [ ...fields ];
     unfolded[fields.indexOf('*')] = wildcardFieldNames;
