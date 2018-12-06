@@ -58,7 +58,7 @@ export function* bootstrap({ payload, meta }) {
  * @param {String} formId 
  */
 export function* initializeRelatedFieldOptions(formId) {
-  const m2mFields = yield select(selectors.metaDataM2MFields, { formId });
+  const m2mFields = yield select(selectors.metaDataM2MRemoteFields, { formId });
   for (const fieldName of map(m2mFields, 'name')) {
     const value = yield select(selectors.storedFieldValue, { formId, name: fieldName });
     if (isEmpty(value))
@@ -68,7 +68,7 @@ export function* initializeRelatedFieldOptions(formId) {
   }
 
   // TODO: Need some DRY here
-  const fkFields = yield select(selectors.metaDataFKFields, { formId });
+  const fkFields = yield select(selectors.metaDataFKRemoteFields, { formId });
   for (const fieldName of map(fkFields, 'name')) {
     const value = yield select(selectors.storedFieldValue, { formId, name: fieldName });
     if (isEmpty(value))

@@ -12,7 +12,7 @@ FilesOnServerPreview.propTypes = {
   onDeleteFile: PropTypes.func,
 };
 FilesOnServerPreview.defaultProps = {
-  isRemovable: PropTypes.bool,
+  isRemovable: false,
   files: [],
   onDeleteFile: (fileUrl) => // eslint-disable-next-line
     console.warn('FilesOnServerPreview.onDeleteFile', fileUrl),
@@ -27,7 +27,9 @@ export function FilesOnServerPreview(props) {
     <Segment as={ List } attached='bottom' divided={ true } relaxed={ true }>
       { files.map((fileUrl, i) => 
         <FileOnServerItem 
-          key={ i } fileUrl={ fileUrl } isRemovable={ props.isRemovable }
+          key={ i } 
+          fileUrl={ fileUrl } 
+          isRemovable={ props.isRemovable }
           onDelete={ props.onDeleteFile }  
         />
       ) }

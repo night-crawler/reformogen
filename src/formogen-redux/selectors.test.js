@@ -216,7 +216,7 @@ describe('selectors', () => {
   ]));
 
   it('should select metaDataM2MFields', () => expect(
-    selectors.metaDataM2MFields(
+    selectors.metaDataM2MRemoteFields(
       state,
       { formId: 'form-3' }
     ).map(({ name }) => name)
@@ -225,7 +225,7 @@ describe('selectors', () => {
   ]));
 
   it('should select metaDataFKFields', () => expect(
-    selectors.metaDataFKFields(
+    selectors.metaDataFKRemoteFields(
       state,
       { formId: 'form-3' }
     ).map(({ name }) => name)

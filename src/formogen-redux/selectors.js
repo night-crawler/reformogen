@@ -73,13 +73,13 @@ export const metaDataFileFields = createSelector(
   )
 );
 
-export const metaDataM2MFields = createSelector(
+export const metaDataM2MRemoteFields = createSelector(
   metaDataFields, metaDataFields => metaDataFields.filter(value => 
     isString(value.data) && value.type === 'ManyToManyField'
   )
 );
 
-export const metaDataFKFields = createSelector(
+export const metaDataFKRemoteFields = createSelector(
   metaDataFields, metaDataFields => metaDataFields.filter(value => 
     isString(value.data) && value.type === 'ForeignKey'
   )
