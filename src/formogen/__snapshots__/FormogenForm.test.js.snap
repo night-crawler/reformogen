@@ -1,0 +1,1117 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<FormogenForm /> 1`] = `
+ShallowWrapper {
+  Symbol(enzyme.__root__): [Circular],
+  Symbol(enzyme.__unrendered__): <FormogenForm
+    actions={
+      Object {
+        "bootstrap": [Function],
+      }
+    }
+    errorsFieldMap={Object {}}
+    fieldsets={
+      Array [
+        Object {
+          "fields": Array [
+            "*",
+          ],
+          "getDisplayOptions": [Function],
+          "header": null,
+        },
+      ]
+    }
+    formId="bla"
+    getFieldComponent={[Function]}
+    getFormComponent={[Function]}
+    isTitleVisible={true}
+    metaData={
+      Object {
+        "description": "",
+        "fields": Array [
+          Object {
+            "blank": false,
+            "default": "2018-11-06",
+            "editable": true,
+            "help_text": "",
+            "name": "f_date",
+            "null": false,
+            "required": true,
+            "type": "DateField",
+            "verbose_name": "date",
+          },
+          Object {
+            "blank": false,
+            "default": "08:30:35.793611",
+            "editable": true,
+            "help_text": "",
+            "name": "f_time",
+            "null": false,
+            "required": true,
+            "type": "TimeField",
+            "verbose_name": "time",
+          },
+          Object {
+            "blank": false,
+            "default": "2018-11-06T08:30:35.793628Z",
+            "editable": true,
+            "help_text": "",
+            "name": "f_dt",
+            "null": false,
+            "required": true,
+            "type": "DateTimeField",
+            "verbose_name": "date and time",
+          },
+          Object {
+            "blank": false,
+            "default": -22,
+            "editable": true,
+            "help_text": "",
+            "name": "f_integer",
+            "null": false,
+            "required": true,
+            "type": "IntegerField",
+            "verbose_name": "integer",
+          },
+          Object {
+            "blank": false,
+            "default": 0,
+            "editable": true,
+            "help_text": "",
+            "name": "f_positive_integer",
+            "null": false,
+            "required": true,
+            "type": "PositiveIntegerField",
+            "verbose_name": "positive integer",
+          },
+          Object {
+            "blank": false,
+            "default": 13,
+            "editable": true,
+            "help_text": "",
+            "name": "f_small_integer",
+            "null": false,
+            "required": true,
+            "type": "SmallIntegerField",
+            "verbose_name": "small integer",
+          },
+          Object {
+            "blank": false,
+            "default": 222,
+            "editable": true,
+            "help_text": "",
+            "name": "f_positive_small_integer",
+            "null": false,
+            "required": true,
+            "type": "PositiveSmallIntegerField",
+            "verbose_name": "positive small integer",
+          },
+          Object {
+            "blank": false,
+            "decimal_places": 4,
+            "default": 3.1415,
+            "editable": true,
+            "help_text": "",
+            "max_digits": 10,
+            "name": "f_decimal",
+            "null": false,
+            "required": true,
+            "type": "DecimalField",
+            "verbose_name": "decimal",
+          },
+          Object {
+            "blank": false,
+            "default": 3.14,
+            "editable": true,
+            "help_text": "",
+            "name": "f_float",
+            "null": false,
+            "required": true,
+            "type": "FloatField",
+            "verbose_name": "float",
+          },
+          Object {
+            "blank": true,
+            "data": Array [
+              Object {
+                "id": 1,
+                "name": "Author Вася",
+              },
+              Object {
+                "id": 2,
+                "name": "Author asd Вася",
+              },
+            ],
+            "editable": true,
+            "help_text": "",
+            "name": "f_fk_embed",
+            "null": true,
+            "required": false,
+            "type": "ForeignKey",
+            "verbose_name": "embedded foreign key",
+          },
+          Object {
+            "blank": true,
+            "data": "http://localhost:8000/api/v1/sample/books/",
+            "editable": true,
+            "help_text": "",
+            "name": "f_fk_rel",
+            "null": true,
+            "required": false,
+            "type": "ForeignKey",
+            "verbose_name": "foreign key with relation",
+          },
+          Object {
+            "blank": false,
+            "choices": Array [
+              Array [
+                0,
+                "dead",
+              ],
+              Array [
+                255,
+                "alive",
+              ],
+              Array [
+                30,
+                "dried",
+              ],
+            ],
+            "default": 255,
+            "editable": true,
+            "help_text": "",
+            "name": "f_choice",
+            "null": false,
+            "required": true,
+            "type": "PositiveSmallIntegerField",
+            "verbose_name": "choice",
+          },
+          Object {
+            "blank": false,
+            "editable": true,
+            "help_text": "",
+            "max_length": 100,
+            "name": "f_file",
+            "null": false,
+            "required": true,
+            "type": "FileField",
+            "upload_url": "http://localhost:8000/api/v1/sample/all/accept_file/",
+            "verbose_name": "short preview sample",
+          },
+          Object {
+            "blank": true,
+            "editable": true,
+            "help_text": "logo image",
+            "max_length": 100,
+            "name": "f_photo",
+            "null": true,
+            "required": false,
+            "type": "FileField",
+            "upload_url": "http://localhost:8000/api/v1/sample/all/accept_file/",
+            "verbose_name": "photo",
+          },
+          Object {
+            "blank": false,
+            "editable": true,
+            "help_text": "charfield",
+            "max_length": 255,
+            "name": "f_char_field",
+            "null": false,
+            "required": true,
+            "type": "CharField",
+            "verbose_name": "char field",
+          },
+          Object {
+            "blank": true,
+            "editable": true,
+            "help_text": "",
+            "name": "f_text_field",
+            "null": false,
+            "required": false,
+            "type": "TextField",
+            "verbose_name": "text field",
+          },
+          Object {
+            "blank": true,
+            "data": Array [
+              Object {
+                "id": 1,
+                "name": "Author Вася",
+              },
+              Object {
+                "id": 2,
+                "name": "Author asd Вася",
+              },
+            ],
+            "editable": true,
+            "help_text": "",
+            "name": "f_m2m_embed",
+            "null": false,
+            "required": false,
+            "type": "ManyToManyField",
+            "verbose_name": "embedded M2M",
+          },
+          Object {
+            "blank": true,
+            "data": "http://localhost:8000/api/v1/sample/authors/",
+            "editable": true,
+            "help_text": "",
+            "name": "f_m2m_rel",
+            "null": false,
+            "required": false,
+            "type": "ManyToManyField",
+            "verbose_name": "related M2M",
+          },
+        ],
+        "title": "Create AllModelFields",
+      }
+    }
+    upperFirstLabels={true}
+  />,
+  Symbol(enzyme.__renderer__): Object {
+    "batchedUpdates": [Function],
+    "getNode": [Function],
+    "render": [Function],
+    "simulateError": [Function],
+    "simulateEvent": [Function],
+    "unmount": [Function],
+  },
+  Symbol(enzyme.__node__): Object {
+    "instance": null,
+    "key": "FormComponent-bla",
+    "nodeType": "function",
+    "props": Object {
+      "fieldsets": Array [
+        Object {
+          "fields": Array [
+            <DateField
+              blank={false}
+              dateFormat="YYYY.MM.DD"
+              default="2018-11-06"
+              displayOptions={
+                Object {
+                  "width": 16,
+                }
+              }
+              dropdownMode="select"
+              editable={true}
+              formId="bla"
+              help_text=""
+              name="f_date"
+              null={false}
+              required={true}
+              showMonthDropdown={true}
+              showTimeSelect={false}
+              showYearDropdown={true}
+              todayButton="Now"
+              type="DateField"
+              upperFirstLabel={true}
+              verbose_name="date"
+            />,
+            <TimeField
+              blank={false}
+              default="08:30:35.793611"
+              displayOptions={
+                Object {
+                  "width": 16,
+                }
+              }
+              editable={true}
+              formId="bla"
+              help_text=""
+              name="f_time"
+              null={false}
+              required={true}
+              type="TimeField"
+              upperFirstLabel={true}
+              verbose_name="time"
+            />,
+            <DateTimeField
+              blank={false}
+              dateFormat="YYYY.MM.DD HH:mm"
+              default="2018-11-06T08:30:35.793628Z"
+              displayOptions={
+                Object {
+                  "width": 16,
+                }
+              }
+              dropdownMode="select"
+              editable={true}
+              formId="bla"
+              help_text=""
+              name="f_dt"
+              null={false}
+              required={true}
+              timeFormat="HH:mm"
+              timeIntervals={30}
+              todayButton="Now"
+              type="DateTimeField"
+              upperFirstLabel={true}
+              verbose_name="date and time"
+            />,
+            <IntegerField
+              blank={false}
+              default={-22}
+              displayOptions={
+                Object {
+                  "width": 16,
+                }
+              }
+              editable={true}
+              formId="bla"
+              help_text=""
+              name="f_integer"
+              null={false}
+              required={true}
+              type="IntegerField"
+              upperFirstLabel={true}
+              verbose_name="integer"
+            />,
+            <IntegerField
+              blank={false}
+              default={0}
+              displayOptions={
+                Object {
+                  "width": 16,
+                }
+              }
+              editable={true}
+              formId="bla"
+              help_text=""
+              name="f_positive_integer"
+              null={false}
+              required={true}
+              type="PositiveIntegerField"
+              upperFirstLabel={true}
+              verbose_name="positive integer"
+            />,
+            <IntegerField
+              blank={false}
+              default={13}
+              displayOptions={
+                Object {
+                  "width": 16,
+                }
+              }
+              editable={true}
+              formId="bla"
+              help_text=""
+              name="f_small_integer"
+              null={false}
+              required={true}
+              type="SmallIntegerField"
+              upperFirstLabel={true}
+              verbose_name="small integer"
+            />,
+            <IntegerField
+              blank={false}
+              default={222}
+              displayOptions={
+                Object {
+                  "width": 16,
+                }
+              }
+              editable={true}
+              formId="bla"
+              help_text=""
+              name="f_positive_small_integer"
+              null={false}
+              required={true}
+              type="PositiveSmallIntegerField"
+              upperFirstLabel={true}
+              verbose_name="positive small integer"
+            />,
+            <IntegerField
+              blank={false}
+              decimal_places={4}
+              default={3.1415}
+              displayOptions={
+                Object {
+                  "width": 16,
+                }
+              }
+              editable={true}
+              formId="bla"
+              help_text=""
+              max_digits={10}
+              name="f_decimal"
+              null={false}
+              required={true}
+              type="DecimalField"
+              upperFirstLabel={true}
+              verbose_name="decimal"
+            />,
+            <IntegerField
+              blank={false}
+              default={3.14}
+              displayOptions={
+                Object {
+                  "width": 16,
+                }
+              }
+              editable={true}
+              formId="bla"
+              help_text=""
+              name="f_float"
+              null={false}
+              required={true}
+              type="FloatField"
+              upperFirstLabel={true}
+              verbose_name="float"
+            />,
+            <InlineForeignKeyField
+              blank={true}
+              data={
+                Array [
+                  Object {
+                    "id": 1,
+                    "name": "Author Вася",
+                  },
+                  Object {
+                    "id": 2,
+                    "name": "Author asd Вася",
+                  },
+                ]
+              }
+              displayOptions={
+                Object {
+                  "width": 16,
+                }
+              }
+              editable={true}
+              formId="bla"
+              getOptionLabel={[Function]}
+              getOptionValue={[Function]}
+              help_text=""
+              isRtl={false}
+              name="f_fk_embed"
+              null={true}
+              required={false}
+              type="ForeignKey"
+              upperFirstLabel={true}
+              verbose_name="embedded foreign key"
+            />,
+            <GenericField
+              blank={true}
+              data="http://localhost:8000/api/v1/sample/books/"
+              displayOptions={
+                Object {
+                  "width": 16,
+                }
+              }
+              editable={true}
+              formId="bla"
+              help_text=""
+              name="f_fk_rel"
+              null={true}
+              required={false}
+              type="ForeignKey"
+              upperFirstLabel={true}
+              verbose_name="foreign key with relation"
+            />,
+            <AutocompleteChoiceField
+              blank={false}
+              choices={
+                Array [
+                  Array [
+                    0,
+                    "dead",
+                  ],
+                  Array [
+                    255,
+                    "alive",
+                  ],
+                  Array [
+                    30,
+                    "dried",
+                  ],
+                ]
+              }
+              default={255}
+              displayOptions={
+                Object {
+                  "width": 16,
+                }
+              }
+              editable={true}
+              formId="bla"
+              getOptionLabel={[Function]}
+              getOptionValue={[Function]}
+              help_text=""
+              name="f_choice"
+              null={false}
+              required={true}
+              type="PositiveSmallIntegerField"
+              upperFirstLabel={true}
+              verbose_name="choice"
+            />,
+            <GenericField
+              blank={false}
+              displayOptions={
+                Object {
+                  "width": 16,
+                }
+              }
+              editable={true}
+              formId="bla"
+              help_text=""
+              max_length={100}
+              name="f_file"
+              null={false}
+              required={true}
+              type="FileField"
+              upload_url="http://localhost:8000/api/v1/sample/all/accept_file/"
+              upperFirstLabel={true}
+              verbose_name="short preview sample"
+            />,
+            <GenericField
+              blank={true}
+              displayOptions={
+                Object {
+                  "width": 16,
+                }
+              }
+              editable={true}
+              formId="bla"
+              help_text="logo image"
+              max_length={100}
+              name="f_photo"
+              null={true}
+              required={false}
+              type="FileField"
+              upload_url="http://localhost:8000/api/v1/sample/all/accept_file/"
+              upperFirstLabel={true}
+              verbose_name="photo"
+            />,
+            <CharField
+              blank={false}
+              displayOptions={
+                Object {
+                  "width": 16,
+                }
+              }
+              editable={true}
+              formId="bla"
+              help_text="charfield"
+              max_length={255}
+              name="f_char_field"
+              null={false}
+              required={true}
+              type="CharField"
+              upperFirstLabel={true}
+              verbose_name="char field"
+            />,
+            <TextField
+              blank={true}
+              displayOptions={
+                Object {
+                  "width": 16,
+                }
+              }
+              editable={true}
+              formId="bla"
+              help_text=""
+              name="f_text_field"
+              null={false}
+              required={false}
+              type="TextField"
+              upperFirstLabel={true}
+              verbose_name="text field"
+            />,
+            <InlineManyToManyField
+              blank={true}
+              closeOnSelect={true}
+              data={
+                Array [
+                  Object {
+                    "id": 1,
+                    "name": "Author Вася",
+                  },
+                  Object {
+                    "id": 2,
+                    "name": "Author asd Вася",
+                  },
+                ]
+              }
+              displayOptions={
+                Object {
+                  "width": 16,
+                }
+              }
+              editable={true}
+              formId="bla"
+              getOptionLabel={[Function]}
+              getOptionValue={[Function]}
+              help_text=""
+              name="f_m2m_embed"
+              null={false}
+              required={false}
+              type="ManyToManyField"
+              upperFirstLabel={true}
+              value={Array []}
+              verbose_name="embedded M2M"
+            />,
+            <GenericField
+              blank={true}
+              data="http://localhost:8000/api/v1/sample/authors/"
+              displayOptions={
+                Object {
+                  "width": 16,
+                }
+              }
+              editable={true}
+              formId="bla"
+              help_text=""
+              name="f_m2m_rel"
+              null={false}
+              required={false}
+              type="ManyToManyField"
+              upperFirstLabel={true}
+              verbose_name="related M2M"
+            />,
+          ],
+          "header": null,
+        },
+      ],
+      "formId": undefined,
+      "isTitleVisible": true,
+      "loading": false,
+      "nonFieldErrorsMap": undefined,
+      "onSubmit": [Function],
+      "submitComponent": [Function],
+      "title": "Create AllModelFields",
+    },
+    "ref": null,
+    "rendered": null,
+    "type": [Function],
+  },
+  Symbol(enzyme.__nodes__): Array [
+    Object {
+      "instance": null,
+      "key": "FormComponent-bla",
+      "nodeType": "function",
+      "props": Object {
+        "fieldsets": Array [
+          Object {
+            "fields": Array [
+              <DateField
+                blank={false}
+                dateFormat="YYYY.MM.DD"
+                default="2018-11-06"
+                displayOptions={
+                  Object {
+                    "width": 16,
+                  }
+                }
+                dropdownMode="select"
+                editable={true}
+                formId="bla"
+                help_text=""
+                name="f_date"
+                null={false}
+                required={true}
+                showMonthDropdown={true}
+                showTimeSelect={false}
+                showYearDropdown={true}
+                todayButton="Now"
+                type="DateField"
+                upperFirstLabel={true}
+                verbose_name="date"
+              />,
+              <TimeField
+                blank={false}
+                default="08:30:35.793611"
+                displayOptions={
+                  Object {
+                    "width": 16,
+                  }
+                }
+                editable={true}
+                formId="bla"
+                help_text=""
+                name="f_time"
+                null={false}
+                required={true}
+                type="TimeField"
+                upperFirstLabel={true}
+                verbose_name="time"
+              />,
+              <DateTimeField
+                blank={false}
+                dateFormat="YYYY.MM.DD HH:mm"
+                default="2018-11-06T08:30:35.793628Z"
+                displayOptions={
+                  Object {
+                    "width": 16,
+                  }
+                }
+                dropdownMode="select"
+                editable={true}
+                formId="bla"
+                help_text=""
+                name="f_dt"
+                null={false}
+                required={true}
+                timeFormat="HH:mm"
+                timeIntervals={30}
+                todayButton="Now"
+                type="DateTimeField"
+                upperFirstLabel={true}
+                verbose_name="date and time"
+              />,
+              <IntegerField
+                blank={false}
+                default={-22}
+                displayOptions={
+                  Object {
+                    "width": 16,
+                  }
+                }
+                editable={true}
+                formId="bla"
+                help_text=""
+                name="f_integer"
+                null={false}
+                required={true}
+                type="IntegerField"
+                upperFirstLabel={true}
+                verbose_name="integer"
+              />,
+              <IntegerField
+                blank={false}
+                default={0}
+                displayOptions={
+                  Object {
+                    "width": 16,
+                  }
+                }
+                editable={true}
+                formId="bla"
+                help_text=""
+                name="f_positive_integer"
+                null={false}
+                required={true}
+                type="PositiveIntegerField"
+                upperFirstLabel={true}
+                verbose_name="positive integer"
+              />,
+              <IntegerField
+                blank={false}
+                default={13}
+                displayOptions={
+                  Object {
+                    "width": 16,
+                  }
+                }
+                editable={true}
+                formId="bla"
+                help_text=""
+                name="f_small_integer"
+                null={false}
+                required={true}
+                type="SmallIntegerField"
+                upperFirstLabel={true}
+                verbose_name="small integer"
+              />,
+              <IntegerField
+                blank={false}
+                default={222}
+                displayOptions={
+                  Object {
+                    "width": 16,
+                  }
+                }
+                editable={true}
+                formId="bla"
+                help_text=""
+                name="f_positive_small_integer"
+                null={false}
+                required={true}
+                type="PositiveSmallIntegerField"
+                upperFirstLabel={true}
+                verbose_name="positive small integer"
+              />,
+              <IntegerField
+                blank={false}
+                decimal_places={4}
+                default={3.1415}
+                displayOptions={
+                  Object {
+                    "width": 16,
+                  }
+                }
+                editable={true}
+                formId="bla"
+                help_text=""
+                max_digits={10}
+                name="f_decimal"
+                null={false}
+                required={true}
+                type="DecimalField"
+                upperFirstLabel={true}
+                verbose_name="decimal"
+              />,
+              <IntegerField
+                blank={false}
+                default={3.14}
+                displayOptions={
+                  Object {
+                    "width": 16,
+                  }
+                }
+                editable={true}
+                formId="bla"
+                help_text=""
+                name="f_float"
+                null={false}
+                required={true}
+                type="FloatField"
+                upperFirstLabel={true}
+                verbose_name="float"
+              />,
+              <InlineForeignKeyField
+                blank={true}
+                data={
+                  Array [
+                    Object {
+                      "id": 1,
+                      "name": "Author Вася",
+                    },
+                    Object {
+                      "id": 2,
+                      "name": "Author asd Вася",
+                    },
+                  ]
+                }
+                displayOptions={
+                  Object {
+                    "width": 16,
+                  }
+                }
+                editable={true}
+                formId="bla"
+                getOptionLabel={[Function]}
+                getOptionValue={[Function]}
+                help_text=""
+                isRtl={false}
+                name="f_fk_embed"
+                null={true}
+                required={false}
+                type="ForeignKey"
+                upperFirstLabel={true}
+                verbose_name="embedded foreign key"
+              />,
+              <GenericField
+                blank={true}
+                data="http://localhost:8000/api/v1/sample/books/"
+                displayOptions={
+                  Object {
+                    "width": 16,
+                  }
+                }
+                editable={true}
+                formId="bla"
+                help_text=""
+                name="f_fk_rel"
+                null={true}
+                required={false}
+                type="ForeignKey"
+                upperFirstLabel={true}
+                verbose_name="foreign key with relation"
+              />,
+              <AutocompleteChoiceField
+                blank={false}
+                choices={
+                  Array [
+                    Array [
+                      0,
+                      "dead",
+                    ],
+                    Array [
+                      255,
+                      "alive",
+                    ],
+                    Array [
+                      30,
+                      "dried",
+                    ],
+                  ]
+                }
+                default={255}
+                displayOptions={
+                  Object {
+                    "width": 16,
+                  }
+                }
+                editable={true}
+                formId="bla"
+                getOptionLabel={[Function]}
+                getOptionValue={[Function]}
+                help_text=""
+                name="f_choice"
+                null={false}
+                required={true}
+                type="PositiveSmallIntegerField"
+                upperFirstLabel={true}
+                verbose_name="choice"
+              />,
+              <GenericField
+                blank={false}
+                displayOptions={
+                  Object {
+                    "width": 16,
+                  }
+                }
+                editable={true}
+                formId="bla"
+                help_text=""
+                max_length={100}
+                name="f_file"
+                null={false}
+                required={true}
+                type="FileField"
+                upload_url="http://localhost:8000/api/v1/sample/all/accept_file/"
+                upperFirstLabel={true}
+                verbose_name="short preview sample"
+              />,
+              <GenericField
+                blank={true}
+                displayOptions={
+                  Object {
+                    "width": 16,
+                  }
+                }
+                editable={true}
+                formId="bla"
+                help_text="logo image"
+                max_length={100}
+                name="f_photo"
+                null={true}
+                required={false}
+                type="FileField"
+                upload_url="http://localhost:8000/api/v1/sample/all/accept_file/"
+                upperFirstLabel={true}
+                verbose_name="photo"
+              />,
+              <CharField
+                blank={false}
+                displayOptions={
+                  Object {
+                    "width": 16,
+                  }
+                }
+                editable={true}
+                formId="bla"
+                help_text="charfield"
+                max_length={255}
+                name="f_char_field"
+                null={false}
+                required={true}
+                type="CharField"
+                upperFirstLabel={true}
+                verbose_name="char field"
+              />,
+              <TextField
+                blank={true}
+                displayOptions={
+                  Object {
+                    "width": 16,
+                  }
+                }
+                editable={true}
+                formId="bla"
+                help_text=""
+                name="f_text_field"
+                null={false}
+                required={false}
+                type="TextField"
+                upperFirstLabel={true}
+                verbose_name="text field"
+              />,
+              <InlineManyToManyField
+                blank={true}
+                closeOnSelect={true}
+                data={
+                  Array [
+                    Object {
+                      "id": 1,
+                      "name": "Author Вася",
+                    },
+                    Object {
+                      "id": 2,
+                      "name": "Author asd Вася",
+                    },
+                  ]
+                }
+                displayOptions={
+                  Object {
+                    "width": 16,
+                  }
+                }
+                editable={true}
+                formId="bla"
+                getOptionLabel={[Function]}
+                getOptionValue={[Function]}
+                help_text=""
+                name="f_m2m_embed"
+                null={false}
+                required={false}
+                type="ManyToManyField"
+                upperFirstLabel={true}
+                value={Array []}
+                verbose_name="embedded M2M"
+              />,
+              <GenericField
+                blank={true}
+                data="http://localhost:8000/api/v1/sample/authors/"
+                displayOptions={
+                  Object {
+                    "width": 16,
+                  }
+                }
+                editable={true}
+                formId="bla"
+                help_text=""
+                name="f_m2m_rel"
+                null={false}
+                required={false}
+                type="ManyToManyField"
+                upperFirstLabel={true}
+                verbose_name="related M2M"
+              />,
+            ],
+            "header": null,
+          },
+        ],
+        "formId": undefined,
+        "isTitleVisible": true,
+        "loading": false,
+        "nonFieldErrorsMap": undefined,
+        "onSubmit": [Function],
+        "submitComponent": [Function],
+        "title": "Create AllModelFields",
+      },
+      "ref": null,
+      "rendered": null,
+      "type": [Function],
+    },
+  ],
+  Symbol(enzyme.__options__): Object {
+    "adapter": ReactSixteenAdapter {
+      "options": Object {
+        "enableComponentDidUpdateOnSetState": true,
+        "lifecycles": Object {
+          "componentDidUpdate": Object {
+            "onSetState": true,
+          },
+          "getDerivedStateFromProps": true,
+          "getSnapshotBeforeUpdate": true,
+          "setState": Object {
+            "skipsComponentDidUpdateOnNullish": true,
+          },
+        },
+      },
+    },
+  },
+}
+`;

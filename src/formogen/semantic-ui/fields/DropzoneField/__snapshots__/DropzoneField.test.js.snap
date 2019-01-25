@@ -1,0 +1,389 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<DropzoneField /> 1`] = `
+ShallowWrapper {
+  Symbol(enzyme.__root__): [Circular],
+  Symbol(enzyme.__unrendered__): <DropzoneField
+    displayOptions={
+      Object {
+        "width": 1,
+      }
+    }
+    dropText="Drop files here"
+    getFileIcon={[Function]}
+    help_text="DropzoneField: help_text"
+    initialValue=""
+    multiple={false}
+    name="DropzoneField: name"
+    onChange={[MockFunction]}
+    type="DropzoneField"
+    value={Array []}
+    verbose_name="DropzoneField: verbose_name"
+  />,
+  Symbol(enzyme.__renderer__): Object {
+    "batchedUpdates": [Function],
+    "getNode": [Function],
+    "render": [Function],
+    "simulateError": [Function],
+    "simulateEvent": [Function],
+    "unmount": [Function],
+  },
+  Symbol(enzyme.__node__): Object {
+    "instance": null,
+    "key": undefined,
+    "nodeType": "function",
+    "props": Object {
+      "children": Array [
+        <Segment
+          acceptClassName="green"
+          as={[Function]}
+          attached="top"
+          className="dropzone"
+          multiple={false}
+          onDrop={[Function]}
+          rejectClassName="red"
+          textAlign="center"
+        >
+          <strong>
+            DropzoneField: verbose_name
+             
+          </strong>
+          <div
+            className="help-text"
+          >
+            DropzoneField: help_text
+          </div>
+          <div>
+            Drop files here
+          </div>
+        </Segment>,
+        <DirtyFilesPreview
+          files={Array []}
+          onClear={[Function]}
+          onDeleteFile={[Function]}
+        />,
+        <FilesOnServerPreview
+          files=""
+          isRemovable={false}
+          onDeleteFile={[Function]}
+        />,
+        <ErrorsList
+          color="red"
+          header="Errors"
+        />,
+      ],
+      "disabled": true,
+      "error": false,
+      "required": undefined,
+      "width": 1,
+    },
+    "ref": null,
+    "rendered": Array [
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "function",
+        "props": Object {
+          "accept": undefined,
+          "acceptClassName": "green",
+          "as": [Function],
+          "attached": "top",
+          "children": Array [
+            <strong>
+              DropzoneField: verbose_name
+               
+            </strong>,
+            <div
+              className="help-text"
+            >
+              DropzoneField: help_text
+            </div>,
+            <div>
+              Drop files here
+            </div>,
+          ],
+          "className": "dropzone",
+          "multiple": false,
+          "onDrop": [Function],
+          "rejectClassName": "red",
+          "textAlign": "center",
+        },
+        "ref": null,
+        "rendered": Array [
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "host",
+            "props": Object {
+              "children": Array [
+                "DropzoneField: verbose_name",
+                " ",
+                undefined,
+              ],
+            },
+            "ref": null,
+            "rendered": Array [
+              "DropzoneField: verbose_name",
+              " ",
+              undefined,
+            ],
+            "type": "strong",
+          },
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "host",
+            "props": Object {
+              "children": "DropzoneField: help_text",
+              "className": "help-text",
+            },
+            "ref": null,
+            "rendered": "DropzoneField: help_text",
+            "type": "div",
+          },
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "host",
+            "props": Object {
+              "children": "Drop files here",
+            },
+            "ref": null,
+            "rendered": "Drop files here",
+            "type": "div",
+          },
+        ],
+        "type": [Function],
+      },
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "function",
+        "props": Object {
+          "files": Array [],
+          "onClear": [Function],
+          "onDeleteFile": [Function],
+        },
+        "ref": null,
+        "rendered": null,
+        "type": [Function],
+      },
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "function",
+        "props": Object {
+          "files": "",
+          "isRemovable": false,
+          "onDeleteFile": [Function],
+        },
+        "ref": null,
+        "rendered": null,
+        "type": [Function],
+      },
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "function",
+        "props": Object {
+          "color": "red",
+          "header": "Errors",
+          "messages": undefined,
+        },
+        "ref": null,
+        "rendered": null,
+        "type": [Function],
+      },
+    ],
+    "type": [Function],
+  },
+  Symbol(enzyme.__nodes__): Array [
+    Object {
+      "instance": null,
+      "key": undefined,
+      "nodeType": "function",
+      "props": Object {
+        "children": Array [
+          <Segment
+            acceptClassName="green"
+            as={[Function]}
+            attached="top"
+            className="dropzone"
+            multiple={false}
+            onDrop={[Function]}
+            rejectClassName="red"
+            textAlign="center"
+          >
+            <strong>
+              DropzoneField: verbose_name
+               
+            </strong>
+            <div
+              className="help-text"
+            >
+              DropzoneField: help_text
+            </div>
+            <div>
+              Drop files here
+            </div>
+          </Segment>,
+          <DirtyFilesPreview
+            files={Array []}
+            onClear={[Function]}
+            onDeleteFile={[Function]}
+          />,
+          <FilesOnServerPreview
+            files=""
+            isRemovable={false}
+            onDeleteFile={[Function]}
+          />,
+          <ErrorsList
+            color="red"
+            header="Errors"
+          />,
+        ],
+        "disabled": true,
+        "error": false,
+        "required": undefined,
+        "width": 1,
+      },
+      "ref": null,
+      "rendered": Array [
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "function",
+          "props": Object {
+            "accept": undefined,
+            "acceptClassName": "green",
+            "as": [Function],
+            "attached": "top",
+            "children": Array [
+              <strong>
+                DropzoneField: verbose_name
+                 
+              </strong>,
+              <div
+                className="help-text"
+              >
+                DropzoneField: help_text
+              </div>,
+              <div>
+                Drop files here
+              </div>,
+            ],
+            "className": "dropzone",
+            "multiple": false,
+            "onDrop": [Function],
+            "rejectClassName": "red",
+            "textAlign": "center",
+          },
+          "ref": null,
+          "rendered": Array [
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "host",
+              "props": Object {
+                "children": Array [
+                  "DropzoneField: verbose_name",
+                  " ",
+                  undefined,
+                ],
+              },
+              "ref": null,
+              "rendered": Array [
+                "DropzoneField: verbose_name",
+                " ",
+                undefined,
+              ],
+              "type": "strong",
+            },
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "host",
+              "props": Object {
+                "children": "DropzoneField: help_text",
+                "className": "help-text",
+              },
+              "ref": null,
+              "rendered": "DropzoneField: help_text",
+              "type": "div",
+            },
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "host",
+              "props": Object {
+                "children": "Drop files here",
+              },
+              "ref": null,
+              "rendered": "Drop files here",
+              "type": "div",
+            },
+          ],
+          "type": [Function],
+        },
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "function",
+          "props": Object {
+            "files": Array [],
+            "onClear": [Function],
+            "onDeleteFile": [Function],
+          },
+          "ref": null,
+          "rendered": null,
+          "type": [Function],
+        },
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "function",
+          "props": Object {
+            "files": "",
+            "isRemovable": false,
+            "onDeleteFile": [Function],
+          },
+          "ref": null,
+          "rendered": null,
+          "type": [Function],
+        },
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "function",
+          "props": Object {
+            "color": "red",
+            "header": "Errors",
+            "messages": undefined,
+          },
+          "ref": null,
+          "rendered": null,
+          "type": [Function],
+        },
+      ],
+      "type": [Function],
+    },
+  ],
+  Symbol(enzyme.__options__): Object {
+    "adapter": ReactSixteenAdapter {
+      "options": Object {
+        "enableComponentDidUpdateOnSetState": true,
+        "lifecycles": Object {
+          "componentDidUpdate": Object {
+            "onSetState": true,
+          },
+          "getDerivedStateFromProps": true,
+          "getSnapshotBeforeUpdate": true,
+          "setState": Object {
+            "skipsComponentDidUpdateOnNullish": true,
+          },
+        },
+      },
+    },
+  },
+}
+`;

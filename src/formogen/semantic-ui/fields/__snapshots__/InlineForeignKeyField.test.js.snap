@@ -1,0 +1,325 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<InlineForeignKeyField /> 1`] = `
+ShallowWrapper {
+  Symbol(enzyme.__root__): [Circular],
+  Symbol(enzyme.__unrendered__): <InlineForeignKeyField
+    data={Array []}
+    displayOptions={
+      Object {
+        "width": 1,
+      }
+    }
+    getOptionLabel={[Function]}
+    getOptionValue={[Function]}
+    help_text="InlineForeignKeyField: help_text"
+    isRtl={false}
+    name="InlineForeignKeyField: name"
+    type="InlineForeignKeyField"
+    verbose_name="InlineForeignKeyField: verbose_name"
+  />,
+  Symbol(enzyme.__renderer__): Object {
+    "batchedUpdates": [Function],
+    "getNode": [Function],
+    "render": [Function],
+    "simulateError": [Function],
+    "simulateEvent": [Function],
+    "unmount": [Function],
+  },
+  Symbol(enzyme.__node__): Object {
+    "instance": null,
+    "key": undefined,
+    "nodeType": "function",
+    "props": Object {
+      "children": Array [
+        <FieldLabel
+          data={Array []}
+          displayOptions={
+            Object {
+              "width": 1,
+            }
+          }
+          getOptionLabel={[Function]}
+          getOptionValue={[Function]}
+          help_text="InlineForeignKeyField: help_text"
+          isRtl={false}
+          name="InlineForeignKeyField: name"
+          type="InlineForeignKeyField"
+          verbose_name="InlineForeignKeyField: verbose_name"
+        />,
+        <StateManager
+          closeOnSelect={true}
+          defaultInputValue=""
+          defaultMenuIsOpen={false}
+          defaultValue={null}
+          disabled={true}
+          getOptionLabel={[Function]}
+          getOptionValue={[Function]}
+          inputProps={
+            Object {
+              "type": "react-type",
+            }
+          }
+          isClearable={true}
+          isMulti={false}
+          isRtl={false}
+          onChange={[Function]}
+          options={Array []}
+          removeSelected={true}
+          simpleValue={true}
+          value={Array []}
+        />,
+        <span
+          className="help-text"
+        >
+          InlineForeignKeyField: help_text
+        </span>,
+        <ErrorsList
+          color="red"
+          header="Errors"
+        />,
+      ],
+      "disabled": true,
+      "error": false,
+      "required": undefined,
+      "width": 1,
+    },
+    "ref": null,
+    "rendered": Array [
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "function",
+        "props": Object {
+          "data": Array [],
+          "displayOptions": Object {
+            "width": 1,
+          },
+          "getOptionLabel": [Function],
+          "getOptionValue": [Function],
+          "help_text": "InlineForeignKeyField: help_text",
+          "isRtl": false,
+          "name": "InlineForeignKeyField: name",
+          "type": "InlineForeignKeyField",
+          "verbose_name": "InlineForeignKeyField: verbose_name",
+        },
+        "ref": null,
+        "rendered": null,
+        "type": [Function],
+      },
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "class",
+        "props": Object {
+          "closeOnSelect": true,
+          "defaultInputValue": "",
+          "defaultMenuIsOpen": false,
+          "defaultValue": null,
+          "disabled": true,
+          "getOptionLabel": [Function],
+          "getOptionValue": [Function],
+          "inputProps": Object {
+            "type": "react-type",
+          },
+          "isClearable": true,
+          "isMulti": false,
+          "isRtl": false,
+          "onChange": [Function],
+          "options": Array [],
+          "placeholder": undefined,
+          "removeSelected": true,
+          "simpleValue": true,
+          "value": Array [],
+        },
+        "ref": null,
+        "rendered": null,
+        "type": [Function],
+      },
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "host",
+        "props": Object {
+          "children": "InlineForeignKeyField: help_text",
+          "className": "help-text",
+        },
+        "ref": null,
+        "rendered": "InlineForeignKeyField: help_text",
+        "type": "span",
+      },
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "function",
+        "props": Object {
+          "color": "red",
+          "header": "Errors",
+          "messages": undefined,
+        },
+        "ref": null,
+        "rendered": null,
+        "type": [Function],
+      },
+    ],
+    "type": [Function],
+  },
+  Symbol(enzyme.__nodes__): Array [
+    Object {
+      "instance": null,
+      "key": undefined,
+      "nodeType": "function",
+      "props": Object {
+        "children": Array [
+          <FieldLabel
+            data={Array []}
+            displayOptions={
+              Object {
+                "width": 1,
+              }
+            }
+            getOptionLabel={[Function]}
+            getOptionValue={[Function]}
+            help_text="InlineForeignKeyField: help_text"
+            isRtl={false}
+            name="InlineForeignKeyField: name"
+            type="InlineForeignKeyField"
+            verbose_name="InlineForeignKeyField: verbose_name"
+          />,
+          <StateManager
+            closeOnSelect={true}
+            defaultInputValue=""
+            defaultMenuIsOpen={false}
+            defaultValue={null}
+            disabled={true}
+            getOptionLabel={[Function]}
+            getOptionValue={[Function]}
+            inputProps={
+              Object {
+                "type": "react-type",
+              }
+            }
+            isClearable={true}
+            isMulti={false}
+            isRtl={false}
+            onChange={[Function]}
+            options={Array []}
+            removeSelected={true}
+            simpleValue={true}
+            value={Array []}
+          />,
+          <span
+            className="help-text"
+          >
+            InlineForeignKeyField: help_text
+          </span>,
+          <ErrorsList
+            color="red"
+            header="Errors"
+          />,
+        ],
+        "disabled": true,
+        "error": false,
+        "required": undefined,
+        "width": 1,
+      },
+      "ref": null,
+      "rendered": Array [
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "function",
+          "props": Object {
+            "data": Array [],
+            "displayOptions": Object {
+              "width": 1,
+            },
+            "getOptionLabel": [Function],
+            "getOptionValue": [Function],
+            "help_text": "InlineForeignKeyField: help_text",
+            "isRtl": false,
+            "name": "InlineForeignKeyField: name",
+            "type": "InlineForeignKeyField",
+            "verbose_name": "InlineForeignKeyField: verbose_name",
+          },
+          "ref": null,
+          "rendered": null,
+          "type": [Function],
+        },
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "class",
+          "props": Object {
+            "closeOnSelect": true,
+            "defaultInputValue": "",
+            "defaultMenuIsOpen": false,
+            "defaultValue": null,
+            "disabled": true,
+            "getOptionLabel": [Function],
+            "getOptionValue": [Function],
+            "inputProps": Object {
+              "type": "react-type",
+            },
+            "isClearable": true,
+            "isMulti": false,
+            "isRtl": false,
+            "onChange": [Function],
+            "options": Array [],
+            "placeholder": undefined,
+            "removeSelected": true,
+            "simpleValue": true,
+            "value": Array [],
+          },
+          "ref": null,
+          "rendered": null,
+          "type": [Function],
+        },
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "host",
+          "props": Object {
+            "children": "InlineForeignKeyField: help_text",
+            "className": "help-text",
+          },
+          "ref": null,
+          "rendered": "InlineForeignKeyField: help_text",
+          "type": "span",
+        },
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "function",
+          "props": Object {
+            "color": "red",
+            "header": "Errors",
+            "messages": undefined,
+          },
+          "ref": null,
+          "rendered": null,
+          "type": [Function],
+        },
+      ],
+      "type": [Function],
+    },
+  ],
+  Symbol(enzyme.__options__): Object {
+    "adapter": ReactSixteenAdapter {
+      "options": Object {
+        "enableComponentDidUpdateOnSetState": true,
+        "lifecycles": Object {
+          "componentDidUpdate": Object {
+            "onSetState": true,
+          },
+          "getDerivedStateFromProps": true,
+          "getSnapshotBeforeUpdate": true,
+          "setState": Object {
+            "skipsComponentDidUpdateOnNullish": true,
+          },
+        },
+      },
+    },
+  },
+}
+`;

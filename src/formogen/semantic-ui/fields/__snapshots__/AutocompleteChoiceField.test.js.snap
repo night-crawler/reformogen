@@ -1,0 +1,372 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<AutocompleteChoiceField /> 1`] = `
+ShallowWrapper {
+  Symbol(enzyme.__root__): [Circular],
+  Symbol(enzyme.__unrendered__): <AutocompleteChoiceField
+    choices={
+      Array [
+        Array [
+          1,
+          "sample",
+        ],
+      ]
+    }
+    displayOptions={
+      Object {
+        "width": 1,
+      }
+    }
+    getOptionLabel={[Function]}
+    getOptionValue={[Function]}
+    help_text="AutocompleteChoiceField: help_text"
+    name="AutocompleteChoiceField: name"
+    type="AutocompleteChoiceField"
+    value={1}
+    verbose_name="AutocompleteChoiceField: verbose_name"
+  />,
+  Symbol(enzyme.__renderer__): Object {
+    "batchedUpdates": [Function],
+    "getNode": [Function],
+    "render": [Function],
+    "simulateError": [Function],
+    "simulateEvent": [Function],
+    "unmount": [Function],
+  },
+  Symbol(enzyme.__node__): Object {
+    "instance": null,
+    "key": undefined,
+    "nodeType": "function",
+    "props": Object {
+      "children": Array [
+        <FieldLabel
+          choices={
+            Array [
+              Array [
+                1,
+                "sample",
+              ],
+            ]
+          }
+          displayOptions={
+            Object {
+              "width": 1,
+            }
+          }
+          getOptionLabel={[Function]}
+          getOptionValue={[Function]}
+          help_text="AutocompleteChoiceField: help_text"
+          name="AutocompleteChoiceField: name"
+          type="AutocompleteChoiceField"
+          value={1}
+          verbose_name="AutocompleteChoiceField: verbose_name"
+        />,
+        <StateManager
+          clearable={true}
+          defaultInputValue=""
+          defaultMenuIsOpen={false}
+          defaultValue={null}
+          getOptionLabel={[Function]}
+          getOptionValue={[Function]}
+          isMulti={false}
+          name="AutocompleteChoiceField: name"
+          onChange={[Function]}
+          options={
+            Array [
+              Array [
+                1,
+                "sample",
+              ],
+            ]
+          }
+          value={
+            Array [
+              Array [
+                1,
+                "sample",
+              ],
+            ]
+          }
+        />,
+        <span
+          className="help-text"
+        >
+          AutocompleteChoiceField: help_text
+        </span>,
+        <ErrorsList
+          color="red"
+          header="Errors"
+        />,
+      ],
+      "disabled": true,
+      "error": false,
+      "required": undefined,
+      "width": 1,
+    },
+    "ref": null,
+    "rendered": Array [
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "function",
+        "props": Object {
+          "choices": Array [
+            Array [
+              1,
+              "sample",
+            ],
+          ],
+          "displayOptions": Object {
+            "width": 1,
+          },
+          "getOptionLabel": [Function],
+          "getOptionValue": [Function],
+          "help_text": "AutocompleteChoiceField: help_text",
+          "name": "AutocompleteChoiceField: name",
+          "type": "AutocompleteChoiceField",
+          "value": 1,
+          "verbose_name": "AutocompleteChoiceField: verbose_name",
+        },
+        "ref": null,
+        "rendered": null,
+        "type": [Function],
+      },
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "class",
+        "props": Object {
+          "clearable": true,
+          "defaultInputValue": "",
+          "defaultMenuIsOpen": false,
+          "defaultValue": null,
+          "getOptionLabel": [Function],
+          "getOptionValue": [Function],
+          "isMulti": false,
+          "name": "AutocompleteChoiceField: name",
+          "onChange": [Function],
+          "options": Array [
+            Array [
+              1,
+              "sample",
+            ],
+          ],
+          "placeholder": undefined,
+          "value": Array [
+            Array [
+              1,
+              "sample",
+            ],
+          ],
+        },
+        "ref": null,
+        "rendered": null,
+        "type": [Function],
+      },
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "host",
+        "props": Object {
+          "children": "AutocompleteChoiceField: help_text",
+          "className": "help-text",
+        },
+        "ref": null,
+        "rendered": "AutocompleteChoiceField: help_text",
+        "type": "span",
+      },
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "function",
+        "props": Object {
+          "color": "red",
+          "header": "Errors",
+          "messages": undefined,
+        },
+        "ref": null,
+        "rendered": null,
+        "type": [Function],
+      },
+    ],
+    "type": [Function],
+  },
+  Symbol(enzyme.__nodes__): Array [
+    Object {
+      "instance": null,
+      "key": undefined,
+      "nodeType": "function",
+      "props": Object {
+        "children": Array [
+          <FieldLabel
+            choices={
+              Array [
+                Array [
+                  1,
+                  "sample",
+                ],
+              ]
+            }
+            displayOptions={
+              Object {
+                "width": 1,
+              }
+            }
+            getOptionLabel={[Function]}
+            getOptionValue={[Function]}
+            help_text="AutocompleteChoiceField: help_text"
+            name="AutocompleteChoiceField: name"
+            type="AutocompleteChoiceField"
+            value={1}
+            verbose_name="AutocompleteChoiceField: verbose_name"
+          />,
+          <StateManager
+            clearable={true}
+            defaultInputValue=""
+            defaultMenuIsOpen={false}
+            defaultValue={null}
+            getOptionLabel={[Function]}
+            getOptionValue={[Function]}
+            isMulti={false}
+            name="AutocompleteChoiceField: name"
+            onChange={[Function]}
+            options={
+              Array [
+                Array [
+                  1,
+                  "sample",
+                ],
+              ]
+            }
+            value={
+              Array [
+                Array [
+                  1,
+                  "sample",
+                ],
+              ]
+            }
+          />,
+          <span
+            className="help-text"
+          >
+            AutocompleteChoiceField: help_text
+          </span>,
+          <ErrorsList
+            color="red"
+            header="Errors"
+          />,
+        ],
+        "disabled": true,
+        "error": false,
+        "required": undefined,
+        "width": 1,
+      },
+      "ref": null,
+      "rendered": Array [
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "function",
+          "props": Object {
+            "choices": Array [
+              Array [
+                1,
+                "sample",
+              ],
+            ],
+            "displayOptions": Object {
+              "width": 1,
+            },
+            "getOptionLabel": [Function],
+            "getOptionValue": [Function],
+            "help_text": "AutocompleteChoiceField: help_text",
+            "name": "AutocompleteChoiceField: name",
+            "type": "AutocompleteChoiceField",
+            "value": 1,
+            "verbose_name": "AutocompleteChoiceField: verbose_name",
+          },
+          "ref": null,
+          "rendered": null,
+          "type": [Function],
+        },
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "class",
+          "props": Object {
+            "clearable": true,
+            "defaultInputValue": "",
+            "defaultMenuIsOpen": false,
+            "defaultValue": null,
+            "getOptionLabel": [Function],
+            "getOptionValue": [Function],
+            "isMulti": false,
+            "name": "AutocompleteChoiceField: name",
+            "onChange": [Function],
+            "options": Array [
+              Array [
+                1,
+                "sample",
+              ],
+            ],
+            "placeholder": undefined,
+            "value": Array [
+              Array [
+                1,
+                "sample",
+              ],
+            ],
+          },
+          "ref": null,
+          "rendered": null,
+          "type": [Function],
+        },
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "host",
+          "props": Object {
+            "children": "AutocompleteChoiceField: help_text",
+            "className": "help-text",
+          },
+          "ref": null,
+          "rendered": "AutocompleteChoiceField: help_text",
+          "type": "span",
+        },
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "function",
+          "props": Object {
+            "color": "red",
+            "header": "Errors",
+            "messages": undefined,
+          },
+          "ref": null,
+          "rendered": null,
+          "type": [Function],
+        },
+      ],
+      "type": [Function],
+    },
+  ],
+  Symbol(enzyme.__options__): Object {
+    "adapter": ReactSixteenAdapter {
+      "options": Object {
+        "enableComponentDidUpdateOnSetState": true,
+        "lifecycles": Object {
+          "componentDidUpdate": Object {
+            "onSetState": true,
+          },
+          "getDerivedStateFromProps": true,
+          "getSnapshotBeforeUpdate": true,
+          "setState": Object {
+            "skipsComponentDidUpdateOnNullish": true,
+          },
+        },
+      },
+    },
+  },
+}
+`;

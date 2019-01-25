@@ -1,63 +1,60 @@
 import PropTypes from 'prop-types';
 
 
-export const layoutOptsType = PropTypes.shape({
-    width: PropTypes.number.isRequired,
+export const displayOptionsType = PropTypes.shape({
+  width: PropTypes.number.isRequired,
 }).isRequired;
 
 export const errorsType = PropTypes.arrayOf(PropTypes.string.isRequired);
 
 
 const defaultFieldPropTypes = {
-    /* common */
-    type: PropTypes.string.isRequired,
+  /* common */
+  formId: PropTypes.string,
+  type: PropTypes.string.isRequired,
 
-    layoutOpts: layoutOptsType,
+  displayOptions: displayOptionsType,
 
-    name: PropTypes.string.isRequired,
-    verbose_name: PropTypes.string.isRequired,
-    help_text: PropTypes.string.isRequired,
-    errors: PropTypes.array,
+  name: PropTypes.string.isRequired,
+  verbose_name: PropTypes.string.isRequired,
+  help_text: PropTypes.string,
+  errors: PropTypes.array,
 
-    max_length: PropTypes.number, /* for CharField && TextField */
+  max_length: PropTypes.number, /* for CharField && TextField */
 
-    blank: PropTypes.bool,
-    null: PropTypes.bool,
-    editable: PropTypes.bool,
-    required: PropTypes.bool,
+  blank: PropTypes.bool,
+  null: PropTypes.bool,
+  editable: PropTypes.bool,
+  required: PropTypes.bool,
 
-    default: PropTypes.any,
-    value: PropTypes.any,
+  default: PropTypes.any,
+  value: PropTypes.any,
 
-    /* integers */
-    min_value: PropTypes.number,
-    max_value: PropTypes.number,
-    decimal_places: PropTypes.number,
-    max_digits: PropTypes.number,
+  /* integers */
+  min_value: PropTypes.number,
+  max_value: PropTypes.number,
+  decimal_places: PropTypes.number,
+  max_digits: PropTypes.number,
 
-    /* multiple select M2M or FK */
-    multi: PropTypes.bool,
+  /* multiple select M2M or FK */
+  multi: PropTypes.bool,
 
-    /* Django choices */
-    choices: PropTypes.arrayOf(PropTypes.array),
+  /* Django choices */
+  choices: PropTypes.arrayOf(PropTypes.array),
 
-    /* optional placeholder support (not bundled in default field data in drf-metadata) */
-    placeholder: PropTypes.string,
+  /* optional placeholder support (not bundled in default field data in drf-metadata) */
+  placeholder: PropTypes.string,
 
-    /* lowercase labels to Uppercase */
-    upperFirstLabel: PropTypes.bool,
+  /* lowercase labels to Uppercase */
+  upperFirstLabel: PropTypes.bool,
 
-    /* show help text on hover label (?) sign, or put in the bottom */
-    helpTextOnHover: PropTypes.bool,
+  /* show help text on hover label (?) sign, or put in the bottom */
+  helpTextOnHover: PropTypes.bool,
 
-    /* pass optional locale to child, it can be useful in some cases */
-    locale: PropTypes.string,
+  /* pass optional locale to child, it can be useful in some cases */
+  locale: PropTypes.string,
 
-    /* method to provide additional/redefine some opts in child component */
-    updateProps: PropTypes.func,
-
-    onChange: PropTypes.func,
-    onNetworkError: PropTypes.func
+  onChange: PropTypes.func,
 };
 
 export default defaultFieldPropTypes;

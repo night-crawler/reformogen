@@ -1,6 +1,5 @@
 from django.utils.translation import ugettext_lazy as _
 
-# Third Party
 from model_utils import Choices
 
 COLOR_CHOICES = Choices(

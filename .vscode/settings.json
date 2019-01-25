@@ -1,0 +1,39 @@
+{
+    "[javascript]": {
+        "editor.tabSize": 2
+    },
+    "[javascriptreact]": {
+        "editor.tabSize": 2
+    },
+    "[html]": {
+        "editor.tabSize": 2
+    },
+    "[json]": {
+        "editor.tabSize": 2
+    },
+    "editor.detectIndentation": false,
+    "eslint.enable": true,
+    "javascript.validate.enable": false,
+    "cSpell.words": [
+        "Dropdown",
+        "FORMID",
+        "Truncator",
+        "cloneable",
+        "csrftoken",
+        "datepicker",
+        "fieldsets",
+        "fname",
+        "formdata",
+        "formogen",
+        "fparts",
+        "mimetypes",
+        "msword",
+        "nbsp",
+        "nowrap",
+        "powerpoint",
+        "pptx",
+        "serializer's",
+        "wildcarded"
+    ],
+    "python.pythonPath": "/home/user/.local/share/virtualenvs/reformogen-E0Pxdy-c/bin/python",
+}

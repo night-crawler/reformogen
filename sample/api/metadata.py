@@ -3,7 +3,6 @@ from django.utils.translation import ugettext_lazy as _
 
 from rest_framework.reverse import reverse_lazy
 
-# Third Party
 from drf_metadata.meta import MetaData
 
 from sample import models as wf_models
@@ -11,6 +10,13 @@ from sample import models as wf_models
 
 class BookMetadata(MetaData):
     model = wf_models.Book
+
+    update_fields = {
+      'preview_sample': {
+        'multiple': True,
+        'upload_url': format_lazy('{}{}', 'http://localhost:8000', reverse_lazy('all-model-fieldss-accept-file')),
+      }
+    }
 
     def get_title(self, request, view, obj: wf_models.Book):
         if obj:
@@ -42,7 +48,7 @@ class AuthorMetadata(MetaData):
 
     def get_title(self, request, view, obj: wf_models.Author):
         if obj:
-            return _('Edit Author "{0}"').format(obj.printable_name())
+            return _('Edit Author "{0}"').format(obj.printable_name)
         return _('Create Author')
 
 
@@ -53,7 +59,7 @@ class AuthorPhotoMetadata(MetaData):
         'photo': {
             'multiple': True,
             # ensure upload_url is lazy (premature import case)
-            'upload_url': format_lazy('{}{}', 'http://localhost:8000', reverse_lazy('all-accept-file')),
+            'upload_url': format_lazy('{}{}', 'http://localhost:8000', reverse_lazy('all-model-fieldss-accept-file')),
             'delete_url': True,
         }
     }
@@ -66,7 +72,7 @@ class AuthorPhotoWithoutAuthorMetadata(MetaData):
     update_fields = {
         'photo': {
             # ensure upload_url is lazy (premature import case)
-            'upload_url': format_lazy('{}{}', 'http://localhost:8000', reverse_lazy('all-accept-file'))
+            'upload_url': format_lazy('{}{}', 'http://localhost:8000', reverse_lazy('all-model-fieldss-accept-file'))
         }
     }
 
@@ -77,11 +83,11 @@ class AllModelFieldsMetadata(MetaData):
     update_fields = {
         'f_file': {
             # ensure upload_url is lazy (premature import case)
-            'upload_url': format_lazy('{}{}', 'http://localhost:8000', reverse_lazy('all-accept-file'))
+            'upload_url': format_lazy('{}{}', 'http://localhost:8000', reverse_lazy('all-model-fieldss-accept-file'))
         },
         'f_photo': {
             # ensure upload_url is lazy (premature import case)
-            'upload_url': format_lazy('{}{}', 'http://localhost:8000', reverse_lazy('all-accept-file'))
+            'upload_url': format_lazy('{}{}', 'http://localhost:8000', reverse_lazy('all-model-fieldss-accept-file'))
         }
     }
 
@@ -93,5 +99,5 @@ class AllModelFieldsMetadata(MetaData):
 
     def get_title(self, request, view, obj: wf_models.AllModelFields):
         if obj:
-            return _('Edit AllModelFields "{0}"').format(obj.printable_name())
+            return _('Edit AllModelFields "{0}"').format(obj.printable_name)
         return _('Create AllModelFields')

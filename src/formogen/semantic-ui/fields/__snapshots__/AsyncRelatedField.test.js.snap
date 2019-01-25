@@ -1,0 +1,535 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<AsyncRelatedField /> renders without errors 1`] = `
+ShallowWrapper {
+  Symbol(enzyme.__root__): [Circular],
+  Symbol(enzyme.__unrendered__): <AsyncRelatedField
+    data="https://its-some-url.tld/"
+    displayOptions={
+      Object {
+        "width": 1,
+      }
+    }
+    formId="FORMID"
+    getOptionLabel={[Function]}
+    getOptionValue={[Function]}
+    help_text="AsyncRelatedField: help_text"
+    isMulti={false}
+    loadOptions={
+      [MockFunction] {
+        "calls": Array [
+          Array [
+            Object {
+              "callback": [Function],
+              "fieldName": "AsyncRelatedField: name",
+              "formId": "FORMID",
+              "searchText": "",
+              "url": "https://its-some-url.tld/",
+            },
+          ],
+        ],
+        "results": Array [
+          Object {
+            "isThrow": false,
+            "value": undefined,
+          },
+        ],
+      }
+    }
+    name="AsyncRelatedField: name"
+    type="AsyncRelatedField"
+    verbose_name="AsyncRelatedField: verbose_name"
+  />,
+  Symbol(enzyme.__renderer__): Object {
+    "batchedUpdates": [Function],
+    "getNode": [Function],
+    "render": [Function],
+    "simulateError": [Function],
+    "simulateEvent": [Function],
+    "unmount": [Function],
+  },
+  Symbol(enzyme.__node__): Object {
+    "instance": null,
+    "key": undefined,
+    "nodeType": "function",
+    "props": Object {
+      "children": Array [
+        <FieldLabel
+          data="https://its-some-url.tld/"
+          displayOptions={
+            Object {
+              "width": 1,
+            }
+          }
+          formId="FORMID"
+          getOptionLabel={[Function]}
+          getOptionValue={[Function]}
+          help_text="AsyncRelatedField: help_text"
+          isMulti={false}
+          loadOptions={
+            [MockFunction] {
+              "calls": Array [
+                Array [
+                  Object {
+                    "callback": [Function],
+                    "fieldName": "AsyncRelatedField: name",
+                    "formId": "FORMID",
+                    "searchText": "",
+                    "url": "https://its-some-url.tld/",
+                  },
+                ],
+              ],
+              "results": Array [
+                Object {
+                  "isThrow": false,
+                  "value": undefined,
+                },
+              ],
+            }
+          }
+          name="AsyncRelatedField: name"
+          type="AsyncRelatedField"
+          verbose_name="AsyncRelatedField: verbose_name"
+        />,
+        <Select
+          backspaceRemovesValue={true}
+          blurInputOnSelect={true}
+          captureMenuScroll={false}
+          closeMenuOnScroll={false}
+          closeMenuOnSelect={true}
+          components={Object {}}
+          controlShouldRenderValue={true}
+          escapeClearsValue={false}
+          filterOption={[Function]}
+          formatGroupLabel={[Function]}
+          getOptionLabel={[Function]}
+          getOptionValue={[Function]}
+          hideSelectedOptions={false}
+          inputId="AsyncRelatedField-FORMID-AsyncRelatedField: name"
+          inputValue=""
+          isDisabled={true}
+          isLoading={true}
+          isMulti={false}
+          isOptionDisabled={[Function]}
+          isRtl={false}
+          isSearchable={true}
+          loadingMessage={[Function]}
+          maxMenuHeight={300}
+          menuIsOpen={false}
+          menuPlacement="bottom"
+          menuPosition="absolute"
+          menuShouldBlockScroll={false}
+          menuShouldScrollIntoView={true}
+          minMenuHeight={140}
+          noOptionsMessage={[Function]}
+          onChange={[Function]}
+          onInputChange={[Function]}
+          onMenuClose={[Function]}
+          onMenuOpen={[Function]}
+          onMenuScrollToBottom={[Function]}
+          openMenuOnClick={true}
+          openMenuOnFocus={false}
+          options={Array []}
+          pageSize={5}
+          placeholder="Select..."
+          screenReaderStatus={[Function]}
+          styles={Object {}}
+          tabIndex="0"
+          tabSelectsValue={true}
+        />,
+        <span
+          className="help-text"
+        >
+          AsyncRelatedField: help_text
+        </span>,
+        <ErrorsList
+          color="red"
+          header="Errors"
+        />,
+      ],
+      "className": "AsyncRelatedField",
+      "disabled": true,
+      "error": false,
+      "required": undefined,
+      "width": 1,
+    },
+    "ref": null,
+    "rendered": Array [
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "function",
+        "props": Object {
+          "data": "https://its-some-url.tld/",
+          "displayOptions": Object {
+            "width": 1,
+          },
+          "formId": "FORMID",
+          "getOptionLabel": [Function],
+          "getOptionValue": [Function],
+          "help_text": "AsyncRelatedField: help_text",
+          "isMulti": false,
+          "loadOptions": [MockFunction] {
+            "calls": Array [
+              Array [
+                Object {
+                  "callback": [Function],
+                  "fieldName": "AsyncRelatedField: name",
+                  "formId": "FORMID",
+                  "searchText": "",
+                  "url": "https://its-some-url.tld/",
+                },
+              ],
+            ],
+            "results": Array [
+              Object {
+                "isThrow": false,
+                "value": undefined,
+              },
+            ],
+          },
+          "name": "AsyncRelatedField: name",
+          "type": "AsyncRelatedField",
+          "verbose_name": "AsyncRelatedField: verbose_name",
+        },
+        "ref": null,
+        "rendered": null,
+        "type": [Function],
+      },
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "class",
+        "props": Object {
+          "backspaceRemovesValue": true,
+          "blurInputOnSelect": true,
+          "captureMenuScroll": false,
+          "closeMenuOnScroll": false,
+          "closeMenuOnSelect": true,
+          "components": Object {},
+          "controlShouldRenderValue": true,
+          "escapeClearsValue": false,
+          "filterOption": [Function],
+          "formatGroupLabel": [Function],
+          "getOptionLabel": [Function],
+          "getOptionValue": [Function],
+          "hideSelectedOptions": false,
+          "inputId": "AsyncRelatedField-FORMID-AsyncRelatedField: name",
+          "inputValue": "",
+          "isClearable": undefined,
+          "isDisabled": true,
+          "isLoading": true,
+          "isMulti": false,
+          "isOptionDisabled": [Function],
+          "isRtl": false,
+          "isSearchable": true,
+          "loadingMessage": [Function],
+          "maxMenuHeight": 300,
+          "menuIsOpen": false,
+          "menuPlacement": "bottom",
+          "menuPosition": "absolute",
+          "menuShouldBlockScroll": false,
+          "menuShouldScrollIntoView": true,
+          "minMenuHeight": 140,
+          "noOptionsMessage": [Function],
+          "onChange": [Function],
+          "onInputChange": [Function],
+          "onMenuClose": [Function],
+          "onMenuOpen": [Function],
+          "onMenuScrollToBottom": [Function],
+          "openMenuOnClick": true,
+          "openMenuOnFocus": false,
+          "options": Array [],
+          "pageSize": 5,
+          "placeholder": "Select...",
+          "screenReaderStatus": [Function],
+          "styles": Object {},
+          "tabIndex": "0",
+          "tabSelectsValue": true,
+          "value": undefined,
+        },
+        "ref": [Function],
+        "rendered": null,
+        "type": [Function],
+      },
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "host",
+        "props": Object {
+          "children": "AsyncRelatedField: help_text",
+          "className": "help-text",
+        },
+        "ref": null,
+        "rendered": "AsyncRelatedField: help_text",
+        "type": "span",
+      },
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "function",
+        "props": Object {
+          "color": "red",
+          "header": "Errors",
+          "messages": undefined,
+        },
+        "ref": null,
+        "rendered": null,
+        "type": [Function],
+      },
+    ],
+    "type": [Function],
+  },
+  Symbol(enzyme.__nodes__): Array [
+    Object {
+      "instance": null,
+      "key": undefined,
+      "nodeType": "function",
+      "props": Object {
+        "children": Array [
+          <FieldLabel
+            data="https://its-some-url.tld/"
+            displayOptions={
+              Object {
+                "width": 1,
+              }
+            }
+            formId="FORMID"
+            getOptionLabel={[Function]}
+            getOptionValue={[Function]}
+            help_text="AsyncRelatedField: help_text"
+            isMulti={false}
+            loadOptions={
+              [MockFunction] {
+                "calls": Array [
+                  Array [
+                    Object {
+                      "callback": [Function],
+                      "fieldName": "AsyncRelatedField: name",
+                      "formId": "FORMID",
+                      "searchText": "",
+                      "url": "https://its-some-url.tld/",
+                    },
+                  ],
+                ],
+                "results": Array [
+                  Object {
+                    "isThrow": false,
+                    "value": undefined,
+                  },
+                ],
+              }
+            }
+            name="AsyncRelatedField: name"
+            type="AsyncRelatedField"
+            verbose_name="AsyncRelatedField: verbose_name"
+          />,
+          <Select
+            backspaceRemovesValue={true}
+            blurInputOnSelect={true}
+            captureMenuScroll={false}
+            closeMenuOnScroll={false}
+            closeMenuOnSelect={true}
+            components={Object {}}
+            controlShouldRenderValue={true}
+            escapeClearsValue={false}
+            filterOption={[Function]}
+            formatGroupLabel={[Function]}
+            getOptionLabel={[Function]}
+            getOptionValue={[Function]}
+            hideSelectedOptions={false}
+            inputId="AsyncRelatedField-FORMID-AsyncRelatedField: name"
+            inputValue=""
+            isDisabled={true}
+            isLoading={true}
+            isMulti={false}
+            isOptionDisabled={[Function]}
+            isRtl={false}
+            isSearchable={true}
+            loadingMessage={[Function]}
+            maxMenuHeight={300}
+            menuIsOpen={false}
+            menuPlacement="bottom"
+            menuPosition="absolute"
+            menuShouldBlockScroll={false}
+            menuShouldScrollIntoView={true}
+            minMenuHeight={140}
+            noOptionsMessage={[Function]}
+            onChange={[Function]}
+            onInputChange={[Function]}
+            onMenuClose={[Function]}
+            onMenuOpen={[Function]}
+            onMenuScrollToBottom={[Function]}
+            openMenuOnClick={true}
+            openMenuOnFocus={false}
+            options={Array []}
+            pageSize={5}
+            placeholder="Select..."
+            screenReaderStatus={[Function]}
+            styles={Object {}}
+            tabIndex="0"
+            tabSelectsValue={true}
+          />,
+          <span
+            className="help-text"
+          >
+            AsyncRelatedField: help_text
+          </span>,
+          <ErrorsList
+            color="red"
+            header="Errors"
+          />,
+        ],
+        "className": "AsyncRelatedField",
+        "disabled": true,
+        "error": false,
+        "required": undefined,
+        "width": 1,
+      },
+      "ref": null,
+      "rendered": Array [
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "function",
+          "props": Object {
+            "data": "https://its-some-url.tld/",
+            "displayOptions": Object {
+              "width": 1,
+            },
+            "formId": "FORMID",
+            "getOptionLabel": [Function],
+            "getOptionValue": [Function],
+            "help_text": "AsyncRelatedField: help_text",
+            "isMulti": false,
+            "loadOptions": [MockFunction] {
+              "calls": Array [
+                Array [
+                  Object {
+                    "callback": [Function],
+                    "fieldName": "AsyncRelatedField: name",
+                    "formId": "FORMID",
+                    "searchText": "",
+                    "url": "https://its-some-url.tld/",
+                  },
+                ],
+              ],
+              "results": Array [
+                Object {
+                  "isThrow": false,
+                  "value": undefined,
+                },
+              ],
+            },
+            "name": "AsyncRelatedField: name",
+            "type": "AsyncRelatedField",
+            "verbose_name": "AsyncRelatedField: verbose_name",
+          },
+          "ref": null,
+          "rendered": null,
+          "type": [Function],
+        },
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "class",
+          "props": Object {
+            "backspaceRemovesValue": true,
+            "blurInputOnSelect": true,
+            "captureMenuScroll": false,
+            "closeMenuOnScroll": false,
+            "closeMenuOnSelect": true,
+            "components": Object {},
+            "controlShouldRenderValue": true,
+            "escapeClearsValue": false,
+            "filterOption": [Function],
+            "formatGroupLabel": [Function],
+            "getOptionLabel": [Function],
+            "getOptionValue": [Function],
+            "hideSelectedOptions": false,
+            "inputId": "AsyncRelatedField-FORMID-AsyncRelatedField: name",
+            "inputValue": "",
+            "isClearable": undefined,
+            "isDisabled": true,
+            "isLoading": true,
+            "isMulti": false,
+            "isOptionDisabled": [Function],
+            "isRtl": false,
+            "isSearchable": true,
+            "loadingMessage": [Function],
+            "maxMenuHeight": 300,
+            "menuIsOpen": false,
+            "menuPlacement": "bottom",
+            "menuPosition": "absolute",
+            "menuShouldBlockScroll": false,
+            "menuShouldScrollIntoView": true,
+            "minMenuHeight": 140,
+            "noOptionsMessage": [Function],
+            "onChange": [Function],
+            "onInputChange": [Function],
+            "onMenuClose": [Function],
+            "onMenuOpen": [Function],
+            "onMenuScrollToBottom": [Function],
+            "openMenuOnClick": true,
+            "openMenuOnFocus": false,
+            "options": Array [],
+            "pageSize": 5,
+            "placeholder": "Select...",
+            "screenReaderStatus": [Function],
+            "styles": Object {},
+            "tabIndex": "0",
+            "tabSelectsValue": true,
+            "value": undefined,
+          },
+          "ref": [Function],
+          "rendered": null,
+          "type": [Function],
+        },
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "host",
+          "props": Object {
+            "children": "AsyncRelatedField: help_text",
+            "className": "help-text",
+          },
+          "ref": null,
+          "rendered": "AsyncRelatedField: help_text",
+          "type": "span",
+        },
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "function",
+          "props": Object {
+            "color": "red",
+            "header": "Errors",
+            "messages": undefined,
+          },
+          "ref": null,
+          "rendered": null,
+          "type": [Function],
+        },
+      ],
+      "type": [Function],
+    },
+  ],
+  Symbol(enzyme.__options__): Object {
+    "adapter": ReactSixteenAdapter {
+      "options": Object {
+        "enableComponentDidUpdateOnSetState": true,
+        "lifecycles": Object {
+          "componentDidUpdate": Object {
+            "onSetState": true,
+          },
+          "getDerivedStateFromProps": true,
+          "getSnapshotBeforeUpdate": true,
+          "setState": Object {
+            "skipsComponentDidUpdateOnNullish": true,
+          },
+        },
+      },
+    },
+  },
+}
+`;

@@ -86,8 +86,8 @@ WSGI_APPLICATION = 'reformogen.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'HOST': 'localhost',
-        'PORT': '',
+        'HOST': '127.0.0.1',
+        'PORT': 5433,
         'NAME': 'reformogen',
         'USER': 'reformogen',
         'PASSWORD': 'reformogen',
@@ -161,14 +161,12 @@ CSRF_TRUSTED_ORIGINS = (
     '127.0.0.1',
 )
 
-
-
 # DJANGO REST FRAMEWORK
 REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES': [],  # авторизация проверяется через LoginRequiredMiddleware
-    'DEFAULT_PAGINATION_CLASS': 'sample.utils.PageSizeNumberPagination',
+    'DEFAULT_PERMISSION_CLASSES': [],
+    'DEFAULT_PAGINATION_CLASS': 'sample.pagination.TunedPagination',
     'DEFAULT_RENDERER_CLASSES': ('rest_framework.renderers.JSONRenderer',),
-    'URL_FORMAT_OVERRIDE': None,  # не использовать 'format' как особый url аргумент
+    'URL_FORMAT_OVERRIDE': None,
     'PAGE_SIZE': 10,
 }
 

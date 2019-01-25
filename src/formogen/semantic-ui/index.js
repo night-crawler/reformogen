@@ -1,72 +1,53 @@
-// fields import
-import AsyncForeignKeyField from './fields/AsyncForeignKeyField';
-import AsyncManyToManyField from './fields/AsyncManyToManyField';
+import { isString } from 'lodash';
 
-import ManyToManyField from './fields/ManyToManyField';
-import ForeignKeyField from './fields/ForeignKeyField';
+import * as fields from './fields';
 
-import AutocompleteChoiceField from './fields/AutocompleteChoiceField';
+export { fields };
+export { FormComponent } from './FormComponent';
 
-import GenericField from './fields/GenericField';
+export const suiFieldComponentMap = {
+  CharField: fields.CharField,
+  TextField: fields.TextField,
 
-import IntegerField from './fields/IntegerField';
-import BooleanField from './fields/BooleanField';
-import CharField from './fields/CharField';
-import TextField from './fields/TextField';
+  DateTimeField: fields.DateTimeField,
+  DateField: fields.DateField,
+  TimeField: fields.TimeField,
 
-import DateTimeField from './fields/DateTimeField';
-import DateField from './fields/DateField';
-import TimeField from './fields/TimeField';
+  PositiveSmallIntegerField: fields.IntegerField,
+  SmallIntegerField: fields.IntegerField,
+  IntegerField: fields.IntegerField,
+  PositiveIntegerField: fields.IntegerField,
+  DecimalField: fields.IntegerField,
+  FloatField: fields.IntegerField,
 
-import DropzoneField from './fields/DropzoneField';
+  // FileField: fields.DropzoneField,
+  BooleanField: fields.BooleanField,
 
-// common import
-import Label from './common/Label';
-import CaptionTruncator from './common/CaptionTruncator';
+  ChoiceField: fields.AutocompleteChoiceField,
 
-import Form from './common/Form';
-import ModalForm from './common/ModalForm';
+  GenericField: fields.GenericField,
 
-import ErrorsList from './common/ErrorsList';
-import NonFieldErrorsList from './common/NonFieldErrorsList';
-
-// WARN! Important styles
-import 'react-datepicker/dist/react-datepicker.css';
-import 'react-select/dist/react-select.css';
-import 'react-times/css/material/default.css';
-
-import './index.css';
-
-export const fields = {
-    AutocompleteChoiceField,
-
-    ForeignKeyField,
-    AsyncForeignKeyField,
-
-    ManyToManyField,
-    AsyncManyToManyField,
-
-    IntegerField,
-    BooleanField,
-    CharField,
-    TextField,
-
-    DateTimeField,
-    DateField,
-    TimeField,
-
-    DropzoneField,
-
-    GenericField,
+  InlineForeignKeyField: fields.InlineForeignKeyField,
+  InlineManyToManyField: fields.InlineManyToManyField,
 };
 
-export const common = {
-    Label,
-    CaptionTruncator,
+/**
+ * 
+ * @param {*} param0 
+ */
+export function getFieldComponentForType({ type, choices, data }) {
+  if (choices)
+    return suiFieldComponentMap['ChoiceField']; 
 
-    Form,
-    ModalForm,
+  // opts.data can be a string or a list; string treats as a url to DataSet
+  if (type === 'ForeignKey' && !isString(data))
+    return suiFieldComponentMap.InlineForeignKeyField;
 
-    ErrorsList,
-    NonFieldErrorsList,
-};
+  if (type === 'ManyToManyField' && !isString(data))
+    return suiFieldComponentMap.InlineManyToManyField;
+
+  if(!suiFieldComponentMap[type])
+    return suiFieldComponentMap.GenericField;
+
+  return suiFieldComponentMap[type];
+}

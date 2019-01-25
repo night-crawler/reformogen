@@ -1,0 +1,192 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<FormComponent /> 1`] = `
+ShallowWrapper {
+  Symbol(enzyme.__root__): [Circular],
+  Symbol(enzyme.__unrendered__): <FormComponent
+    fieldsets={Array []}
+    isTitleVisible={true}
+    loading={true}
+    onSubmit={[Function]}
+    submitComponent={[Function]}
+    title="sample"
+  />,
+  Symbol(enzyme.__renderer__): Object {
+    "batchedUpdates": [Function],
+    "getNode": [Function],
+    "render": [Function],
+    "simulateError": [Function],
+    "simulateEvent": [Function],
+    "unmount": [Function],
+  },
+  Symbol(enzyme.__node__): Object {
+    "instance": null,
+    "key": undefined,
+    "nodeType": "class",
+    "props": Object {
+      "as": "form",
+      "children": Array [
+        <Header
+          as="h2"
+          dividing={true}
+        >
+          sample
+        </Header>,
+        <div
+          className="layouts"
+        />,
+        <DefaultSubmitComponent
+          content="Submit"
+          fluid={true}
+          onSubmit={[Function]}
+          type="submit"
+        />,
+      ],
+      "loading": true,
+      "onSubmit": [Function],
+    },
+    "ref": null,
+    "rendered": Array [
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "function",
+        "props": Object {
+          "as": "h2",
+          "children": "sample",
+          "dividing": true,
+        },
+        "ref": null,
+        "rendered": "sample",
+        "type": [Function],
+      },
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "host",
+        "props": Object {
+          "children": Array [
+            false,
+            Array [],
+          ],
+          "className": "layouts",
+        },
+        "ref": null,
+        "rendered": Array [
+          false,
+        ],
+        "type": "div",
+      },
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "function",
+        "props": Object {
+          "content": "Submit",
+          "fluid": true,
+          "onSubmit": [Function],
+          "type": "submit",
+        },
+        "ref": null,
+        "rendered": null,
+        "type": [Function],
+      },
+    ],
+    "type": [Function],
+  },
+  Symbol(enzyme.__nodes__): Array [
+    Object {
+      "instance": null,
+      "key": undefined,
+      "nodeType": "class",
+      "props": Object {
+        "as": "form",
+        "children": Array [
+          <Header
+            as="h2"
+            dividing={true}
+          >
+            sample
+          </Header>,
+          <div
+            className="layouts"
+          />,
+          <DefaultSubmitComponent
+            content="Submit"
+            fluid={true}
+            onSubmit={[Function]}
+            type="submit"
+          />,
+        ],
+        "loading": true,
+        "onSubmit": [Function],
+      },
+      "ref": null,
+      "rendered": Array [
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "function",
+          "props": Object {
+            "as": "h2",
+            "children": "sample",
+            "dividing": true,
+          },
+          "ref": null,
+          "rendered": "sample",
+          "type": [Function],
+        },
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "host",
+          "props": Object {
+            "children": Array [
+              false,
+              Array [],
+            ],
+            "className": "layouts",
+          },
+          "ref": null,
+          "rendered": Array [
+            false,
+          ],
+          "type": "div",
+        },
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "function",
+          "props": Object {
+            "content": "Submit",
+            "fluid": true,
+            "onSubmit": [Function],
+            "type": "submit",
+          },
+          "ref": null,
+          "rendered": null,
+          "type": [Function],
+        },
+      ],
+      "type": [Function],
+    },
+  ],
+  Symbol(enzyme.__options__): Object {
+    "adapter": ReactSixteenAdapter {
+      "options": Object {
+        "enableComponentDidUpdateOnSetState": true,
+        "lifecycles": Object {
+          "componentDidUpdate": Object {
+            "onSetState": true,
+          },
+          "getDerivedStateFromProps": true,
+          "getSnapshotBeforeUpdate": true,
+          "setState": Object {
+            "skipsComponentDidUpdateOnNullish": true,
+          },
+        },
+      },
+    },
+  },
+}
+`;

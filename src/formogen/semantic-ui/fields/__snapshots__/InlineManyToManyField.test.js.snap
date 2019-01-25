@@ -1,0 +1,300 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<InlineManyToManyField /> 1`] = `
+ShallowWrapper {
+  Symbol(enzyme.__root__): [Circular],
+  Symbol(enzyme.__unrendered__): <InlineManyToManyField
+    closeOnSelect={true}
+    data={Array []}
+    displayOptions={
+      Object {
+        "width": 1,
+      }
+    }
+    getOptionLabel={[Function]}
+    getOptionValue={[Function]}
+    help_text="InlineManyToManyField: help_text"
+    name="InlineManyToManyField: name"
+    type="InlineManyToManyField"
+    value={Array []}
+    verbose_name="InlineManyToManyField: verbose_name"
+  />,
+  Symbol(enzyme.__renderer__): Object {
+    "batchedUpdates": [Function],
+    "getNode": [Function],
+    "render": [Function],
+    "simulateError": [Function],
+    "simulateEvent": [Function],
+    "unmount": [Function],
+  },
+  Symbol(enzyme.__node__): Object {
+    "instance": null,
+    "key": undefined,
+    "nodeType": "function",
+    "props": Object {
+      "children": Array [
+        <FieldLabel
+          closeOnSelect={true}
+          data={Array []}
+          displayOptions={
+            Object {
+              "width": 1,
+            }
+          }
+          getOptionLabel={[Function]}
+          getOptionValue={[Function]}
+          help_text="InlineManyToManyField: help_text"
+          name="InlineManyToManyField: name"
+          type="InlineManyToManyField"
+          value={Array []}
+          verbose_name="InlineManyToManyField: verbose_name"
+        />,
+        <StateManager
+          closeOnSelect={true}
+          defaultInputValue=""
+          defaultMenuIsOpen={false}
+          defaultValue={null}
+          getOptionLabel={[Function]}
+          getOptionValue={[Function]}
+          isDisabled={true}
+          isMulti={true}
+          onChange={[Function]}
+          options={Array []}
+          value={Array []}
+        />,
+        <span
+          className="help-text"
+        >
+          InlineManyToManyField: help_text
+        </span>,
+        <ErrorsList
+          color="red"
+          header="Errors"
+        />,
+      ],
+      "disabled": true,
+      "error": false,
+      "required": undefined,
+      "width": 1,
+    },
+    "ref": null,
+    "rendered": Array [
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "function",
+        "props": Object {
+          "closeOnSelect": true,
+          "data": Array [],
+          "displayOptions": Object {
+            "width": 1,
+          },
+          "getOptionLabel": [Function],
+          "getOptionValue": [Function],
+          "help_text": "InlineManyToManyField: help_text",
+          "name": "InlineManyToManyField: name",
+          "type": "InlineManyToManyField",
+          "value": Array [],
+          "verbose_name": "InlineManyToManyField: verbose_name",
+        },
+        "ref": null,
+        "rendered": null,
+        "type": [Function],
+      },
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "class",
+        "props": Object {
+          "closeOnSelect": true,
+          "defaultInputValue": "",
+          "defaultMenuIsOpen": false,
+          "defaultValue": null,
+          "getOptionLabel": [Function],
+          "getOptionValue": [Function],
+          "isClearable": undefined,
+          "isDisabled": true,
+          "isMulti": true,
+          "onChange": [Function],
+          "options": Array [],
+          "placeholder": undefined,
+          "value": Array [],
+        },
+        "ref": null,
+        "rendered": null,
+        "type": [Function],
+      },
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "host",
+        "props": Object {
+          "children": "InlineManyToManyField: help_text",
+          "className": "help-text",
+        },
+        "ref": null,
+        "rendered": "InlineManyToManyField: help_text",
+        "type": "span",
+      },
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "function",
+        "props": Object {
+          "color": "red",
+          "header": "Errors",
+          "messages": undefined,
+        },
+        "ref": null,
+        "rendered": null,
+        "type": [Function],
+      },
+    ],
+    "type": [Function],
+  },
+  Symbol(enzyme.__nodes__): Array [
+    Object {
+      "instance": null,
+      "key": undefined,
+      "nodeType": "function",
+      "props": Object {
+        "children": Array [
+          <FieldLabel
+            closeOnSelect={true}
+            data={Array []}
+            displayOptions={
+              Object {
+                "width": 1,
+              }
+            }
+            getOptionLabel={[Function]}
+            getOptionValue={[Function]}
+            help_text="InlineManyToManyField: help_text"
+            name="InlineManyToManyField: name"
+            type="InlineManyToManyField"
+            value={Array []}
+            verbose_name="InlineManyToManyField: verbose_name"
+          />,
+          <StateManager
+            closeOnSelect={true}
+            defaultInputValue=""
+            defaultMenuIsOpen={false}
+            defaultValue={null}
+            getOptionLabel={[Function]}
+            getOptionValue={[Function]}
+            isDisabled={true}
+            isMulti={true}
+            onChange={[Function]}
+            options={Array []}
+            value={Array []}
+          />,
+          <span
+            className="help-text"
+          >
+            InlineManyToManyField: help_text
+          </span>,
+          <ErrorsList
+            color="red"
+            header="Errors"
+          />,
+        ],
+        "disabled": true,
+        "error": false,
+        "required": undefined,
+        "width": 1,
+      },
+      "ref": null,
+      "rendered": Array [
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "function",
+          "props": Object {
+            "closeOnSelect": true,
+            "data": Array [],
+            "displayOptions": Object {
+              "width": 1,
+            },
+            "getOptionLabel": [Function],
+            "getOptionValue": [Function],
+            "help_text": "InlineManyToManyField: help_text",
+            "name": "InlineManyToManyField: name",
+            "type": "InlineManyToManyField",
+            "value": Array [],
+            "verbose_name": "InlineManyToManyField: verbose_name",
+          },
+          "ref": null,
+          "rendered": null,
+          "type": [Function],
+        },
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "class",
+          "props": Object {
+            "closeOnSelect": true,
+            "defaultInputValue": "",
+            "defaultMenuIsOpen": false,
+            "defaultValue": null,
+            "getOptionLabel": [Function],
+            "getOptionValue": [Function],
+            "isClearable": undefined,
+            "isDisabled": true,
+            "isMulti": true,
+            "onChange": [Function],
+            "options": Array [],
+            "placeholder": undefined,
+            "value": Array [],
+          },
+          "ref": null,
+          "rendered": null,
+          "type": [Function],
+        },
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "host",
+          "props": Object {
+            "children": "InlineManyToManyField: help_text",
+            "className": "help-text",
+          },
+          "ref": null,
+          "rendered": "InlineManyToManyField: help_text",
+          "type": "span",
+        },
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "function",
+          "props": Object {
+            "color": "red",
+            "header": "Errors",
+            "messages": undefined,
+          },
+          "ref": null,
+          "rendered": null,
+          "type": [Function],
+        },
+      ],
+      "type": [Function],
+    },
+  ],
+  Symbol(enzyme.__options__): Object {
+    "adapter": ReactSixteenAdapter {
+      "options": Object {
+        "enableComponentDidUpdateOnSetState": true,
+        "lifecycles": Object {
+          "componentDidUpdate": Object {
+            "onSetState": true,
+          },
+          "getDerivedStateFromProps": true,
+          "getSnapshotBeforeUpdate": true,
+          "setState": Object {
+            "skipsComponentDidUpdateOnNullish": true,
+          },
+        },
+      },
+    },
+  },
+}
+`;

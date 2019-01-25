@@ -1,0 +1,23 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+django-cors-headers = "*"
+django-extensions = "*"
+django-model-utils = "*"
+djangorestframework = "*"
+drf-metadata = "*"
+easy-thumbnails = "*"
+olefile = "*"
+"psycopg2-binary" = "*"
+pytz = "*"
+six = "*"
+Django = "*"
+Pillow = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.7"

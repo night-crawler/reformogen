@@ -1,0 +1,87 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<AsyncForeignKeyField /> 1`] = `
+ShallowWrapper {
+  Symbol(enzyme.__root__): [Circular],
+  Symbol(enzyme.__unrendered__): <AsyncForeignKeyField
+    displayOptions={
+      Object {
+        "width": 1,
+      }
+    }
+    help_text="AsyncForeignKeyField: help_text"
+    name="AsyncForeignKeyField: name"
+    type="AsyncForeignKeyField"
+    verbose_name="AsyncForeignKeyField: verbose_name"
+  />,
+  Symbol(enzyme.__renderer__): Object {
+    "batchedUpdates": [Function],
+    "getNode": [Function],
+    "render": [Function],
+    "simulateError": [Function],
+    "simulateEvent": [Function],
+    "unmount": [Function],
+  },
+  Symbol(enzyme.__node__): Object {
+    "instance": null,
+    "key": undefined,
+    "nodeType": "class",
+    "props": Object {
+      "displayOptions": Object {
+        "width": 1,
+      },
+      "getOptionLabel": [Function],
+      "getOptionValue": [Function],
+      "help_text": "AsyncForeignKeyField: help_text",
+      "isMulti": false,
+      "loadOptions": [Function],
+      "name": "AsyncForeignKeyField: name",
+      "type": "AsyncForeignKeyField",
+      "verbose_name": "AsyncForeignKeyField: verbose_name",
+    },
+    "ref": null,
+    "rendered": null,
+    "type": [Function],
+  },
+  Symbol(enzyme.__nodes__): Array [
+    Object {
+      "instance": null,
+      "key": undefined,
+      "nodeType": "class",
+      "props": Object {
+        "displayOptions": Object {
+          "width": 1,
+        },
+        "getOptionLabel": [Function],
+        "getOptionValue": [Function],
+        "help_text": "AsyncForeignKeyField: help_text",
+        "isMulti": false,
+        "loadOptions": [Function],
+        "name": "AsyncForeignKeyField: name",
+        "type": "AsyncForeignKeyField",
+        "verbose_name": "AsyncForeignKeyField: verbose_name",
+      },
+      "ref": null,
+      "rendered": null,
+      "type": [Function],
+    },
+  ],
+  Symbol(enzyme.__options__): Object {
+    "adapter": ReactSixteenAdapter {
+      "options": Object {
+        "enableComponentDidUpdateOnSetState": true,
+        "lifecycles": Object {
+          "componentDidUpdate": Object {
+            "onSetState": true,
+          },
+          "getDerivedStateFromProps": true,
+          "getSnapshotBeforeUpdate": true,
+          "setState": Object {
+            "skipsComponentDidUpdateOnNullish": true,
+          },
+        },
+      },
+    },
+  },
+}
+`;

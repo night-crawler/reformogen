@@ -10,11 +10,9 @@ from django.utils.translation import ugettext_lazy as _
 
 from rest_framework.reverse import reverse
 
-# Third Party
 from easy_thumbnails.fields import ThumbnailerImageField
 from model_utils.fields import AutoCreatedField, AutoLastModifiedField
 
-# First Party
 from sample import abstract, states
 
 media_storage = FileSystemStorage(location=settings.MEDIA_ROOT, base_url=settings.MEDIA_URL)
@@ -112,6 +110,7 @@ class Author(CRUDUrlsMixin, TimeStampedModel, abstract.StateBundleMixin):
             self.biography = 'It was filled on the server side as a test value!'
         super().save(*args, **kwargs)
 
+    @property
     def printable_name(self):
         return self.name
 
@@ -159,8 +158,9 @@ class Book(CRUDUrlsMixin, TimeStampedModel):
         ordering = ('id',)
 
     def __str__(self):
-        return self.printable_name()
+        return self.printable_name
 
+    @property
     def printable_name(self):
         return self.title
 
@@ -214,7 +214,8 @@ class AllModelFields(CRUDUrlsMixin, models.Model):
         ordering = ('id',)
 
     def __str__(self):
-        return self.printable_name()
+        return self.printable_name
 
+    @property
     def printable_name(self):
         return '{0.id}: {0.f_char_field}'.format(self)

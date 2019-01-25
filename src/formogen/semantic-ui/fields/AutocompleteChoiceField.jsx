@@ -1,82 +1,71 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-
-import _ from 'lodash';
-
+import { isEmpty } from 'lodash';
 import { Form } from 'semantic-ui-react';
 import Select from 'react-select';
 
-import { errorsType, layoutOptsType } from '../../fieldPropTypes';
-import Label from '../common/Label';
-import ErrorsList from '../common/ErrorsList';
-
-
-const makeReactSelectOptions = (choices) => {
-    return choices.map(([key, val]) => {
-        return {
-            value: key,
-            label: val,
-        };
-    });
-};
+import { errorsType, displayOptionsType } from '../../fieldPropTypes';
+import { FieldLabel } from '../FieldLabel';
+import { ErrorsList } from '../ErrorsList';
 
 
 AutocompleteChoiceField.propTypes = {
-    type: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
-    value: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-    choices: PropTypes.arrayOf(PropTypes.array),
-    max_length: PropTypes.number,
-    help_text: PropTypes.string.isRequired,
-    placeholder: PropTypes.string,
-    errors: errorsType,
+  type: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  value: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  choices: PropTypes.arrayOf(PropTypes.array),
+  max_length: PropTypes.number,
+  help_text: PropTypes.string,
+  placeholder: PropTypes.string,
+  errors: errorsType,
 
-    required: PropTypes.bool,
-    editable: PropTypes.bool,
+  required: PropTypes.bool,
+  editable: PropTypes.bool,
 
-    helpTextOnHover: PropTypes.bool,
-    layoutOpts: layoutOptsType,
+  helpTextOnHover: PropTypes.bool,
+  displayOptions: displayOptionsType,
 
-    updateProps: PropTypes.func,
-    onChange: PropTypes.func,
+  getOptionLabel: PropTypes.func,
+  getOptionValue: PropTypes.func,
+
+  onChange: PropTypes.func,
 };
-export default function AutocompleteChoiceField(props) {
-    const handleChange = (newVal) => {
-        props.onChange(
-            null,
-            { name: props.name, value: newVal ? newVal.value : null }
-        );
-    };
+AutocompleteChoiceField.defaultProps = {
+  choices: [],
+  getOptionLabel: ([ , name ]) => name,
+  getOptionValue: ([ id ]) => id,
+};
+export function AutocompleteChoiceField(props) {
+  const handleChange = ([ id ]) => props.onChange(
+    null,
+    { name: props.name, value: id !== undefined ? id : null }
+  );
 
-    let _props = {
-        clearable: !props.required,
-        name: props.name,
-        value: props.value,
-        placeholder: props.placeholder,
-        options: makeReactSelectOptions(props.choices),
-        onChange: handleChange,
-        inputProps: { type: 'react-type' },  // fixing breaking semantic markup
-    };
+  return (
+    <Form.Field
+      required={ props.required }
+      disabled={ !props.editable }
+      width={ props.displayOptions.width }
+      error={ !isEmpty(props.errors) }
+    >
+      <FieldLabel { ...props } />
+      <Select 
+        isMulti={ false }
+        clearable={ !props.required }
+        name={ props.name }
+        value={ props.choices.filter(([ id ]) => props.value === id ) }
+        placeholder={ props.placeholder }
+        options={ props.choices }
+        onChange={ handleChange }
 
-    if (_.isFunction(props.updateProps)) {
-        _props = props.updateProps(_props, props);
-    }
-
-    return (
-        <Form.Field
-            required={ props.required }
-            disabled={ !props.editable }
-            width={ props.layoutOpts.width }
-            error={ !_.isEmpty(props.errors) }
-        >
-            <Label { ...props } />
-            <Select { ..._props } />
-            {
-                !props.helpTextOnHover
-                    ? <span className='help-text'>{ props.help_text }</span>
-                    : ''
-            }
-            <ErrorsList messages={ props.errors } />
-        </Form.Field>
-    );
+        getOptionLabel={ props.getOptionLabel }
+        getOptionValue={ props.getOptionValue }
+      />
+      { !props.helpTextOnHover 
+        ? <span className='help-text'>{ props.help_text }</span>
+        : ''
+      }
+      <ErrorsList messages={ props.errors } />
+    </Form.Field>
+  );
 }

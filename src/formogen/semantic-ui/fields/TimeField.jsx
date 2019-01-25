@@ -1,81 +1,93 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
 import _ from 'lodash';
 import moment from 'moment';
-
 import { Form } from 'semantic-ui-react';
 import TimePicker from 'react-times';
 
-import { errorsType, layoutOptsType } from '../../fieldPropTypes';
-import Label from '../common/Label';
-import ErrorsList from '../common/ErrorsList';
+import { errorsType, displayOptionsType } from '../../fieldPropTypes';
+import { FieldLabel } from '../FieldLabel';
+import { ErrorsList } from '../ErrorsList';
 
-
-DateField.propTypes = {
+export class TimeField extends React.Component {
+  static propTypes = {
     type: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
     value: PropTypes.string,
     max_length: PropTypes.number,
-    help_text: PropTypes.string.isRequired,
+    help_text: PropTypes.string,
     errors: errorsType,
-
+  
     required: PropTypes.bool,
     editable: PropTypes.bool,
-
+  
     helpTextOnHover: PropTypes.bool,
-    layoutOpts: layoutOptsType,
-
+    displayOptions: displayOptionsType,
+  
     updateProps: PropTypes.func,
     onChange: PropTypes.func,
-};
-export default function DateField(props) {
-    let hour = null, minutes = null;
+  };
 
-    const handleChange = (timeString) => {
-        // trigger global onChange in case user've changed both minutes and hours
-        // (calling onChange on every change causes redraw && closing TimePicker)
-        hour && minutes && props.onChange(null, {
-            name: props.name,
-            // append seconds to time
-            value: timeString ? moment(timeString, 'HH:mm').format('HH:mm:ss') : null
-        });
-    };
-
-    let _props = {
-        autoMode: true,
-        name: props.name,
-        time: props.value ? moment(props.value, 'HH:mm:ss').format('HH:mm') : null,
-        timeMode: '24',
-        focused: false,
-        withoutIcon: false,
-        showTimezone: true,
-        onMinuteChange: (_minutes) => ( minutes = _minutes ),
-        onHourChange: (_hour) => ( hour = _hour ),
-        onTimeChange: handleChange,
-        // timezone: 'America/New_York',
-        theme: 'material',
-    };
-
-    if (_.isFunction(props.updateProps)) {
-        _props = props.updateProps(_props, props);
+  constructor(props) {
+    super(props);
+    let [ hour, minute ] = [ null, null ];
+    if (props.value) {
+      [ hour, minute ] = moment(this.props.value, 'HH:mm:ss').format('HH:mm').split(':');
     }
 
+    this.state = {
+      hour, minute,
+      meridiem: props.meridiem || null,
+    };
+  }
+  render() {
     return (
-        <Form.Field
-            required={ props.required }
-            disabled={ !props.editable }
-            width={ props.layoutOpts.width }
-            error={ !_.isEmpty(props.errors) }
-        >
-            <Label { ...props } />
-            <TimePicker { ..._props } />
-            {
-                !props.helpTextOnHover
-                    ? <span className='help-text'>{ props.help_text }</span>
-                    : ''
-            }
-            <ErrorsList messages={ props.errors } />
-        </Form.Field>
+      <Form.Field
+        required={ this.props.required }
+        disabled={ !this.props.editable }
+        width={ this.props.displayOptions.width }
+        error={ !_.isEmpty(this.props.errors) }
+      >
+        <FieldLabel { ...this.props } />
+        <TimePicker 
+          autoMode={ true }
+          timeMode='24'
+          focused={ false }
+          withoutIcon={ false }
+          showTimezone={ true }
+          onTimeChange={ this.handleTimeChange }
+          onFocusChange={ this.handleFocusChange }
+          theme='material'
+          timezone={ this.props.timezone }
+
+          time={ this.state.hour && this.state.minute 
+            ? `${this.state.hour}:${this.state.minute}` 
+            : null 
+          }
+          meridiem={ this.state.meridiem }
+        />
+        { !this.props.helpTextOnHover
+          ? <span className='help-text'>{ this.props.help_text }</span>
+          : '' 
+        }
+        <ErrorsList messages={ this.props.errors } />
+      </Form.Field>
     );
+  }
+
+  handleTimeChange = options => {
+    // eslint-disable-next-line
+    this.setState(options);
+  };
+
+  handleFocusChange = focus => {
+    // eslint-disable-next-line
+    this.setState(
+      { focus },
+      () => !focus && this.props.onChange(null, { 
+        name: this.props.name, 
+        value: `${this.state.hour}:${this.state.minute}` 
+      })
+    );
+  };
 }
