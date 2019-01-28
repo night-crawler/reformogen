@@ -5,6 +5,10 @@ import { isEmpty } from 'lodash';
 
 import { NonFieldErrorsList } from './NonFieldErrorsList';
 
+DefaultSubmitComponent.propTypes = {
+  style: PropTypes.shape
+};
+
 function DefaultSubmitComponent(props) {
   const { style, ...rest } = props;
   const patchedStyle = {

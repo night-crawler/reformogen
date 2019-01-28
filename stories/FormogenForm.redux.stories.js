@@ -1,16 +1,14 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { Grid, GridColumn } from 'semantic-ui-react';
-
-import { FormogenForm } from '~/formogen-redux/FormogenForm';
+import { FormogenForm } from 'reformogen-redux/build/FormogenForm';
 
 import { FormComponent } from '~/formogen/semantic-ui/FormComponent';
 
+import { getFieldComponentForType } from 'reformogen-redux/build/semantic-ui';
+import { storeFormData, storeFormMetaData } from 'reformogen-redux/build/actions';
+
 import { withContainerSegment, withStore, dispatch } from './storyDecorators';
-
-import { getFieldComponentForType } from '~/formogen-redux/semantic-ui';
-
-import { storeFormData, storeFormMetaData } from '~/formogen-redux/actions';
 
 const stories = storiesOf('redux|FormogenForm', module)
   .addDecorator(withStore)

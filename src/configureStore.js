@@ -7,9 +7,9 @@ import createSagaMiddleware from 'redux-saga';
 
 import rootSaga from '~/rootSaga';
 
-import { createRootReducer } from './reducers';
+import { responseAdapterRegistry, DjangoRestFrameworkResponseAdapter } from 'reformogen-redux/build/ListResponseAdapters';
 
-import { responseAdapterRegistry, DjangoRestFrameworkResponseAdapter } from '~/formogen-redux/ListResponseAdapters';
+import { createRootReducer } from './reducers';
 
 const sagaMiddleware = createSagaMiddleware();
 responseAdapterRegistry.register(/\/api\/v/, DjangoRestFrameworkResponseAdapter);

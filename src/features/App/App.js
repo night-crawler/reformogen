@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
 import { Segment, Grid, Button } from 'semantic-ui-react';
-
-import { FormogenForm } from '~/formogen-redux/FormogenForm';
+import { FormogenForm } from 'reformogen-redux/build/FormogenForm';
 
 import { FormComponent } from '~/formogen/semantic-ui/FormComponent';
 
-import { getFieldComponentForType } from '~/formogen-redux/semantic-ui';
+import { getFieldComponentForType } from 'reformogen-redux/build/semantic-ui';
 
 
 export class App extends Component {
